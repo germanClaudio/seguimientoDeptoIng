@@ -1,0 +1,139 @@
+<div class="card mt-2 mb-5 mx-auto text-center" style="max-width: 95vw;">
+    <div class="row align-items-center">
+        <div class="col-2 mx-auto my-2">    
+                <a href="/api/clientes/select/<%= cliente._id %>">
+                    <img src="<%= cliente.logo %>" class="img-fluid rounded" alt="Imagen Logo Cliente" width="200px">
+                </a>
+                <h5 class="card-title">
+                    <%= cliente.name %>
+                </h5>
+                <p class="card-text">
+                    <%= cliente.code %>
+                </p>
+                <% if (cliente.status==true) { %>
+                    <span class="badge rounded-pill bg-success text-white"> Activo </span>
+                <% } else { %>
+                    <span class="badge rounded-pill bg-danger text-white"> Inactivo </span>
+                <% } %>
+                    <p class="card-text"><small class="text-muted"> Proyectos: <%= cliente.project %></small></p>
+        </div>
+        <div class="col-10 mx-auto">
+            <div class="card-body px-1">
+                <% if (proyectos.length > 0) { %>
+                    <% for ( let m = 0;  proyectos.length > m; m++) { %>
+                        
+                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                            <% for ( let j = 0;  proyectos[m].project.length > j; j++) { %>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="panelsStayOpen-headingOneCard">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#panelsStayOpen-collapseOneCard<%=m %>" aria-expanded="false"
+                                            aria-controls="panelsStayOpen-collapseOneCard<%=m %>">
+                                                    Codigo Proyecto: <%= proyectos[m].project[j].codeProject %> -
+                                                    Nombre Proyecto: <strong class="mx-2"> <%= proyectos[m].project[j].projectName %> </strong> -
+                                            
+                                            <% if (proyectos[m].project[j].levelProject) {
+                                                const level="Ganado" %>
+                                                    Nivel: <span class="badge rounded-pill bg-success text-white mx-2"> <%= level %> </span>
+                                            <% } else {
+                                                const level="Cotizado" %>
+                                                    Nivel: <span class="badge rounded-pill bg-secondary text-warning mx-2"> <%= level %> </span>
+                                            <% } %>
+                                        </button>
+                                    </h2>
+
+                                    <div id="panelsStayOpen-collapseOneCard<%=m %>" class="accordion-collapse collapse"
+                                        aria-labelledby="panelsStayOpen-headingOne">
+                                        <div class="accordion-body">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-3 my-auto">
+                                                        <ul><img src="<%= proyectos[m].project[j].imageProject %>"
+                                                                class="img-fluid rounded" alt="Imagen Proyecto"
+                                                                width="200px">
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-4 my-auto">
+                                                        <ul>Descripción: <%= proyectos[m].project[j].projectDescription %>
+                                                        </ul>
+                                                        <ul>Prio: <span class="badge bg-dark text-white mx-2"> <%= proyectos[m].project[j].prioProject %> </span>
+                                                        </ul>
+                                                        <% if (proyectos[m].project[j].statusProject) {
+                                                            const status="Activo" %>
+                                                            <ul>Status: <span class="badge rounded-pill bg-primary text-white mx-2"> <%= status %> </span>
+                                                            </ul>
+                                                        <% } else {
+                                                            const status="Inactivo" %>
+                                                            <ul>Status: <span class="badge rounded-pill bg-danger text-white mx-2"> <%= status %> </span>
+                                                            </ul>
+                                                        <% } %>
+                                                        <div class="d-flex justify-content-center">
+                                                            <button type="button" id="btnSeeProyectDetails" class="btn btn-secondary rounded-circle mx-2"><i class="fa fa-eye"></i></button>
+                                                            <button type="button" id="btnChangeStausProyect" class="btn btn-danger rounded-circle ms-1"><i class="fa fa-power-off"></i></button>
+                                                        </div>
+                                                    </div>           
+                                                    <div class="col-5 my-auto">
+                                                        <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
+
+                                                                <ul>OCI #: <%= proyectos[m].project[j].oci[k].ociNumber %> </ul>
+                                                                <ul>Descripcion: <%= proyectos[m].project[j].oci[k].ociDescription %> </ul>
+                                                                
+                                                                    <% if (proyectos[m].project[j].oci[k].ociStatus) {
+                                                                        const ociStatus="Activo" %>
+                                                                        <ul>Status OCI: <span class="badge rounded-pill bg-primary text-white"> <%= ociStatus %> </span> </ul>
+                                                                    
+                                                                    <% } else {
+                                                                        const ociStatus="Inactivo" %>
+                                                                        <ul>Status OCI: <span class="badge rounded-pill bg-danger text-white"> <%= ociStatus %> </span> </ul>
+                                                                    <% } %>
+                                                                <div class="d-flex justify-content-center">
+                                                                    <button type="button" id="btnAddNewOt" class="btn btn-primary rounded-circle me-1"><i class="fa fa-plus-circle"></i></button>
+                                                                    <button type="button" id="btnSeeOciDetails" class="btn btn-secondary rounded-circle mx-2"><i class="fa fa-eye"></i></button>
+                                                                    <button type="button" id="btnChangeStausOci" class="btn btn-danger rounded-circle ms-1"><i class="fa fa-power-off"></i></button>
+                                                                </div>
+                                                                <% if ( proyectos[m].project[j].oci.length > (k+1) ) { %>
+                                                                    <hr>
+                                                                <% } %>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="container">
+                                                    <div class="row my-auto">
+                                                        <div class="col-6">
+                                                            <ul>Creador por: <%= proyectos[0].creator[0].name %>, <%= proyectos[0].creator[0].lastName %> </ul>
+                                                            <ul>Fecha: <%= proyectos[0].timestamp %> </ul>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <% if (proyectos[0].modificator[0]) { %>
+                                                                <ul>Modificado por: <%= proyectos[0].modificator[0].name %>, <%= proyectos[0].modificator[0].lastName %> </ul>
+                                                                <ul>Fecha modificación: <%= proyectos[0].modifiedOn %> </ul>
+                                                            <% } else { %>
+                                                                <ul>Modificado por: </ul>
+                                                                <ul>Fecha modificación: </ul>
+                                                            <% } %>
+                                                        </div>      
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } %>
+                <% } else { %>
+                    <span class="badge rounded-pill bg-danger text-white"> No hay proyectos cargados </span>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-2 mb-1 border-top">
+        <a class="btn btn-primary me-3 mt-3 mb-1" href="/api/clientes/select/<%= cliente._id %>"><i
+                class="fa fa-list-ul"></i> Ver Cliente </a>
+        <a class="btn btn-secondary ms-3 mt-3 mb-1" href="/api/auth/index"><i class="fa fa-home"></i> Home </a>
+    </div>
+</div>

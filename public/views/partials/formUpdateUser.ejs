@@ -1,0 +1,117 @@
+<div class="form-group col-10 mx-auto mt-2 mb-5 w-75 border p-3 bg-dark bg-gradient text-white bg-opacity-75">
+    <h3 class="mx-auto my-2 text-center">Actualizar o Eliminar Usuario</h3>
+    <form action="/api/usuarios/update/<%=usuario._id%>" method="post">
+        <fieldset>
+            <div class="row my-2 mx-auto">
+                <div class="col-3">
+                    <label for="idDisable">Id#</label>
+                    <input type="text" name="idDisable" id="idDisable" class="form-control-plaintext text-white"
+                        value="<%=usuario._id%>" disabled="true">
+                </div>
+                <input type="text" name="id" id="id" class="form-control" value="<%=usuario._id%>" hidden="true">
+                <br>
+                <div class="col-2">
+                    <label for="creatorDisable">Creado por</label>
+                    <input type="text" name="creatorDisable" id="creatorDisable"
+                        class="form-control-plaintext text-white small" value="<%=usuario.creator%>" disabled="true">
+                </div>
+                <br>
+                <div class="col-2">
+                    <label for="timestampDisable">Fecha Creación</label>
+                    <input type="text" name="timestampDisable" id="timestampDisable"
+                        class="form-control-plaintext text-white small" value="<%=usuario.timestamp%>" disabled="true">
+                </div>
+                <br>
+                <div class="col-2">
+                    <label for="modifiedDisable">Modificado por</label>
+                    <input type="text" name="modifiedDisable" id="modifiedDisable"
+                        class="form-control-plaintext text-white small" value="<%=usuario.modificator%>"
+                        disabled="true">
+                </div>
+                <br>
+                <br>
+                <div class="col-auto">
+                    <label for="modifiedOnDisable">Fecha Modificación</label>
+                    <input type="text" name="modifiedOnDisable" id="modifiedOnDisable"
+                        class="form-control-plaintext text-white small" value="<%=usuario.modifiedOn%>" disabled="true">
+                </div>
+            </div>
+            <hr>
+            <div class="row my-3 mx-auto">
+                <div class="col-3">
+                    <label for="name">Nombre</label>
+                    <input type="text" name="name" id="name" class="form-control" value="<%=usuario.name%>"
+                        placeholder="Nombre" required>
+                </div>
+                <br>
+                <div class="col-3">
+                    <label for="lastName">Apellido</label>
+                    <input type="text" name="lastName" id="lastName" class="form-control" value="<%=usuario.lastName%>"
+                        placeholder="Apellido" required>
+                </div>
+                <br>
+                <div class="col-3">
+                    <label for="email">Em@il</label>
+                    <input type="email" name="email" id="email" class="form-control" value="<%=usuario.email%> "
+                        placeholder="Ejemplo@dominio.com" required>
+                </div>
+                <br>
+                <div class="col-3">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" class="form-control" value="<%=usuario.username%>"
+                        placeholder="Username" required>
+                </div>
+                <br>
+            </div>
+            <div class="row my-3 mx-auto">
+                <div class="col-10">
+                    <label for="avatar">Avatar URL</label>
+                    <input type="text" name="avatar" id="avatar" class="form-control" value="<%=usuario.avatar%>"
+                        placeholder="Image or picture url" required>
+                </div>
+            </div>
+            <br>
+            <div class="container ps-3 my-3 ">Status
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <div class="d-inline-block me-1">Inactivo</div>
+                        <div class="form-check form-switch d-inline-block">
+                            <input type="checkbox" class="form-check-input" id="status" name="status"
+                                aria-checked="true" style="cursor: pointer;" checked>
+                            <label for="status" class="form-check-label">Activo</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container ps-3 my-3">Rol
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <div class="d-inline-block me-1">Usuario</div>
+                        <div class="form-check form-switch d-inline-block">
+                            <input type="checkbox" class="form-check-input" id="admin" name="admin" aria-checked="true"
+                                style="cursor: pointer;" checked>
+                            <label for="admin" class="form-check-label">Administrador</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container-fluid my-1 p-1 text-center">
+                <img src="<%=usuario.avatar%>" class="img-thumbnail rounded mx-auto" alt="Avatar not Founded"
+                    width="200px" height="200px">
+            </div>
+            <div class="d-flex justify-content-center my-2">
+                <button type="submit" class="btn btn-success mx-auto my-2">Actualizar Usuario <i
+                        class="fa fa-save"></i></button>
+                <a class="btn btn-primary my-2" href="/api/usuarios"> Volver <i class="fa fa-arrow-left"></i></a>
+                <a class="btn btn-danger mx-auto my-2" href="/api/usuarios/delete/<%=usuario._id%>">Eliminar <i
+                        class="fa fa-trash"></i></a>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<!-- onsubmit="return updateProducto(this)" -->

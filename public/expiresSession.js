@@ -1,0 +1,24 @@
+const countdownElement = document.getElementById('countdown')
+const expires = (document.getElementById('expires').innerText)
+
+    function updateCountdown() {
+        const countdownDate = new Date(`${expires}`).getTime()
+        const now = new Date().getTime()
+        let distance = countdownDate - now
+        
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000)
+        
+        if (distance > 60000000) {
+            countdownElement.innerHTML = "<span class=\"badge rounded-pill bg-success\">Sessión Ilimitada</span>"
+        } else if (distance > 0 && distance <= 60000000 ) {
+            countdownElement.innerHTML = `<span class="badge rounded-pill bg-warning text-dark">Tiempo de Sesión: ${hours}h ${minutes}m ${seconds}s</span>`
+        } else {
+            countdownElement.innerHTML = `<span class="badge rounded-pill bg-danger">Expiró Tiempo de Sessión!</span>`
+        }
+    }
+
+updateCountdown()
+
+setInterval(updateCountdown, 1000)

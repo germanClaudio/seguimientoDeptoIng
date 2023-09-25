@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+    <%- include('../partials/header'); %>
+
+        <%- include('../partials/userBanner'); %>
+            <br>
+            <div class="collapse" id="collapseExample">
+                <%- include('../partials/formularioUsers'); %>
+            </div>
+            <br>
+            <div class="d-block mx-auto my-4 pb-5 text-center">
+                <button class="btn btn-primary my-2 me-5" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Nuevo
+                    Usuario <i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+                <a class="btn btn-secondary my-2" href="/api/auth/index"><i class="fa fa-home"></i> Regresar al Home</a>
+                <br>
+                <h2 class="d-block mx-auto my-3 text-center">Tabla de Usuarios</h2>
+                <div class="d-block mx-auto px-5 mb-3 text-center w-100">
+                    <%- include('../partials/dataUsersTable'); %>
+                        <footer>
+                            <%- include('../partials/footer'); %>
+                        </footer>
+
+                        <!--    scripts     -->
+                        <script type="text/javascript" src="../../usuarios.js"></script>
+                        <script type="text/javascript" src="../../clock.js"></script>
+                        <script type="text/javascript" src="../../expiresSession.js"></script>
+
+</body>
+
+</html>

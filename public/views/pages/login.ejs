@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+    <header>
+        <%- include('../partials/headerLogin'); %>
+    </header>
+    <div class="container my-4 mx-auto">
+        <br>
+        <%- include('../partials/formularioLogin'); %>
+    </div>
+    <% if (!flag && !fail) { %>
+        <div class="alert alert-success mx-auto my-5 text-center w-25 text-white shadow-lg" id="alert2" style="background-color: rgb(0, 10, 90);">
+            Aplicación de Seguimiento<br>
+            Departamento de Ingeniería
+        </div>
+        <% } else if (flag && fail) { %>
+            <div class="alert alert-danger mx-auto my-5 text-center w-25 shadow-lg" id="alert1">
+                <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> El Usuario no Existe o<br>Password incorrecto!</strong></div>
+    <% } else { %>
+        <div class="alert alert-warning mx-auto my-5 text-center w-25" id="alert3">Usuario <strong><%=username%></strong> registrado exitosamente! <i class="fa fa-check" aria-hidden="true" style="color:green;"></i></div>
+    <% } %>
+
+    <!-- <div class="alert alert-dark mx-auto mt-3 mb-5 text-center w-50"> -->
+        <!-- <a href="/api/auth/github" class="btn btn-success mx-auto my-3 w-50">Login with github <i class="fa fa-github" aria-hidden="true"></i></a><br> -->
+        <!-- <a href="/api/auth/register" class="btn btn-primary mx-auto my-3 w-50">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a> -->
+    <!-- </div> -->
+    <br>
+    <footer>
+        <%- include('../partials/footer'); %>
+    </footer>    
+        <!--    scripts     -->
+        <script type="text/javascript" src="../../login.js"></script>
+</body>
+
+</html>

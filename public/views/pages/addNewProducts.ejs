@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+    <%- include('../partials/header'); %>
+
+    <%- include('../partials/userBanner'); %>
+    <br>
+    <%- include('../partials/formulario'); %>
+            <br>
+            <div class="d-block mx-auto my-4 pb-5 text-center">
+                <a class="btn btn-primary my-2 me-5" href="/api/auth/index"><i class="fa fa-home" aria-hidden="true"></i> Regresar al Home </a>
+                <a class="btn btn-danger my-2 ms-5" href="/api/productos/all/delete"><i class="fa fa-trash" aria-hidden="true"></i> Eliminar Todos los Proyectos </a>
+            </div>
+            <h2 class="d-block mx-auto my-3 text-center">Lista de Proyectos</h2>
+            <div class="d-block mx-auto px-5 mb-3 text-center w-100">
+            <%- include('../partials/dataProductTable'); %>
+            <br>
+            <div class="d-block mx-auto my-4 pb-5 text-center">
+                <a class="btn btn-primary my-2 me-5" href="/api/auth/index"><i class="fa fa-home" aria-hidden="true"></i> Regresar al Home </a>
+                <a class="btn btn-secondary my-2 mx-2" href="#"> Ir arriba <i class="fa fa-arrow-up"></i></a>
+                <a class="btn btn-danger my-2 ms-5" href="/api/productos/all/delete"><i class="fa fa-trash" aria-hidden="true"></i> Eliminar Todos los Proyectos </a>
+            </div>
+            <br>
+            <footer>
+                <%- include('../partials/footer'); %>
+            </footer>
+<!--    scripts     -->
+<script type="text/javascript" src="../../../historial.js"></script>
+<script type="text/javascript" src="../../../clock.js"></script>
+<script type="text/javascript" src="../../../expiresSession.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<div class="card card-body">
+    <div class="form-group col-10 mx-auto my-2 w-75 border p-3 bg-dark bg-gradient text-white bg-opacity-75">
+        <form action="/api/clientes" method="post">
+            <fieldset>
+                <h4 class="d-block mx-auto my-2 text-center">Nuevo Cliente</h4>
+                <div class="row my-3">
+                    <div class="col-4">
+                        <label for="name">Nombre Cliente</label>
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Nombre Cliente"
+                            required>
+                    </div>
+                    <br>
+                    <div class="col-4">
+                        <label for="status">Status</label>
+                        <select id="status" name="status" class="form-select" required="required">
+                            <option selected disabled value="">Seleccione un status</option>
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+                    <br>
+                </div>
+
+                <div class="row my-3">
+                    <div class="col-4">
+                        <label for="code">Codigo Cliente</label>
+                        <input type="text" name="code" id="code" class="form-control" placeholder="Codigo Cliente"
+                            required>
+                    </div>
+                    <!-- <br>
+                    <div class="col-4">
+                        <label for="code">Proyectos</label>
+                        <input type="number" name="project" id="project" class="form-control"
+                            placeholder="Cantidad de Proyectos" required>
+                    </div> -->
+                    <br>
+                    <div class="row my-3">
+                        <div class="col-10">
+                            <label for="logo">URL Logo Cliente</label>
+                            <input type="text" name="logo" id="logo" class="form-control" placeholder="Logo url"
+                                required>
+                        </div>
+                    </div>
+                    <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>"
+                        hidden="true">
+                    <input type="text" name="usernameHidden" id="usernameHidden" class="form-control"
+                        value="<%= userInfo.username %>" hidden="true">
+                    <input type="text" name="unameHidden" id="unameHidden" class="form-control"
+                        value="<%= userInfo.name %>" hidden="true">
+                    <input type="text" name="lastNameHidden" id="lastNameHidden" class="form-control"
+                        value="<%= userInfo.lastName %>" hidden="true">
+                    <br>
+                    <div class="d-flex justify-content-center my-2">
+                        <button type="submit" class="btn btn-primary mx-auto w-25">Guardar Cliente <i
+                                class="fa fa-save"></i></button>
+                        <button type="reset" class="btn btn-danger mx-auto w-25">Reset <i
+                                class="fa fa-rotate-left"></i></button>
+                    </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+    <header>
+        <%- include('../partials/header'); %>
+    </header>
+    <% if( userInfo.admin ){ %>
+    <div class="d-block mx-auto w-100 text-center alert alert-success mt-1" style="padding-top: 72px;"
+        role="alert" id="mostrarUserName"><%= userInfo.name %>, <%= userInfo.lastName %> <span class="badge rounded-pill bg-primary">Admin</span>
+         - Visit <span class="badge rounded-pill bg-secondary"><%= visits %></span> 
+        <img class="img-fluid rounded-circle float-end me-5 mt-0" alt="Avatar" src="<%= userInfo.avatar %>" width="50px" height="50px">
+    </div>
+    <% } else { %>
+    <div class="d-block mx-auto w-100 text-center alert alert-success mt-1" style="padding-top: 72px;"
+        role="alert" id="mostrarUserName"><%= userInfo.name %>, <%= userInfo.lastName %> <span class="badge rounded-pill bg-info text-dark">User</span>
+         - Visit <span class="badge rounded-pill bg-secondary"><%= visits %></span> 
+        <img class="img-fluid rounded-circle float-end me-5 mt-0" alt="Avatar" src="<%= userInfo.avatar %>" width="50px" height="50px">
+    </div>    
+    <% } %>
+    <br>
+    <% if( userInfo.admin ){ %>
+    <div class="container mx-auto mt-3 mb-5 text-center shadow-lg bg-body rounded p-3" width="96vw">
+        <div class="row justify-content-evenly">
+            <div class="col mx-2 py-2">
+                <div class="card bg-primary h-100 py-2" style="width: 13rem;">
+                    <div class="card-body">
+                      <h6 class="card-title">Administrar Clientes</h6>
+                      <p class="card-text">Agrega, actualiza o elimina clientes</p>
+                      <a href="/api/clientes" class="btn btn-dark mx-auto my-3 w-100"><i class="fa fa-users fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col mx-2 py-2">
+                <div class="card bg-secondary h-100 py-2" style="width: 13rem;">
+                    <div class="card-body">
+                      <h6 class="card-title">Administrar Usuarios</h6>
+                      <p class="card-text">Agrega, actualiza o elimina usuarios y administradres</p>
+                      <a href="/api/usuarios" class="btn btn-light mx-auto my-3 w-100"><i class="fa fa-users fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col mx-2 py-2">
+                <div class="card bg-dark text-white h-100 py-2" style="width: 13rem;">
+                    <div class="card-body">
+                      <h6 class="card-title">Manage Orders</h6>
+                      <p class="card-text">Check your orders list, shiping and more.</p>
+                      <a href="/api/carts/" class="btn btn-light mx-auto my-3 w-100"><i class="fa fa-check fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col mx-2 py-2">
+                <div class="card bg-warning h-100 py-2" style="width: 13rem;">
+                    <div class="card-body">
+                      <h6 class="card-title">Manage WebChat</h6>
+                      <p class="card-text">Check messages form admins and your users.</p>
+                      <a href="/api/webchat/" class="btn btn-dark text-white mx-auto my-3 w-100"><i class="fa fa-comments fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col mx-2 py-2">
+                <div class="card bg-info h-100 py-2" style="width: 13rem;">
+                    <div class="card-body">
+                      <h6 class="card-title">Info System</h6>
+                      <p class="card-text">Check the info system, do some tests.</p>
+                      <a href="/info/system" class="btn btn-dark mx-auto my-3 w-100"><i class="fa fa-info-circle fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <% } %>
+
+    <br>
+    <div class="d-block mx-auto mt-4 my-3 text-center bg-primary-light">
+        <%- include('../partials/formularioSearchProduct'); %>    
+        <%- include('../partials/dataProductSearch'); %>
+    </div>
+    <div class="d-block mx-auto mt-5 mb-3 text-center w-75">
+        <h3 class="d-block mx-auto my-4 text-center">Lista de Clientes</h3>
+    </div>
+    <br>
+        <div class="d-block mx-auto mb-3 text-center w-75">
+            <%- include('../partials/dataClientList'); %>
+        </div>
+        <br>
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+
+        <!--    scripts     -->
+        <script type="text/javascript" src="../../index.js"></script>
+        <script type="text/javascript" src="../../search.js"></script>
+        <script type="text/javascript" src="../../clock.js"></script>
+        <script type="text/javascript" src="../../expiresSession.js"></script>
+</body>
+</html>

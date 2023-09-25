@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+    <header>
+        <%- include('../partials/headerLogin'); %>
+    </header>
+    
+    <br>
+    <div class="d-block mx-auto my-5 text-center">
+        <h3 class="d-block mx-auto my-3 text-center"><i class="fa fa-meh-o fa-1x" aria-hidden="true"></i> Lo siento. Tu tiempo de sesión ha expirado o no tienes permiso!</h3>
+        <br>
+        <h3 class="d-block mx-auto my-2 text-center">Llama a tu administrador si crees que esto es un error... <i class="fa fa-phone fa-1x" aria-hidden="true"></i></h3>
+    </div>
+    <br>
+    <div class="d-block mx-auto my-3 text-center">
+        <a class="btn btn-primary mx-auto my-2" href="/api/auth/login"> Regresar al Login <i class="fa fa-arrow-left"></i></a>
+    </div>
+    <br>
+    <footer>
+        <%- include('../partials/footer'); %>
+    </footer>
+        <!--    scripts     -->
+        <script type="text/javascript" src="../../../userDetail.js"></script>
+                    
+</body>
+
+</html>
