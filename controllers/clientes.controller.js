@@ -104,17 +104,13 @@ class ClientsController {
         const cliente = await this.clients.getClientById(id)
         
         const proyectos = await this.projects.getProjectsByClientId(id)
-        console.log('selectClientById___proyectos....... ',proyectos)
+        
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
-
-        // const usuarios = await this.users.getUserByUsername(username)
-        // const userId = usuarios._id // User Id
-        // let cart = await this.carts.getCartByUserId(userId)
 
         try {
             if(!cliente) return res.status(404).json({msg: 'Cliente no encontrado'})
@@ -130,7 +126,7 @@ class ClientsController {
 
     createNewClient = async (req, res) => {
         const user = []
-        user.push(req.body.idHidden, req.body.unameHidden, req.body.lastNameHidden, req.body.usernameHidden)
+        user.push(req.body.unameHidden, req.body.lastNameHidden, req.body.usernameHidden)
         
         const newCliente = {
             creator: user,
@@ -153,10 +149,6 @@ class ClientsController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        // const usuarios = await this.users.getUserByUsername(username)
-        // const userId = usuarios._id // User Id
-        // let cart = await this.carts.getCartByUserId(userId)
-
         try {
             if(!cliente) return res.status(404).json({Msg: 'Cliente no guardado'})
             res.render('addNewClients', { cliente, username, userInfo, expires })
@@ -174,11 +166,8 @@ class ClientsController {
         const proyectosQty = await this.projects.getProjectsByClientId(id)
         const creador = await this.clients.getClientById(id)
         
-        const modifier = {
-            name: req.body.unameHidden,
-            lastName: req.body.lastNameHidden,
-            userName: req.body.usernameHidden
-        }
+        const modifier = []
+        modifier.push(req.body.unameHidden, req.body.lastNameHidden, req.body.username)
                         
         const updatedCliente = {
             creator: creador.creator,
@@ -202,13 +191,14 @@ class ClientsController {
         try {
             const clientUpdated = this.clients.updateClient(id, updatedCliente)
             res.render('addNewClients', { clientUpdated, username, userInfo, expires })
+                    
         } catch (error) {
-                res.status(500).json({
-                    status: false,
-                    error: error
-                })
+            res.status(500).json({
+                status: false,
+                error: error
+            })
         }
-    }
+}    
 
     updateClientProjectsQty = async (req, res) => {
         const id = req.params.id

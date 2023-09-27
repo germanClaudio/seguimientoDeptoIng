@@ -1,33 +1,33 @@
 <div class="form-group col-10 mx-auto my-5 w-75 border p-3 bg-dark bg-gradient text-white bg-opacity-75 shadow-lg">
-    <form action="/api/clientes/update/<%=cliente._id%>" method="post">
+    <form id="formUpdateClient" action="/api/clientes/update/<%=cliente._id%>" method="post">
         <fieldset>
             <div class="row my-3 mx-auto">
-                <div class="col-3 my-2">
+                <div class="col-3 mx-auto my-2">
                     <label for="idDisable">Id#</label>
                     <input type="text" name="idDisable" id="idDisable" class="form-control-plaintext text-white" value="<%=cliente._id%>"
                         disabled="true">
                 </div>
                 <input type="text" name="id" id="id" class="form-control" value="<%=cliente._id%>" hidden="true">
                 <br>
-                <div class="col-2 my-2">
+                <div class="col-2 mx-auto my-2">
                     <label for="idCreator">Creado por</label>
-                    <input type="text" name="idCreator" id="idCreator" class="form-control-plaintext text-white small" value="<%=cliente.creator[0]%> <%=cliente.creator[0]%>"
+                    <input type="text" name="idCreator" id="idCreator" class="form-control-plaintext text-white small" value="<%=cliente.creator[0]%> <%=cliente.creator[1]%>"
                         disabled="true">
                 </div>
                 <br>
-                <div class="col-2 my-2">
+                <div class="col-2 mx-auto my-2">
                     <label for="timestampDisable">Fecha creación</label>
                     <input type="text" name="timestampDisable" id="timestampDisable" class="form-control-plaintext text-white small" value="<%=cliente.timestamp%>"
                         disabled="true">
                 </div>
                 <br>
-                <div class="col-2 my-2">
+                <div class="col-2 mx-auto my-2">
                     <label for="modificatorDisable">Modificado por</label>
                     <input type="text" name="modificatorDisable" id="modificatorDisable" class="form-control-plaintext text-white small" value="<%=cliente.modificator[0]%> <%=cliente.modificator[1]%>"
                         disabled="true">
                 </div>
                 <br>
-                <div class="col-auto my-2">
+                <div class="col-auto mx-auto my-2">
                     <label for="modifiedOnDisable">Fecha modificación</label>
                     <input type="text" name="modifiedOnDisable" id="modifiedOnDisable" class="form-control-plaintext text-white small" value="<%=cliente.modifiedOn%>"
                         disabled="true">
@@ -92,7 +92,7 @@
                     value="<%= userInfo.lastName %>" hidden="true">
 
                 <div class="d-flex justify-content-center my-2">
-                    <button type="submit" class="btn btn-success mx-auto my-2">Update Cliente <i
+                    <button id="btnUpdate" class="btn btn-success mx-auto my-2">Update Cliente <i
                             class="fa fa-save"></i></button>
                     <a class="btn btn-primary my-2" href="/api/clientes"> Volver <i class="fa fa-arrow-left"></i></a>
                     <a class="btn btn-danger mx-auto my-2" href="/api/clientes/delete/<%=cliente._id%>">Eliminar <i

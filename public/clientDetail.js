@@ -1,5 +1,4 @@
-const socket = io.connect()
-const Swal = require('sweetalert2');
+const socket = io.connect();
 
 function formatDate(date) {
     const day = date.getDate()
@@ -11,7 +10,42 @@ function formatDate(date) {
     return day + "-" + month + "-" + year + "_" + hours + "." + min + "." + sec
 }
 
-// --------------------- update client ----------------------------- 
+function tostada() {
+    Swal.fire({
+        title: 'Esta seguro?',
+        text: "No va a ser posible revertirlo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, modificalo!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById("formUpdateClient").submit();
+          Swal.fire(
+            'Modificado!',
+            'El cliente ha sido modificado exitosamente.',
+            'success'
+          )
+        } else {
+            Swal.fire(
+                'No modificado!',
+                'El cliente no ha sido modificado.',
+                'info'
+              )
+              return false
+        }
+      })
+}
+
+const btnUpdate = document.getElementById('btnUpdate')
+btnUpdate.addEventListener('click', (event)=>{
+    event.preventDefault()
+    tostada()
+})
+
+
+//--------------------- update client ----------------------------- 
 socket.on('updateCliente', async (arrClient) => {
     renderUpdatedClient (await arrClient)
 })
@@ -25,7 +59,7 @@ const updateCliente = () => {
     const code = document.getElementById('code').value
     let e = Boolean(document.getElementById('status'))
     const status = e
-    
+
     socket.emit('updateCliente', {
         _id,
         name,
@@ -35,18 +69,14 @@ const updateCliente = () => {
         project,
         timestamp
     })
-    
     return false
 }    
 
 const renderUpdatedClient = (arrClient) => {
     const html2 = arrClient.map((element) => {
-    
         return (`<div class="d-block mx-auto my-3 w-75 text-center alert alert-success h5"
         role="alert">Cliente ${element.name} actualizado exitosamente!</div>`
             )
-
     }).join(" ");
-
     document.getElementById('updateCliente').innerHTML = html2
 }

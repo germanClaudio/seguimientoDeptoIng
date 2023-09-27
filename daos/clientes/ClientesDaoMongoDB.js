@@ -4,8 +4,6 @@ const Clientes = require('../../models/clientes.models.js')
 const logger = require('../../utils/winston.js')
 const now = require('../../utils/formatDate.js')
 
-const Swal = require('sweetalert2');
-
 
 class ClientesDaoMongoDB extends ContenedorMongoDB {
     constructor(cnxStr) {
@@ -141,34 +139,10 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                         modifiedOn: now
                     }
 
-                    // const clientUpdated = await Clientes.findOneAndUpdate(
-                    //     { _id: id }, newValues , { new: true })
-                    // logger.info('Cliente actualizado ', clientUpdated)
-                 console.log('llegue hasta aqui, y ahora?')   
-                //----------------------------
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: '¿Quieres editar este cliente?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, editar',
-                    cancelButtonText: 'Cancelar',
-                  }).then((result) => {
-                    if (result.isConfirmed){
-                        const clientUpdated = Clientes.findOneAndUpdate(
-                            { _id: id }, newValues , { new: true })
-                        Swal('¡Cliente actualizado!', 'El cliente ha sido editado correctamente.', 'success');
-                        return clientUpdated    
-                    } else {
-                        Swal('Error', 'Hubo un problema al editar el cliente.', 'error');
-                        return null
-                    }
-                })
-                
-                //----------------------------
-                // return clientUpdated
+                    const clientUpdated = await Clientes.findOneAndUpdate(
+                        { _id: id }, newValues , { new: true })
+                    logger.info('Cliente actualizado ', clientUpdated)
+                    return clientUpdated
                 
                 } catch (error) {
                     logger.error("Error MongoDB updateClient: ",error)
