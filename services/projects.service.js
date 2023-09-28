@@ -7,8 +7,8 @@ class ProjectService {
     }
 
     // returns all projects
-    async getArrProjects(data) {
-        return this.proyectos.getArrProjects(data)
+    async getAllProjects(data) {
+        return this.proyectos.getAllProjects(data)
     }
 
     // returns all projects from one Client

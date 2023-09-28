@@ -5,9 +5,9 @@
                 <img src='../../../src/images/Logo_Prodismo.png' width="150" height="150" class="p-2 my-1 mx-auto">
             </div>
             <label for="username">Usuario</label>
-            <input type="text" name="username" id="username" class="form-control" placeholder="Nombre de Usuario" required>
+            <input type="text" name="username" id="username" class="form-control" placeholder="Nombre de Usuario" autocomplete="username" required>
             <br>
-            <label for="thumbnail">Password</label>
+            <label for="password">Password</label>
             <div class="input-group">
                 <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
                 <button class="btn btn-dark text-light" type="button" id="show-password-btn"><i class="fa fa-eye" aria-hidden="true"></i></button>
@@ -23,7 +23,7 @@
                 <a href="#" class="link small">¿Olvidaste tu contraseña?</a>
             </div>
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary mx-auto">Login <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                <button id="btnFormLogin" type="submit" class="btn btn-primary mx-auto">Login <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                 <button type="reset" class="btn btn-danger mx-auto">Reset <i class="fa fa-refresh" aria-hidden="true"></i></button>
             </div>
         </fieldset>

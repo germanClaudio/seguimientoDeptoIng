@@ -10,10 +10,10 @@ function formatDate(date) {
     return day + "-" + month + "-" + year + "_" + hours + "." + min + "." + sec
 }
 
-function tostada() {
-    Swal.fire({
+function message(clientName) {
+        Swal.fire({
         title: 'Esta seguro?',
-        text: "No va a ser posible revertirlo!",
+        text: `El cliente ${clientName} será modificado!`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -21,16 +21,16 @@ function tostada() {
         confirmButtonText: 'Si, modificalo!'
       }).then((result) => {
         if (result.isConfirmed) {
-            document.getElementById("formUpdateClient").submit();
+            document.getElementById("formUpdateClient").submit()
           Swal.fire(
             'Modificado!',
-            'El cliente ha sido modificado exitosamente.',
+            `El cliente ${clientName} ha sido modificado exitosamente.`,
             'success'
           )
         } else {
             Swal.fire(
                 'No modificado!',
-                'El cliente no ha sido modificado.',
+                `El cliente ${clientName} no ha sido modificado.`,
                 'info'
               )
               return false
@@ -38,10 +38,11 @@ function tostada() {
       })
 }
 
-const btnUpdate = document.getElementById('btnUpdate')
+const btnUpdate = document.getElementById('btnUpdateClient')
 btnUpdate.addEventListener('click', (event)=>{
     event.preventDefault()
-    tostada()
+    const clientName = document.getElementById('name').value
+    message(clientName)
 })
 
 

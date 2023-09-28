@@ -16,11 +16,10 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
     
     async getAllProjects() {
         try {
-            const projects = await Proyectos.find()
+            const projects = await Proyectos.find().sort( { 'client.name': 1, 'timestamp': 1 } )
             if ( projects === undefined || projects === null) {
-                return new Error ('No hay proyectos en el cliente!')
+                return new Error ('No hay proyectos cargados en ningún cliente!')
             } else {
-                logger.info('Proyectos encontrados...>')
                 return projects
             }    
         } catch (error) {

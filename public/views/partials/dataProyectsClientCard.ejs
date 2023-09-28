@@ -101,19 +101,21 @@
                                                 <hr>
                                                 <div class="container">
                                                     <div class="row my-auto">
-                                                        <div class="col-6">
-                                                            <ul>Creador por: <%= proyectos[0].creator[0].name %>, <%= proyectos[0].creator[0].lastName %> </ul>
-                                                            <ul>Fecha: <%= proyectos[0].timestamp %> </ul>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <% if (proyectos[0].modificator[0]) { %>
-                                                                <ul>Modificado por: <%= proyectos[0].modificator[0].name %>, <%= proyectos[0].modificator[0].lastName %> </ul>
-                                                                <ul>Fecha modificación: <%= proyectos[0].modifiedOn %> </ul>
-                                                            <% } else { %>
-                                                                <ul>Modificado por: </ul>
-                                                                <ul>Fecha modificación: </ul>
-                                                            <% } %>
-                                                        </div>      
+                                                        <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
+                                                            <div class="col-6">
+                                                                <ul>Creador por: <%= proyectos[m].creator[j].name %>, <%= proyectos[m].creator[j].lastName %> </ul>
+                                                                <ul>Fecha: <%= proyectos[m].timestamp %> </ul>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <% if (proyectos[m].modificator[j]) { %>
+                                                                    <ul>Modificado por: <%= proyectos[m].modificator[j].name %>, <%= proyectos[m].modificator[j].lastName %> </ul>
+                                                                    <ul>Fecha modificación: <%= proyectos[m].modifiedOn %> </ul>
+                                                                <% } else { %>
+                                                                    <ul>Modificado por: </ul>
+                                                                    <ul>Fecha modificación: </ul>
+                                                                <% } %>
+                                                            </div>      
+                                                        <% } %>    
                                                     </div>
                                                 </div>
 

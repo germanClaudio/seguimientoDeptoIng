@@ -85,3 +85,21 @@ function removeRow(e) {
         }
     }
 }
+
+function messageNewProject(projectName) {
+    Swal.fire({
+        position: 'center',
+        timer: 3500,
+        text: `El proyecto ${projectName} se creó exitosamente!`,
+        icon: 'success',
+        showCancelButton: false,
+        showConfirmButton: false,
+  })
+}
+
+const btnCreate = document.getElementById('btnNewProject')
+btnCreate.addEventListener('click', (event)=>{
+    //event.preventDefault()
+    const projectName = document.getElementById('projectName').value
+    messageNewProject(projectName)
+})

@@ -32,14 +32,11 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        const usuarios = await this.users.getUserByUsername(username)
-        const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
-        let cliente = await this.clients.getClientById()
+       let cliente = await this.clients.getClientById()
 
         try {
-            if (productos.error) return res.status(400).json({ msg: 'No hay proyectos cargados' })
-            res.render('addNewProjects', { proyectos, cliente, username, userInfo, cart, expires })
+            if (proyectos.error) return res.status(400).json({ msg: 'No hay proyectos cargados' })
+            res.render('projectsList', { proyectos, cliente, username, userInfo, expires })
 
         } catch (error) {
             res.status(500).json({
@@ -217,7 +214,8 @@ class ProjectsController {
             modifiedOn: ''
         }
 
-        const proyectos = await this.projects.addProjectToClient(newProject)
+        const newProyecto = await this.projects.addProjectToClient(newProject)
+        const proyectos = await this.projects.getProjectsByClientId(clientId)
 
         let username = res.locals.username
         let userInfo = res.locals.userInfo
@@ -227,11 +225,11 @@ class ProjectsController {
         const expires = new Date(time)
 
        const cliente = await this.clients.updateClientProjectQty(clientId, clienteSeleccionado)
-        // console.log('CreateNewProject proyecto...', proyectos)
-        try {
+       
+       try {
             if (!proyectos) return res.status(404).json({ Msg: 'Proyecto no guardado' })
             res.render('clientProjectsDetails', { username, userInfo, expires, cliente, proyectos })
-        
+
         } catch (error) {
             res.status(500).json({
                 status: false,

@@ -1,6 +1,6 @@
 <div class="form-group col-10 mx-auto mt-2 mb-5 w-75 border p-3 bg-dark bg-gradient text-white bg-opacity-75">
     <h3 class="mx-auto my-2 text-center">Actualizar o Eliminar Usuario</h3>
-    <form action="/api/usuarios/update/<%=usuario._id%>" method="post">
+    <form id="formUpdateUser" action="/api/usuarios/update/<%=usuario._id%>" method="post">
         <fieldset>
             <div class="row my-2 mx-auto">
                 <div class="col-3">
@@ -104,7 +104,7 @@
                     width="200px" height="200px">
             </div>
             <div class="d-flex justify-content-center my-2">
-                <button type="submit" class="btn btn-success mx-auto my-2">Actualizar Usuario <i
+                <button id="btnUpdateUser" class="btn btn-success mx-auto my-2">Actualizar Usuario <i
                         class="fa fa-save"></i></button>
                 <a class="btn btn-primary my-2" href="/api/usuarios"> Volver <i class="fa fa-arrow-left"></i></a>
                 <a class="btn btn-danger mx-auto my-2" href="/api/usuarios/delete/<%=usuario._id%>">Eliminar <i
@@ -113,5 +113,3 @@
         </fieldset>
     </form>
 </div>
-
-<!-- onsubmit="return updateProducto(this)" -->
