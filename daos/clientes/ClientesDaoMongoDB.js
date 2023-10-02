@@ -86,6 +86,27 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
     async getClientProjectsById(id) {
         if(id){
             try {
+                const client = await Clientes.findById({
+                    'client.0._id': id 
+                })
+                logger.info('Cliente encontrado: ',client)
+                return client
+            } catch (error) {
+                logger.error("Error MongoDB getOneClientById: ",error)
+            }
+        } else {
+            try {
+                const clients = await Clientes.find()
+                return clients
+            } catch (error) {
+                logger.error("Error MongoDB getOneClientById: ",error)
+            }
+        }
+    }
+
+    async getClientByProjectId(id) {
+        if(id){
+            try {
                 const client = await Clientes.findById({_id: id })
                 logger.info('Cliente encontrado: ',client)
                 return client

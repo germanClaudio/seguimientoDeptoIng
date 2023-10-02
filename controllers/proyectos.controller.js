@@ -49,7 +49,7 @@ class ProjectsController {
 
     getProjectsByClientId = async (req, res) => {
         const { id } = req.params
-        //const cliente = await this.clients.getClientById(id)
+        const cliente = await this.clients.getClientById(id)
         console.log('proyectosControler - Cliente -getProjectsByClientId ', id)
         const proyectos = await this.projects.getProjectsByClientId(id)
         console.log('proyectosControler-getProjectsByClientId ', proyectos)
@@ -90,6 +90,38 @@ class ProjectsController {
         try {
             if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
             res.render('clientProjectsDetails', { proyectosCargados, username, userInfo, expires, cliente })
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                msg: 'controllerError - getProductById',
+                error: error
+            })
+        }
+    }
+
+    selectProjectById = async (req, res) => {
+        const { id } = req.params
+
+        const cliente = await this.clients.getClientByProjectId(id)
+
+        const proyecto = await this.projects.selectProjectByProjectId(id)
+        
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+
+        try {
+            if (!proyecto) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+            res.render('projectSelectedDetail', {
+                proyecto,
+                username,
+                userInfo,
+                expires,
+                cliente
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,

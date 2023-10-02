@@ -14,9 +14,11 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
          await this.connection
     }
     
+    // get all Projects form DB ----------------
     async getAllProjects() {
         try {
             const projects = await Proyectos.find().sort( { 'client.name': 1, 'timestamp': 1 } )
+           
             if ( projects === undefined || projects === null) {
                 return new Error ('No hay proyectos cargados en ningún cliente!')
             } else {
@@ -28,6 +30,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    // Search all Clients by Client Name o Code ----------------
     async searchClientsAll(name) {
         const query = name.clientName
         try {
@@ -44,6 +47,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    // Get all projects from a Client by Id ----------------
     async getProjectsByClientId(id) {
         if(id){
             try {
@@ -52,6 +56,28 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                   })
                 
                 return projects
+               
+            } catch (error) {
+                logger.error("Error MongoDB getProjectsByClientId: ",error)
+            }
+        } else {
+            try {
+                const projects = await Proyectos.find()
+                return projects
+            } catch (error) {
+                logger.error("Error MongoDB getOneClientById: ",error)
+            }
+        }
+    }
+
+    // Select one project by project Id ----------------
+    async selectProjectByProjectId(id) {
+        if(id){
+            try {
+                const project = await Proyectos.find({
+                    'project.0._id': id 
+                  })
+                return project
                
             } catch (error) {
                 logger.error("Error MongoDB getProjectsByClientId: ",error)

@@ -24,6 +24,11 @@ class ClientService {
 
     // returns all Projects from one client by id
     async getClientProjectsById(id) {
+        return await this.clientes.getClientByProjectId(id)
+    }
+
+    // returns one Project from Project id
+    async getClientByProjectId(id) {
         return await this.clientes.getClientProjectsById(id)
     }
 

@@ -16,8 +16,8 @@ socket.on('projectsAll', (arrayProjects, arrUsers) => {
 
 // --------------- Render Project table for AdminS -----------------------------------
 const renderProjectsForAdmin = (arrayProjects) => {
-    const arrayProyectos = arrayProjects
-    
+    let arrayProyectos = arrayProjects
+        
     const html = arrayProyectos.map((element) => {
         let green = 'success'
         let red = 'danger'
@@ -27,7 +27,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
         let white = 'white'
         // let black = 'dark'
         // let blue = 'primary'
-        let result = 'S/P'
+        // let result = 'S/P'
         let colorResult = grey
         let colorLevel
         
@@ -70,7 +70,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
                     <td class="text-center">${loopOcis()}</td>
                     <td class="text-center"><img class="img-fluid rounded m-2" alt="Imagen Proyecto" src='${element.project[0].imageProject}' width="100px" height="80px"></td>
                     <td class="text-center"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.client[0].logo}' width="80px" height="60px"></td>
-                    <td class="text-center">${element.project[0].prioProject}</td>
+                    <td class="text-center"><span class="badge rounded-pill bg-dark">${element.project[0].prioProject}</span></td>
                     <td class="text-center"><span class="badge rounded-pill bg-${colorResult} text-${colorLevel}">${text}</span></td>
                     <td class="text-center">${element.project[0].projectDescription}</td>
                     <td class="text-center">${element.project[0].oci[0].otProject}</td>
@@ -80,7 +80,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
                     <td class="text-center">
                         <div class="d-block align-items-center">
                             <a href="#" class="btn btn-secondary btn-sm me-1 disabled" data-toggle="tooltip" data-placement="top" title="To Be Done"><i class="fa fa-eye"></i></a>
-                            <a href="/api/proyectos/${element.project[0]._id}" class="btn btn-primary btn-sm mx-1"><i class="fa fa-pencil"></i></a>
+                            <a href="/api/proyectos/select/${element.project[0]._id}" class="btn btn-primary btn-sm mx-1"><i class="fa fa-pencil"></i></a>
                             <a href="/api/proyectos/delete/${element.project[0]._id}" class="btn btn-danger btn-sm mx-1"><i class="fa fa-trash"></i></a>
                         </div>
                     </td>
@@ -89,10 +89,10 @@ const renderProjectsForAdmin = (arrayProjects) => {
 
     document.getElementById('mostrarProyectos').innerHTML = html
 
-    const htmlProjectsList = 
-        ( `<caption id="capProjectsList">Cantidad Total de Proyectos ${arrayProyectos.length}</caption>`)
+        const htmlProjectsList = 
+            ( `<caption id="capProjectsList">Cantidad Total de Proyectos ${arrayProyectos.length}</caption>`)
 
-    document.getElementById('capProjectsList').innerHTML = htmlProjectsList
+        document.getElementById('capProjectsList').innerHTML = htmlProjectsList
 }
 
 //----------------------- Render User -------------------------------
@@ -149,3 +149,33 @@ const renderClientUser = (arrClient) => {
 
     document.getElementById('capClientList').innerHTML = htmlClientList
 }
+
+//-------------------------------------------------------
+// function order(icon) {
+//     //console.log('orden / icon', orden, icon)
+//     // arrayClient.sort((a, b) => {
+//     //     return a.nombre - b.nombre
+//     //   })
+
+//     const iconAsc = (`<i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>`)
+//     const iconDesc = (`<i class="fa fa-sort-alpha-desc" aria-hidden="true"></i>`)
+//     const resultado = icon == iconDesc ? iconAsc : iconDesc
+    
+//     document.getElementById('btnNombre').innerHTML = resultado
+// }
+
+// const btnNombre = document.getElementById('btnNombre')
+// btnNombre.addEventListener('click', (event)=>{
+//     event.preventDefault()
+//     const icon = document.getElementById('btnNombre').innerHTML
+//     let categoria = document.getElementById("btnNombre").value
+//     console.log('categoria: ', categoria)
+//     let query = window.location.search
+//     if (query.includes("categoria=")) {
+//         query = query.replace(/categoria=[^&]*/, "categoria=" + categoria);
+//       } else {
+//         query += "&categoria=" + categoria
+//       }
+//     order(icon)
+//     window.location.replace(window.location.pathname + query)
+// })

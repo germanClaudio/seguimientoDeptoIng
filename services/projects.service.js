@@ -7,13 +7,18 @@ class ProjectService {
     }
 
     // returns all projects
-    async getAllProjects(data) {
-        return this.proyectos.getAllProjects(data)
+    async getAllProjects() {
+        return this.proyectos.getAllProjects()
     }
 
     // returns all projects from one Client
     async getProjectsByClientId(data) {
         return this.proyectos.getProjectsByClientId(data)
+    }
+
+    // returns one project from a ProjectId
+    async selectProjectByProjectId(idProject) {
+        return this.proyectos.selectProjectByProjectId(idProject)
     }
 
     // // reduce quantity of Projects from one Client

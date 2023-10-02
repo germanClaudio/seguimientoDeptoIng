@@ -14,8 +14,8 @@ routerProyectos.get('/', checkAuthentication, authUserMiddleware, projects.getAl
 // -------------------  Seleccionar Proyecto por Cliente Id ------------------ 
 routerProyectos.get('/:id', checkAuthentication, authProductMiddleware, projects.getProjectsByClientId)
 
-// -------------------  Ver detalles del Proyecto por Id ------------------ 
-// routerProyectos.get('/select/:id', checkAuthentication, authProductMiddleware, projects.selectClientById)
+// -------------------  Ver detalles del Proyecto por Id del proyecto ------------------ 
+routerProyectos.get('/select/:id', checkAuthentication, authProductMiddleware, projects.selectProjectById)
 
 // -------------------  Ver proyectos del Cliente ------------------ 
 // routerProyectos.get('/projects/:id', checkAuthentication, authProductMiddleware, projects.getClientProjectsById)
