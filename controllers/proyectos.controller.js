@@ -103,7 +103,7 @@ class ProjectsController {
         const { id } = req.params
 
         const cliente = await this.clients.getClientByProjectId(id)
-
+        console.log('cliente:', cliente)
         const proyecto = await this.projects.selectProjectByProjectId(id)
         
         let username = res.locals.username

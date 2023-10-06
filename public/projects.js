@@ -39,20 +39,29 @@ const renderProjectsForAdmin = (arrayProjects) => {
             return ociArr.join('<br>')
         }
 
-        // function loopPrio() {
-        //     for (let i=0; i < element.project[0].oci.length; i++) {
-        //         ociArr.push(element.project[0].oci[i].ociNumber)
-        //     }
-        //     return ociArr.join('<br>')
-        // }
+        let otArr = []
+        function loopOt() {
+            for (let i=0; i < element.project[0].oci[0].otProject.length; i++) {
+                otArr.push(element.project[0].oci[0].otProject[i].otNumber)
+            }
+            return otArr.join('<br>')
+        }
 
-        // let ociArr = []
-        // function loopModifId() {
-        //     for (let i=0; i < element.modificator.length; i++) {
-        //         modifArr.push(element.modificator[i])
-        //     }
-        //     return modifArr.join('<br>')
-        // }
+        let opArr = []
+        function loopOp() {
+            for (let i=0; i < element.project[0].oci[0].otProject.length; i++) {
+                opArr.push(element.project[0].oci[0].otProject[i].opNumber)
+            }
+            return opArr.join('<br>')
+        }
+
+        let DescriptionArr = []
+        function loopDescription() {
+            for (let i=0; i < element.project[0].oci[0].otProject.length; i++) {
+                DescriptionArr.push(element.project[0].oci[0].otProject[i].opDescription)
+            }
+            return DescriptionArr.join('<br>')
+        }
 
         if ( element.project[0].levelProject === true) {
             colorLevel = white
@@ -69,13 +78,13 @@ const renderProjectsForAdmin = (arrayProjects) => {
                     <td class="text-center">${element.project[0].projectName}</td>
                     <td class="text-center">${loopOcis()}</td>
                     <td class="text-center"><img class="img-fluid rounded m-2" alt="Imagen Proyecto" src='${element.project[0].imageProject}' width="100px" height="80px"></td>
-                    <td class="text-center"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.client[0].logo}' width="80px" height="60px"></td>
+                    <td class="text-center"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.client[0].logo}' width="70px" height="55px"></td>
                     <td class="text-center"><span class="badge rounded-pill bg-dark">${element.project[0].prioProject}</span></td>
                     <td class="text-center"><span class="badge rounded-pill bg-${colorResult} text-${colorLevel}">${text}</span></td>
                     <td class="text-center">${element.project[0].projectDescription}</td>
-                    <td class="text-center">${element.project[0].oci[0].otProject}</td>
-                    <td class="text-center">${element.project[0].statusProject}</td>
-                    <td class="text-center">${element.project[0].statusProject}</td>
+                    <td class="text-center">${loopOt()}</td>
+                    <td class="text-center">${loopOp()}</td>
+                    <td class="text-center">${loopDescription()}</td>
                     <td class="text-center">${element.timestamp}</td>
                     <td class="text-center">
                         <div class="d-block align-items-center">

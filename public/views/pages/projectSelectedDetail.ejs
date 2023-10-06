@@ -8,28 +8,29 @@
         <%- include('../partials/header'); %>
     </header>
     <%- include('../partials/userBanner'); %>
-    <br>
-    <!-- <div class="d-block mx-auto my-2 pb-4 text-center">
-        <button class="btn btn-primary my-2 me-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-            aria-expanded="false" aria-controls="collapseExample">Detalle de Proyecto <i class="fa fa-plus"
+    
+    <div class="d-block mx-auto my-2 pb-4 text-center">
+        <button class="btn btn-primary my-1 me-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+            aria-expanded="false" aria-controls="collapseExample">Agregar OT's <i class="fa fa-plus"
                 aria-hidden="true"></i>
         </button>
-        <a class="btn btn-secondary my-2 ms-5" href="/api/auth/index"><i class="fa fa-home"
-                aria-hidden="true"></i> Home </a>
-    </div> -->
+        <a class="btn btn-info my-1 mx-5" href="/api/proyectos"><i class="fa fa-reply"
+            aria-hidden="true"></i> Volver Atrás </a>
+        <a class="btn btn-secondary my-1 ms-5" href="/api/auth/index"><i class="fa fa-home"
+                aria-hidden="true"></i> Volver al Home </a>
+    </div>
     
-    <h3 class="d-block mx-auto mt-2 mb-3 text-center">Proyecto <%=proyecto[0].project[0].projectName %></h3>
+    <h5 class="d-block mx-auto mt-2 mb-3 text-center">Nombre Proyecto: <%=proyecto[0].project[0].projectName %></h5>
     <div id="updateCliente"> 
     </div>
-    <div>Aca iría toda la info del proyecto <%=proyecto[0].project[0].projectName %> </div>
+    <%- include('../partials/dataProyectCard'); %>
     <br>
     <footer>
         <%- include('../partials/footer'); %>
     </footer>
 
         <!--    scripts     -->
-        <!-- <script type="text/javascript" src="../../../projectDetails.js"></script> -->
-        <!-- <script type="text/javascript" src="../../../clientDetail.js"></script> -->
+        <script type="text/javascript" src="../../../projectInfo.js"></script>
         <script type="text/javascript" src="../../../clock.js"></script>
         <script type="text/javascript" src="../../../expiresSession.js"></script>
                     

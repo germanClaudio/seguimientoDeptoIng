@@ -7,32 +7,41 @@ showPasswordBtn.addEventListener('click', () => {
     showPasswordBtn.innerHTML = type === 'password' ? '<i class="fa fa-eye" aria-hidden="true"></i>' : '<i class="fa fa-eye-slash" aria-hidden="true"></i>'
 })
 
-function welcomeMessage(uName) {
+function welcomeMessage(uName, passWord) {
 
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: false,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
+  
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: false,
+      // didOpen: (toast) => {
+        //   toast.addEventListener('mouseenter', Swal.stopTimer)
+        //   toast.addEventListener('mouseleave', Swal.resumeTimer)
+        // }
       })
       
-      Toast.fire({
-        icon: 'success',
-        title: `Bienvenido ${uName}`
-      })
+  if(uName !="" && passWord !="") {
+    Toast.fire({
+      icon: 'success',
+      title: `Bienvenido ${uName}`
+    })
+  } else {
+    Toast.fire({
+      icon: 'error',
+      title: `Error en formulario Login!`
+    })
+  }
 }
 
 const btnUpdate = document.getElementById('btnFormLogin')
-btnUpdate.addEventListener('click', ()=> {
+btnUpdate.addEventListener('click', (event)=> {
     //event.preventDefault()
     const uName = document.getElementById('username').value
+    const passWord = document.getElementById('password').value
     if(uName) {
-        welcomeMessage(uName)
+        welcomeMessage(uName, passWord)
     }
     
 })

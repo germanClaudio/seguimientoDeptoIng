@@ -10,12 +10,12 @@ function formatDate(date) {
     const hours = date.getHours()
     const min = date.getMinutes()
     const sec = date.getSeconds()
-    
+
     return day + "-" + month + "-" + year + "_" + hours + "." + min + "." + sec
 }
 
-class ClientsController {  
-    constructor(){
+class ClientsController {
+    constructor() {
         this.clients = new ClientsService()
         this.carts = new CartsService()
         this.users = new UserService()
@@ -24,7 +24,7 @@ class ClientsController {
 
     getAllClients = async (req, res) => {
         const clientes = await this.clients.getAllClients()
-        
+
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
@@ -33,7 +33,7 @@ class ClientsController {
         const expires = new Date(time)
 
         try {
-            if(clientes.error) return res.status(400).json({msg: 'No hay clientes cargados'})
+            if (clientes.error) return res.status(400).json({ msg: 'No hay clientes cargados' })
             res.render('addNewClients', { clientes, username, userInfo, expires })
 
         } catch (error) {
@@ -48,34 +48,34 @@ class ClientsController {
     getClientProjectsById = async (req, res) => {
         const { id } = req.params
         const proyectos = await this.projects.getProjectsByClientId(id)
-        
-            const cliente = await this.clients.getClientById(id)
 
-            let username = res.locals.username
-            let userInfo = res.locals.userInfo
+        const cliente = await this.clients.getClientById(id)
 
-            const cookie = req.session.cookie
-            const time = cookie.expires
-            const expires = new Date(time)
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
 
-            try {
-                if(!proyectos) return res.status(404).json({msg: 'getProjectsByClientId no encontrado'})
-                
-                res.render('clientProjectsDetails', { username, userInfo, expires, proyectos, cliente })
-            
-            } catch (error) {
-                res.status(500).json({
-                    status: false,
-                    msg: 'controllerError - getClientById',
-                    error: error
-                })
-            }
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+
+        try {
+            if (!proyectos) return res.status(404).json({ msg: 'getProjectsByClientId no encontrado' })
+
+            res.render('clientProjectsDetails', { username, userInfo, expires, proyectos, cliente })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                msg: 'controllerError - getClientById',
+                error: error
+            })
+        }
     }
 
     getClientById = async (req, res) => {
         const { id } = req.params
         const cliente = await this.clients.getClientById(id)
-        
+
         const proyectos = await this.projects.getProjectsByClientId(id)
         // console.log('getClientById__proyectos....... ',proyectos)
         let username = res.locals.username
@@ -86,10 +86,10 @@ class ClientsController {
         const expires = new Date(time)
 
         try {
-            if(!cliente) return res.status(404).json({msg: 'Cliente no encontrado'})
-            
+            if (!cliente) return res.status(404).json({ msg: 'Cliente no encontrado' })
+
             res.render('clientProjectsDetails', { cliente, username, userInfo, expires, proyectos })
-        
+
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -102,9 +102,9 @@ class ClientsController {
     selectClientById = async (req, res) => {
         const { id } = req.params
         const cliente = await this.clients.getClientById(id)
-        
+
         const proyectos = await this.projects.getProjectsByClientId(id)
-        
+
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
@@ -113,7 +113,7 @@ class ClientsController {
         const expires = new Date(time)
 
         try {
-            if(!cliente) return res.status(404).json({msg: 'Cliente no encontrado'})
+            if (!cliente) return res.status(404).json({ msg: 'Cliente no encontrado' })
             res.render('clientDetails', { cliente, username, userInfo, expires, proyectos })
         } catch (error) {
             res.status(500).json({
@@ -127,7 +127,7 @@ class ClientsController {
     createNewClient = async (req, res) => {
         const user = []
         user.push(req.body.unameHidden, req.body.lastNameHidden, req.body.usernameHidden)
-        
+
         const newCliente = {
             creator: user,
             modificator: [],
@@ -150,7 +150,7 @@ class ClientsController {
         const expires = new Date(time)
 
         try {
-            if(!cliente) return res.status(404).json({Msg: 'Cliente no guardado'})
+            if (!cliente) return res.status(404).json({ Msg: 'Cliente no guardado' })
             res.render('addNewClients', { cliente, username, userInfo, expires })
         } catch (error) {
             res.status(500).json({
@@ -165,10 +165,10 @@ class ClientsController {
         const id = req.params.id
         const proyectosQty = await this.projects.getProjectsByClientId(id)
         const creador = await this.clients.getClientById(id)
-        
+
         const modifier = []
         modifier.push(req.body.unameHidden, req.body.lastNameHidden, req.body.username)
-                        
+
         const updatedCliente = {
             creator: creador.creator,
             name: req.body.name,
@@ -187,32 +187,32 @@ class ClientsController {
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
-        
+
         try {
             const clientUpdated = this.clients.updateClient(id, updatedCliente)
             res.render('addNewClients', { clientUpdated, username, userInfo, expires })
-                    
+
         } catch (error) {
             res.status(500).json({
                 status: false,
                 error: error
             })
         }
-}    
+    }
 
     updateClientProjectsQty = async (req, res) => {
         const id = req.params.id
         const proyectos = await this.projects.getProjectsByClientId(id)
-        // console.log('proyectosQty.......',proyectos.lentgh)
+        
         const clientToUpdateProjectQty = await this.clients.getClientById(id)
         const creador = await this.clients.getClientById(id)
 
         let username = res.locals.username
         let userInfo = res.locals.userInfo
-        
+
         const modifier = []
         modifier.push(req.body.unameHidden, req.body.lastNameHidden, username)
-                
+
         const updatedClienteProjectsQty = {
             creator: creador.creator,
             name: clientToUpdateProjectQty.name,
@@ -240,20 +240,16 @@ class ClientsController {
         }
     }
 
-    
+
     deleteClientById = async (req, res) => {
         const { id } = req.params
-                
+
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
-
-        // const usuarios = await this.users.getUserByUsername(username)
-        // const userId = usuarios._id // User Id
-        // let cart = await this.carts.getCartByUserId(userId)
 
         try {
             const clientDeleted = await this.clients.deleteClientById(req.params.id)
@@ -274,10 +270,6 @@ class ClientsController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        // const usuarios = await this.users.getUserByUsername(username)
-        // const userId = usuarios._id // User Id
-        // let cart = await this.carts.getCartByUserId(userId)
-
         try {
             const clientsDeleted = await this.clients.deleteAllClients()
             res.render('addNewClients', { clientsDeleted, username, userInfo, expires })
@@ -286,37 +278,9 @@ class ClientsController {
             res.status(500).json({
                 status: false,
                 error: error
-            })    
+            })
         }
     }
-
-    // getClientProjectsById = async (req, res) => {
-    //     const { id } = req.params
-    //     const cliente = await this.clients.getClientProjectsById(id)
-        
-    //     let username = res.locals.username
-    //     let userInfo = res.locals.userInfo
-
-    //     const cookie = req.session.cookie
-    //     const time = cookie.expires
-    //     const expires = new Date(time)
-
-    //     const usuarios = await this.users.getUserByUsername(username)
-    //     const userId = usuarios._id // User Id
-    //     let cart = await this.carts.getCartByUserId(userId)
-
-    //     try {
-    //         if(!cliente) return res.status(404).json({msg: 'Cliente no encontrado'})
-    //         res.render('clientProjectsDetails', { cliente, username, userInfo, cart, expires })
-    //     } catch (error) {
-    //         res.status(500).json({
-    //             status: false,
-    //             msg: 'controllerError - getClientProjectsById',
-    //             error: error
-    //         })
-    //     }
-    // }
-
 
 }
 

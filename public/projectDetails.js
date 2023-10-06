@@ -99,7 +99,7 @@ function messageNewProject(projectName) {
 
 const btnCreate = document.getElementById('btnNewProject')
 btnCreate.addEventListener('click', (event)=>{
-    //event.preventDefault()
+    event.preventDefault()
     const projectName = document.getElementById('projectName').value
     messageNewProject(projectName)
 })

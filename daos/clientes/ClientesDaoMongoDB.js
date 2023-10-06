@@ -87,7 +87,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         if(id){
             try {
                 const client = await Clientes.findById({
-                    'client.0._id': id 
+                    _id: id  //client.0._id
                 })
                 logger.info('Cliente encontrado: ',client)
                 return client
