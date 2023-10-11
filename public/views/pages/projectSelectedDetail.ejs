@@ -8,16 +8,19 @@
         <%- include('../partials/header'); %>
     </header>
     <%- include('../partials/userBanner'); %>
+
+    <%- include('../partials/formularioNewOt'); %>
     
     <div class="d-block mx-auto my-2 pb-4 text-center">
-        <button class="btn btn-primary my-1 me-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-            aria-expanded="false" aria-controls="collapseExample">Agregar OT's <i class="fa fa-plus"
-                aria-hidden="true"></i>
-        </button>
+        <a class="btn btn-primary my-1 me-5" href="/api/proyectos/oci/"
+        type="button">Agregar OT's <i class="fa-regular fa-plus" aria-hidden="true"></i>
+        </a>
         <a class="btn btn-info my-1 mx-5" href="/api/proyectos"><i class="fa fa-reply"
-            aria-hidden="true"></i> Volver Atrás </a>
+            aria-hidden="true"></i> Volver Atrás
+        </a>
         <a class="btn btn-secondary my-1 ms-5" href="/api/auth/index"><i class="fa fa-home"
-                aria-hidden="true"></i> Volver al Home </a>
+                aria-hidden="true"></i> Volver al Home
+        </a>
     </div>
     
     <h5 class="d-block mx-auto mt-2 mb-3 text-center">Nombre Proyecto: <%=proyecto[0].project[0].projectName %></h5>

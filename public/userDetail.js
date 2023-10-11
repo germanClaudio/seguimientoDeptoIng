@@ -43,7 +43,6 @@ btnUpdate.addEventListener('click', (event)=>{
     event.preventDefault()
     const name = document.getElementById('name').value
     const lastName = document.getElementById('lastName').value
-    console.log('name y lastName...', name, lastName)
     message(name, lastName)
 })
 
@@ -64,7 +63,13 @@ const updateUsuario = () => {
     status ? status = true : status = false
     const admin = document.getElementById('admin').checked
     admin ? admin = true : admin = false
-    const timestamp = formatDate(new Date())
+    const permiso = document.getElementById('permiso').value
+    //const timestamp = ""
+    const modificatorName = document.getElementById('userNameHidden').value
+    const modificatorLastName = document.getElementById('userLastNameHidden').value
+    //const creator = []
+    const modificator = [modificatorName, modificatorLastName]
+    const modifiedOn = formatDate(new Date())
 
     socket.emit('updateUsuario', {
         _id,
@@ -75,18 +80,11 @@ const updateUsuario = () => {
         avatar,
         status,
         admin,
-        timestamp
+        permiso,
+        // timestamp,
+        // creator,
+        modificator,
+        modifiedOn
     })
     return false
-}    
-
-const renderUpdatedUser = (arrUser) => {
-    const html2 = arrUser.map((element) => {
-    
-        return (`<div class="d-block mx-auto my-3 w-75 text-center alert alert-success h5"
-        role="alert">Producto actualizado exitosamente!</div>`
-                )
-    }).join(" ");
-
-    document.getElementById('updateUsuario').innerHTML = html2
 }

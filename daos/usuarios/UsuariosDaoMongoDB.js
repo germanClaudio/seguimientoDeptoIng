@@ -19,7 +19,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
    async getAllUsers(){
        try {
            const users = await Usuarios.find()
-           if ( users === [] || users === undefined || users === null) {
+           if ( users === undefined || users === null) {
                 return new Error ('No hay usuarios en la DB!')
            } else {
                 return users    
@@ -34,7 +34,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
         if(id){
             try {
                 const user = await Usuarios.findOne( {_id: `${id}`} )
-                if ( user === [] || user === undefined || user === null) {
+                if ( user === undefined || user === null) {
                     return new Error (`El Usuario no existe con ese ID${id}!`)
                 } else {
                     return user    
@@ -52,7 +52,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
             try {
                 const user = await Usuarios.findOne( { username: `${username}` })
                 
-                 if ( user === [] || user === undefined || user === null) {
+                 if ( user === undefined || user === null) {
                     return false
                  } else {
                     return user    
@@ -69,7 +69,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
         if(username || password) {
             try {
                 const user = await Usuarios.findOne( {username: `${username}`, password: `${password}` } )
-                if ( user === [] || user === undefined || user === null || password !== user.password ) {
+                if ( user === undefined || user === null || password !== user.password ) {
                     return false    
                 } else {
                     return true
@@ -83,6 +83,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
     }
     
     async createNewUser(usuario) {
+        console.log('UsuarioCreador: ',usuario)
         if (usuario) {
             let username = usuario.username || "";
             let password = usuario.password || "";
@@ -105,6 +106,10 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                                   null);
                     }
                     password = createHash(password)
+
+                    const creator = []
+                    const modificator = []
+                    const modified = ""
         
                     const nuevoUsuario = { 
                         name: usuario.name,
@@ -115,7 +120,12 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                         password: password,
                         status: true,
                         admin: false,
+                        permiso: usuario.permiso,
                         timestamp: now,
+                        creator: creator,
+                        modificator: modificator,
+                        modifiedOn: modified
+
                     }             
 
                     const newUser = new Usuarios(nuevoUsuario)
@@ -223,6 +233,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                         password: password,
                         status: true,
                         admin: false,
+                        permiso: usuario.permiso,
                         timestamp: now,
                     }             
 
@@ -303,12 +314,16 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
 
     async updateUser(id, user){
         const userMongoDB = await Usuarios.findById( { _id: `${id}` } )
-                
+        const userModificator = await Usuarios.findById( { _id: `${user.id}`} )
+        console.log('modifiedOn: ', userModificator)        
         if (userMongoDB) {
             try {
                 let adminValue, statusValue = ""
                 user.admin === "on" ? adminValue = true : adminValue = false
                 user.status === "on" ? statusValue = true : statusValue = false
+
+                let modificatorArr = [userModificator.name, userModificator.lastName]
+               
                  const newValues = {
                     name: user.name,
                     lastName: user.lastName,
@@ -318,11 +333,18 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                     password: userMongoDB.password,
                     admin: adminValue,
                     status: statusValue,
-                    timestamp: now,
+                    permiso: user.permiso,
+                    modificator: modificatorArr,
+                    modifiedOn: now
                 }
                 
                 const userUpdated = await Usuarios.findOneAndUpdate(
-                    { _id: id }, newValues , { new: true })
+                    { _id: id,
+                    timestamp: user.timestamp,
+                    creator: user.creator },
+                    newValues,
+                    { new: true })
+
                 return userUpdated
                
             } catch (error) {
@@ -349,6 +371,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                         password: userMongoDB.password,
                         admin: userMongoDB.admin,
                         active: false,
+                        permiso: userMongoDB.permiso,
                         timestamp: now,
                     }
                     const user = await Usuarios.findOneAndUpdate(

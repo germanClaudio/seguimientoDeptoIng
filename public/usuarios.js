@@ -14,7 +14,14 @@ const addNewUser = () => {
     const password = document.getElementById('password').value
     const status = true
     const admin = false
+    const permiso = document.getElementById('permiso').value
+    console.log('permiso:', permiso)
     const timestamp = new Date().toLocaleString('en-GB')
+    const creatorName = document.getElementById('userNameHidden').value
+    const creatorLastName = document.getElementById('userLastNameHidden').value
+    const creator = [creatorName, creatorLastName]
+    const modificator = []
+    const modifiedOn = ""
 
     socket.emit('newUsuario', {
         name,
@@ -25,7 +32,11 @@ const addNewUser = () => {
         password,
         status,
         admin,
-        timestamp
+        permiso,
+        timestamp,
+        creator,
+        modificator,
+        modifiedOn
     })
     return false
 }
@@ -40,13 +51,25 @@ const renderUser = (arrUsers) => {
     const inactive = 'Inactive'
     const admin = 'Admin'
     const user = 'User'
-    
+        
     const html = arrUsers.map((element) => {
         let optionStatus = element.status ? green : red
         let optionAdmin = element.admin ? dark : grey
+        let optionPermiso = element.permiso ? grey : red
         let showStatus = element.status ? active : inactive
         let showAdmin = element.admin ? admin : user
         let idChain = element._id.substring(19)
+        var showPermiso = "Diseño/Simulación"
+        
+            if (element.permiso === 'diseno') {
+                showPermiso = "Diseño"
+            } else if (element.permiso === "simulacion"){
+                showPermiso = 'Simulación'
+            } else if (element.permiso === "disenoSimulacion"){
+                showPermiso
+            } else {
+                showPermiso = 'Sin permisos asociados'
+            }
 
         return (`<tr>
                     <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
@@ -57,10 +80,11 @@ const renderUser = (arrUsers) => {
                     <td class="text-center"><img class="img-fluid rounded py-2" alt="Avatar" src='${element.avatar}' width="90px" height="70px"></td>
                     <td class="text-center"><span class="badge rounded-pill bg-${optionStatus}"> ${showStatus} </span></td>
                     <td class="text-center"><span class="badge rounded-pill bg-${optionAdmin}"> ${showAdmin} </span></td>
+                    <td class="text-center"><span class="badge rounded-pill bg-${optionPermiso}"> ${showPermiso} </span></td>
                     <td class="text-center">
                         <div class="d-block align-items-center text-center">
-                            <a href="/api/usuarios/${element._id}" class="btn btn-primary btn-sm me-1"><i class="fa fa-pencil"></i></a>
-                            <a href="/api/usuarios/delete/${element._id}" class="btn btn-danger btn-sm mx-1"><i class="fa fa-trash"></i></a>
+                            <a href="/api/usuarios/${element._id}" class="btn btn-primary btn-sm me-1"><i class="fa-solid fa-user-pen"></i></a>
+                            <a href="/api/usuarios/delete/${element._id}" class="btn btn-danger btn-sm mx-1"><i class="fa-solid fa-user-xmark"></i></a>
                         </div>
                     </td>
                 </tr>`)

@@ -39,6 +39,10 @@ const userSchema = new Schema({
         required: true,
         default: true
     },
+    permiso: { 
+        type: String,
+        required: true
+    },
     creator: {
         type: Array,
     },

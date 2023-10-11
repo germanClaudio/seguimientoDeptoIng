@@ -42,26 +42,36 @@
                     required>
                 </div>
             </div>
-            <!-- status y rol -->
-            <div class="row my-1 mx-auto">
-                <div class="col-4">
+            <!-- status, rol y permisos -->
+            <div class="row mx-auto align-middle">
+                <div class="col-2 my-3">
+                    <label class="form-check-label" for="permiso">Seleccione un Permiso</label>
+                    <select class="form-select form-select" aria-label=".form-select example" id="permiso" required>
+                        <option selected disabled value="diseno">Diseño</option>
+                        <option value="simulacion">Simulación</option>
+                        <option value="disenoSimulacion">Diseño/Simulación</option>
+                    </select>
+                </div>
+
+                <div class="col-2 ms-4 mt-5 my-auto">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="status" checked disabled>
                         <label class="form-check-label" for="status">Activo</label>
                     </div>
                 </div>
-            </div>        
-                <br>
-                <div class="row my-1 mx-auto">
-                    <div class="col-4">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="admin" checked disabled>
-                            <label class="form-check-label" for="status">Usuario</label>
-                        </div>
-                    </div>
-                </div>    
-                    <br>
             
+                <div class="col-2 ms-4 mt-5 my-auto">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="admin" checked disabled>
+                        <label class="form-check-label" for="status">Usuario</label>
+                    </div>
+                </div>
+                <!-- <input type="text" value="<%= userInfo.id %>" id="userIdHidden" hidden> -->
+                <input type="text" value="<%= userInfo.name %>" id="userNameHidden" hidden>
+                <input type="text" value="<%= userInfo.lastName %>" id="userLastNameHidden" hidden>
+                    
+            </div>    
+            <br>  
             <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary mx-auto" id="btnNewUser">Nuevo Usuario <i
                         class="fa fa-user-plus"></i></button>

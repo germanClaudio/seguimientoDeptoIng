@@ -19,13 +19,11 @@ class UsersController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        const usuario = await this.users.getUserByUsername(username)
-        const userId = usuario._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
+        //const usuario = await this.users.getUserByUsername(username)
 
         try {
             if(usuarios.error) return res.status(400).json({msg: 'No hay usuarios cargados!'}) 
-            res.render('addNewUser', { usuarios, username, userInfo, cart, expires })
+            res.render('addNewUser', { usuarios, username, userInfo, expires })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -46,13 +44,10 @@ class UsersController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        const userId = usuario._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
-
         try {
             if(!usuario) return res.status(404).json({msg: 'Usuario no encontrado'})
             
-            res.render('userDetails', { usuario, username, userInfo, cart, expires })
+            res.render('userDetails', { usuario, username, userInfo, expires })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -71,14 +66,11 @@ class UsersController {
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
-        
-        const userId = usuario._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
-        
+                
         try {
             if(!usuario) return res.status(404).json({msg: 'Usuario no encontrado'})
             
-            res.render('userDetails', { usuario, username, userInfo, cart, expires })
+            res.render('userDetails', { usuario, username, userInfo, expires })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -105,7 +97,9 @@ class UsersController {
     }
 
     createNewUser = async (req, res) => {
+        console.log('usuario-controller-body: ',req.body)
         const usuario = await this.users.addNewUser(req.body)
+        console.log('usuario-controller: ',usuario)
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
@@ -113,16 +107,23 @@ class UsersController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        const usuarioLog = await this.users.getUserByUsername(username)
-        const userId = usuarioLog._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
+        const usuarioLog = await this.users.getUserByUsername(username)        
 
         try {
             if(!usuarioLog) {
-                res.render('addNewUser', { usuario, username, userInfo, cart, expires }) //agergar control
+                res.render('addNewUser', {
+                    usuario,
+                    username,
+                    userInfo,
+                    expires
+                })
             }
             else {
-                res.render('userDetails', { usuario, username, userInfo, cart, expires })
+                res.render('userDetails', {
+                    usuario,
+                    username,
+                    userInfo,
+                    expires })
             } 
         } catch (error) {
             res.status(500).json({
@@ -137,19 +138,18 @@ class UsersController {
         let username = res.locals.username
         let userInfo = res.locals.userInfo
         const userToUpdate = req.body
-
+        console.log('datos de usuario a modificar: ', userToUpdate)
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
 
         const usuarioLog = await this.users.getUserByUsername(username)
-        const userId = usuarioLog._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
-
+        //const userId = usuarioLog._id // User Id
+        
         try {
             const userUpdated = await this.users.updateUser(userToUpdate.id, userToUpdate)
             const usuario = await this.users.getUserById(userToUpdate.id)
-            res.render('userDetails', { usuario, userUpdated, username, userInfo, cart, expires })
+            res.render('userDetails', { usuario, userUpdated, username, userInfo, expires })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -168,12 +168,11 @@ class UsersController {
         const expires = new Date(time)
 
         const usuarioLog = await this.users.getUserByUsername(username)
-        const userId = usuarioLog._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
+        //const userId = usuarioLog._id // User Id
 
         try {
             const userDeleted = await this.users.deleteUserById(id)
-            res.render('addNewUser', { usuarios, username, userInfo, cart, expires })
+            res.render('addNewUser', { usuarios, username, userInfo, expires })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -216,11 +215,11 @@ class UsersController {
                 }
                 else if (usuario && userInfo.status ) {
                     const access_token = generateToken(usuario)
-                    const cart = await this.carts.getCartByUserId(userInfo._id)
+                    //const cart = await this.carts.getCartByUserId(userInfo._id)
                    
                     req.session.admin = true
                     req.session.username = userInfo.username    
-                    return res.render('index', { userInfo, username, visits, cart, expires })
+                    return res.render('index', { userInfo, username, visits, expires })
                 }
                 else {
                     return res.render('notAuthorizated', { userInfo, username, visits, expires })

@@ -240,7 +240,6 @@ class ClientsController {
         }
     }
 
-
     deleteClientById = async (req, res) => {
         const { id } = req.params
 

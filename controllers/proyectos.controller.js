@@ -103,7 +103,7 @@ class ProjectsController {
         const { id } = req.params
 
         const cliente = await this.clients.getClientByProjectId(id)
-        console.log('cliente:', cliente)
+        //console.log('cliente:', cliente)
         const proyecto = await this.projects.selectProjectByProjectId(id)
         
         let username = res.locals.username
@@ -260,7 +260,13 @@ class ProjectsController {
        
        try {
             if (!proyectos) return res.status(404).json({ Msg: 'Proyecto no guardado' })
-            res.render('clientProjectsDetails', { username, userInfo, expires, cliente, proyectos })
+            res.render('clientProjectsDetails', {
+                username,
+                userInfo,
+                expires,
+                cliente,
+                proyectos
+            })
 
         } catch (error) {
             res.status(500).json({
@@ -271,7 +277,51 @@ class ProjectsController {
         }
     }
 
-    updateProduct = async (req, res) => {
+    addOtToOciProject = async (req, res) => {
+        const idOci = req.params.id
+        console.log('idOci: ',idOci)
+
+        const clientId = req.body.clientIdHidden
+        const cliente = await this.clients.selectClientById(clientId)
+
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+
+        const userId = userInfo.id
+        const user = await this.users.getUserById(userId)
+
+        const otAddedToOci = {
+            otNumber: req.body.otNumber,
+            opNumber: req.body.opNumber,
+            otDescription: req.body.otDescription,
+            otStatus: req.body.otStatus,
+            timestamp: now,
+            creator: user
+        }
+
+        const proyecto = await this.projects.addOtToOciProject(idOci, otAddedToOci)
+        
+        try {
+            if (!proyecto) return res.status(404).json({ msg: 'OCI no encontrada' })
+            res.render('projectSelectedDetail', {
+                proyecto,
+                username,
+                userInfo,
+                expires,
+                cliente
+            })
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                msg: 'controllerError - Adding OT to OCI',
+                error: error
+            })
+        }
+    }
+
+
+
+    updateProject = async (req, res) => {
         const id = req.params.id
         req.body.category ? req.body.category : req.body.categoryHidden
 
@@ -284,13 +334,10 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        const usuarios = await this.users.getUserByUsername(username)
-        const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
 
         try {
             const productUpdated = await this.products.updateProduct(id, producto)
-            res.render('addNewProducts', { productUpdated, username, userInfo, cart, expires })
+            res.render('addNewProducts', { productUpdated, username, userInfo, expires })
         } catch (error) {
             res.status(500).json({
                 status: false,

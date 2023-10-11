@@ -71,11 +71,40 @@
                 </div>
             </div>
             <br>
-            <div class="container ps-3 my-3 ">Status
-                <br>
+            <div class="container-fluid my-auto">Permisos y Rol
                 <div class="row">
-                    <div class="col">
-                        <div class="d-inline-block me-1">Inactivo</div>
+                    <div class="col-2 my-2">
+                        <label class="form-check-label" for="permiso">Seleccione un permiso</label>
+                        <select class="form-select form-select" aria-label=".form-select example" id="permiso" required>
+                            <% if (usuario.permiso==="diseno") { %>
+                                <option selected disabled value="diseno">Diseño</option>
+                                <option value="simulacion">Simulación</option>
+                                <option value="disenoSimulacion">Diseño/Simulación</option>
+                            <% } else if (usuario.permiso==="simulacion") { %>
+                                <option selected disabled value="simulacion">Simulación</option>
+                                <option value="diseno">Diseño</option>
+                                <option value="disenoSimulacion">Diseño/Simulación</option>
+                            <% } else { %>
+                                <option selected disabled value="disenoSimulacion">Diseño/Simulación</option>
+                                <option value="diseno">Diseño</option>
+                                <option value="simulacion">Simulación</option>
+                            <% } %>    
+                        </select>
+                    </div>
+                    
+                    <div class="col-2 my-2">Rol
+                        <br>
+                        <div class="d-inline-block mt-1">Usuario</div>
+                        <div class="form-check form-switch d-inline-block">
+                            <input type="checkbox" class="form-check-input" id="admin" name="admin"
+                            aria-checked="true" style="cursor: pointer;" checked>
+                            <label for="admin" class="form-check-label">Administrador</label>
+                        </div>
+                    </div>
+
+                    <div class="col-2 my-2">Status
+                        <br>
+                        <div class="d-inline-block mt-1">Inactivo</div>
                         <div class="form-check form-switch d-inline-block">
                             <input type="checkbox" class="form-check-input" id="status" name="status"
                                 aria-checked="true" style="cursor: pointer;" checked>
@@ -83,22 +112,11 @@
                         </div>
                     </div>
                 </div>
+
             </div>
-            <br>
-            <div class="container ps-3 my-3">Rol
-                <br>
-                <div class="row">
-                    <div class="col">
-                        <div class="d-inline-block me-1">Usuario</div>
-                        <div class="form-check form-switch d-inline-block">
-                            <input type="checkbox" class="form-check-input" id="admin" name="admin" aria-checked="true"
-                                style="cursor: pointer;" checked>
-                            <label for="admin" class="form-check-label">Administrador</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
+            <input type="text" value="<%= userInfo.name %>" id="userNameHidden" hidden>
+            <input type="text" value="<%= userInfo.lastName %>" id="userLastNameHidden" hidden>
+            
             <div class="container-fluid my-1 p-1 text-center">
                 <img src="<%=usuario.avatar%>" class="img-thumbnail rounded mx-auto" alt="Avatar not Founded"
                     width="200px" height="200px">

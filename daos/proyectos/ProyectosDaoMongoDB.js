@@ -113,6 +113,39 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    async addOtToOciProject(idOci, infoOt){
+        if(idOci) {
+            try {
+                const itemMongoDB = await Proyectos.findById({_id: idOci})
+                conosle.log(...itemMongoDB)
+                if (itemMongoDB) {
+                    const newValues = {
+                        otNumber: infoOt.otNumber,
+                        opNumber: infoOt.opNumber,
+                        otDescription: infoOt.otDescription,
+                        otStatus: infoOt.otStatus,
+                        timestamp: now,
+                        creator: infoOt.creator
+                    }
+    
+                    const otAddedToOci = await Clientes.findOneAndUpdate(
+                        { _id: idOci }, newValues , { new: true })
+                    logger.info('Ot agregada a OCI ', otAddedToOci)
+                    
+                    return otAddedToOci
+                } else {
+                    logger.error(`No se encontró la OCI con id: ${idOci}`)
+                    return new Error (`No se encontró la OCI con id: ${idOci}`)
+                }
+            } catch (error) {
+                logger.error("Error MongoDB adding OT to a OCI: ",error)
+            }
+        } else {
+            return new Error (`No se pudo agregar la OT a la OCI del Proyecto!`)
+        }
+    }
+
+
     async updateClient(id, client){
         const itemMongoDB = await Clientes.findById({_id: id})
         if (itemMongoDB) {

@@ -21,20 +21,15 @@ class ProjectService {
         return this.proyectos.selectProjectByProjectId(idProject)
     }
 
-    // // reduce quantity of Projects from one Client
-    // async reduceStockProduct(data) {
-    //     return this.proyectos.reduceStockProduct(data)
-    // }
-
     // add new project to a Client
     async addProjectToClient(payload) {
         return this.proyectos.createNewProject(payload)
     }
     
-    // // remove one project from Client
-    //  async removeItemFromCart(payload) {
-    //     return this.proyectos.removeItemFromCart(payload)
-    // }
+    // add new Ot to OCI - Project
+    async addOtToOciProject(idOci) {
+        return this.proyectos.addOtToOciProject(idOci)
+    }
 
     // // remove one project from Client
     // async deleteProjectFromClient(id) {
