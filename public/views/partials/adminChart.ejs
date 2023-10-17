@@ -1,0 +1,63 @@
+    <% if( userInfo.admin ){ %>
+        <div class="container mx-auto mt-3 mb-5 text-center shadow-lg bg-body rounded p-3" width="96vw">
+            <div class="row justify-content-evenly">
+                <div class="col mx-2 py-2">
+                    <a href="/api/clientes" style="text-decoration: none;">
+                        <div class="card bg-primary h-100 py-2" style="width: 13rem;">
+                            <div class="card-body">
+                                <h6 class="card-title text-dark">Administrar Clientes</h6>
+                                <p class="card-text text-dark">Agrega, actualiza o elimina clientes</p>
+                                <div class="rounded-circle bg-light mx-auto" style="height: 5rem; width: 5rem;">
+                                    <i class="fa-regular fa-handshake fa-2x mt-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col mx-2 py-2">
+                    <a href="/api/usuarios" style="text-decoration: none;">
+                        <div class="card bg-secondary h-100 py-2" style="width: 13rem;">
+                            <div class="card-body">
+                                <h6 class="card-title">Administrar Usuarios</h6>
+                                <p class="card-text">Agrega, actualiza o elimina usuarios</p>
+                                <div class="rounded-circle bg-light mx-auto" style="height: 5rem; width: 5rem;">
+                                    <i class="fa-solid fa-users fa-2x mt-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col mx-2 py-2">
+                    <a href="/api/proyectos/" style="text-decoration: none;">
+                        <div class="card bg-dark text-white h-100 py-2" style="width: 13rem;">
+                            <div class="card-body">
+                                <h6 class="card-title">Proyectos</h6>
+                                <p class="card-text">Administra, actualiza o elimina proyectos</p>
+                                <div class="rounded-circle bg-white mx-auto" style="height: 5rem; width: 5rem;">
+                                    <i class="fa-solid fa-diagram-project fa-2x mt-4 text-dark"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col mx-2 py-2">
+                    <div class="card bg-warning h-100 py-2" style="width: 13rem;">
+                        <div class="card-body">
+                        <h6 class="card-title">Manage WebChat</h6>
+                        <p class="card-text">Check messages form admins and your users.</p>
+                        <a href="/api/webchat/" class="btn btn-dark text-white mx-auto my-3 w-100"><i class="fa fa-comments fa-2x"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mx-2 py-2">
+                    <div class="card bg-info h-100 py-2" style="width: 13rem;">
+                        <div class="card-body">
+                        <h6 class="card-title">Info System</h6>
+                        <p class="card-text">Check the info system, do some tests.</p>
+                        <a href="/info/system" class="btn btn-dark mx-auto my-3 w-100"><i class="fa fa-info-circle fa-2x"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>

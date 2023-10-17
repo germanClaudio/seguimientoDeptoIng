@@ -83,7 +83,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
     }
     
     async createNewUser(usuario) {
-        console.log('UsuarioCreador: ',usuario)
+        console.log('usuariosDaoMongoDB: ',usuario)
         if (usuario) {
             let username = usuario.username || "";
             let password = usuario.password || "";
@@ -107,7 +107,11 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                     }
                     password = createHash(password)
 
-                    const creator = []
+                    const creator = [{
+                        creatorName: usuario.userNameHidden,
+                        creatorLastName: usuario.userLastNameHidden,
+                        creatorId: usuario.userIdHidden,
+                    }]
                     const modificator = []
                     const modified = ""
         
@@ -125,7 +129,6 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                         creator: creator,
                         modificator: modificator,
                         modifiedOn: modified
-
                     }             
 
                     const newUser = new Usuarios(nuevoUsuario)
@@ -192,11 +195,11 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                     return newUser
                 } catch (error) {
                     logger.error(error)
-                    return new Error (`No se pudo crear el Usuario!`)
+                    return new Error (`No se pudo crear el Usuario! Error Try-catch`)
                 }
             }   
         } else {
-            return new Error (`No se pudo crear el Usuario!`)
+            return new Error (`No se pudo crear el Usuario! error else/if`)
         }
     }
 
@@ -312,39 +315,49 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
 
     }
 
-    async updateUser(id, user){
-        const userMongoDB = await Usuarios.findById( { _id: `${id}` } )
-        const userModificator = await Usuarios.findById( { _id: `${user.id}`} )
-        console.log('modifiedOn: ', userModificator)        
-        if (userMongoDB) {
+    async updateUser(userToUpdate, userModificator) {
+        const userMongoDB = await Usuarios.findById( { _id: `${userToUpdate.id}` } )
+        const userMongoDBModificator = await Usuarios.findById( { _id: `${userModificator.id}`} )
+        //console.log('UserToModify: ', userToUpdate)        
+        //console.log('UserModificator: ', userMongoDBModificator)
+        
+        if (userMongoDB && userMongoDBModificator) {
             try {
-                let adminValue, statusValue = ""
-                user.admin === "on" ? adminValue = true : adminValue = false
-                user.status === "on" ? statusValue = true : statusValue = false
+                let adminValue
+                let statusValue
+                userToUpdate.admin === 'on' ? adminValue = true : adminValue = false
+                userToUpdate.status === 'on' ? statusValue = true : statusValue = false
 
-                let modificatorArr = [userModificator.name, userModificator.lastName]
+                //console.log('adminValue: ', adminValue, ' - statusValue: ', statusValue)
+                
+                let modificatorArr = [{
+                    modificatorName: userMongoDBModificator.name,
+                    modificatorLastName: userMongoDBModificator.lastName,
+                    modificatorId: userMongoDBModificator._id,
+                }]
                
                  const newValues = {
-                    name: user.name,
-                    lastName: user.lastName,
-                    email: user.email,
-                    username: user.username,
-                    avatar: user.avatar,
-                    password: userMongoDB.password,
+                    name: userToUpdate.name,
+                    lastName: userToUpdate.lastName,
+                    email: userToUpdate.email,
+                    username: userToUpdate.username,
+                    avatar: userToUpdate.avatar,
+                    password: userToUpdate.password,
                     admin: adminValue,
                     status: statusValue,
-                    permiso: user.permiso,
+                    permiso: userToUpdate.permiso,
                     modificator: modificatorArr,
-                    modifiedOn: now
+                    modifiedOn: now,
+                    timestamp: userToUpdate.timestamp,
+                    creator: userToUpdate.creator,
                 }
-                
+
                 const userUpdated = await Usuarios.findOneAndUpdate(
-                    { _id: id,
-                    timestamp: user.timestamp,
-                    creator: user.creator },
+                    { _id: userToUpdate.id },
                     newValues,
                     { new: true })
-
+                    //console.log('UserNewData----: ', userUpdated)
+                
                 return userUpdated
                
             } catch (error) {

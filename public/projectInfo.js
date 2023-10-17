@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         document.querySelector('[data-bs-slide="next"]').removeAttribute('disabled')
       }
-
+      // Si el slide actual es el primero, deshabilita el botón "Prev"
       if (currentIndex === 0) {
         document.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
       } else {
@@ -121,3 +121,130 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     })
   })
+
+
+// ---------------- Event Add New Ot Row to OCI --------------------
+const btnAddNewRow = document.getElementById("btnAddNewRow")
+
+//-------------------------- Add New OCI Row --------------------------------
+btnAddNewRow.addEventListener('click', () => {
+
+    const parentDiv = document.getElementById('div_body')
+    let i = parentDiv.childElementCount
+    const lastChild = parentDiv.children[i-1]
+    const lastChildId = lastChild.id
+
+        if(lastChildId < i || i==1) {
+            i = parentDiv.childElementCount
+        } else {
+            const numberId1 = parseInt(lastChildId.slice(-1))
+            const numberId2 = parseInt(lastChildId.slice(-2))
+            let numberIdLastChild
+        
+            numberId1>=0 && numberId2 ? numberIdLastChild = numberId2 : numberIdLastChild = numberId1;
+
+            i = numberIdLastChild+1
+        }    
+        const originalDiv = (
+            `<div class="col-1">
+                <label for="otNumber${i}" id="labelOtNumber${i}">OT#${i}</label>
+                <input type="number" name="otNumber${i}" id="otNumber${i}" class="form-control" min="0" max="9999"
+                placeholder="Número OT">
+            </div>
+            <div class="col-1">
+                <label for="opNumber${i}" id="labelOpNumber${i}">OP# ${i}</label>
+                <input type="number" name="opNumber${i}" id="opNumber${i}" class="form-control" min="0" max="9999"
+                placeholder="Número OP">
+            </div>
+            <div class="col-2">
+                <label for="otDescription${i}" id="labelOtDescription${i}">Descripción OP ${i}</label>
+                <input type="text" name="otDescription${i}" id="otDescription${i}" class="form-control"
+                placeholder="Descripción OP">
+            </div>
+            <div class="col-1">
+                <label for="otStatus${i}" id="labelOtStatus${i}">Status OT</label><br>
+                <div class="form-check form-switch d-inline-block">
+                    <input class="form-check-input" type="checkbox" id="otStatus${i}" aria-checked="true" name="otStatus${i}" style="cursor: pointer;" checked>
+                    <label class="form-check-label" for="otStatus${i}">Activa</label>
+                </div>
+            </div>
+            <div class="col-2">
+                <label for="internoDiseno${i}" id="labelInternoDiseno${i}">Diseño seguido por ${i}</label>
+                <input type="text" name="internoDiseno${i}" id="internoDiseno${i}" class="form-control"
+                placeholder="Diseño">    
+            </div>
+            <div class="col-2">
+                <label for="internoSimulacion${i}" id="labelInternoSimulacion${i}">Simulación seguida por ${i}</label>
+                <input type="text" name="internoSimulacion${i}" id="internoSimulacion${i}" class="form-control"
+                placeholder="Simulación">    
+            </div>
+            <div class="col-2">
+            <label for="externoDiseno${i}" id="labelExternoDiseno${i}">Proveedor externo ${i}</label>
+                <input type="text" name="externoDiseno${i}" id="externoDiseno${i}" class="form-control"
+                placeholder="Proveedor">    
+            </div>
+            <div class="col-1 my-auto">
+                <div class="d-flex">
+                    <button type="button" id="btnRemoveRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa fa-trash"></i></button>
+                </div>    
+            </div>`)
+               
+    if (i == 1) {
+        originalDiv
+
+    } else {
+        originalDiv              
+    }
+
+        const newDiv = document.createElement('div')
+        newDiv.setAttribute('class', "row my-3")
+        newDiv.id = `otItemRow${i}`
+        newDiv.innerHTML = originalDiv
+        parentDiv.appendChild(newDiv)
+        const otQty = document.getElementById("otQuantity")
+        otQty.setAttribute('value', i)
+
+            const buttons = document.querySelectorAll('button')
+            buttons.forEach((button) => {
+                button.addEventListener("click", removeRow)
+            })
+})
+    
+//-------------------------- Remove OCI Row ----------------------------------
+function removeRow(e) {    
+    if(e.target.id){
+        let btnRemoveRow = e.target.id
+        const numberId1 = parseInt(btnRemoveRow.slice(-1))
+        const numberId2 = parseInt(btnRemoveRow.slice(-2))
+        let numberIdToDelete
+
+        numberId1>=0 && numberId2 ? numberIdToDelete = numberId2 : numberIdToDelete = numberId1;
+        
+        function checkString(string) {
+            return /^[0-9]*$/.test(string);
+        }
+        
+        if(checkString(numberIdToDelete)) {
+            const rowToDelete = document.getElementById(`otItemRow${numberIdToDelete}`)
+            rowToDelete.remove()
+        }
+    }
+}
+
+function messageNewOt(ociNumber) {
+    Swal.fire({
+        position: 'center',
+        timer: 3500,
+        text: `Se agregaron las OT a la ${ociNumber} exitosamente!`,
+        icon: 'success',
+        showCancelButton: false,
+        showConfirmButton: false,
+  })
+}
+
+const btnCreate = document.getElementById('btnNewOt')
+btnCreate.addEventListener('click', (event)=>{
+    event.preventDefault()
+    const ociNumber = document.getElementsByName('ociNumber').value
+    messageNewOt(ociNumber)
+})

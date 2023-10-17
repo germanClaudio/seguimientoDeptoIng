@@ -6,45 +6,50 @@
                 <div class="col-3">
                     <label for="idDisable">Id#</label>
                     <input type="text" name="idDisable" id="idDisable" class="form-control-plaintext text-white"
-                        value="<%=usuario._id%>" disabled="true">
+                        value="<%=usuario._id%>" disabled>
                 </div>
-                <input type="text" name="id" id="id" class="form-control" value="<%=usuario._id%>" hidden="true">
+                <input type="text" name="id" id="id" class="form-control" value="<%=usuario._id%>" hidden>
                 <br>
                 <div class="col-2">
                     <label for="creatorDisable">Creado por</label>
                     <input type="text" name="creatorDisable" id="creatorDisable"
-                        class="form-control-plaintext text-white small" value="<%=usuario.creator%>" disabled="true">
+                        class="form-control-plaintext text-white small" value="<%=usuario.creator[0].creatorName%>, <%=usuario.creator[0].creatorLastName%>" disabled>    
                 </div>
                 <br>
                 <div class="col-2">
                     <label for="timestampDisable">Fecha Creación</label>
                     <input type="text" name="timestampDisable" id="timestampDisable"
-                        class="form-control-plaintext text-white small" value="<%=usuario.timestamp%>" disabled="true">
+                        class="form-control-plaintext text-white small" value="<%=usuario.timestamp%>" disabled>
                 </div>
                 <br>
                 <div class="col-2">
                     <label for="modifiedDisable">Modificado por</label>
-                    <input type="text" name="modifiedDisable" id="modifiedDisable"
-                        class="form-control-plaintext text-white small" value="<%=usuario.modificator%>"
-                        disabled="true">
+                    <% if (usuario.modificator.length > 0) { %>
+                        <input type="text" name="modifiedDisable" id="modifiedDisable"
+                        class="form-control-plaintext text-white small" value="<%=usuario.modificator[0].modificatorName%>, <%=usuario.modificator[0].modificatorLastName%>"
+                        disabled>
+                    <% } else { %>
+                        <input type="text" name="modifiedDisable" id="modifiedDisable"
+                        class="form-control-plaintext text-white small" value="" disabled>
+                    <% } %>        
                 </div>
                 <br>
                 <br>
                 <div class="col-auto">
                     <label for="modifiedOnDisable">Fecha Modificación</label>
                     <input type="text" name="modifiedOnDisable" id="modifiedOnDisable"
-                        class="form-control-plaintext text-white small" value="<%=usuario.modifiedOn%>" disabled="true">
+                        class="form-control-plaintext text-white small" value="<%=usuario.modifiedOn%>" disabled>
                 </div>
             </div>
             <hr>
             <div class="row my-3 mx-auto">
-                <div class="col-3">
+                <div class="col-2">
                     <label for="name">Nombre</label>
                     <input type="text" name="name" id="name" class="form-control" value="<%=usuario.name%>"
                         placeholder="Nombre" required>
                 </div>
                 <br>
-                <div class="col-3">
+                <div class="col-2">
                     <label for="lastName">Apellido</label>
                     <input type="text" name="lastName" id="lastName" class="form-control" value="<%=usuario.lastName%>"
                         placeholder="Apellido" required>
@@ -52,11 +57,11 @@
                 <br>
                 <div class="col-3">
                     <label for="email">Em@il</label>
-                    <input type="email" name="email" id="email" class="form-control" value="<%=usuario.email%> "
+                    <input type="email" name="email" id="email" class="form-control" value="<%=usuario.email%>"
                         placeholder="Ejemplo@dominio.com" required>
                 </div>
                 <br>
-                <div class="col-3">
+                <div class="col-2">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" class="form-control" value="<%=usuario.username%>"
                         placeholder="Username" required>
@@ -67,7 +72,7 @@
                 <div class="col-10">
                     <label for="avatar">Avatar URL</label>
                     <input type="text" name="avatar" id="avatar" class="form-control" value="<%=usuario.avatar%>"
-                        placeholder="Image or picture url" required>
+                        placeholder="Avatar url" required>
                 </div>
             </div>
             <br>
@@ -75,12 +80,12 @@
                 <div class="row">
                     <div class="col-2 my-2">
                         <label class="form-check-label" for="permiso">Seleccione un permiso</label>
-                        <select class="form-select form-select" aria-label=".form-select example" id="permiso" required>
-                            <% if (usuario.permiso==="diseno") { %>
+                        <select class="form-select form-select" aria-label=".form-select example" name="permiso" id="permiso" required>
+                            <% if (usuario.permiso === "diseno") { %>
                                 <option selected disabled value="diseno">Diseño</option>
                                 <option value="simulacion">Simulación</option>
                                 <option value="disenoSimulacion">Diseño/Simulación</option>
-                            <% } else if (usuario.permiso==="simulacion") { %>
+                            <% } else if (usuario.permiso === "simulacion") { %>
                                 <option selected disabled value="simulacion">Simulación</option>
                                 <option value="diseno">Diseño</option>
                                 <option value="disenoSimulacion">Diseño/Simulación</option>
@@ -96,8 +101,13 @@
                         <br>
                         <div class="d-inline-block mt-1">Usuario</div>
                         <div class="form-check form-switch d-inline-block">
-                            <input type="checkbox" class="form-check-input" id="admin" name="admin"
-                            aria-checked="true" style="cursor: pointer;" checked>
+                            <% if (usuario.admin == true) { %>
+                                <input type="checkbox" class="form-check-input" id="admin" name="admin"
+                                aria-checked="true" style="cursor: pointer;" checked>
+                            <% } else { %>
+                                <input type="checkbox" class="form-check-input" id="admin" name="admin"
+                                aria-checked="true" style="cursor: pointer;">
+                            <% }  %>    
                             <label for="admin" class="form-check-label">Administrador</label>
                         </div>
                     </div>
@@ -106,27 +116,35 @@
                         <br>
                         <div class="d-inline-block mt-1">Inactivo</div>
                         <div class="form-check form-switch d-inline-block">
-                            <input type="checkbox" class="form-check-input" id="status" name="status"
+                            <% if (usuario.status == true) { %>
+                                <input type="checkbox" class="form-check-input" id="status" name="status"
                                 aria-checked="true" style="cursor: pointer;" checked>
+                            <% } else { %>
+                                <input type="checkbox" class="form-check-input" id="status" name="status"
+                                aria-checked="true" style="cursor: pointer;">
+                            <% }  %>    
                             <label for="status" class="form-check-label">Activo</label>
                         </div>
                     </div>
                 </div>
 
             </div>
-            <input type="text" value="<%= userInfo.name %>" id="userNameHidden" hidden>
-            <input type="text" value="<%= userInfo.lastName %>" id="userLastNameHidden" hidden>
             
             <div class="container-fluid my-1 p-1 text-center">
                 <img src="<%=usuario.avatar%>" class="img-thumbnail rounded mx-auto" alt="Avatar not Founded"
                     width="200px" height="200px">
             </div>
+            
+            <input type="text" value="<%= userInfo.name %>" name="userNameHidden" id="userNameHidden" hidden>
+            <input type="text" value="<%= userInfo.lastName %>" name="userLastNameHidden" id="userLastNameHidden" hidden>
+            <input type="text" value="<%= userInfo.id %>" name="userIdHidden" id="userIdHidden" hidden>
+            
             <div class="d-flex justify-content-center my-2">
                 <button id="btnUpdateUser" class="btn btn-success mx-auto my-2">Actualizar Usuario <i
-                        class="fa fa-save"></i></button>
-                <a class="btn btn-primary my-2" href="/api/usuarios"> Volver <i class="fa fa-arrow-left"></i></a>
+                        class="fa-solid fa-save"></i></button>
+                <a class="btn btn-primary my-2" href="/api/usuarios"> Volver <i class="fa-solid fa-arrow-left"></i></a>
                 <a class="btn btn-danger mx-auto my-2" href="/api/usuarios/delete/<%=usuario._id%>">Eliminar <i
-                        class="fa fa-trash"></i></a>
+                        class="fa-solid fa-trash"></i></a>
             </div>
         </fieldset>
     </form>

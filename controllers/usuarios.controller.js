@@ -33,7 +33,6 @@ class UsersController {
         }
     }
 
-
     getUserById = async (req, res) => {
         const { id } = req.params
         let username = res.locals.username
@@ -97,9 +96,10 @@ class UsersController {
     }
 
     createNewUser = async (req, res) => {
-        console.log('usuario-controller-body: ',req.body)
-        const usuario = await this.users.addNewUser(req.body)
-        console.log('usuario-controller: ',usuario)
+        
+        const body = req.body
+        const usuario = await this.users.addNewUser(body)
+        
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
@@ -123,7 +123,8 @@ class UsersController {
                     usuario,
                     username,
                     userInfo,
-                    expires })
+                    expires
+                })
             } 
         } catch (error) {
             res.status(500).json({
@@ -138,18 +139,23 @@ class UsersController {
         let username = res.locals.username
         let userInfo = res.locals.userInfo
         const userToUpdate = req.body
-        console.log('datos de usuario a modificar: ', userToUpdate)
+        // console.log('datos de usuario a modificar: ', userToUpdate)
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
 
-        const usuarioLog = await this.users.getUserByUsername(username)
-        //const userId = usuarioLog._id // User Id
-        
+        const usuarioModificador = await this.users.getUserById(userToUpdate.userIdHidden)
+                
         try {
-            const userUpdated = await this.users.updateUser(userToUpdate.id, userToUpdate)
+            const userUpdated = await this.users.updateUser(userToUpdate, usuarioModificador)
             const usuario = await this.users.getUserById(userToUpdate.id)
-            res.render('userDetails', { usuario, userUpdated, username, userInfo, expires })
+            res.render('userDetails', {
+                usuario,
+                userUpdated,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,

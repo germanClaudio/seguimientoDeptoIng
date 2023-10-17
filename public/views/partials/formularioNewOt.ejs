@@ -1,4 +1,4 @@
-<div class="card mx-auto" style="width: 93vw;">
+<div class="card mx-auto" style="width: 95vw;">
     <div class="card card-body d-flex justify-content-center">
         <div class="form-group col-12 mx-auto my-2 w-100 border px-5 py-1 bg-dark bg-gradient text-white bg-opacity-75">
             <form id="formNewOt" action="/api/proyectos/oci" method="post">
@@ -45,7 +45,7 @@
                                     </h2>
                                     <div id="panelsStayOpen-collapseOneForm" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
                                         <div class="accordion-body" id="div_body">
-                                            <div class="row my-3" id="ociItemRow">
+                                            <div class="row my-3" id="otItemRow">
                                                 <div class="col-1">
                                                     <label for="otNumber" id="labelOtNumber">OT#</label>
                                                     <input type="number" name="otNumber" id="otNumber" class="form-control" min="0" max="9999"
@@ -61,9 +61,9 @@
                                                     <input type="text" name="otDescription" id="otDescription" class="form-control"
                                                     placeholder="Descripcion OP">
                                                 </div>
-                                                <div class="col-2">
+                                                <div class="col-1">
                                                     <label for="otStatus" id="labelOtStatus">Status OT</label><br>
-                                                    <div class="d-inline-block me-1">Inactiva</div>
+                                                    <!-- <div class="d-inline-block me-1">Inactiva</div> -->
                                                     <div class="form-check form-switch d-inline-block">
                                                         <input class="form-check-input" type="checkbox" id="otStatus" name="otStatus" aria-checked="true" style="cursor: pointer;" checked>
                                                         <label class="form-check-label" for="otStatus">Activa</label>
@@ -75,14 +75,16 @@
                                                     placeholder="Diseño">    
                                                 </div>
                                                 <div class="col-2">
-                                                    <label for="internoSimulación" id="labelInternoSimulación">Simulación seguida por</label>
-                                                    <input type="text" name="internoSimulación" id="internoSimulación" class="form-control"
+                                                    <label for="internoSimulacion" id="labelInternoSimulacion">Simulación seguida por</label>
+                                                    <input type="text" name="internoSimulacion" id="internoSimulacion" class="form-control"
                                                     placeholder="Simulación">    
                                                 </div>
                                                 <div class="col-2">
                                                     <label for="externoDiseno" id="labelExternoDiseno">Proveedor externo</label>
                                                     <input type="text" name="externoDiseno" id="externoDiseno" class="form-control"
                                                     placeholder="Proveedor">    
+                                                </div>
+                                                <div class="col-1">
                                                 </div>
                                             </div>
                                         </div>
@@ -92,7 +94,7 @@
                         </div>
                         <div class="col-1">
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <button type="button" id="btnAddNewRow" class="btn btn-primary rounded-circle me-2 my-2"><i class="fa fa-plus-circle"></i></button>
+                                    <button type="button" id="btnAddNewRow" class="btn btn-primary rounded-circle me-2 my-2"><i class="fa-solid fa-plus-circle"></i></button>
                                 </div>
                         </div>
                     </div>
@@ -102,12 +104,14 @@
                             value="<%= proyecto[0].client[0]._id %>">
                             id OT: <input type="number" name="idOtHidden" id="idOtHidden" class="form-control"
                             value="">
+                            <input type="number" name="otQuantity" id="otQuantity" class="form-control"
+                            value="">
                     <br>
                     <div class="d-flex justify-content-center my-2">
                         <button id="btnNewOt" type="submit" class="btn btn-primary mx-auto w-25">Guardar <i
-                                class="fa fa-save"></i></button>
+                                class="fa-solid fa-save"></i></button>
                         <button type="reset" class="btn btn-danger mx-auto w-25">Reset <i
-                                class="fa fa-rotate-left"></i></button>
+                                class="fa-solid fa-rotate-left"></i></button>
                     </div>
                 </fieldset>
             </form>

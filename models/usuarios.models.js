@@ -1,7 +1,10 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, mongoose } = require('mongoose')
 const now = require('../utils/formatDate.js')
 
 const userSchema = new Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
     name: {
         type: String,
         maxlength: 100
@@ -41,7 +44,7 @@ const userSchema = new Schema({
     },
     permiso: { 
         type: String,
-        required: true
+        default: 'disenoSimulacion'
     },
     creator: {
         type: Array,
@@ -55,7 +58,7 @@ const userSchema = new Schema({
     },
     modifiedOn: {
         type: String,
-        default: now
+        default: now,
     }  
 })
 
