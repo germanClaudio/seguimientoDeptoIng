@@ -1,12 +1,12 @@
 const UserService = require("../services/users.service.js")
-const CartsService = require("../services/carts.service.js")
+//const CartsService = require("../services/carts.service.js")
 const bCrypt = require('bcrypt')
 const { generateToken } = require('../utils/generateToken')
 
 class UsersController {  
     constructor(){
         this.users = new UserService()
-        this.carts = new CartsService()
+        //this.carts = new CartsService()
       }
 
        
@@ -23,7 +23,12 @@ class UsersController {
 
         try {
             if(usuarios.error) return res.status(400).json({msg: 'No hay usuarios cargados!'}) 
-            res.render('addNewUser', { usuarios, username, userInfo, expires })
+            res.render('addNewUser', {
+                usuarios,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -46,7 +51,12 @@ class UsersController {
         try {
             if(!usuario) return res.status(404).json({msg: 'Usuario no encontrado'})
             
-            res.render('userDetails', { usuario, username, userInfo, expires })
+            res.render('userDetails', {
+                usuario,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -69,7 +79,12 @@ class UsersController {
         try {
             if(!usuario) return res.status(404).json({msg: 'Usuario no encontrado'})
             
-            res.render('userDetails', { usuario, username, userInfo, expires })
+            res.render('userDetails', {
+                usuario,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -178,7 +193,12 @@ class UsersController {
 
         try {
             const userDeleted = await this.users.deleteUserById(id)
-            res.render('addNewUser', { usuarios, username, userInfo, expires })
+            res.render('addNewUser', {
+                usuarios,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -217,7 +237,10 @@ class UsersController {
                 const userInfo = await this.users.getUserByUsername(username)
                 
                 if (!usuario) {
-                    return res.render('register', { flag: false, fail: false }) 
+                    return res.render('register', {
+                        flag: false,
+                        fail: false
+                    }) 
                 }
                 else if (usuario && userInfo.status ) {
                     const access_token = generateToken(usuario)
@@ -225,16 +248,29 @@ class UsersController {
                    
                     req.session.admin = true
                     req.session.username = userInfo.username    
-                    return res.render('index', { userInfo, username, visits, expires })
+                    return res.render('index', {
+                        userInfo,
+                        username,
+                        visits,
+                        expires
+                    })
                 }
                 else {
-                    return res.render('notAuthorizated', { userInfo, username, visits, expires })
+                    return res.render('notAuthorizated', {
+                        userInfo,
+                        username,
+                        visits,
+                        expires
+                    })
                 }
             
             } else {
                 const flag = true
                 const fail = true
-                return res.render('login', { flag, fail } )
+                return res.render('login', {
+                    flag,
+                    fail
+                })
             }
     
         } catch (error) {
@@ -254,11 +290,19 @@ class UsersController {
         try {
             if (yaExiste) {
                 const username = yaExiste.username
-                return res.render('register', { username , flag: true,  fail: true})
+                return res.render('register', {
+                    username,
+                    flag: true, 
+                    fail: true
+                })
             }
            
             const username = usuario.username
-            res.render('login', { username, flag: true, fail: false })
+            res.render('login', {
+                username,
+                flag: true,
+                fail: false
+            })
        
         } catch (error) {
             res.status(500).json({

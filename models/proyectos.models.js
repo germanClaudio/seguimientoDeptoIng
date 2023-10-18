@@ -40,10 +40,6 @@ let otProjectSchema = new Schema({
     otId: {
         type: mongoose.Schema.Types.ObjectId,
     },
-    otName: { 
-        type: String,
-        maxlength: 150,
-    },
     otNumber: { 
         type: Number,
         maxlength: 4,
@@ -59,6 +55,29 @@ let otProjectSchema = new Schema({
     otStatus:{
         type: Boolean,
         default: true,
+    },
+    otDesign:{
+        type: String,
+        maxlength: 150,
+    },
+    otSimulation:{
+        type: String,
+        maxlength: 150,
+    },
+    otSupplier:{
+        type: String,
+        maxlength: 150,
+    },
+    timestamp: {
+        type: String,
+        default: now,
+    },
+    modificator: {
+        type: Array,
+    },
+    modifiedOn: {
+        type: String,
+        default: now,
     },
 
 })

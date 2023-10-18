@@ -1,6 +1,6 @@
 const MessagesService = require("../services/messages.service.js")
-const ProductosService = require("../services/products.service.js")
-const CartsService = require("../services/carts.service.js")
+// const ProductosService = require("../services/products.service.js")
+// const CartsService = require("../services/carts.service.js")
 const UserService = require("../services/users.service.js")
 
 function formatDate(date) {
@@ -16,8 +16,8 @@ function formatDate(date) {
 
 class MessagesController {  
     constructor(){
-        this.products = new ProductosService()
-        this.carts = new CartsService()
+        // this.products = new ProductosService()
+        // this.carts = new CartsService()
         this.users = new UserService()
         this.messages = new MessagesService()
     }
@@ -34,12 +34,16 @@ class MessagesController {
 
         const usuarios = await this.users.getUserByUsername(username)
         const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
 
         try {
             if(mensajes.error) return res.status(400).json({msg: 'No hay mensajes cargados'}) 
             
-            res.render('addNewMessage', { mensajes, username, userInfo, cart, expires })
+            res.render('addNewMessage', {
+                mensajes,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -62,12 +66,16 @@ class MessagesController {
 
         const usuarios = await this.users.getUserByUsername(username)
         const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
 
         try {
             if(!mensaje) return res.status(404).json({msg: 'Mensaje no encontrado'})
             
-            res.render('addNewMessage', { mensaje, username, userInfo, cart, expires })
+            res.render('addNewMessage', {
+                mensaje,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -102,11 +110,15 @@ class MessagesController {
 
         const usuarios = await this.users.getUserByUsername(username)
         const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
 
         try {
             if(!mensaje) return res.status(404).json({Msg: 'Mensaje no guardado'})
-            res.render('addNewMessage', { mensaje, username, userInfo, cart, expires })
+            res.render('addNewMessage', {
+                mensaje,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -128,11 +140,15 @@ class MessagesController {
 
         const usuarios = await this.users.getUserByUsername(username)
         const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
 
         try {
             const messageDeleted = await this.messages.deleteMessageById(req.params.id)
-            res.render('addNewMessage', { messageDeleted, username, userInfo, cart, expires })
+            res.render('addNewMessage', {
+                messageDeleted,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -151,11 +167,15 @@ class MessagesController {
 
         const usuarios = await this.users.getUserByUsername(username)
         const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
         
         try {
             const messageDeleted = await this.messages.deleteAllMessages()
-            res.render('addNewMessage', { messageDeleted, username, userInfo, cart, expires })
+            res.render('addNewMessage', {
+                messageDeleted,
+                username,
+                userInfo,
+                expires
+            })
 
         } catch (error) {
             res.status(500).json({

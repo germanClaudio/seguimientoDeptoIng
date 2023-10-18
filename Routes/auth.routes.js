@@ -18,8 +18,8 @@ const serverMongoDB = require('../usuarios/userMongoDB')
 const constructor = serverMongoDB.ServerMongoDB
 const server = new constructor()
 
-const GetCarts = require('../daos/carritos/CarritosDaoMongoDB.js')
-const carts = new GetCarts()
+// const GetCarts = require('../daos/carritos/CarritosDaoMongoDB.js')
+// const carts = new GetCarts()
 
 //_______________________________ login _____________________________________ //
 authRouter.get('/login', (req, res) => { // lleva la vista del formulario de login
@@ -44,18 +44,30 @@ authRouter.get('/historial', checkAuthentication, authUserMiddleware, async (req
     try {
         const visits = req.session.visits
         const user = await server.getUserByUsername(username)
-        const cart = await carts.getCartByUserId(user._id) 
+        // const cart = await carts.getCartByUserId(user._id) 
         const { flag, fail } = true
         
         if (!user) {
-            return res.render('register', { flag, fail })
+            return res.render('register', {
+                flag,
+                fail
+            })
         } else if ( user.status ) {
             const access_token = generateToken(user)
             req.session.admin = true
             req.session.username = userInfo.username
-            return res.render('historial', { userInfo, username, cart, expires })
+            return res.render('historial', {
+                userInfo,
+                username,
+                expires
+            })
         } else {
-            return res.render('notAuthorizated', { userInfo, username, visits, flag})
+            return res.render('notAuthorizated', {
+                userInfo,
+                username,
+                visits,
+                flag
+            })
         }
         
     } catch (error) {
@@ -75,19 +87,35 @@ authRouter.get('/index', checkAuthentication, authUserMiddleware ,async (req, re
     try {
         const visits = req.session.visits
         const user = await server.getUserByUsername(username)
-        const cart = await carts.getCartByUserId(user._id)
+        // const cart = await carts.getCartByUserId(user._id)
         const { flag, fail } = true
 
         if (!user) {
-            return res.render('register', { flag, fail })
+            return res.render('register', {
+                flag,
+                fail
+            })
         } else if ( user.status ) {
             const access_token = generateToken(user)
             const fail = false
             req.session.admin = true
             req.session.username = userInfo.username
-            return res.render('index', { userInfo, username, visits, flag, fail, cart, expires })
+            return res.render('index', {
+                userInfo,
+                username,
+                visits,
+                flag,
+                fail,
+                expires
+            })
         } else {
-            return res.render('notAuthorizated', { userInfo, username, visits, flag, expires})
+            return res.render('notAuthorizated', {
+                userInfo,
+                username,
+                visits,
+                flag,
+                expires
+            })
         }
          
     } catch (error) {
@@ -109,7 +137,7 @@ authRouter.get('/githubcallback', checkAuthentication, authUserMiddleware, passp
 
             const visits = req.session.visits
             const user = await server.getUserByUsername(username)
-            const cart = await carts.getCartByUserId(user._id)
+            //const cart = await carts.getCartByUserId(user._id)
             const { flag, fail } = true
             
             req.session.admin = true
@@ -120,7 +148,14 @@ authRouter.get('/githubcallback', checkAuthentication, authUserMiddleware, passp
            
             if (username != null) {
                 const fail = false
-                res.render('index', { username, userInfo, visits, flag, fail, cart, expires } )
+                res.render('index', {
+                    username,
+                    userInfo,
+                    visits,
+                    flag,
+                    fail,
+                    expires
+                })
             }
             if (username == null) {
                 res.redirect('/api/login')

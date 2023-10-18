@@ -113,6 +113,30 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    // Select one OCI by Oci Number ----------------
+    async selectOciByOciNumber(numberOci) {
+        if(numberOci){
+            try {
+                const project = await Proyectos.find({
+                    'project.0.oci.0.ociNumber': numberOci 
+                  })
+                  console.log('project: ',project)
+                return project
+               
+            } catch (error) {
+                logger.error("Error MongoDB selectOciByOciNumber: ",error)
+            }
+        } 
+        // else {
+        //     try {
+        //         const projects = await Proyectos.find()
+        //         return projects
+        //     } catch (error) {
+        //         logger.error("Error MongoDB getOneClientById: ",error)
+        //     }
+        // }
+    }
+
     async addOtToOciProject(idOci, infoOt){
         if(idOci) {
             try {
@@ -124,8 +148,13 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                         opNumber: infoOt.opNumber,
                         otDescription: infoOt.otDescription,
                         otStatus: infoOt.otStatus,
+                        otDesign: infoOt.otDesign,
+                        otSimulation: infoOt.otSimulation,
+                        otSuplier: infoOt.otSupplier,
                         timestamp: now,
-                        creator: infoOt.creator
+                        creator: infoOt.creator,
+                        modificator: [],
+                        modifiedOn: "",
                     }
     
                     const otAddedToOci = await Clientes.findOneAndUpdate(

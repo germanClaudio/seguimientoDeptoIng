@@ -1,7 +1,9 @@
 <div class="card mx-auto" style="width: 95vw;">
     <div class="card card-body d-flex justify-content-center">
         <div class="form-group col-12 mx-auto my-2 w-100 border px-5 py-1 bg-dark bg-gradient text-white bg-opacity-75">
+            
             <form id="formNewOt" action="/api/proyectos/oci" method="post">
+            
                 <fieldset>
                     <h5 class="d-block mx-auto my-2 text-center">Agregar Nueva OT a OCI / Proyecto: <%= proyecto[0].project[0].projectName %></h5>
                     <div class="row my-3">
@@ -70,7 +72,11 @@
                                                     </div>    
                                                 </div>
                                                 <div class="col-2">
-                                                    <label for="internoDiseno" id="labelInternoDiseno">Diseño seguido por</label>
+                                                    <label for="internoDiseno" id="labelInternoDiseno">Diseño seguido por
+                                                        <!-- <button type="button" id="searchDesignUser" class="btn btn-light rounded-circle ms-2">
+                                                            <i class="fa-solid fa-database"></i>
+                                                        </button> -->
+                                                    </label>
                                                     <input type="text" name="internoDiseno" id="internoDiseno" class="form-control"
                                                     placeholder="Diseño">    
                                                 </div>
@@ -99,18 +105,17 @@
                         </div>
                     </div>
                             <hr>
-                            id usuario: <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>" disabled>
-                            id cliente: <input type="text" name="clientIdHidden" id="clientIdHidden" class="form-control" disabled
-                            value="<%= proyecto[0].client[0]._id %>">
+                            id usuario: <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>" >
+                            id cliente: <input type="text" name="clientIdHidden" id="clientIdHidden" class="form-control" value="<%= proyecto[0].client[0]._id %>">
                             id OT: <input type="number" name="idOtHidden" id="idOtHidden" class="form-control"
                             value="">
-                            <input type="number" name="otQuantity" id="otQuantity" class="form-control"
+                            Qty. OT: <input type="number" name="otQuantity" id="otQuantity" class="form-control"
                             value="">
                     <br>
                     <div class="d-flex justify-content-center my-2">
-                        <button id="btnNewOt" type="submit" class="btn btn-primary mx-auto w-25">Guardar <i
+                        <button id="btnNewOt" type="submit" class="btn btn-primary mx-auto">Guardar <i
                                 class="fa-solid fa-save"></i></button>
-                        <button type="reset" class="btn btn-danger mx-auto w-25">Reset <i
+                        <button type="reset" class="btn btn-danger mx-auto">Reset <i
                                 class="fa-solid fa-rotate-left"></i></button>
                     </div>
                 </fieldset>

@@ -1,5 +1,5 @@
-const ProductosService = require("../services/products.service.js")
-const CartsService = require("../services/carts.service.js")
+// const ProductosService = require("../services/products.service.js")
+// const CartsService = require("../services/carts.service.js")
 const UserService = require("../services/users.service.js")
 const InfoService = require("../services/info.service.js")
 
@@ -13,8 +13,8 @@ const options = require('../options/config')
 class InfoController {  
     constructor(){
         this.info = new InfoService()
-        this.products = new ProductosService()
-        this.carts = new CartsService()
+        // this.products = new ProductosService()
+        // this.carts = new CartsService()
         this.users = new UserService()
       }
         
@@ -30,7 +30,6 @@ class InfoController {
 
         const usuarios = await this.users.getUserByUsername(username)
         const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
 
         const infoSystem = [
             {args: parseArgs(process.argv.slice(2))},
@@ -48,7 +47,12 @@ class InfoController {
         try {
 
             if(info.error) return res.status(400).json({msg: 'No hay Informacion que mostrar!'}) 
-             res.render('sistema', { infoSystem, username, userInfo, cart, expires })
+             res.render('sistema', {
+                infoSystem,
+                username,
+                userInfo,
+                expires
+            })
            
         } catch (error) {
             res.status(500).json({
@@ -71,7 +75,6 @@ class InfoController {
 
         const usuarios = await this.users.getUserByUsername(username)
         const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
 
         const number = req.body.random
         const maxCount = 10000
@@ -80,7 +83,12 @@ class InfoController {
         
         if (cant <= maxCount) {
             forked.on('message', (msg) => {
-                res.render('testSystem', { msg , username, userInfo, cart, expires })
+                res.render('testSystem', {
+                    msg ,
+                    username,
+                    userInfo,
+                    expires
+                })
                 res.end( msg )
             })
             forked.send('start')

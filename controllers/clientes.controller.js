@@ -1,5 +1,5 @@
 const ClientsService = require("../services/clients.service.js")
-const CartsService = require("../services/carts.service.js")
+//const CartsService = require("../services/carts.service.js")
 const UserService = require("../services/users.service.js")
 const ProjectsService = require("../services/projects.service.js")
 
@@ -17,7 +17,7 @@ function formatDate(date) {
 class ClientsController {
     constructor() {
         this.clients = new ClientsService()
-        this.carts = new CartsService()
+        // this.carts = new CartsService()
         this.users = new UserService()
         this.projects = new ProjectsService()
     }
@@ -34,7 +34,12 @@ class ClientsController {
 
         try {
             if (clientes.error) return res.status(400).json({ msg: 'No hay clientes cargados' })
-            res.render('addNewClients', { clientes, username, userInfo, expires })
+            res.render('addNewClients', {
+                clientes,
+                username,
+                userInfo,
+                expires
+            })
 
         } catch (error) {
             res.status(500).json({
@@ -61,7 +66,13 @@ class ClientsController {
         try {
             if (!proyectos) return res.status(404).json({ msg: 'getProjectsByClientId no encontrado' })
 
-            res.render('clientProjectsDetails', { username, userInfo, expires, proyectos, cliente })
+            res.render('clientProjectsDetails', {
+                username,
+                userInfo,
+                expires,
+                proyectos,
+                cliente
+            })
 
         } catch (error) {
             res.status(500).json({
@@ -88,7 +99,13 @@ class ClientsController {
         try {
             if (!cliente) return res.status(404).json({ msg: 'Cliente no encontrado' })
 
-            res.render('clientProjectsDetails', { cliente, username, userInfo, expires, proyectos })
+            res.render('clientProjectsDetails', {
+                cliente,
+                username,
+                userInfo,
+                expires,
+                proyectos
+            })
 
         } catch (error) {
             res.status(500).json({
@@ -114,7 +131,13 @@ class ClientsController {
 
         try {
             if (!cliente) return res.status(404).json({ msg: 'Cliente no encontrado' })
-            res.render('clientDetails', { cliente, username, userInfo, expires, proyectos })
+            res.render('clientDetails', {
+                cliente,
+                username,
+                userInfo,
+                expires,
+                proyectos
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -151,7 +174,12 @@ class ClientsController {
 
         try {
             if (!cliente) return res.status(404).json({ Msg: 'Cliente no guardado' })
-            res.render('addNewClients', { cliente, username, userInfo, expires })
+            res.render('addNewClients', {
+                cliente,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -190,7 +218,12 @@ class ClientsController {
 
         try {
             const clientUpdated = this.clients.updateClient(id, updatedCliente)
-            res.render('addNewClients', { clientUpdated, username, userInfo, expires })
+            res.render('addNewClients', {
+                clientUpdated,
+                username,
+                userInfo,
+                expires
+            })
 
         } catch (error) {
             res.status(500).json({
@@ -231,7 +264,13 @@ class ClientsController {
 
         try {
             const cliente = await this.clients.updateClient(id, updatedClienteProjectsQty)
-            res.render('clientProjectsDetails', { cliente, username, userInfo, expires, proyectos })
+            res.render('clientProjectsDetails', {
+                cliente,
+                username,
+                userInfo,
+                expires,
+                proyectos
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -252,7 +291,12 @@ class ClientsController {
 
         try {
             const clientDeleted = await this.clients.deleteClientById(req.params.id)
-            res.render('addNewClients', { clientDeleted, username, userInfo, expires })
+            res.render('addNewClients', {
+                clientDeleted,
+                username,
+                userInfo,
+                expires
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -271,7 +315,12 @@ class ClientsController {
 
         try {
             const clientsDeleted = await this.clients.deleteAllClients()
-            res.render('addNewClients', { clientsDeleted, username, userInfo, expires })
+            res.render('addNewClients', {
+                clientsDeleted,
+                username,
+                userInfo,
+                expires
+            })
 
         } catch (error) {
             res.status(500).json({

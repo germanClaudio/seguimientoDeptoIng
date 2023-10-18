@@ -1,6 +1,6 @@
 const ProyectosService = require("../services/projects.service.js")
 const ClientesService = require("../services/clients.service.js")
-const CartsService = require("../services/carts.service.js")
+//const CartsService = require("../services/carts.service.js")
 const UserService = require("../services/users.service.js")
 
 function formatDate(date) {
@@ -18,7 +18,7 @@ class ProjectsController {
     constructor() {
         this.projects = new ProyectosService()
         this.clients = new ClientesService()
-        this.carts = new CartsService()
+        //this.carts = new CartsService()
         this.users = new UserService()
     }
 
@@ -36,7 +36,13 @@ class ProjectsController {
 
         try {
             if (proyectos.error) return res.status(400).json({ msg: 'No hay proyectos cargados' })
-            res.render('projectsList', { proyectos, cliente, username, userInfo, expires })
+            res.render('projectsList', {
+                proyectos,
+                cliente,
+                username,
+                userInfo,
+                expires
+            })
 
         } catch (error) {
             res.status(500).json({
@@ -50,9 +56,9 @@ class ProjectsController {
     getProjectsByClientId = async (req, res) => {
         const { id } = req.params
         const cliente = await this.clients.getClientById(id)
-        console.log('proyectosControler - Cliente -getProjectsByClientId ', id)
+        //console.log('proyectosControler - Cliente -getProjectsByClientId ', id)
         const proyectos = await this.projects.getProjectsByClientId(id)
-        console.log('proyectosControler-getProjectsByClientId ', proyectos)
+        //console.log('proyectosControler-getProjectsByClientId ', proyectos)
 
         let username = res.locals.username
         let userInfo = res.locals.userInfo
@@ -63,7 +69,13 @@ class ProjectsController {
 
         try {
             if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
-            res.render('clientProjectsDetails', { proyectos, username, userInfo, expires, cliente })
+            res.render('clientProjectsDetails', {
+                proyectos,
+                username,
+                userInfo,
+                expires,
+                cliente
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -78,7 +90,7 @@ class ProjectsController {
         const cliente = await this.clients.getClientById(id)
 
         const proyectosCargados = await this.projects.getProjectsByClientId(id)
-        console.log('Select proyectos controler..... ', proyectosCargados)
+        //console.log('Select proyectos controler..... ', proyectosCargados)
 
         let username = res.locals.username
         let userInfo = res.locals.userInfo
@@ -89,7 +101,13 @@ class ProjectsController {
 
         try {
             if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
-            res.render('clientProjectsDetails', { proyectosCargados, username, userInfo, expires, cliente })
+            res.render('clientProjectsDetails', {
+                proyectosCargados,
+                username,
+                userInfo,
+                expires,
+                cliente
+            })
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -278,23 +296,29 @@ class ProjectsController {
     }
 
     addOtToOciProject = async (req, res) => {
-        const idOci = req.params.id
-        console.log('idOci: ',idOci)
-
-        const clientId = req.body.clientIdHidden
-        const cliente = await this.clients.selectClientById(clientId)
-
+        const numberOci = req.body.ociNumber
+        const ociTarget = await this.projects.selectOciByOciNumber(numberOci)
+        const idOci = ociTarget._id
+        console.log('idOci: ', ociTarget)
+        //const clientId = req.body.clientIdHidden
+        //const cliente = await this.clients.selectClientById(clientId)
+        
         let username = res.locals.username
         let userInfo = res.locals.userInfo
-
+        
         const userId = userInfo.id
         const user = await this.users.getUserById(userId)
+        const now = formatDate(new Date())
 
+        console.log('req.body addOtToOci: ',req.body)
         const otAddedToOci = {
             otNumber: req.body.otNumber,
             opNumber: req.body.opNumber,
             otDescription: req.body.otDescription,
             otStatus: req.body.otStatus,
+            otDesign: req.body.internoDiseno,
+            otSimulation: req.body.internoSimulacion,
+            otSupplier: req.body.externoDiseno,
             timestamp: now,
             creator: user
         }
@@ -321,79 +345,79 @@ class ProjectsController {
 
 
 
-    updateProject = async (req, res) => {
-        const id = req.params.id
-        req.body.category ? req.body.category : req.body.categoryHidden
+    // updateProject = async (req, res) => {
+    //     const id = req.params.id
+    //     req.body.category ? req.body.category : req.body.categoryHidden
 
-        const producto = req.body
+    //     const producto = req.body
 
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
+    //     let username = res.locals.username
+    //     let userInfo = res.locals.userInfo
 
-        const cookie = req.session.cookie
-        const time = cookie.expires
-        const expires = new Date(time)
+    //     const cookie = req.session.cookie
+    //     const time = cookie.expires
+    //     const expires = new Date(time)
 
 
-        try {
-            const productUpdated = await this.products.updateProduct(id, producto)
-            res.render('addNewProducts', { productUpdated, username, userInfo, expires })
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                error: error
-            })
-        }
-    }
+    //     try {
+    //         const productUpdated = await this.products.updateProduct(id, producto)
+    //         res.render('addNewProducts', { productUpdated, username, userInfo, expires })
+    //     } catch (error) {
+    //         res.status(500).json({
+    //             status: false,
+    //             error: error
+    //         })
+    //     }
+    // }
 
-    deleteProductById = async (req, res) => {
-        const { id } = req.params
+    // deleteProductById = async (req, res) => {
+    //     const { id } = req.params
 
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
+    //     let username = res.locals.username
+    //     let userInfo = res.locals.userInfo
 
-        const cookie = req.session.cookie
-        const time = cookie.expires
-        const expires = new Date(time)
+    //     const cookie = req.session.cookie
+    //     const time = cookie.expires
+    //     const expires = new Date(time)
 
-        const usuarios = await this.users.getUserByUsername(username)
-        const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
+    //     const usuarios = await this.users.getUserByUsername(username)
+    //     const userId = usuarios._id // User Id
+    //     let cart = await this.carts.getCartByUserId(userId)
 
-        try {
-            const productDeleted = await this.products.deleteProductById(req.params.id)
-            res.render('addNewProducts', { productDeleted, username, userInfo, cart, expires })
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                error: error
-            })
-        }
-    }
+    //     try {
+    //         const productDeleted = await this.products.deleteProductById(req.params.id)
+    //         res.render('addNewProducts', { productDeleted, username, userInfo, cart, expires })
+    //     } catch (error) {
+    //         res.status(500).json({
+    //             status: false,
+    //             error: error
+    //         })
+    //     }
+    // }
 
-    deleteAllProducts = async (req, res) => {
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
+    // deleteAllProducts = async (req, res) => {
+    //     let username = res.locals.username
+    //     let userInfo = res.locals.userInfo
 
-        const cookie = req.session.cookie
-        const time = cookie.expires
-        const expires = new Date(time)
+    //     const cookie = req.session.cookie
+    //     const time = cookie.expires
+    //     const expires = new Date(time)
 
-        const usuarios = await this.users.getUserByUsername(username)
-        const userId = usuarios._id // User Id
-        let cart = await this.carts.getCartByUserId(userId)
+    //     const usuarios = await this.users.getUserByUsername(username)
+    //     const userId = usuarios._id // User Id
+    //     let cart = await this.carts.getCartByUserId(userId)
 
-        try {
-            const productsDeleted = await this.products.deleteAllProducts()
-            res.render('addNewProducts', { productsDeleted, username, userInfo, cart, expires })
+    //     try {
+    //         const productsDeleted = await this.products.deleteAllProducts()
+    //         res.render('addNewProducts', { productsDeleted, username, userInfo, cart, expires })
 
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                error: error
-            })
-        }
-    }
+    //     } catch (error) {
+    //         res.status(500).json({
+    //             status: false,
+    //             error: error
+    //         })
+    //     }
+    // }
 }
 
 module.exports = { ProjectsController }

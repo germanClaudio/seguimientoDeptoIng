@@ -15,48 +15,52 @@ document.addEventListener('DOMContentLoaded', function () {
     // const tabla5 = document.getElementById('tabla5')
 
     // Manejador de eventos para ocultar la tabla #1
-    btnHiddeTable1.addEventListener('click', function () {
-        if (tablaGeneral.style.display === 'none') {
-            tablaGeneral.style.display = ''
-            tablaGeneral.classList.add("col-3")
-            tablaSeguimiento.classList.add("col-3")
-            // tabla3.classList.add("col-2")
-            // tabla4.classList.add("col-2")
-            // tabla5.classList.add("col-2")
-            btnHiddeTable1.setHTML('<i class="fa-regular fa-eye-slash"></i>')
-            posBtnHiddeTable1.classList.remove("col-1")
-            posBtnHiddeTable1.classList.add("col-3")
-            btnHiddeTable1.title='Ocultar General'
+    if(tablaGeneral){
+        btnHiddeTable1.addEventListener('click', function () {
+            if (tablaGeneral.style.display === 'none') {
+                tablaGeneral.style.display = ''
+                tablaGeneral.classList.add("col-3")
+                tablaSeguimiento.classList.add("col-3")
+                // tabla3.classList.add("col-2")
+                // tabla4.classList.add("col-2")
+                // tabla5.classList.add("col-2")
+                btnHiddeTable1.setHTML('<i class="fa-regular fa-eye-slash"></i>')
+                posBtnHiddeTable1.classList.remove("col-1")
+                posBtnHiddeTable1.classList.add("col-3")
+                btnHiddeTable1.title='Ocultar General'
 
-        } else {
-            tablaGeneral.style.display = 'none'
-            tablaGeneral.classList.remove("col-3")
-            tablaSeguimiento.classList.add("col-3")
-            // tabla3.classList.add("col-2")
-            // tabla4.classList.add("col-2")
-            btnHiddeTable1.setHTML('<i class="fa-solid fa-eye"></i>')
-            posBtnHiddeTable1.classList.remove("col-3")
-            posBtnHiddeTable1.classList.add("col-1")
-            btnHiddeTable1.title='Mostrar General'
-        }
-    })
+            } else {
+                tablaGeneral.style.display = 'none'
+                tablaGeneral.classList.remove("col-3")
+                tablaSeguimiento.classList.add("col-3")
+                // tabla3.classList.add("col-2")
+                // tabla4.classList.add("col-2")
+                btnHiddeTable1.setHTML('<i class="fa-solid fa-eye"></i>')
+                posBtnHiddeTable1.classList.remove("col-3")
+                posBtnHiddeTable1.classList.add("col-1")
+                btnHiddeTable1.title='Mostrar General'
+            }
+        })
+    }
 
     // Manejador de eventos para ocultar la tabla #2
-    btnHiddeTable2.addEventListener('click', function () {
-        if (tablaSeguimiento.style.display === 'none') {
-            tablaSeguimiento.style.display = ''
-            btnHiddeTable2.setHTML('<i class="fa-regular fa-eye-slash"></i>')
-            posBtnHiddeTable2.classList.remove("col-1")
-            posBtnHiddeTable2.classList.add("col-3")
-            btnHiddeTable2.title='Ocultar Int/Ext'
-        } else {
-            tablaSeguimiento.style.display = 'none'
-            btnHiddeTable2.setHTML('<i class="fa-solid fa-eye"></i>')
-            posBtnHiddeTable2.classList.remove("col-3")
-            posBtnHiddeTable2.classList.add("col-1")
-            btnHiddeTable2.title='Mostrar Int/Ext'
-        }
-    })
+    if(tablaSeguimiento){
+        btnHiddeTable2.addEventListener('click', function () {
+            if (tablaSeguimiento.style.display === 'none') {
+                tablaSeguimiento.style.display = ''
+                btnHiddeTable2.setHTML('<i class="fa-regular fa-eye-slash"></i>')
+                posBtnHiddeTable2.classList.remove("col-1")
+                posBtnHiddeTable2.classList.add("col-3")
+                btnHiddeTable2.title='Ocultar Int/Ext'
+            } else {
+                tablaSeguimiento.style.display = 'none'
+                btnHiddeTable2.setHTML('<i class="fa-solid fa-eye"></i>')
+                posBtnHiddeTable2.classList.remove("col-3")
+                posBtnHiddeTable2.classList.add("col-1")
+                btnHiddeTable2.title='Mostrar Int/Ext'
+            }
+        })
+    }
 
     // Manejador de eventos para ocultar la tabla #3
     // btnHiddeTable3.addEventListener('click', function () {
@@ -96,30 +100,33 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('DOMContentLoaded', function (event) {
     let initIndex = event.eventPhase
     let myCarousel = document.getElementById('carouselExampleControls')
-    if (initIndex === 2) {
-        document.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-      } else {
-        document.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-      }
 
-    // Detectar cuando el slide cambia
-    myCarousel.addEventListener('slid.bs.carousel', function (event) {
-        let slideCount = event.relatedTarget.parentElement.children.length
-        let currentIndex = event.to
+    if (myCarousel) {
+        if (initIndex === 2) {
+            document.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
+        } else {
+            document.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
+        }
         
-      // Si el slide actual es el último, deshabilita el botón "Next"
-      if (currentIndex === slideCount - 1) {
-        document.querySelector('[data-bs-slide="next"]').setAttribute('disabled', 'disabled')
-      } else {
-        document.querySelector('[data-bs-slide="next"]').removeAttribute('disabled')
-      }
-      // Si el slide actual es el primero, deshabilita el botón "Prev"
-      if (currentIndex === 0) {
-        document.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-      } else {
-        document.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-      }
-    })
+        // Detectar cuando el slide cambia
+        myCarousel.addEventListener('slid.bs.carousel', function (event) {
+            let slideCount = event.relatedTarget.parentElement.children.length
+            let currentIndex = event.to
+            
+            // Si el slide actual es el último, deshabilita el botón "Next"
+            if (currentIndex === slideCount - 1) {
+                document.querySelector('[data-bs-slide="next"]').setAttribute('disabled', 'disabled')
+            } else {
+                document.querySelector('[data-bs-slide="next"]').removeAttribute('disabled')
+            }
+            // Si el slide actual es el primero, deshabilita el botón "Prev"
+            if (currentIndex === 0) {
+                document.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
+            } else {
+                document.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
+            }
+        })
+    }
   })
 
 
@@ -235,7 +242,7 @@ function messageNewOt(ociNumber) {
     Swal.fire({
         position: 'center',
         timer: 3500,
-        text: `Se agregaron las OT a la ${ociNumber} exitosamente!`,
+        text: `Se agregaro/n la/s OT/s a la OCI# ${ociNumber} exitosamente!`,
         icon: 'success',
         showCancelButton: false,
         showConfirmButton: false,
@@ -244,7 +251,18 @@ function messageNewOt(ociNumber) {
 
 const btnCreate = document.getElementById('btnNewOt')
 btnCreate.addEventListener('click', (event)=>{
-    event.preventDefault()
-    const ociNumber = document.getElementsByName('ociNumber').value
-    messageNewOt(ociNumber)
+    //event.preventDefault()
+    const ociNumber = document.getElementsByName('ociNumber')
+    console.log('ociNumber: ',ociNumber[0].value)
+    messageNewOt(ociNumber[0].value)
+
+    const inputOciSelected = document.getElementById(`ociNumber${ociNumber[0].value}`)
+    console.log('inputOciSelected: ',inputOciSelected.value)
+    const formAction = document.getElementById('formNewOt')
+    formAction.setAttribute('action', `/api/proyectos/oci/${inputOciSelected.value}`)
+    
 })
+
+
+
+

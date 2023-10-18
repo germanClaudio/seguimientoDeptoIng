@@ -27,8 +27,13 @@ class ProjectService {
     }
     
     // add new Ot to OCI - Project
-    async addOtToOciProject(idOci) {
-        return this.proyectos.addOtToOciProject(idOci)
+    async addOtToOciProject(idOci, otAddedToOci) {
+        return this.proyectos.addOtToOciProject(idOci, otAddedToOci)
+    }
+
+    // Select OCI - Project
+    async selectOciByOciNumber(numberOci) {
+        return this.proyectos.selectOciByOciNumber(numberOci)
     }
 
     // // remove one project from Client
