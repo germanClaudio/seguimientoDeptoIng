@@ -47,19 +47,20 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
 
     async getClientById(id) {
         if(id){
+            console.log('id-getClientById.....',id)
             try {
                 const client = await Clientes.findById({_id: id })
                 logger.info('Cliente encontrado: ',client)
                 return client
             } catch (error) {
-                logger.error("Error MongoDB getOneClientById: ",error)
+                logger.error("Error MongoDB getClientById-Dao: ",error)
             }
         } else {
             try {
                 const clients = await Clientes.find()
                 return clients
             } catch (error) {
-                logger.error("Error MongoDB getOneClientById: ",error)
+                logger.error("Error MongoDB getClientById-Dao: ",error)
             }
         }
     }
@@ -71,14 +72,14 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                 logger.info('Cliente encontrado: ',client)
                 return client
             } catch (error) {
-                logger.error("Error MongoDB getOneClientById: ",error)
+                logger.error("Error MongoDB selectClientById: ",error)
             }
         } else {
             try {
                 const clients = await Clientes.find()
                 return clients
             } catch (error) {
-                logger.error("Error MongoDB getOneClientById: ",error)
+                logger.error("Error MongoDB selectClientById: ",error)
             }
         }
     }
@@ -92,14 +93,14 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                 logger.info('Cliente encontrado: ',client)
                 return client
             } catch (error) {
-                logger.error("Error MongoDB getOneClientById: ",error)
+                logger.error("Error MongoDB getClientProjectsById: ",error)
             }
         } else {
             try {
                 const clients = await Clientes.find()
                 return clients
             } catch (error) {
-                logger.error("Error MongoDB getOneClientById: ",error)
+                logger.error("Error MongoDB getClientProjectsById: ",error)
             }
         }
     }
@@ -111,14 +112,14 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                 logger.info('Cliente encontrado: ',client)
                 return client
             } catch (error) {
-                logger.error("Error MongoDB getOneClientById: ",error)
+                logger.error("Error MongoDB getClientByProjectId: ",error)
             }
         } else {
             try {
                 const clients = await Clientes.find()
                 return clients
             } catch (error) {
-                logger.error("Error MongoDB getOneClientById: ",error)
+                logger.error("Error MongoDB getClientByProjectId: ",error)
             }
         }
     }

@@ -68,6 +68,7 @@ let otProjectSchema = new Schema({
         type: String,
         maxlength: 150,
     },
+    creator: [creatorSchema],
     timestamp: {
         type: String,
         default: now,
@@ -77,7 +78,6 @@ let otProjectSchema = new Schema({
     },
     modifiedOn: {
         type: String,
-        default: now,
     },
 
 })

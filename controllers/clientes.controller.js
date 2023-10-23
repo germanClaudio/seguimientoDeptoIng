@@ -1,5 +1,4 @@
 const ClientsService = require("../services/clients.service.js")
-//const CartsService = require("../services/carts.service.js")
 const UserService = require("../services/users.service.js")
 const ProjectsService = require("../services/projects.service.js")
 
@@ -17,7 +16,6 @@ function formatDate(date) {
 class ClientsController {
     constructor() {
         this.clients = new ClientsService()
-        // this.carts = new CartsService()
         this.users = new UserService()
         this.projects = new ProjectsService()
     }

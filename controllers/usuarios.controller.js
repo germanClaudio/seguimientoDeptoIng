@@ -1,12 +1,10 @@
 const UserService = require("../services/users.service.js")
-//const CartsService = require("../services/carts.service.js")
 const bCrypt = require('bcrypt')
 const { generateToken } = require('../utils/generateToken')
 
 class UsersController {  
     constructor(){
         this.users = new UserService()
-        //this.carts = new CartsService()
       }
 
        

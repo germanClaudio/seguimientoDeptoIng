@@ -40,15 +40,22 @@ btnAddNewRow.addEventListener('click', () => {
             </div>
             <div class="col-3 my-auto">
                 <div class="d-flex">
-                    <button type="button" id="btnRemoveRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa fa-trash"></i></button>
+                    <button type="button" id="btnRemoveRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
                 </div>    
             </div>`)
                
     if (i == 1) {
         originalDiv
 
+    } else if (i < 5 ) { //cantidad maxima de OCI en conjunto a agregar 5
+        originalDiv
+        btnRemoveItem = document.getElementById(`btnRemoveRow${i-1}`)
+        btnRemoveItem.style.display = 'none'
+
     } else {
-        originalDiv              
+        btnRemoveItem = document.getElementById(`btnRemoveRow${i-1}`)
+        btnRemoveItem.style.display = 'none'     
+        btnAddNewRow.setAttribute('disabled', true)
     }
 
         const newDiv = document.createElement('div')
@@ -57,16 +64,22 @@ btnAddNewRow.addEventListener('click', () => {
         newDiv.innerHTML = originalDiv
         parentDiv.appendChild(newDiv)
         const ociQty = document.getElementById("ociQuantity")
-        ociQty.setAttribute('value', i)
+        ociQty.setAttribute('value', i+1)
 
             const buttons = document.querySelectorAll('button')
             buttons.forEach((button) => {
                 button.addEventListener("click", removeRow)
             })
+        
+            
 })
     
 //-------------------------- Remove OCI Row ----------------------------------
-function removeRow(e) {    
+function removeRow(e) {
+
+    const parentDiv = document.getElementById('div_body')
+    let i = parentDiv.childElementCount
+
     if(e.target.id){
         let btnRemoveRow = e.target.id
         const numberId1 = parseInt(btnRemoveRow.slice(-1))
@@ -82,6 +95,17 @@ function removeRow(e) {
         if(checkString(numberIdToDelete)) {
             const rowToDelete = document.getElementById(`ociItemRow${numberIdToDelete}`)
             rowToDelete.remove()
+            const otQty = document.getElementById("otQuantity")
+            otQty.setAttribute('value', (i-1))
+
+            if(numberIdToDelete !== 1 && numberIdToDelete < 5) {
+                btnRemoveItem = document.getElementById(`btnRemoveRow${numberIdToDelete-1}`)
+                btnRemoveItem.style.display = 'inline'            
+            } else {
+                btnRemoveItem = document.getElementById(`btnRemoveRow${numberIdToDelete-1}`)
+                btnRemoveItem.style.display = 'inline'
+                btnAddNewRow.removeAttribute('disabled')   
+            }
         }
     }
 }

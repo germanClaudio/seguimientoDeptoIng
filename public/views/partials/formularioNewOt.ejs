@@ -2,7 +2,7 @@
     <div class="card card-body d-flex justify-content-center">
         <div class="form-group col-12 mx-auto my-2 w-100 border px-5 py-1 bg-dark bg-gradient text-white bg-opacity-75">
             
-            <form id="formNewOt" action="/api/proyectos/oci" method="post">
+            <form id="formNewOt" method="post">
             
                 <fieldset>
                     <h5 class="d-block mx-auto my-2 text-center">Agregar Nueva OT a OCI / Proyecto: <%= proyecto[0].project[0].projectName %></h5>
@@ -10,22 +10,24 @@
                         <div class="col-12">
                             <% let j=0
                             if (proyecto.length > 0) { 
-                    
-                                 for ( let m = 0;  proyecto.length > m; m++) { 
-                                     if (proyecto[m].project[j].oci.length > 1) { 
+                                <input class="form-control" type="text" name="projectIdHidden" value="<%= proyecto[m].project[j].id %>" hidden>
+                                for ( let m = 0;  proyecto.length > m; m++) { 
+                                    if (proyecto[m].project[j].oci.length > 1) { 
                                          for ( let k = 0; proyecto[m].project[j].oci.length > k; k++) { %>
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label" for="ociNumber<%= proyecto[m].project[j].oci[k].ociNumber %>">OCI # <%= proyecto[m].project[j].oci[k].ociNumber %></label>
-                                                <input class="form-check-input" type="radio" name="ociNumber" id="ociNumber<%= proyecto[m].project[j].oci[k].ociNumber %>" value="<%= proyecto[m].project[j].oci[k].ociNumber %>">
+                                                <input class="form-check-input" type="radio" name="ociNumber" id="<%= proyecto[m].project[j]._id %>" value="<%= proyecto[m].project[j].oci[k].ociNumber %>">
+                                                <input class="form-check-input" type="radio" name="ociNumberK" value="<%= k %>">
                                             </div>
                                         <% } 
-                                     } else { %>
+                                    } else { %>
                                         <div class="form-check form-check-inline">
                                             <label class="form-check-label" for="ociNumber<%= proyecto[j].project[j].oci[0].ociNumber %>">OCI # <%= proyecto[m].project[j].oci[0].ociNumber %></label>
-                                            <input class="form-check-input" type="radio" name="ociNumber" id="ociNumber<%= proyecto[m].project[j].oci[0].ociNumber %>" value="<%= proyecto[m].project[j].oci[0].ociNumber %>" checked>
+                                            <input class="form-check-input" type="radio" name="ociNumber" id="<%= proyecto[m].project[j]._id %>" value="<%= proyecto[m].project[j].oci[0].ociNumber %>" checked>
                                         </div>       
                                     <% } 
-                                 }     
+                                }
+
                             } else { %>
                                 <span class="badge rounded-pill bg-danger text-white"> No hay datos cargados </span>
                             <% } %>    
@@ -60,7 +62,7 @@
                                                 </div>
                                                 <div class="col-2">
                                                     <label for="otDescription" id="labelOtDescription">Descripción OP</label>
-                                                    <input type="text" name="otDescription" id="otDescription" class="form-control"
+                                                    <input type="text" name="opDescription" id="opDescription" class="form-control"
                                                     placeholder="Descripcion OP">
                                                 </div>
                                                 <div class="col-1">
@@ -105,12 +107,9 @@
                         </div>
                     </div>
                             <hr>
-                            id usuario: <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>" >
-                            id cliente: <input type="text" name="clientIdHidden" id="clientIdHidden" class="form-control" value="<%= proyecto[0].client[0]._id %>">
-                            id OT: <input type="number" name="idOtHidden" id="idOtHidden" class="form-control"
-                            value="">
-                            Qty. OT: <input type="number" name="otQuantity" id="otQuantity" class="form-control"
-                            value="">
+                            <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>" hidden>
+                            <input type="text" name="clientIdHidden" id="clientIdHidden" class="form-control" value="<%= proyecto[0].client[0]._id %>" hidden>
+                            <input type="number" name="otQuantity" id="otQuantity" class="form-control" value="1" hidden>
                     <br>
                     <div class="d-flex justify-content-center my-2">
                         <button id="btnNewOt" type="submit" class="btn btn-primary mx-auto">Guardar <i

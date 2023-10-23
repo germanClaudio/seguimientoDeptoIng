@@ -89,7 +89,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
                     <td class="text-center">
                         <div class="d-block align-items-center">
                             <a href="#" class="btn btn-secondary btn-sm me-1 disabled" data-toggle="tooltip" data-placement="top" title="To Be Done"><i class="fa fa-eye"></i></a>
-                            <a href="/api/proyectos/select/${element.project[0]._id}" class="btn btn-primary btn-sm mx-1"><i class="fa fa-pencil"></i></a>
+                            <a href="/api/proyectos/selectProject/${element.project[0]._id}" class="btn btn-primary btn-sm mx-1"><i class="fa fa-pencil"></i></a>
                             <a href="/api/proyectos/delete/${element.project[0]._id}" class="btn btn-danger btn-sm mx-1"><i class="fa fa-trash"></i></a>
                         </div>
                     </td>

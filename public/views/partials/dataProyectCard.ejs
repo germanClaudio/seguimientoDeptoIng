@@ -89,7 +89,7 @@
 
                                                                 <button id="btnHiddeTable1" type="button" class="btn btn-primary" title="Ocultar General"
                                                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #ccc; border: none">
-                                                                    <i class="fa-regular fa-eye-slash"></i>
+                                                                    <i class="fa-solid fa-eye-slash"></i>
                                                                 </button>
                                                                 
                                                             </div>
@@ -97,7 +97,7 @@
                                                                 
                                                                 <button id="btnHiddeTable2" type="button" class="btn btn-secondary" title="Ocultar Int/Ext"
                                                                     style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #bbc; border: none">
-                                                                    <i class="fa-regular fa-eye-slash"></i>
+                                                                    <i class="fa-solid fa-eye-slash"></i>
                                                                 </button>
 
                                                             </div>
@@ -135,7 +135,12 @@
                                                                                     </div>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
-                                                                                    <span class="badge rounded-pill bg-success text-white my-2"> Activo </span>
+                                                                                    
+                                                                                    <% if (proyecto[m].project[j].oci[k].otProject[n].otStatus) { %>
+                                                                                        <span class="badge rounded-pill bg-success text-white my-2"> Activo </span>
+                                                                                    <% } else { %>
+                                                                                        <span class="badge rounded-pill bg-danger text-white my-2"> Inactivo </span>
+                                                                                    <% } %>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
                                                                                     <span class="badge rounded-pill bg-dark text-white my-2"> <%= proyecto[m].project[j].oci[k].otProject[n].otNumber %> </span>
@@ -168,13 +173,13 @@
                 
                                                                             <tr style="height: 7vh;">
                                                                                 <td class="text-center">
-                                                                                    <small class="text-dark align-middle"> Daniel Rosetto </small>
+                                                                                    <small class="text-dark align-middle"> <%= proyecto[m].project[j].oci[k].otProject[n].otDesign %> </small>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
-                                                                                    <small class="text-dark"> Daniel Diaz </small>
+                                                                                    <small class="text-dark"> <%= proyecto[m].project[j].oci[k].otProject[n].otSimulation %> </small>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
-                                                                                    <small class="text-dark"> Procor </small>
+                                                                                    <small class="text-dark"> <%= proyecto[m].project[j].oci[k].otProject[n].otSupplier %> </small>
                                                                                 </td>
                                                                             </tr>
                                                                         <% } %>    

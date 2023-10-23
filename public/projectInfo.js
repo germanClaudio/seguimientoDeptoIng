@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // tabla3.classList.add("col-2")
                 // tabla4.classList.add("col-2")
                 // tabla5.classList.add("col-2")
-                btnHiddeTable1.setHTML('<i class="fa-regular fa-eye-slash"></i>')
+                btnHiddeTable1.setHTML('<i class="fa-solid fa-eye-slash"></i>')
                 posBtnHiddeTable1.classList.remove("col-1")
                 posBtnHiddeTable1.classList.add("col-3")
                 btnHiddeTable1.title='Ocultar General'
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btnHiddeTable2.addEventListener('click', function () {
             if (tablaSeguimiento.style.display === 'none') {
                 tablaSeguimiento.style.display = ''
-                btnHiddeTable2.setHTML('<i class="fa-regular fa-eye-slash"></i>')
+                btnHiddeTable2.setHTML('<i class="fa-solid fa-eye-slash"></i>')
                 posBtnHiddeTable2.classList.remove("col-1")
                 posBtnHiddeTable2.classList.add("col-3")
                 btnHiddeTable2.title='Ocultar Int/Ext'
@@ -94,6 +94,19 @@ document.addEventListener('DOMContentLoaded', function () {
     //         btnHiddeTable5.setHTML('Mostrar')
     //     }
     // })
+    const ociNumber = document.getElementsByName('ociNumber')
+    for (let i = 0 ; i < ociNumber.length; i++) {
+        if (ociNumber.length === 1) {
+            const inputOciSelected = document.getElementById(`${ociNumber[i].id}`)
+            const formAction = document.getElementById('formNewOt')
+            let path = `/api/proyectos/oci/${inputOciSelected.id}`
+            console.log('path: ',path)
+            formAction.setAttribute('action', path)
+        } else {
+
+        }
+    }
+
   })
 
   
@@ -127,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
     }
-  })
+})
 
 
 // ---------------- Event Add New Ot Row to OCI --------------------
@@ -192,15 +205,22 @@ btnAddNewRow.addEventListener('click', () => {
             </div>
             <div class="col-1 my-auto">
                 <div class="d-flex">
-                    <button type="button" id="btnRemoveRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa fa-trash"></i></button>
+                    <button type="button" id="btnRemoveRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
                 </div>    
             </div>`)
                
     if (i == 1) {
         originalDiv
-
+        
+    } else if (i < 10 ) { //cantidad maxima de OT en conjunto a agregar 10
+        originalDiv
+        btnRemoveItem = document.getElementById(`btnRemoveRow${i-1}`)
+        btnRemoveItem.style.display = 'none'
+        
     } else {
-        originalDiv              
+        btnRemoveItem = document.getElementById(`btnRemoveRow${i-1}`)
+        btnRemoveItem.style.display = 'none'     
+        btnAddNewRow.setAttribute('disabled', true)
     }
 
         const newDiv = document.createElement('div')
@@ -209,7 +229,7 @@ btnAddNewRow.addEventListener('click', () => {
         newDiv.innerHTML = originalDiv
         parentDiv.appendChild(newDiv)
         const otQty = document.getElementById("otQuantity")
-        otQty.setAttribute('value', i)
+        otQty.setAttribute('value', i+1)
 
             const buttons = document.querySelectorAll('button')
             buttons.forEach((button) => {
@@ -219,13 +239,17 @@ btnAddNewRow.addEventListener('click', () => {
     
 //-------------------------- Remove OCI Row ----------------------------------
 function removeRow(e) {    
+
+    const parentDiv = document.getElementById('div_body')
+    let i = parentDiv.childElementCount
+
     if(e.target.id){
         let btnRemoveRow = e.target.id
         const numberId1 = parseInt(btnRemoveRow.slice(-1))
         const numberId2 = parseInt(btnRemoveRow.slice(-2))
         let numberIdToDelete
 
-        numberId1>=0 && numberId2 ? numberIdToDelete = numberId2 : numberIdToDelete = numberId1;
+        numberId1 >= 0 && numberId2 ? numberIdToDelete = numberId2 : numberIdToDelete = numberId1;
         
         function checkString(string) {
             return /^[0-9]*$/.test(string);
@@ -234,18 +258,30 @@ function removeRow(e) {
         if(checkString(numberIdToDelete)) {
             const rowToDelete = document.getElementById(`otItemRow${numberIdToDelete}`)
             rowToDelete.remove()
+            const otQty = document.getElementById("otQuantity")
+            otQty.setAttribute('value', (i-1))
+
+            if(numberIdToDelete !== 1 && numberIdToDelete < 10) {
+                btnRemoveItem = document.getElementById(`btnRemoveRow${numberIdToDelete-1}`)
+                btnRemoveItem.style.display = 'inline'        
+            } else {
+                btnRemoveItem = document.getElementById(`btnRemoveRow${numberIdToDelete-1}`)
+                btnRemoveItem.style.display = 'inline'
+                btnAddNewRow.removeAttribute('disabled')   
+            }
         }
     }
 }
 
 function messageNewOt(ociNumber) {
     Swal.fire({
+        title: 'Está seguro de ingresar los datos?',
         position: 'center',
         timer: 3500,
         text: `Se agregaro/n la/s OT/s a la OCI# ${ociNumber} exitosamente!`,
         icon: 'success',
-        showCancelButton: false,
-        showConfirmButton: false,
+        showCancelButton: true,
+        showConfirmButton: true,
   })
 }
 
@@ -253,16 +289,11 @@ const btnCreate = document.getElementById('btnNewOt')
 btnCreate.addEventListener('click', (event)=>{
     //event.preventDefault()
     const ociNumber = document.getElementsByName('ociNumber')
-    console.log('ociNumber: ',ociNumber[0].value)
-    messageNewOt(ociNumber[0].value)
-
-    const inputOciSelected = document.getElementById(`ociNumber${ociNumber[0].value}`)
-    console.log('inputOciSelected: ',inputOciSelected.value)
+        
+    const inputOciSelected = document.getElementById(`${ociNumber[0].id}`)
     const formAction = document.getElementById('formNewOt')
-    formAction.setAttribute('action', `/api/proyectos/oci/${inputOciSelected.value}`)
+    let path = `/api/proyectos/oci/${inputOciSelected.id}`
+    formAction.setAttribute('action', path)
     
+    messageNewOt(ociNumber[0].value)
 })
-
-
-
-

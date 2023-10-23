@@ -87,7 +87,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 const projects = await Proyectos.find()
                 return projects
             } catch (error) {
-                logger.error("Error MongoDB getOneClientById: ",error)
+                logger.error("Error MongoDB getOneProjectById: ",error)
             }
         }
     }
@@ -115,53 +115,61 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
     // Select one OCI by Oci Number ----------------
     async selectOciByOciNumber(numberOci) {
-        if(numberOci){
+        if (numberOci) {
+            
             try {
                 const project = await Proyectos.find({
                     'project.0.oci.0.ociNumber': numberOci 
-                  })
-                  console.log('project: ',project)
+                })
                 return project
-               
+
             } catch (error) {
                 logger.error("Error MongoDB selectOciByOciNumber: ",error)
             }
-        } 
-        // else {
-        //     try {
-        //         const projects = await Proyectos.find()
-        //         return projects
-        //     } catch (error) {
-        //         logger.error("Error MongoDB getOneClientById: ",error)
-        //     }
-        // }
+        
+        } else {
+
+            try {
+                const projects = await Proyectos.find()
+                return projects
+            } catch (error) {
+                logger.error("Error MongoDB selectOciByOciNumber: ",error)
+            }
+        }
     }
 
-    async addOtToOciProject(idOci, infoOt){
-        if(idOci) {
+    async addOtToOciProject(idProjectTarget, numberOci, ociNumberKinfoOt) {
+        console.log('infoOt----> ',
+                    infoOt,
+                    '------------end of InfoOt---------------'
+                    )
+
+        if (idProjectTarget) {
             try {
-                const itemMongoDB = await Proyectos.findById({_id: idOci})
-                conosle.log(...itemMongoDB)
+                const itemMongoDB = await Proyectos.findById({_id: idProjectTarget})
+                                
                 if (itemMongoDB) {
-                    const newValues = {
-                        otNumber: infoOt.otNumber,
-                        opNumber: infoOt.opNumber,
-                        otDescription: infoOt.otDescription,
-                        otStatus: infoOt.otStatus,
-                        otDesign: infoOt.otDesign,
-                        otSimulation: infoOt.otSimulation,
-                        otSuplier: infoOt.otSupplier,
-                        timestamp: now,
-                        creator: infoOt.creator,
-                        modificator: [],
-                        modifiedOn: "",
-                    }
-    
-                    const otAddedToOci = await Clientes.findOneAndUpdate(
-                        { _id: idOci }, newValues , { new: true })
+
+                    const otAddedToOci = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $push: {
+                                'project.0.oci.0.otProject':
+                                infoOt
+                            }
+                        },
+                        { new: true }
+                    )
+
                     logger.info('Ot agregada a OCI ', otAddedToOci)
                     
-                    return otAddedToOci
+                    if (otAddedToOci.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({_id: idProjectTarget})
+                        return itemUpdated
+                    } else {
+                        return new Error (`No se actualizó el item: ${itemMongoDB._id}`)
+                    }
+
                 } else {
                     logger.error(`No se encontró la OCI con id: ${idOci}`)
                     return new Error (`No se encontró la OCI con id: ${idOci}`)
@@ -189,7 +197,9 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 }
 
                 const clientUpdated = await Clientes.findOneAndUpdate(
-                    { _id: id }, newValues , { new: true })
+                    { _id: id },
+                    newValues,
+                    { new: true })
                 logger.info('Cliente actualizado ', clientUpdated)
                 
                 return clientUpdated
