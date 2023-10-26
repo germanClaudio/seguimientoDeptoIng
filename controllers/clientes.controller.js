@@ -147,7 +147,11 @@ class ClientsController {
 
     createNewClient = async (req, res) => {
         const user = []
-        user.push(req.body.unameHidden, req.body.lastNameHidden, req.body.usernameHidden)
+        user.push(
+            req.body.unameHidden,
+            req.body.lastNameHidden,
+            req.body.usernameHidden
+        )
 
         const newCliente = {
             creator: user,
@@ -193,7 +197,11 @@ class ClientsController {
         const creador = await this.clients.getClientById(id)
 
         const modifier = []
-        modifier.push(req.body.unameHidden, req.body.lastNameHidden, req.body.username)
+        modifier.push(
+            req.body.unameHidden,
+            req.body.lastNameHidden,
+            req.body.username
+        )
 
         const updatedCliente = {
             creator: creador.creator,
@@ -242,7 +250,11 @@ class ClientsController {
         let userInfo = res.locals.userInfo
 
         const modifier = []
-        modifier.push(req.body.unameHidden, req.body.lastNameHidden, username)
+        modifier.push(
+            req.body.unameHidden, 
+            req.body.lastNameHidden, 
+            username
+        )
 
         const updatedClienteProjectsQty = {
             creator: creador.creator,

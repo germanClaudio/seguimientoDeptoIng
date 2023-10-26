@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%- include('../partials/head'); %>
 </head>
+
 <body>
     <header>
         <%- include('../partials/header'); %>
     </header>
     <%- include('../partials/userBanner'); %>
+        <div class="collapse mt-5 mx-auto" id="collapseExample">
+            <%- include('../partials/formularioNewOt'); %>
+        </div>
+            <br>
+            <div class="d-block mx-auto my-2 pb-4 text-center">
+                <button id="btnAddOtForm" class="btn btn-primary my-2 me-5" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Agregar OT's
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                </button>
+                <a class="btn btn-info my-2 mx-5" href="/api/proyectos"><i class="fa-solid fa-reply"
+                        aria-hidden="true"></i> Volver Atrás
+                </a>
+                <a class="btn btn-secondary my-2 ms-5" href="/api/auth/index"><i class="fa-solid fa-home"
+                        aria-hidden="true"></i> Volver al Home
+                </a>
+            </div>
 
-    <%- include('../partials/formularioNewOt'); %>
-    
-    <div class="d-block mx-auto my-2 pb-4 text-center">
-        <a class="btn btn-primary my-1 me-5" href="/api/proyectos/oci/"
-        type="button">Agregar OT's <i class="fa-regular fa-plus" aria-hidden="true"></i>
-        </a>
-        <a class="btn btn-info my-1 mx-5" href="/api/proyectos"><i class="fa-solid fa-reply"
-            aria-hidden="true"></i> Volver Atrás
-        </a>
-        <a class="btn btn-secondary my-1 ms-5" href="/api/auth/index"><i class="fa-solid fa-home"
-                aria-hidden="true"></i> Volver al Home
-        </a>
-    </div>
-    
-    <h5 class="d-block mx-auto mt-2 mb-3 text-center">Nombre Proyecto: <%=proyecto[0].project[0].projectName %></h5>
-    <div id="updateCliente"> 
-    </div>
-    <%- include('../partials/dataProyectCard'); %>
-    <br>
-    <footer>
-        <%- include('../partials/footer'); %>
-    </footer>
+            <h5 class="d-block mx-auto mt-2 mb-3 text-center">Nombre Proyecto: <%=proyecto[0].project[0].projectName %>
+            </h5>
+            <div id="updateCliente">
+            </div>
+            <%- include('../partials/dataProyectCard'); %>
+                <br>
+                <footer>
+                    <%- include('../partials/footer'); %>
+                </footer>
 
-        <!--    scripts     -->
-        <script type="text/javascript" src="../../../projectInfo.js"></script>
-        <script type="text/javascript" src="../../../clock.js"></script>
-        <script type="text/javascript" src="../../../expiresSession.js"></script>
-                    
+                <!--    scripts     -->
+                <script type="text/javascript" src="../../../projectInfo.js"></script>
+                <script type="text/javascript" src="../../../clock.js"></script>
+                <script type="text/javascript" src="../../../expiresSession.js"></script>
+
 </body>
 
 </html>

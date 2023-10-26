@@ -138,28 +138,86 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    async addOtToOciProject(idProjectTarget, numberOci, ociNumberKinfoOt) {
-        console.log('infoOt----> ',
-                    infoOt,
-                    '------------end of InfoOt---------------'
-                    )
+    async addOtToOciProject(idProjectTarget, numberOci, ociNumberK, infoOt) {
+        // console.log('idProjectTarget--> ', idProjectTarget)
+        // console.log('ociNumber--> ', numberOci)
+        // console.log('ociNumberK--> ', ociNumberK)
+        // console.log('infoOt--> ', infoOt, '--end of InfoOt--')
 
         if (idProjectTarget) {
             try {
-                const itemMongoDB = await Proyectos.findById({_id: idProjectTarget})
+                const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget})
                                 
                 if (itemMongoDB) {
-
-                    const otAddedToOci = await Proyectos.updateOne(
-                        { _id: itemMongoDB._id },
-                        {
-                            $push: {
-                                'project.0.oci.0.otProject':
-                                infoOt
-                            }
-                        },
-                        { new: true }
-                    )
+                    const ociKNumber = parseInt(ociNumberK) || 0
+                    //console.log('ociNumberK--> ', ociKNumber)
+                    switch (ociKNumber) {
+                        case 4 : {
+                            var otAddedToOci = await Proyectos.updateOne(
+                                { _id: itemMongoDB._id },
+                                {
+                                    $push: {
+                                        'project.0.oci.4.otProject':
+                                        infoOt
+                                    }
+                                },
+                                { new: true }
+                            )
+                            break;
+                        }
+                        case 3: {
+                            var otAddedToOci = await Proyectos.updateOne(
+                                { _id: itemMongoDB._id },
+                                {
+                                    $push: {
+                                        'project.0.oci.3.otProject':
+                                        infoOt
+                                    }
+                                },
+                                { new: true }
+                            )
+                            break;
+                        }
+                        case 2: {
+                            var otAddedToOci = await Proyectos.updateOne(
+                                { _id: itemMongoDB._id },
+                                {
+                                    $push: {
+                                        'project.0.oci.2.otProject':
+                                        infoOt
+                                    }
+                                },
+                                { new: true }
+                            )
+                            break;
+                        }
+                        case 1 : {
+                            var otAddedToOci = await Proyectos.updateOne(
+                                { _id: itemMongoDB._id },
+                                {
+                                    $push: {
+                                        'project.0.oci.1.otProject':
+                                        infoOt
+                                    }
+                                },
+                                { new: true }
+                            )
+                            break;
+                        }
+                        default : {
+                            var otAddedToOci = await Proyectos.updateOne(
+                                { _id: itemMongoDB._id },
+                                {
+                                    $push: {
+                                        'project.0.oci.0.otProject':
+                                        infoOt
+                                    }
+                                },
+                                { new: true }
+                            )
+                            break;
+                        }
+                    }
 
                     logger.info('Ot agregada a OCI ', otAddedToOci)
                     
@@ -171,8 +229,8 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                     }
 
                 } else {
-                    logger.error(`No se encontró la OCI con id: ${idOci}`)
-                    return new Error (`No se encontró la OCI con id: ${idOci}`)
+                    logger.error(`No se encontró la OCI: ${numberOci}`)
+                    return new Error (`No se encontró la OCI: ${numberOci}`)
                 }
             } catch (error) {
                 logger.error("Error MongoDB adding OT to a OCI: ",error)

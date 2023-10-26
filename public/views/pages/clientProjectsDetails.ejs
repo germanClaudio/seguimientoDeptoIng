@@ -1,43 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%- include('../partials/head'); %>
 </head>
+
 <body>
     <header>
         <%- include('../partials/header'); %>
     </header>
     <%- include('../partials/userBanner'); %>
 
-    <div class="collapse mt-5 mx-auto" id="collapseExample">
-        <%- include('../partials/formularioProyecto'); %>
-    </div>
-    <br>
-    <div class="d-block mx-auto my-2 pb-4 text-center">
-        <button class="btn btn-primary my-2 me-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-            aria-expanded="false" aria-controls="collapseExample">Nuevo Proyecto <i class="fa fa-plus"
-                aria-hidden="true"></i>
-        </button>
-        <a class="btn btn-secondary my-2 ms-5" href="/api/auth/index"><i class="fa fa-home"
-                aria-hidden="true"></i> Home </a>
-    </div>
-    
+        <div class="collapse mt-5 mx-auto" id="collapseExample">
+            <%- include('../partials/formularioProyecto'); %>
+        </div>
+        <br>
+        <div class="d-block mx-auto my-2 pb-4 text-center">
+            <button class="btn btn-primary my-2 me-5" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Nuevo Proyecto
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            </button>
+            <a class="btn btn-secondary my-2 ms-5" href="/api/auth/index"><i class="fa fa-home" aria-hidden="true"></i>
+                Home </a>
+        </div>
 
-    <h3 class="d-block mx-auto mt-2 mb-3 text-center">Proyectos del Cliente</h3>
-    <div id="updateCliente"> 
-    </div>
-    <%- include('../partials/dataProyectsClientCard'); %>
-    <br>
-    <footer>
-        <%- include('../partials/footer'); %>
-    </footer>
 
-        <!--    scripts     -->
-        <script type="text/javascript" src="../../../projectDetails.js"></script>
-        <!-- <script type="text/javascript" src="../../../clientDetail.js"></script> -->
-        <script type="text/javascript" src="../../../clock.js"></script>
-        <script type="text/javascript" src="../../../expiresSession.js"></script>
-                    
+        <h3 class="d-block mx-auto mt-2 mb-3 text-center">Proyectos del Cliente</h3>
+        <div id="updateCliente">
+        </div>
+        <%- include('../partials/dataProyectsClientCard'); %>
+            <br>
+            <footer>
+                <%- include('../partials/footer'); %>
+            </footer>
+
+            <!--    scripts     -->
+            <script type="text/javascript" src="../../../projectDetails.js"></script>
+            <!-- <script type="text/javascript" src="../../../clientDetail.js"></script> -->
+            <script type="text/javascript" src="../../../clock.js"></script>
+            <script type="text/javascript" src="../../../expiresSession.js"></script>
+
 </body>
 
 </html>

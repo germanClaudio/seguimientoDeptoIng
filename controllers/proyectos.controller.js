@@ -30,7 +30,7 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
 
-       let cliente = await this.clients.getClientById()
+        let cliente = await this.clients.getClientById()
 
         try {
             if (proyectos.error) return res.status(400).json({ msg: 'No hay proyectos cargados' })
@@ -88,7 +88,7 @@ class ProjectsController {
         const cliente = await this.clients.getClientById(id)
 
         const proyectosCargados = await this.projects.getProjectsByClientId(id)
-        
+
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
@@ -119,7 +119,7 @@ class ProjectsController {
 
         const cliente = await this.clients.getClientByProjectId(id)
         const proyecto = await this.projects.selectProjectByProjectId(id)
-        
+
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
@@ -151,94 +151,121 @@ class ProjectsController {
 
         const userId = req.body.idHidden
         const user = await this.users.getUserById(userId)
-        
-        const flagOciStatus = req.body.ociStatus == 'on' ? true : false
+
         const flagStatusProject = req.body.statusProject == 'on' ? true : false
-        
-        let ociProject = [{
-            ociNumber: req.body.ociNumber,
-            ociDescription: req.body.ociDescription,
-            ociStatus: flagOciStatus
-        }]
-        
+
         const ociQuantity = parseInt(req.body.ociQuantity)
-        let emptyArray = []
-        
+
+        const flagOciStatus = req.body.ociStatus == 'on' ? true : false
         const flagOciStatus1 = req.body.ociStatus1 == 'on' ? true : false
         const flagOciStatus2 = req.body.ociStatus2 == 'on' ? true : false
         const flagOciStatus3 = req.body.ociStatus3 == 'on' ? true : false
         const flagOciStatus4 = req.body.ociStatus4 == 'on' ? true : false
-        //const flagOciStatus5 = req.body.ociStatus5 == 'on' ? true : false
-       
-        if (ociQuantity === 4) {
-            const ociProjectPlus = [{
-                ociNumber: parseInt(req.body.ociNumber1),
-                ociDescription: req.body.ociDescription1,
-                ociStatus: flagOciStatus1
-            },{
-                ociNumber: parseInt(req.body.ociNumber2),
-                ociDescription: req.body.ociDescription2,
-                ociStatus: flagOciStatus2
-            },{
-                ociNumber: parseInt(req.body.ociNumber3),
-                ociDescription: req.body.ociDescription3,
-                ociStatus: flagOciStatus3
-            },{
-                ociNumber: parseInt(req.body.ociNumber4),
-                ociDescription: req.body.ociDescription4,
-                ociStatus: flagOciStatus4
-            }]
-            emptyArray = emptyArray.concat(ociProjectPlus)
 
-        } else if (ociQuantity === 3) {
-            const ociProjectPlus = [{
-                ociNumber: req.body.ociNumber1,
-                ociDescription: req.body.ociDescription1,
-                ociStatus: flagOciStatus1
-            },{
-                ociNumber: req.body.ociNumber2,
-                ociDescription: req.body.ociDescription2,
-                ociStatus: flagOciStatus2
-            },{
-                ociNumber: req.body.ociNumber3,
-                ociDescription: req.body.ociDescription3,
-                ociStatus: flagOciStatus3
-            }]
-            emptyArray = emptyArray.concat(ociProjectPlus)
 
-        } else if (ociQuantity === 2) {
-            const ociProjectPlus = [{
-                ociNumber: req.body.ociNumber1,
-                ociDescription: req.body.ociDescription1,
-                ociStatus: flagOciStatus1
-            },{
-                ociNumber: req.body.ociNumber2,
-                ociDescription: req.body.ociDescription2,
-                ociStatus: flagOciStatus2
-            }]
-            emptyArray = emptyArray.concat(ociProjectPlus)
-
-        } else {
-            const ociProjectPlus = []
-            emptyArray = ociProjectPlus
+        switch (ociQuantity) {
+            case 4: {
+                var ociProject = [
+                    {
+                        ociNumber: parseInt(req.body.ociNumber),
+                        ociDescription: req.body.ociDescription,
+                        ociStatus: flagOciStatus
+                    }, {
+                        ociNumber: parseInt(req.body.ociNumber1),
+                        ociDescription: req.body.ociDescription1,
+                        ociStatus: flagOciStatus1
+                    }, {
+                        ociNumber: parseInt(req.body.ociNumber2),
+                        ociDescription: req.body.ociDescription2,
+                        ociStatus: flagOciStatus2
+                    }, {
+                        ociNumber: parseInt(req.body.ociNumber3),
+                        ociDescription: req.body.ociDescription3,
+                        ociStatus: flagOciStatus3
+                    }, {
+                        ociNumber: parseInt(req.body.ociNumber4),
+                        ociDescription: req.body.ociDescription4,
+                        ociStatus: flagOciStatus4
+                    }]
+                break;
+            }
+            case 3: {
+                var ociProject = [
+                    {
+                        ociNumber: parseInt(req.body.ociNumber),
+                        ociDescription: req.body.ociDescription,
+                        ociStatus: flagOciStatus
+                    }, {
+                        ociNumber: req.body.ociNumber1,
+                        ociDescription: req.body.ociDescription1,
+                        ociStatus: flagOciStatus1
+                    }, {
+                        ociNumber: req.body.ociNumber2,
+                        ociDescription: req.body.ociDescription2,
+                        ociStatus: flagOciStatus2
+                    }, {
+                        ociNumber: req.body.ociNumber3,
+                        ociDescription: req.body.ociDescription3,
+                        ociStatus: flagOciStatus3
+                    }]
+                break;
+            }
+            case 2: {
+                var ociProject = [
+                    {
+                        ociNumber: parseInt(req.body.ociNumber),
+                        ociDescription: req.body.ociDescription,
+                        ociStatus: flagOciStatus
+                    }, {
+                        ociNumber: req.body.ociNumber1,
+                        ociDescription: req.body.ociDescription1,
+                        ociStatus: flagOciStatus1
+                    }, {
+                        ociNumber: req.body.ociNumber2,
+                        ociDescription: req.body.ociDescription2,
+                        ociStatus: flagOciStatus2
+                    }]
+                emptyArray = emptyArray.concat(ociProjectPlus)
+                break;
+            }
+            case 1: {
+                var ociProject = [
+                    {
+                        ociNumber: parseInt(req.body.ociNumber),
+                        ociDescription: req.body.ociDescription,
+                        ociStatus: flagOciStatus
+                    }, {
+                        ociNumber: req.body.ociNumber1,
+                        ociDescription: req.body.ociDescription1,
+                        ociStatus: flagOciStatus1
+                    }]
+                break;
+            }
+            default: {
+                var ociProject = [
+                    {
+                        ociNumber: parseInt(req.body.ociNumber),
+                        ociDescription: req.body.ociDescription,
+                        ociStatus: flagOciStatus
+                    }]
+                break;
+            }
         }
 
-        ociProject = ociProject.concat(emptyArray)
-        
         function dividirArrayEnSubarrays(ociProject, longitudSubarray) {
             const subarrays = []
             for (let i = 0; i < ociProject.length; i += longitudSubarray) {
-              subarrays.push(ociProject.slice(i, i + longitudSubarray))
+                subarrays.push(ociProject.slice(i, i + longitudSubarray))
             }
             return subarrays
-          }
+        }
 
-          const longitudDeseada = 1 // longitud que desees
-          const subarrays = dividirArrayEnSubarrays(ociProject, longitudDeseada)
-          
-          const arraysSeparados = subarrays.reduce((acc, currentArray) => {
+        const longitudDeseada = 1 // longitud que desees
+        const subarrays = dividirArrayEnSubarrays(ociProject, longitudDeseada)
+
+        const arraysSeparados = subarrays.reduce((acc, currentArray) => {
             return acc.concat(currentArray)
-          }, [])
+        }, [])
 
         const project = {
             projectName: req.body.projectName,
@@ -270,9 +297,9 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
 
-       const cliente = await this.clients.updateClientProjectQty(clientId, clienteSeleccionado)
-       
-       try {
+        const cliente = await this.clients.updateClientProjectQty(clientId, clienteSeleccionado)
+
+        try {
             if (!proyectos) return res.status(404).json({ Msg: 'Proyecto no guardado' })
             res.render('clientProjectsDetails', {
                 username,
@@ -294,148 +321,151 @@ class ProjectsController {
     addOtToOciProject = async (req, res) => {
         const clientId = req.body.clientIdHidden
         const cliente = await this.clients.selectClientById(clientId)
-        
+
         const numberOci = req.body.ociNumber
         const ociNumberK = req.body.ociNumberK
         const projectId = req.body.projectIdHidden
-        //const project = await this.projects.selectOciByOciNumber(numberOci)
+        const otQuantity = parseInt(req.body.otQuantity)
+
+        // console.log('A_ numberOci: ', numberOci,
+        //             ' B_ ociNumberK: ', ociNumberK,
+        //             ' C_ projectId: ', projectId,
+        //             ' D_ otQuantity: ', otQuantity
+        //             )
+        //const project = await this.projects.selectOciByOciNumber(numberOci, ociNumberK)
         //const idProjectTarget = project[0]._id
-               
+
         let username = res.locals.username
         let userInfo = res.locals.userInfo
-        
         const userId = userInfo.id
-        
+
         const userCreator = await this.users.getUserById(userId)
 
         const user = [{
             name: userCreator.name,
-            lastName : userCreator.lastName,
+            lastName: userCreator.lastName,
             username: userCreator.username,
             email: userCreator.email
         }]
 
         const now = formatDate(new Date())
 
-        const otQuantity = parseInt(req.body.otQuantity)
-                
         switch (otQuantity) {
-            case 10 : {
-                        var otAddedToOci = [{
-                            otNumber: parseInt(req.body.otNumber1),
-                            opNumber: req.body.opNumber1,
-                            opDescription: req.body.opDescription1,
-                            otStatus: req.body.otStatus1 == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno1,
-                            otSimulation: req.body.internoSimulacion1,
-                            otSupplier: req.body.externoDiseno1,
-                            timestamp: now,
-                            creator: user
+            case 10: {
+                var otAddedToOci = [{
+                    otNumber: parseInt(req.body.otNumber1),
+                    opNumber: req.body.opNumber1,
+                    opDescription: req.body.opDescription1,
+                    otStatus: req.body.otStatus1 == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno1,
+                    otSimulation: req.body.internoSimulacion1,
+                    otSupplier: req.body.externoDiseno1,
+                    timestamp: now,
+                    creator: user
 
-                        },{
-                            otNumber: parseInt(req.body.otNumber2),
-                            opNumber: req.body.opNumber2,
-                            opDescription: req.body.opDescription2,
-                            otStatus: req.body.otStatus2 == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno2,
-                            otSimulation: req.body.internoSimulacion2,
-                            otSupplier: req.body.externoDiseno2,
-                            timestamp: now,
-                            creator: user
-                        
-                        },{
-                            otNumber: parseInt(req.body.otNumber3),
-                            opNumber: req.body.opNumber3,
-                            opDescription: req.body.opDescription3,
-                            otStatus: req.body.otStatus3 == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno3,
-                            otSimulation: req.body.internoSimulacion3,
-                            otSupplier: req.body.externoDiseno3,
-                            timestamp: now,
-                            creator: user
-                        
-                        },{
-                            otNumber: parseInt(req.body.otNumber4),
-                            opNumber: req.body.opNumber4,
-                            opDescription: req.body.opDescription4,
-                            otStatus: req.body.otStatus4 == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno4,
-                            otSimulation: req.body.internoSimulacion4,
-                            otSupplier: req.body.externoDiseno4,
-                            timestamp: now,
-                            creator: user
+                }, {
+                    otNumber: parseInt(req.body.otNumber2),
+                    opNumber: req.body.opNumber2,
+                    opDescription: req.body.opDescription2,
+                    otStatus: req.body.otStatus2 == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno2,
+                    otSimulation: req.body.internoSimulacion2,
+                    otSupplier: req.body.externoDiseno2,
+                    timestamp: now,
+                    creator: user
 
-                        },{
-                            otNumber: parseInt(req.body.otNumber5),
-                            opNumber: req.body.opNumber5,
-                            opDescription: req.body.opDescription5,
-                            otStatus: req.body.otStatus5 == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno5,
-                            otSimulation: req.body.internoSimulacion5,
-                            otSupplier: req.body.externoDiseno5,
-                            timestamp: now,
-                            creator: user
+                }, {
+                    otNumber: parseInt(req.body.otNumber3),
+                    opNumber: req.body.opNumber3,
+                    opDescription: req.body.opDescription3,
+                    otStatus: req.body.otStatus3 == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno3,
+                    otSimulation: req.body.internoSimulacion3,
+                    otSupplier: req.body.externoDiseno3,
+                    timestamp: now,
+                    creator: user
 
-                        },{
-                            otNumber: parseInt(req.body.otNumber6),
-                            opNumber: req.body.opNumber6,
-                            opDescription: req.body.opDescription6,
-                            otStatus: req.body.otStatus6 == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno6,
-                            otSimulation: req.body.internoSimulacion6,
-                            otSupplier: req.body.externoDiseno6,
-                            timestamp: now,
-                            creator: user
-                        
-                        },{
-                            otNumber: parseInt(req.body.otNumber7),
-                            opNumber: req.body.opNumber7,
-                            opDescription: req.body.opDescription7,
-                            otStatus: req.body.otStatus7 == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno7,
-                            otSimulation: req.body.internoSimulacion7,
-                            otSupplier: req.body.externoDiseno7,
-                            timestamp: now,
-                            creator: user
-                        
-                        },{
-                            otNumber: parseInt(req.body.otNumber8),
-                            opNumber: req.body.opNumber8,
-                            opDescription: req.body.opDescription8,
-                            otStatus: req.body.otStatus8 == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno8,
-                            otSimulation: req.body.internoSimulacion8,
-                            otSupplier: req.body.externoDiseno8,
-                            timestamp: now,
-                            creator: user
-                        
-                        },{
-                            otNumber: parseInt(req.body.otNumber9),
-                            opNumber: req.body.opNumber9,
-                            opDescription: req.body.opDescription9,
-                            otStatus: req.body.otStatus9 == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno9,
-                            otSimulation: req.body.internoSimulacion9,
-                            otSupplier: req.body.externoDiseno9,
-                            timestamp: now,
-                            creator: user
+                }, {
+                    otNumber: parseInt(req.body.otNumber4),
+                    opNumber: req.body.opNumber4,
+                    opDescription: req.body.opDescription4,
+                    otStatus: req.body.otStatus4 == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno4,
+                    otSimulation: req.body.internoSimulacion4,
+                    otSupplier: req.body.externoDiseno4,
+                    timestamp: now,
+                    creator: user
 
-                        },{
-                            otNumber: parseInt(req.body.otNumber),
-                            opNumber: req.body.opNumber,
-                            opDescription: req.body.opDescription,
-                            otStatus: req.body.otStatus == 'on' ? true : false,
-                            otDesign: req.body.internoDiseno,
-                            otSimulation: req.body.internoSimulacion,
-                            otSupplier: req.body.externoDiseno,
-                            timestamp: now,
-                            creator: user,
-                            ociNumber: numberOci
+                }, {
+                    otNumber: parseInt(req.body.otNumber5),
+                    opNumber: req.body.opNumber5,
+                    opDescription: req.body.opDescription5,
+                    otStatus: req.body.otStatus5 == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno5,
+                    otSimulation: req.body.internoSimulacion5,
+                    otSupplier: req.body.externoDiseno5,
+                    timestamp: now,
+                    creator: user
 
-                        }]
-                        break;
+                }, {
+                    otNumber: parseInt(req.body.otNumber6),
+                    opNumber: req.body.opNumber6,
+                    opDescription: req.body.opDescription6,
+                    otStatus: req.body.otStatus6 == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno6,
+                    otSimulation: req.body.internoSimulacion6,
+                    otSupplier: req.body.externoDiseno6,
+                    timestamp: now,
+                    creator: user
+
+                }, {
+                    otNumber: parseInt(req.body.otNumber7),
+                    opNumber: req.body.opNumber7,
+                    opDescription: req.body.opDescription7,
+                    otStatus: req.body.otStatus7 == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno7,
+                    otSimulation: req.body.internoSimulacion7,
+                    otSupplier: req.body.externoDiseno7,
+                    timestamp: now,
+                    creator: user
+
+                }, {
+                    otNumber: parseInt(req.body.otNumber8),
+                    opNumber: req.body.opNumber8,
+                    opDescription: req.body.opDescription8,
+                    otStatus: req.body.otStatus8 == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno8,
+                    otSimulation: req.body.internoSimulacion8,
+                    otSupplier: req.body.externoDiseno8,
+                    timestamp: now,
+                    creator: user
+
+                }, {
+                    otNumber: parseInt(req.body.otNumber9),
+                    opNumber: req.body.opNumber9,
+                    opDescription: req.body.opDescription9,
+                    otStatus: req.body.otStatus9 == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno9,
+                    otSimulation: req.body.internoSimulacion9,
+                    otSupplier: req.body.externoDiseno9,
+                    timestamp: now,
+                    creator: user
+
+                }, {
+                    otNumber: parseInt(req.body.otNumber),
+                    opNumber: req.body.opNumber,
+                    opDescription: req.body.opDescription,
+                    otStatus: req.body.otStatus == 'on' ? true : false,
+                    otDesign: req.body.internoDiseno,
+                    otSimulation: req.body.internoSimulacion,
+                    otSupplier: req.body.externoDiseno,
+                    timestamp: now,
+                    creator: user
+
+                }]
+                break;
             }
-            case 9 : {
+            case 9: {
                 var otAddedToOci = [{
                     otNumber: parseInt(req.body.otNumber1),
                     opNumber: req.body.opNumber1,
@@ -447,7 +477,7 @@ class ProjectsController {
                     timestamp: now,
                     creator: user
 
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber2),
                     opNumber: req.body.opNumber2,
                     opDescription: req.body.opDescription2,
@@ -457,8 +487,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno2,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber3),
                     opNumber: req.body.opNumber3,
                     opDescription: req.body.opDescription3,
@@ -468,8 +498,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno3,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber4),
                     opNumber: req.body.opNumber4,
                     opDescription: req.body.opDescription4,
@@ -480,7 +510,7 @@ class ProjectsController {
                     timestamp: now,
                     creator: user
 
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber5),
                     opNumber: req.body.opNumber5,
                     opDescription: req.body.opDescription5,
@@ -491,7 +521,7 @@ class ProjectsController {
                     timestamp: now,
                     creator: user
 
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber6),
                     opNumber: req.body.opNumber6,
                     opDescription: req.body.opDescription6,
@@ -501,8 +531,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno6,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber7),
                     opNumber: req.body.opNumber7,
                     opDescription: req.body.opDescription7,
@@ -512,8 +542,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno7,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber8),
                     opNumber: req.body.opNumber8,
                     opDescription: req.body.opDescription8,
@@ -523,8 +553,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno8,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber),
                     opNumber: req.body.opNumber,
                     opDescription: req.body.opDescription,
@@ -533,13 +563,12 @@ class ProjectsController {
                     otSimulation: req.body.internoSimulacion,
                     otSupplier: req.body.externoDiseno,
                     timestamp: now,
-                    creator: user,
-                    ociNumber: numberOci
+                    creator: user
 
                 }]
                 break;
             }
-            case 8 : {
+            case 8: {
                 var otAddedToOci = [{
                     otNumber: parseInt(req.body.otNumber1),
                     opNumber: req.body.opNumber1,
@@ -551,7 +580,7 @@ class ProjectsController {
                     timestamp: now,
                     creator: user
 
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber2),
                     opNumber: req.body.opNumber2,
                     opDescription: req.body.opDescription2,
@@ -561,8 +590,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno2,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber3),
                     opNumber: req.body.opNumber3,
                     opDescription: req.body.opDescription3,
@@ -572,8 +601,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno3,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber4),
                     opNumber: req.body.opNumber4,
                     opDescription: req.body.opDescription4,
@@ -584,7 +613,7 @@ class ProjectsController {
                     timestamp: now,
                     creator: user
 
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber5),
                     opNumber: req.body.opNumber5,
                     opDescription: req.body.opDescription5,
@@ -595,7 +624,7 @@ class ProjectsController {
                     timestamp: now,
                     creator: user
 
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber6),
                     opNumber: req.body.opNumber6,
                     opDescription: req.body.opDescription6,
@@ -605,8 +634,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno6,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber7),
                     opNumber: req.body.opNumber7,
                     opDescription: req.body.opDescription7,
@@ -616,8 +645,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno7,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber),
                     opNumber: req.body.opNumber,
                     opDescription: req.body.opDescription,
@@ -626,13 +655,12 @@ class ProjectsController {
                     otSimulation: req.body.internoSimulacion,
                     otSupplier: req.body.externoDiseno,
                     timestamp: now,
-                    creator: user,
-                    ociNumber: numberOci
-                
+                    creator: user
+
                 }]
                 break;
             }
-            case 7 : {
+            case 7: {
                 var otAddedToOci = [{
                     otNumber: parseInt(req.body.otNumber1),
                     opNumber: req.body.opNumber1,
@@ -644,7 +672,7 @@ class ProjectsController {
                     timestamp: now,
                     creator: user
 
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber2),
                     opNumber: req.body.opNumber2,
                     opDescription: req.body.opDescription2,
@@ -654,8 +682,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno2,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber3),
                     opNumber: req.body.opNumber3,
                     opDescription: req.body.opDescription3,
@@ -665,8 +693,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno3,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber4),
                     opNumber: req.body.opNumber4,
                     opDescription: req.body.opDescription4,
@@ -676,7 +704,7 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno4,
                     timestamp: now,
                     creator: user
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber5),
                     opNumber: req.body.opNumber5,
                     opDescription: req.body.opDescription5,
@@ -687,7 +715,7 @@ class ProjectsController {
                     timestamp: now,
                     creator: user
 
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber6),
                     opNumber: req.body.opNumber6,
                     opDescription: req.body.opDescription6,
@@ -697,8 +725,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno6,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber),
                     opNumber: req.body.opNumber,
                     opDescription: req.body.opDescription,
@@ -707,13 +735,12 @@ class ProjectsController {
                     otSimulation: req.body.internoSimulacion,
                     otSupplier: req.body.externoDiseno,
                     timestamp: now,
-                    creator: user,
-                    ociNumber: numberOci
-                
+                    creator: user
+
                 }]
                 break;
             }
-            case 6 : {
+            case 6: {
                 var otAddedToOci = [{
                     otNumber: parseInt(req.body.otNumber1),
                     opNumber: req.body.opNumber1,
@@ -724,8 +751,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno1,
                     timestamp: now,
                     creator: user
-                    
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber2),
                     opNumber: req.body.opNumber2,
                     opDescription: req.body.opDescription2,
@@ -735,8 +762,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno2,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber3),
                     opNumber: req.body.opNumber3,
                     opDescription: req.body.opDescription3,
@@ -746,8 +773,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno3,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber4),
                     opNumber: req.body.opNumber4,
                     opDescription: req.body.opDescription4,
@@ -757,7 +784,7 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno4,
                     timestamp: now,
                     creator: user
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber5),
                     opNumber: req.body.opNumber5,
                     opDescription: req.body.opDescription5,
@@ -768,7 +795,7 @@ class ProjectsController {
                     timestamp: now,
                     creator: user
 
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber),
                     opNumber: req.body.opNumber,
                     opDescription: req.body.opDescription,
@@ -777,13 +804,12 @@ class ProjectsController {
                     otSimulation: req.body.internoSimulacion,
                     otSupplier: req.body.externoDiseno,
                     timestamp: now,
-                    creator: user,
-                    ociNumber: numberOci
-                
+                    creator: user
+
                 }]
                 break;
             }
-            case 5 : {
+            case 5: {
                 var otAddedToOci = [{
                     otNumber: parseInt(req.body.otNumber1),
                     opNumber: req.body.opNumber1,
@@ -794,8 +820,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno1,
                     timestamp: now,
                     creator: user
-                    
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber2),
                     opNumber: req.body.opNumber2,
                     opDescription: req.body.opDescription2,
@@ -805,8 +831,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno2,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber3),
                     opNumber: req.body.opNumber3,
                     opDescription: req.body.opDescription3,
@@ -816,8 +842,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno3,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber4),
                     opNumber: req.body.opNumber4,
                     opDescription: req.body.opDescription4,
@@ -827,7 +853,7 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno4,
                     timestamp: now,
                     creator: user
-                },{
+                }, {
                     otNumber: parseInt(req.body.otNumber),
                     opNumber: req.body.opNumber,
                     opDescription: req.body.opDescription,
@@ -836,13 +862,12 @@ class ProjectsController {
                     otSimulation: req.body.internoSimulacion,
                     otSupplier: req.body.externoDiseno,
                     timestamp: now,
-                    creator: user,
-                    ociNumber: numberOci
+                    creator: user
 
                 }]
                 break;
             }
-            case 4 : {
+            case 4: {
                 var otAddedToOci = [{
                     otNumber: parseInt(req.body.otNumber1),
                     opNumber: req.body.opNumber1,
@@ -853,8 +878,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno1,
                     timestamp: now,
                     creator: user
-                    
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber2),
                     opNumber: req.body.opNumber2,
                     opDescription: req.body.opDescription2,
@@ -864,8 +889,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno2,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber3),
                     opNumber: req.body.opNumber3,
                     opDescription: req.body.opDescription3,
@@ -875,8 +900,8 @@ class ProjectsController {
                     otSupplier: req.body.externoDiseno3,
                     timestamp: now,
                     creator: user
-                
-                },{
+
+                }, {
                     otNumber: parseInt(req.body.otNumber),
                     opNumber: req.body.opNumber,
                     opDescription: req.body.opDescription,
@@ -885,51 +910,11 @@ class ProjectsController {
                     otSimulation: req.body.internoSimulacion,
                     otSupplier: req.body.externoDiseno,
                     timestamp: now,
-                    creator: user,
-                    ociNumber: numberOci
+                    creator: user
                 }]
                 break;
             }
-            case 3 : {
-                var otAddedToOci = [
-                {
-                    otNumber: parseInt(req.body.otNumber),
-                    opNumber: req.body.opNumber,
-                    opDescription: req.body.opDescription,
-                    otStatus: req.body.otStatus == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno,
-                    otSimulation: req.body.internoSimulacion,
-                    otSupplier: req.body.externoDiseno,
-                    timestamp: now,
-                    creator: user,
-                    ociNumber: numberOci
-                    
-                },{
-                    otNumber: parseInt(req.body.otNumber1),
-                    opNumber: req.body.opNumber1,
-                    opDescription: req.body.opDescription1,
-                    otStatus: req.body.otStatus1 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno1,
-                    otSimulation: req.body.internoSimulacion1,
-                    otSupplier: req.body.externoDiseno1,
-                    timestamp: now,
-                    creator: user
-                    
-                },{
-                    otNumber: parseInt(req.body.otNumber2),
-                    opNumber: req.body.opNumber2,
-                    opDescription: req.body.opDescription2,
-                    otStatus: req.body.otStatus2 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno2,
-                    otSimulation: req.body.internoSimulacion2,
-                    otSupplier: req.body.externoDiseno2,
-                    timestamp: now,
-                    creator: user
-                
-                }]
-                break;
-            }
-            case 2 : {
+            case 3: {
                 var otAddedToOci = [
                     {
                         otNumber: parseInt(req.body.otNumber),
@@ -940,10 +925,9 @@ class ProjectsController {
                         otSimulation: req.body.internoSimulacion,
                         otSupplier: req.body.externoDiseno,
                         timestamp: now,
-                        creator: user,
-                        ociNumber: numberOci
-                    
-                    },{
+                        creator: user
+
+                    }, {
                         otNumber: parseInt(req.body.otNumber1),
                         opNumber: req.body.opNumber1,
                         opDescription: req.body.opDescription1,
@@ -953,11 +937,49 @@ class ProjectsController {
                         otSupplier: req.body.externoDiseno1,
                         timestamp: now,
                         creator: user
-                    
-                }]
+
+                    }, {
+                        otNumber: parseInt(req.body.otNumber2),
+                        opNumber: req.body.opNumber2,
+                        opDescription: req.body.opDescription2,
+                        otStatus: req.body.otStatus2 == 'on' ? true : false,
+                        otDesign: req.body.internoDiseno2,
+                        otSimulation: req.body.internoSimulacion2,
+                        otSupplier: req.body.externoDiseno2,
+                        timestamp: now,
+                        creator: user
+
+                    }]
                 break;
             }
-            default : {
+            case 2: {
+                var otAddedToOci = [
+                    {
+                        otNumber: parseInt(req.body.otNumber),
+                        opNumber: req.body.opNumber,
+                        opDescription: req.body.opDescription,
+                        otStatus: req.body.otStatus == 'on' ? true : false,
+                        otDesign: req.body.internoDiseno,
+                        otSimulation: req.body.internoSimulacion,
+                        otSupplier: req.body.externoDiseno,
+                        timestamp: now,
+                        creator: user
+
+                    }, {
+                        otNumber: parseInt(req.body.otNumber1),
+                        opNumber: req.body.opNumber1,
+                        opDescription: req.body.opDescription1,
+                        otStatus: req.body.otStatus1 == 'on' ? true : false,
+                        otDesign: req.body.internoDiseno1,
+                        otSimulation: req.body.internoSimulacion1,
+                        otSupplier: req.body.externoDiseno1,
+                        timestamp: now,
+                        creator: user
+
+                    }]
+                break;
+            }
+            default: {
                 var otAddedToOci = [{
                     otNumber: parseInt(req.body.otNumber),
                     opNumber: req.body.opNumber,
@@ -967,24 +989,28 @@ class ProjectsController {
                     otSimulation: req.body.internoSimulacion,
                     otSupplier: req.body.externoDiseno,
                     timestamp: now,
-                    creator: user,
-                    ociNumber: numberOci
-                    
+                    creator: user
+
                 }]
                 break;
             }
         }
-            
-        const proyecto = await this.projects.addOtToOciProject(projectId, numberOci, ociNumberK, otAddedToOci)
-        
-        console.log('proyecto - proyecto.controller ===> ',
-                    proyecto.project[0].oci[0],
-                    '--------end of proyecto.controller--------------'
-                    )
-        
+
+        const proyecto = await this.projects.addOtToOciProject(
+            projectId,
+            numberOci,
+            ociNumberK,
+            otAddedToOci
+        )
+
+        // console.log('proyecto - proyecto.controller ===> ',
+        //             proyecto.project[0].oci[ociNumberK].ociNumber,
+        //             '--------end of proyecto.controller--------'
+        //             )
+
         try {
             if (!proyecto) return res.status(404).json({ msg: 'OCI no encontrada' })
-            res.render('projectList', {
+            res.render('projectSelectedDetail', {
                 proyecto,
                 username,
                 userInfo,

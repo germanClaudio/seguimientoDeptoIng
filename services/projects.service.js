@@ -27,8 +27,12 @@ class ProjectService {
     }
     
     // add new Ot to OCI - Project
-    async addOtToOciProject(numberOci, otAddedToOci) {
-        return this.proyectos.addOtToOciProject(numberOci, otAddedToOci)
+    async addOtToOciProject(projectId, numberOci, ociNumberK, otAddedToOci) {
+        return this.proyectos.addOtToOciProject(projectId,
+            numberOci,
+            ociNumberK, 
+            otAddedToOci
+        )
     }
 
     // Select OCI - Project

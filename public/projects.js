@@ -31,37 +31,78 @@ const renderProjectsForAdmin = (arrayProjects) => {
         let colorResult = grey
         let colorLevel
         
+        // ----------- Loops de Array OCI ----------------
         let ociArr = []
         function loopOcis() {
             for (let i=0; i < element.project[0].oci.length; i++) {
                 ociArr.push(element.project[0].oci[i].ociNumber)
             }
-            return ociArr.join('<br>')
+            return ociArr.join('<hr>')
         }
 
-        let otArr = []
-        function loopOt() {
-            for (let i=0; i < element.project[0].oci[0].otProject.length; i++) {
-                otArr.push(element.project[0].oci[0].otProject[i].otNumber)
+        // ----------- Loops de Array OTs ----------------
+        function loopOt(j) {
+            let otArr = []
+            if (element.project[0].oci[j].otProject.length > 0 ) {
+                for (let i=0; i < element.project[0].oci[j].otProject.length; i++) {
+                    otArr.push(element.project[0].oci[j].otProject[i].otNumber)
+                }
+                return otArr.join('<br>')
+            } else {
+                return ('<span class="badge rounded-pill bg-secondary text-light">S/D</span>')
             }
-            return otArr.join('<br>')
         }
 
-        let opArr = []
-        function loopOp() {
-            for (let i=0; i < element.project[0].oci[0].otProject.length; i++) {
-                opArr.push(element.project[0].oci[0].otProject[i].opNumber)
+        let arrOtArr = []
+        function loopArrayOt() {
+            for (let j=0; j < element.project[0].oci.length; j++) {
+                arrOtArr.push(loopOt(j))
             }
-            return opArr.join('<br>')
+            return arrOtArr.join('<hr>')
+        }    
+
+        // ----------- Loops de Array OPs ----------------
+        function loopOp(j) {
+            let opArr = []
+            if (element.project[0].oci[j].otProject.length > 0 ) {
+                for (let i=0; i < element.project[0].oci[j].otProject.length; i++) {
+                    opArr.push(element.project[0].oci[j].otProject[i].opNumber)
+                }
+                return opArr.join('<br>')
+            } else {
+                return ('<span class="badge rounded-pill bg-secondary text-light">S/D</span>')
+            }
         }
 
-        let DescriptionArr = []
-        function loopDescription() {
-            for (let i=0; i < element.project[0].oci[0].otProject.length; i++) {
-                DescriptionArr.push(element.project[0].oci[0].otProject[i].opDescription)
+        let arrOpArr = []
+        function loopArrayOp() {
+            for (let j=0; j < element.project[0].oci.length; j++) {
+                arrOpArr.push(loopOp(j))
             }
-            return DescriptionArr.join('<br>')
+            return arrOpArr.join('<hr>')
+        }    
+
+    // ----------- Loops de Array Descriptions ----------------
+        function loopDescription(j) {
+            let DescriptionArr = []
+            if (element.project[0].oci[j].otProject.length > 0 ) {
+                for (let i=0; i < element.project[0].oci[j].otProject.length; i++) {
+                    DescriptionArr.push(element.project[0].oci[j].otProject[i].opDescription)
+                }
+                return DescriptionArr.join('<br>')
+            } else {
+                return ('<span class="badge rounded-pill bg-secondary text-light">S/D</span>')
+            }
         }
+
+        let arrDescriptionArr = []
+        function loopArrayDescription() {
+            for (let j=0; j < element.project[0].oci.length; j++) {
+                arrDescriptionArr.push(loopDescription(j))
+            }
+            return arrDescriptionArr.join('<hr>')
+        }    
+
 
         if ( element.project[0].levelProject === true) {
             colorLevel = white
@@ -82,9 +123,9 @@ const renderProjectsForAdmin = (arrayProjects) => {
                     <td class="text-center"><span class="badge rounded-pill bg-dark">${element.project[0].prioProject}</span></td>
                     <td class="text-center"><span class="badge rounded-pill bg-${colorResult} text-${colorLevel}">${text}</span></td>
                     <td class="text-center">${element.project[0].projectDescription}</td>
-                    <td class="text-center">${loopOt()}</td>
-                    <td class="text-center">${loopOp()}</td>
-                    <td class="text-center">${loopDescription()}</td>
+                    <td class="text-center">${loopArrayOt()}</td>
+                    <td class="text-center">${loopArrayOp()}</td>
+                    <td class="text-center">${loopArrayDescription()}</td>
                     <td class="text-center">${element.timestamp}</td>
                     <td class="text-center">
                         <div class="d-block align-items-center">
