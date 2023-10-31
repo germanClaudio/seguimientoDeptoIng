@@ -9,7 +9,6 @@ showPasswordBtn.addEventListener('click', () => {
 
 function welcomeMessage(uName, passWord) {
 
-  
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -32,6 +31,7 @@ function welcomeMessage(uName, passWord) {
       icon: 'error',
       title: `Error en formulario Login!`
     })
+    return false
   }
 }
 
@@ -43,7 +43,6 @@ btnUpdate.addEventListener('click', (event)=> {
     if(uName) {
         welcomeMessage(uName, passWord)
     }
-    
 })
 
 document.getElementById('username').value = ""

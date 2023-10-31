@@ -20,14 +20,16 @@ btnAddNewRow.addEventListener('click', () => {
         i = numberIdLastChild + 1
     }
     
+    const ociNumberValue = parseInt(document.getElementById('ociNumber').value)
+
     const originalDiv = (
         `<div class="col-3">
-                <label for="ociNumber${i}" id="labelOciNumber${i}">Número de OCI ${i}</label>
+                <label for="ociNumber${i}" id="labelOciNumber${i}">Número de OCI</label>
                 <input type="number" name="ociNumber${i}" id="ociNumber${i}" class="form-control" min="0" max="9999"
-                placeholder="Número OCI">
+                placeholder="Número OCI" value="${ociNumberValue+i}">
             </div>
             <div class="col-3">
-                <label for="ociDescription${i}" id="labelOciDescription${i}">Descripción OCI ${i}</label>
+                <label for="ociDescription${i}" id="labelOciDescription${i}">Descripción OCI</label>
                 <input type="text" name="ociDescription${i}" id="ociDescription${i}" class="form-control"
                 placeholder="Descripción OCI">
             </div>

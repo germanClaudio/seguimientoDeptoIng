@@ -24,7 +24,7 @@ routerProyectos.get('/selectProject/:id', checkAuthentication, authProductMiddle
 routerProyectos.post('/', checkAuthentication, authProductMiddleware, projects.createNewProject)
 
 // -------------------  Actualizar Proyecto por Id ------------------ 
-routerProyectos.post('/oci/:id', checkAuthentication, authProductMiddleware, projects.addOtToOciProject)
+routerProyectos.post('/oci', checkAuthentication, authProductMiddleware, projects.addOtToOciProject)
 
 // -------------------  Actualizar Proyecto por Id ------------------ 
 // routerProyectos.post('/update/:id', checkAuthentication, authProductMiddleware, projects.updateClient)

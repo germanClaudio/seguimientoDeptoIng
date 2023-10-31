@@ -47,7 +47,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
 
     async getClientById(id) {
         if(id){
-            console.log('id-getClientById.....',id)
+            //console.log('id-getClientById.....',id)
             try {
                 const client = await Clientes.findById({_id: id })
                 logger.info('Cliente encontrado: ',client)
@@ -72,7 +72,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                 logger.info('Cliente encontrado: ',client)
                 return client
             } catch (error) {
-                logger.error("Error MongoDB selectClientById: ",error)
+                logger.error("Error MongoDB selectClientById-Dao: ",error)
             }
         } else {
             try {

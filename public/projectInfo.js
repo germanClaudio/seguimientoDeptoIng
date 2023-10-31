@@ -248,10 +248,9 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }
 
-    const formulario = document.getElementById("formNewOt")
-    const projectNumberId = document.getElementById(`projectIdHidden`).value
-    let path = `/api/proyectos/oci/${projectNumberId}`
-    formulario.setAttribute('action', path)
+    const projectNameHidden = document.getElementById('projectNameHidden').value
+    const projectNameTitle = document.getElementById('projectNameTitle')
+    projectNameTitle.innerHTML = `Nombre Proyecto: ${projectNameHidden}`
 })
 
 // Manejador de eventos para Carouseles --------------------
@@ -538,88 +537,173 @@ function removeRow(e) {
     }
 }
 
-function messageNewOt(ociNumber, otArray) {
-    if (otArray.length > 1) {
-        Swal.fire({
-            title: 'Datos ingresados con éxito!',
-            position: 'center',
-            timer: 3500,
-            text: `Se agregaron las OT's ${otArray} a la OCI# ${ociNumber} exitosamente!`,
-            icon: 'success',
-            //showCancelButton: true,
-            //showConfirmButton: true,
-        })
-    } else {
-        Swal.fire({
-            title: 'Datos ingresados con éxito!',
-            position: 'center',
-            timer: 3500,
-            text: `Se agregaró la OT ${otArray} a la OCI# ${ociNumber} exitosamente!`,
-            icon: 'success',
-            //showCancelButton: true,
-            //showConfirmButton: true,
-        })
-    }
-}
-
-
 const formulario = document.getElementById("formNewOt")
 const radios = formulario.elements["ociNumber"]
 const tituloForm = document.getElementById('tituloForm')
 const projectNameHidden = document.getElementById('projectNameHidden').value
 const projectNumberId = document.getElementById(`projectIdHidden`).value
 const ociNumberK = document.getElementById('ociNumberK')
+const clientId = document.getElementById('clientIdHidden')
 
 //-------------------- Boton agregar nuevas OT's a OCI ------------------------
 const btnAddOtForm = document.getElementById("btnAddOtForm")
 btnAddOtForm.addEventListener('click', () => {
-    let ociSeleccionada = document.getElementById(`ociNumberHidden`).value
-    tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #${ociSeleccionada} / Proyecto: ${projectNameHidden}`
+    if (document.getElementById(`ociNumberHidden`)) {
+        let ociSeleccionada = document.getElementById(`ociNumberHidden`).value
+        tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
+    }
 })
 
-const btnAddOtFormSelected = document.getElementById('btnAddOtFormSelected')
-btnAddOtFormSelected.addEventListener('click', (event)=> {
-    let ociSeleccionada = event.target.name
-    const radioSelected = document.getElementById(`${ociSeleccionada}`)
+function radioSelected(radioSelectedValue){
+    const radioSelected = document.getElementById(`${radioSelectedValue}`)
     radioSelected.setAttribute('checked', true)
-    tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #${ociSeleccionada} / Proyecto: ${projectNameHidden}`
-    let path = `/api/proyectos/oci/${projectNumberId}`
-    formulario.setAttribute('action', path)
+    tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${radioSelectedValue}</strong> / Proyecto: ${projectNameHidden}`
+    formulario.scrollIntoView({ behavior: 'smooth' })
+}
 
-    // for (let i = 0; i < radios.length; i++) {
+const btnAddOtFormSelected0 = document.getElementById(`btnAddOtFormSelected0`)
+const btnAddOtFormSelected1 = document.getElementById('btnAddOtFormSelected1')
+const btnAddOtFormSelected2 = document.getElementById('btnAddOtFormSelected2')
+const btnAddOtFormSelected3 = document.getElementById('btnAddOtFormSelected3')
+const btnAddOtFormSelected4 = document.getElementById('btnAddOtFormSelected4')
 
-    //     // radios[i].addEventListener("change", function (event) {
-    //         ociSeleccionada = event.target.value
-    //         ociNumberK.setAttribute('value', i)
-    //     // })
-    
-    // }
-})
+if (btnAddOtFormSelected0) {
+    btnAddOtFormSelected0.addEventListener('click', ()=> {
+        const radioSelectedValue = btnAddOtFormSelected0.name
+        radioSelected(radioSelectedValue)
+    })
+}
 
+if (btnAddOtFormSelected1) {
+    btnAddOtFormSelected1.addEventListener('click', ()=> {
+        const radioSelectedValue = btnAddOtFormSelected1.name
+        radioSelected(radioSelectedValue)
+    })
+}
+
+if (btnAddOtFormSelected2) {
+    btnAddOtFormSelected2.addEventListener('click', ()=> {
+        const radioSelectedValue = btnAddOtFormSelected2.name
+        radioSelected(radioSelectedValue)
+    })
+}
+
+if (btnAddOtFormSelected3) {
+    btnAddOtFormSelected3.addEventListener('click', ()=> {
+        const radioSelectedValue = btnAddOtFormSelected3.name
+        radioSelected(radioSelectedValue)
+    })
+}
+if (btnAddOtFormSelected4) {
+    btnAddOtFormSelected4.addEventListener('click', ()=> {
+        const radioSelectedValue = btnAddOtFormSelected4.name
+        radioSelected(radioSelectedValue)
+    })
+}
 
 for (let i = 0; i < radios.length; i++) {
-
     radios[i].addEventListener("change", function (event) {
         ociSeleccionada = event.target.value
-        tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #${ociSeleccionada} / Proyecto: ${projectNameHidden}`
+        tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
         ociNumberK.setAttribute('value', i)
-        let path = `/api/proyectos/oci/${projectNumberId}`
-        formulario.setAttribute('action', path)
-        // const radioSelected = document.getElementById(`${ociSeleccionada}`)
-        // radioSelected.setAttribute('checked', true)
     })
+}
 
+function messageNewOt(ociNumber, otArray) {
+    
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: false,
+          })
+    
+    if (otArray.length > 1) {
+        Swal.fire({
+            title: 'Ingreso de datos!',
+            position: 'center',
+            text: `Se agregaran las OT's ${otArray.join(" - ")} a la OCI# ${ociNumber}`,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('formNewOt').submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `OT's ${otArray.join(" - ")} agregadas!`
+                  })
+            } else {
+                Swal.fire(
+                    'OTs no agregadas!',
+                    `Las OT's ${otArray.join(" - ")} no fueron agregadas a la OCI# ${ociNumber}`,
+                    'warning'
+                )
+                return false
+            }
+        })
+
+    } else {
+        Swal.fire({
+            title: 'Ingreso de datos!',
+            position: 'center',
+            text: `Se agregará la OT ${otArray} a la OCI# ${ociNumber}`,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('formNewOt').submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `OT ${otArray.join(" - ")} agregada!`
+                  })
+            } else {
+                Swal.fire(
+                    'OT no agregada!',
+                    `La OT ${otArray} no fue agregada a la OCI# ${ociNumber}`,
+                    'warning'
+                )
+                return false
+            }
+        })
+    }
 }
 
 const btnCreate = document.getElementById('btnNewOt')
-btnCreate.addEventListener('click', (event) => {
+btnCreate.addEventListener('click', (event)=> {
     event.preventDefault()
-    const otQuantity = parseInt(document.getElementById(otQuantity).value)
-
-    let otArray = [document.getElementById(`otNumber`).value]
-    for (let j = 1; j = otQuantity; j++) {
-        let otSelected = document.getElementById(`otNumber${j}`).value
-        otArray = otArray.push(otSelected)
+    if (ociNumberK) {
+        switch (ociNumberK) {
+            case 4 : {
+                var ociSeleccionada = parseInt(btnAddOtFormSelected4.name)
+            }
+            case 3 : {
+                var ociSeleccionada = parseInt(btnAddOtFormSelected3.name)
+            }
+            case 2 : {
+                var ociSeleccionada = parseInt(btnAddOtFormSelected2.name)
+            }
+            case 1 : {
+                var ociSeleccionada = parseInt(btnAddOtFormSelected1.name)
+            }
+            default : {
+                ociSeleccionada = document.getElementById(`ociNumberHidden`).value
+            }
+        }
+    } else {
+        ociSeleccionada = document.getElementById(`ociNumberHidden`).value
     }
+
+    const otQuantity = parseInt(document.getElementById('otQuantity').value)
+    let otArray = [document.getElementById(`otNumber`).value]
+           
+    if (otQuantity > 1) {
+        for (let j = 1; j < otQuantity; j++) {
+            let otNumberSelected = document.getElementById(`otNumber${j}`).value
+            otArray.push(otNumberSelected)
+        }
+    } 
     messageNewOt(ociSeleccionada, otArray)
 })

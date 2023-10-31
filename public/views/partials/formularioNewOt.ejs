@@ -1,43 +1,60 @@
 <div class="card mx-auto" style="width: 95vw;">
     <div class="card card-body d-flex justify-content-center">
         <div class="form-group col-12 mx-auto my-2 w-100 border px-5 py-1 bg-dark bg-gradient text-white bg-opacity-75">
-            
+
             <form id="formNewOt" action="/api/proyectos/oci" method="post" name="formNewOt">
-            
+
                 <fieldset>
-                    <h5 id="tituloForm" class="d-block mx-auto my-2 text-center">Agregar Nueva/s OT's a OCI # / Proyecto: <%= proyecto[0].project[0].projectName %></h5>
+                    <h5 id="tituloForm" class="d-block mx-auto my-2 text-center">Agregar Nueva/s OT's a OCI #
+                        (Seleccionar # OCI) / Proyecto: </h5>
                     <div class="row my-3">
                         <div class="col-12">
-                            <% let j=0
-                            if (proyecto.length > 0) { 
-                                for ( let m = 0;  proyecto.length > m; m++) { %>
-                                    <input class="form-control" type="text" name="projectIdHidden" id="projectIdHidden" value="<%= proyecto[m]._id %>" hidden>
-                                    <input class="form-control" type="text" name="projectNameHidden" id="projectNameHidden" value="<%= proyecto[0].project[0].projectName %>" hidden>
-                                    <% if (proyecto[m].project[j].oci.length > 1) { 
+                            <% let j=0;
+                            if (proyecto.length> 0) {
+                                for ( let m = 0; proyecto.length > m; m++) { %>
+                                    <input class="form-control" type="text" name="projectIdHidden" id="projectIdHidden"
+                                        value="<%= proyecto[m]._id %>" hidden>
+                                    <input class="form-control" type="text" name="projectNameHidden" id="projectNameHidden"
+                                        value="<%= proyecto[0].project[0].projectName %>" hidden>
+                                    <% if (proyecto[m].project[j].oci.length> 1) {
                                         for ( let k = 0; proyecto[m].project[j].oci.length > k; k++) { %>
                                             <div class="form-check form-check-inline">
-                                                <label class="form-check-label" for="ociNumber">OCI # <%= proyecto[m].project[j].oci[k].ociNumber %></label>
-                                                <input class="form-check-input" type="radio" name="ociNumber" id="<%= proyecto[m].project[j].oci[k].ociNumber %>" value="<%= proyecto[m].project[j].oci[k].ociNumber %>" required>
+                                                <label class="form-check-label" for="ociNumber">OCI # <%=
+                                                        proyecto[m].project[j].oci[k].ociNumber %></label>
+                                                <input class="form-check-input" type="radio" name="ociNumber"
+                                                    id="<%= proyecto[m].project[j].oci[k].ociNumber %>"
+                                                    value="<%= proyecto[m].project[j].oci[k].ociNumber %>" required>
                                             </div>
-                                            <input class="form-input" type="text" name="ociNumberId" id="ociNumberId<%=k%>" value="<%=proyecto[m].project[j].oci[k]._id %>" hidden>
+                                            <input class="form-input" type="text" name="ociNumberId" id="ociNumberId<%=k%>"
+                                                value="<%=proyecto[m].project[j].oci[k]._id %>" hidden>
                                         <% } %>
-                                            <input class="form-input" type="text" name="ociNumberK" id="ociNumberK" value="" hidden>
+                                            <input class="form-input" type="text" name="ociNumberK" id="ociNumberK" value=""
+                                                hidden>
                                     <%} else { %>
-                                        <div class="form-check form-check-inline">
-                                            <label class="form-check-label" for="ociNumber<%= proyecto[m].project[j].oci[0].ociNumber %>">OCI # <%= proyecto[m].project[j].oci[0].ociNumber %></label>
-                                            <input class="form-check-input" type="radio" name="ociNumber" id="<%= proyecto[m].project[j]._id %>" value="<%= proyecto[m].project[j].oci[0].ociNumber %>" checked>
-                                            <input class="form-input" type="text" name="ociNumberId" id="ociNumberId0" value="<%=proyecto[m].project[j].oci[0]._id %>" hidden>
-                                            <input class="form-input" type="text" name="ociNumberK" id="ociNumberK" value="0" hidden>
-                                            <input class="form-input" type="text" name="ociNumberHidden" id="ociNumberHidden" value="<%= proyecto[m].project[j].oci[0].ociNumber %>" hidden>
-                                        </div>       
-                                    <% } 
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label"
+                                                    for="ociNumber<%= proyecto[m].project[j].oci[0].ociNumber %>">OCI #
+                                                    <%= proyecto[m].project[j].oci[0].ociNumber %></label>
+                                                <input class="form-check-input" type="radio" name="ociNumber"
+                                                    id="<%= proyecto[m].project[j].oci[0].ociNumber %>"
+                                                    value="<%= proyecto[m].project[j].oci[0].ociNumber %>" checked>
+                                                <input class="form-input" type="text" name="ociNumberId"
+                                                    id="ociNumberId0" value="<%=proyecto[m].project[j].oci[0]._id %>"
+                                                    hidden>
+                                                <input class="form-input" type="text" name="ociNumberK" id="ociNumberK"
+                                                    value="0" hidden>
+                                                <input class="form-input" type="text" name="ociNumberHidden"
+                                                    id="ociNumberHidden"
+                                                    value="<%= proyecto[m].project[j].oci[0].ociNumber %>" hidden>
+                                            </div>
+                                    <% }
                                 }
-
                             } else { %>
-                                <span class="badge rounded-pill bg-danger text-white"> No hay datos cargados </span>
-                            <% } %>    
+                                                <span class="badge rounded-pill bg-danger text-white"> No hay datos
+                                                    cargados </span>
+                            <% } %>
                         </div>
-                        
+
                         <br>
                     </div>
 
@@ -48,34 +65,40 @@
                             <div class="accordion" id="accordionPanelsStayOpenExample">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                                        <button class="accordion-button" id="buttonOne" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOneForm" aria-expanded="false" aria-controls="panelsStayOpen-collapseOneForm">
+                                        <button class="accordion-button" id="buttonOne" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOneForm"
+                                            aria-expanded="false" aria-controls="panelsStayOpen-collapseOneForm">
                                             <strong>Información OT</strong>
                                         </button>
                                     </h2>
-                                    <div id="panelsStayOpen-collapseOneForm" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                                    <div id="panelsStayOpen-collapseOneForm" class="accordion-collapse collapse"
+                                        aria-labelledby="panelsStayOpen-headingOne">
                                         <div class="accordion-body" id="div_body">
                                             <div class="row my-3" id="otItemRow">
                                                 <div class="col-1">
                                                     <label for="otNumber" id="labelOtNumber">OT#</label>
-                                                    <input type="number" name="otNumber" id="otNumber" class="form-control" min="0" max="9999"
-                                                    placeholder="Número OT">
+                                                    <input type="number" name="otNumber" id="otNumber"
+                                                        class="form-control" min="0" max="9999" placeholder="Número OT">
                                                 </div>
                                                 <div class="col-1">
                                                     <label for="opNumber" id="labelOpNumber">OP#</label>
-                                                    <input type="number" name="opNumber" id="opNumber" class="form-control" min="0" max="9999"
-                                                    placeholder="Número OP">
+                                                    <input type="number" name="opNumber" id="opNumber"
+                                                        class="form-control" min="0" max="9999" placeholder="Número OP">
                                                 </div>
                                                 <div class="col-2">
-                                                    <label for="opDescription" id="labelOpDescription">Descripción OP</label>
-                                                    <input type="text" name="opDescription" id="opDescription" class="form-control"
-                                                    placeholder="Descripcion OP">
+                                                    <label for="opDescription" id="labelOpDescription">Descripción
+                                                        OP</label>
+                                                    <input type="text" name="opDescription" id="opDescription"
+                                                        class="form-control" placeholder="Descripcion OP">
                                                 </div>
                                                 <div class="col-1">
                                                     <label for="otStatus" id="labelOtStatus">Status OT</label><br>
                                                     <div class="form-check form-switch d-inline-block mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="otStatus" name="otStatus" aria-checked="true" style="cursor: pointer;" checked>
+                                                        <input class="form-check-input" type="checkbox" id="otStatus"
+                                                            name="otStatus" aria-checked="true" style="cursor: pointer;"
+                                                            checked>
                                                         <label class="form-check-label" for="otStatus">Activa</label>
-                                                    </div>    
+                                                    </div>
                                                 </div>
                                                 <div class="col-2">
                                                     <label for="internoDiseno" id="labelInternoDiseno">Diseño seguido por
@@ -83,18 +106,20 @@
                                                             <i class="fa-solid fa-database"></i>
                                                         </button> -->
                                                     </label>
-                                                    <input type="text" name="internoDiseno" id="internoDiseno" class="form-control"
-                                                    placeholder="Diseño">    
+                                                    <input type="text" name="internoDiseno" id="internoDiseno"
+                                                        class="form-control" placeholder="Diseño">
                                                 </div>
                                                 <div class="col-2">
-                                                    <label for="internoSimulacion" id="labelInternoSimulacion">Simulación seguida por</label>
-                                                    <input type="text" name="internoSimulacion" id="internoSimulacion" class="form-control"
-                                                    placeholder="Simulación">    
+                                                    <label for="internoSimulacion"
+                                                        id="labelInternoSimulacion">Simulación seguida por</label>
+                                                    <input type="text" name="internoSimulacion" id="internoSimulacion"
+                                                        class="form-control" placeholder="Simulación">
                                                 </div>
                                                 <div class="col-2">
-                                                    <label for="externoDiseno" id="labelExternoDiseno">Proveedor externo</label>
-                                                    <input type="text" name="externoDiseno" id="externoDiseno" class="form-control"
-                                                    placeholder="Proveedor">    
+                                                    <label for="externoDiseno" id="labelExternoDiseno">Proveedor
+                                                        externo</label>
+                                                    <input type="text" name="externoDiseno" id="externoDiseno"
+                                                        class="form-control" placeholder="Proveedor">
                                                 </div>
                                                 <div class="col-1">
                                                 </div>
@@ -105,22 +130,27 @@
                             </div>
                         </div>
                         <div class="col-1">
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <button type="button" id="btnAddNewRow" class="btn btn-primary rounded-circle me-2 my-2"><i class="fa-solid fa-plus-circle"></i></button>
-                                </div>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <button type="button" id="btnAddNewRow"
+                                    class="btn btn-primary rounded-circle me-2 my-2"><i
+                                        class="fa-solid fa-plus-circle"></i></button>
+                            </div>
                         </div>
                     </div>
-                            <hr>
-                            <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>" hidden>
-                            <input type="text" name="clientIdHidden" id="clientIdHidden" class="form-control" value="<%= proyecto[0].client[0]._id %>" hidden>
-                            <input type="number" name="otQuantity" id="otQuantity" class="form-control" value="1" hidden>
-                    <br>
-                    <div class="d-flex justify-content-center my-2">
-                        <button id="btnNewOt" type="submit" class="btn btn-primary mx-auto">Guardar <i
-                                class="fa-solid fa-save"></i></button>
-                        <button type="reset" class="btn btn-danger mx-auto">Reset <i
-                                class="fa-solid fa-rotate-left"></i></button>
-                    </div>
+                    <hr>
+                    <% if (proyecto.length> 0) { %>
+                        <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>"
+                            hidden>
+                        <input type="text" name="clientIdHidden" id="clientIdHidden" class="form-control" value="<%= proyecto[0].client[0]._id %>" hidden>
+                        <input type="number" name="otQuantity" id="otQuantity" class="form-control" value="1" hidden>
+                        <br>
+                    <% } %>
+                        <div class="d-flex justify-content-center my-2">
+                            <button id="btnNewOt" class="btn btn-primary mx-auto">Guardar <i
+                                    class="fa-solid fa-save"></i></button>
+                            <button type="reset" class="btn btn-danger mx-auto">Reset <i
+                                    class="fa-solid fa-rotate-left"></i></button>
+                        </div>
                 </fieldset>
             </form>
         </div>

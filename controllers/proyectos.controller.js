@@ -319,25 +319,22 @@ class ProjectsController {
     }
 
     addOtToOciProject = async (req, res) => {
+        const { id } = req.params
         const clientId = req.body.clientIdHidden
         const cliente = await this.clients.selectClientById(clientId)
 
         const numberOci = req.body.ociNumber
         const ociNumberK = req.body.ociNumberK
-        const projectId = req.body.projectIdHidden
+        const projectId = id || req.body.projectIdHidden
         const otQuantity = parseInt(req.body.otQuantity)
-
-        // console.log('A_ numberOci: ', numberOci,
-        //             ' B_ ociNumberK: ', ociNumberK,
-        //             ' C_ projectId: ', projectId,
-        //             ' D_ otQuantity: ', otQuantity
-        //             )
-        //const project = await this.projects.selectOciByOciNumber(numberOci, ociNumberK)
-        //const idProjectTarget = project[0]._id
 
         let username = res.locals.username
         let userInfo = res.locals.userInfo
         const userId = userInfo.id
+
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
 
         const userCreator = await this.users.getUserById(userId)
 
@@ -1003,14 +1000,9 @@ class ProjectsController {
             otAddedToOci
         )
 
-        // console.log('proyecto - proyecto.controller ===> ',
-        //             proyecto.project[0].oci[ociNumberK].ociNumber,
-        //             '--------end of proyecto.controller--------'
-        //             )
-
         try {
             if (!proyecto) return res.status(404).json({ msg: 'OCI no encontrada' })
-            res.render('projectSelectedDetail', {
+            res.render('projectsList', {
                 proyecto,
                 username,
                 userInfo,
@@ -1020,7 +1012,7 @@ class ProjectsController {
         } catch (error) {
             res.status(500).json({
                 status: false,
-                msg: 'controllerError - Adding OT to OCI',
+                msg: 'controllerError - Adding OT to OCI Proyect',
                 error: error
             })
         }

@@ -24,13 +24,13 @@ function message(clientName) {
             document.getElementById("formUpdateClient").submit()
           Swal.fire(
             'Modificado!',
-            `El cliente ${clientName} ha sido modificado exitosamente.`,
+            `El cliente ${clientName}, ha sido modificado exitosamente.`,
             'success'
           )
         } else {
             Swal.fire(
                 'No modificado!',
-                `El cliente ${clientName} no ha sido modificado.`,
+                `El cliente ${clientName}, no ha sido modificado.`,
                 'info'
               )
               return false

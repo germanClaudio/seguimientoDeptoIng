@@ -139,18 +139,14 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
     }
 
     async addOtToOciProject(idProjectTarget, numberOci, ociNumberK, infoOt) {
-        // console.log('idProjectTarget--> ', idProjectTarget)
-        // console.log('ociNumber--> ', numberOci)
-        // console.log('ociNumberK--> ', ociNumberK)
-        // console.log('infoOt--> ', infoOt, '--end of InfoOt--')
-
+        
         if (idProjectTarget) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget})
                                 
                 if (itemMongoDB) {
                     const ociKNumber = parseInt(ociNumberK) || 0
-                    //console.log('ociNumberK--> ', ociKNumber)
+                    
                     switch (ociKNumber) {
                         case 4 : {
                             var otAddedToOci = await Proyectos.updateOne(

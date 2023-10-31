@@ -37,14 +37,12 @@
         <div class="col-11 mx-auto">
             <div class="card-body px-1">
                 <% let j=0
-                if (proyecto.length > 0) { %>
-                    
-                    <% for ( let m = 0;  proyecto.length > m; m++) { %>
+                if (proyecto.length > 0) { 
+                    for ( let m = 0;  proyecto.length > m; m++) { %>
                         <div class="accordion" id="accordionPanelsStayOpenExample">
                             <% for ( let k = 0; proyecto[m].project[j].oci.length > k; k++) { %>
 
                                 <div class="accordion-item">
-                                    
                                     <h2 class="accordion-header" id="panelsStayOpen-headingOneCard">
                                         <button class="accordion-button p-1" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#panelsStayOpen-collapseOneCard<%=k %>" aria-expanded="false"
@@ -75,14 +73,6 @@
                                             <div class="container-fluid">
                                                 <% if (proyecto[m].project[j].oci[k].otProject.length > 0) { %>
                                                     <div class="container my-2 mw-100">
-                                                        <div class="row">
-                                                            <div class="col-2">
-                                                                <a class="btn btn-primary m-1 rounded-circle" href="/api/proyectos/oci/<%=proyecto[m].project[j].oci[k]._id%>"
-                                                                    style="--bs-btn-font-size: .75rem; color: var(--bs-white);" title="Agregar OT"
-                                                                    type="button"><i class="fa-regular fa-plus" aria-hidden="true"></i> 
-                                                                </a>
-                                                            </div>
-                                                        </div>
                                                         <hr class="border border-primary opacity-75">
                                                         <div class="row">
                                                             <div id="posBtnHiddeTableGeneral<%=k%>" class="col-3">
@@ -100,6 +90,13 @@
                                                                     <i class="fa-solid fa-eye-slash"></i>
                                                                 </button>
 
+                                                            </div>
+
+                                                            <div id="posBtnAddData<%=k%>" class="col-6">
+                                                                <button class="btn btn-success m-1 rounded-circle"
+                                                                    style="--bs-btn-font-size: .75rem; color: var(--bs-white);" title="Agregar Datos">
+                                                                    <i class="fa-regular fa-plus" aria-hidden="true"></i> 
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -143,7 +140,7 @@
                                                                                     <% } %>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
-                                                                                    <span class="badge rounded-pill bg-dark text-white my-2"> <%= proyecto[m].project[j].oci[k].otProject[n].otNumber %> </span>
+                                                                                    <span name="lastOtNumber" class="badge rounded-pill bg-dark text-white my-2"> <%= proyecto[m].project[j].oci[k].otProject[n].otNumber %> </span>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
                                                                                     <span class="badge rounded-pill bg-secondary text-white my-2"> <%= proyecto[m].project[j].oci[k].otProject[n].opNumber %> </span>
@@ -596,9 +593,9 @@
                                                     <div class="container my-3">
                                                         <span class="badge rounded-pill bg-danger text-white"> No hay datos de OT cargados para mostrar </span>
                                                     </div>
-                                                    Puedes empezar a cargar datos de OT en esta OCI haciendo click en el siguiente botón
-                                                    <button class="btn btn-primary m-1 rounded-circle"
-                                                        id="btnAddOtFormSelected"
+                                                    Puedes comenzar a cargar datos de OT en esta OCI haciendo click en el siguiente botón
+                                                    <button class="btn btn-danger m-1 rounded-circle"
+                                                        id="btnAddOtFormSelected<%=k%>"
                                                         aria-controls="collapseExample"
                                                         data-bs-toggle="collapse"
                                                         data-bs-target="#collapseExample"
@@ -606,7 +603,7 @@
                                                         style="--bs-btn-font-size: .75rem; color: var(--bs-white);"
                                                         type="button"
                                                         name="<%= proyecto[m].project[j].oci[k].ociNumber %>"
-                                                        value="<%= proyecto[m].project[j].oci[k].ociNumber %>">
+                                                        title="Agregar OT">
                                                         <i class="fa-regular fa-plus" aria-hidden="true"></i>
                                                     </button>
 
