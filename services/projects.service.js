@@ -11,6 +11,11 @@ class ProjectService {
         return this.proyectos.getAllProjects()
     }
 
+    // returns all projects
+    async getAllProjectsBySort(sorted) {
+        return this.proyectos.getAllProjectsBySort(sorted)
+    }
+
     // returns all projects from one Client
     async getProjectsByClientId(data) {
         return this.proyectos.getProjectsByClientId(data)

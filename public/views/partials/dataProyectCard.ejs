@@ -120,16 +120,29 @@
                                                                         <% for ( let n = 0; proyecto[m].project[j].oci[k].otProject.length > n; n++) { %>
                                                                             <tr style="height: 7vh;"> 
                                                                                 <td class="text-center align-middle">
-                                                                                    <div class="btn-group my-2" role="group" aria-label="Basic outlined example">
-                                                                                        <button id="btnEdit" type="button" class="btn btn-light" value="edit"
-                                                                                        style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;">
-                                                                                            <i class="fa-solid fa-pen-to-square"></i>
-                                                                                        </button>
-                                                                                        <button id="btnDelete" type="button" class="btn btn-light" value="delete"
-                                                                                        style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;">
-                                                                                            <i class="fa-solid fa-trash"></i>
-                                                                                        </button>
-                                                                                    </div>
+                                                                                    <% if( userInfo.admin ){ %>
+                                                                                        <div class="btn-group my-2" role="group" aria-label="Basic outlined example">
+                                                                                            <button id="btnEdit" type="button" class="btn btn-light" value="edit"
+                                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;">
+                                                                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                                                            </button>
+                                                                                            <button id="btnDelete" type="button" class="btn btn-light" value="delete"
+                                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;">
+                                                                                                <i class="fa-solid fa-trash"></i>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    <% } else { %>
+                                                                                        <div class="btn-group my-2" role="group" aria-label="Basic outlined example">
+                                                                                            <button id="btnEdit" type="button" class="btn btn-light" value="edit"
+                                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;" disabled>
+                                                                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                                                            </button>
+                                                                                            <button id="btnDelete" type="button" class="btn btn-light" value="delete"
+                                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;" disabled>
+                                                                                                <i class="fa-solid fa-trash"></i>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    <% } %>    
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
                                                                                     
@@ -140,10 +153,10 @@
                                                                                     <% } %>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
-                                                                                    <span name="lastOtNumber" class="badge rounded-pill bg-dark text-white my-2"> <%= proyecto[m].project[j].oci[k].otProject[n].otNumber %> </span>
+                                                                                    <span id="lastOtNumber<%=k%>_<%=n%>" class="badge rounded-pill bg-dark text-white my-2"> <%= proyecto[m].project[j].oci[k].otProject[n].otNumber %> </span>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
-                                                                                    <span class="badge rounded-pill bg-secondary text-white my-2"> <%= proyecto[m].project[j].oci[k].otProject[n].opNumber %> </span>
+                                                                                    <span id="lastOpNumber<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-white my-2"> <%= proyecto[m].project[j].oci[k].otProject[n].opNumber %> </span>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
                                                                                     <small class="text-dark my-2"> <%= proyecto[m].project[j].oci[k].otProject[n].opDescription %> </small>

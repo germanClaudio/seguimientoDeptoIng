@@ -51,6 +51,39 @@ class ProjectsController {
         }
     }
 
+    getAllProjectsBySort = async (req, res) => {
+        const sorted = req.params.sorted
+        console.log('nameController: ', sorted)
+        const proyectos = await this.projects.getAllProjectsBySort(sorted)
+
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+
+        let cliente = await this.clients.getClientById()
+
+        try {
+            if (proyectos.error) return res.status(400).json({ msg: 'No hay proyectos cargados' })
+            res.render('projectsList', {
+                proyectos,
+                cliente,
+                username,
+                userInfo,
+                expires
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                msg: 'controllerError - getAllProjects',
+                error: error
+            })
+        }
+    }
+
     getProjectsByClientId = async (req, res) => {
         const { id } = req.params
         const cliente = await this.clients.getClientById(id)

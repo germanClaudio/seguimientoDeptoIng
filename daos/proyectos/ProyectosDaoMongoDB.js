@@ -17,7 +17,14 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
     // get all Projects form DB ----------------
     async getAllProjects() {
         try {
-            const projects = await Proyectos.find().sort( { 'client.name': 1, 'timestamp': 1 } )
+            const projects = await Proyectos.find()
+            // .sort(
+            //     {
+            //         //'client.name': 1, 
+            //         'project.0.prioProject': 1,
+            //         'timestamp': 1
+            //     }
+            // )
            
             if ( projects === undefined || projects === null) {
                 return new Error ('No hay proyectos cargados en ningún cliente!')
@@ -27,6 +34,77 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         } catch (error) {
             logger.error("Error MongoDB getClients: ",error)
             return new Error ('No hay proyectos en la DB!')
+        }
+    }
+
+    // get all Projects by ProjectName form DB ----------------
+    async getAllProjectsBySort(sorted) {
+        console.log('nameDao: ', sorted)
+        if(sorted==='nombre'){
+            try {
+                const projects = await Proyectos.find()
+                .sort(
+                    {
+                        'project.0.projectName': 1,
+                        //'timestamp': -1
+                    }
+                )
+               
+                if ( projects === undefined || projects === null) {
+                    return new Error ('No hay proyectos cargados en ningún cliente!')
+                } else {
+                    console.log('Projets..... ',...projects)
+                    return projects
+                }
+
+            } catch (error) {
+                logger.error("Error MongoDB getClients: ",error)
+                return new Error ('No hay proyectos en la DB!')
+            }
+
+        } else if (sorted==='cliente') {
+            try {
+                const projects = await Proyectos.find()
+                .sort(
+                    {
+                        'client.name': 1, 
+                        //'project.0.prioProject': 1,
+                        //'timestamp': -1
+                    }
+                )
+               
+                if ( projects === undefined || projects === null) {
+                    return new Error ('No hay proyectos cargados en ningún cliente!')
+                } else {
+                    return projects
+                }    
+            } catch (error) {
+                logger.error("Error MongoDB getClients: ",error)
+                return new Error ('No hay proyectos en la DB!')
+            }
+
+        } else if (sorted==='oci') {
+            try {
+                const projects = await Proyectos.find()
+                .sort(
+                    {
+                        'project.0.oci.0.ociNumber': 1,
+                        // 'timestamp': -1
+                    }
+                )
+               
+                if ( projects === undefined || projects === null) {
+                    return new Error ('No hay proyectos cargados en ningún cliente!')
+                } else {
+                    return projects
+                }    
+            } catch (error) {
+                logger.error("Error MongoDB getClients: ",error)
+                return new Error ('No hay proyectos en la DB!')
+            }
+
+        } else {
+            return new Error ('No hay proyectos en la DB con ese nombre!')
         }
     }
 

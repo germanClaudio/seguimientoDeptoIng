@@ -24,12 +24,10 @@
                                                 <input class="form-check-input" type="radio" name="ociNumber"
                                                     id="<%= proyecto[m].project[j].oci[k].ociNumber %>"
                                                     value="<%= proyecto[m].project[j].oci[k].ociNumber %>" required>
-                                            </div>
-                                            <input class="form-input" type="text" name="ociNumberId" id="ociNumberId<%=k%>"
-                                                value="<%=proyecto[m].project[j].oci[k]._id %>" hidden>
+                                            </div>        
                                         <% } %>
-                                            <input class="form-input" type="text" name="ociNumberK" id="ociNumberK" value=""
-                                                hidden>
+                                            <input class="form-input" type="text" name="ociNumberK" id="ociNumberK" value="" hidden>
+                                            <input class="form-input" type="text" name="ociNumberHidden" id="ociNumberHidden" value="" hidden>    
                                     <%} else { %>
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label"
@@ -139,8 +137,7 @@
                     </div>
                     <hr>
                     <% if (proyecto.length> 0) { %>
-                        <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>"
-                            hidden>
+                        <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>" hidden>
                         <input type="text" name="clientIdHidden" id="clientIdHidden" class="form-control" value="<%= proyecto[0].client[0]._id %>" hidden>
                         <input type="number" name="otQuantity" id="otQuantity" class="form-control" value="1" hidden>
                         <br>

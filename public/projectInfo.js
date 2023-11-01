@@ -418,7 +418,7 @@ btnAddNewRow.addEventListener('click', () => {
         i = numberIdLastChild + 1
     }
 
-    const otNumberValue = parseInt(document.getElementById('otNumber').value)
+    let otNumberValue = parseInt(document.getElementById('otNumber').value)
     const opNumberValue = parseInt(document.getElementById('opNumber').value)
     const internoDisenoValue = document.getElementById('internoDiseno').value
     const internoSimulacion = document.getElementById('internoSimulacion').value
@@ -543,7 +543,41 @@ const tituloForm = document.getElementById('tituloForm')
 const projectNameHidden = document.getElementById('projectNameHidden').value
 const projectNumberId = document.getElementById(`projectIdHidden`).value
 const ociNumberK = document.getElementById('ociNumberK')
+const ociNumberHidden = document.getElementById('ociNumberHidden')
 const clientId = document.getElementById('clientIdHidden')
+
+// ------------- function bucle do/while para encontrar ultima OT ----------
+function lastOtNumberFn(i){
+    let n=10
+    let k=i || 5
+
+        do {
+            var lastOtNumber = document.getElementById(`lastOtNumber${k}_${n}`)
+            var lastOpNumber = document.getElementById(`lastOpNumber${k}_${n}`)    
+            
+            if (lastOtNumber && lastOpNumber) {
+                var otNumberValue = document.getElementById('otNumber')
+                var opNumberValue = document.getElementById('opNumber')
+                    
+                let lastOtNumberValue = parseInt(document.getElementById(`lastOtNumber${k}_${n}`).innerHTML)
+                let lastOpNumberValue = parseInt(document.getElementById(`lastOpNumber${k}_${n}`).innerHTML)
+                    
+                otNumberValue.setAttribute('value', lastOtNumberValue+1)
+                opNumberValue.setAttribute('value', lastOpNumberValue+10)
+                break;
+            }
+
+            // Restar 1 a 'n' y ajustar 'k' si es necesario
+            if (n > 0) {
+                n--
+            } else if (k > 0) {
+                k--
+                n = 9
+            } else {
+                break;
+            }
+        } while (true)
+}
 
 //-------------------- Boton agregar nuevas OT's a OCI ------------------------
 const btnAddOtForm = document.getElementById("btnAddOtForm")
@@ -551,6 +585,7 @@ btnAddOtForm.addEventListener('click', () => {
     if (document.getElementById(`ociNumberHidden`)) {
         let ociSeleccionada = document.getElementById(`ociNumberHidden`).value
         tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
+        lastOtNumberFn()
     }
 })
 
@@ -571,6 +606,7 @@ if (btnAddOtFormSelected0) {
     btnAddOtFormSelected0.addEventListener('click', ()=> {
         const radioSelectedValue = btnAddOtFormSelected0.name
         radioSelected(radioSelectedValue)
+        lastOtNumberFn(0)
     })
 }
 
@@ -578,6 +614,7 @@ if (btnAddOtFormSelected1) {
     btnAddOtFormSelected1.addEventListener('click', ()=> {
         const radioSelectedValue = btnAddOtFormSelected1.name
         radioSelected(radioSelectedValue)
+        lastOtNumberFn(1)
     })
 }
 
@@ -585,6 +622,7 @@ if (btnAddOtFormSelected2) {
     btnAddOtFormSelected2.addEventListener('click', ()=> {
         const radioSelectedValue = btnAddOtFormSelected2.name
         radioSelected(radioSelectedValue)
+        lastOtNumberFn(2)
     })
 }
 
@@ -592,12 +630,14 @@ if (btnAddOtFormSelected3) {
     btnAddOtFormSelected3.addEventListener('click', ()=> {
         const radioSelectedValue = btnAddOtFormSelected3.name
         radioSelected(radioSelectedValue)
+        lastOtNumberFn(3)
     })
 }
 if (btnAddOtFormSelected4) {
     btnAddOtFormSelected4.addEventListener('click', ()=> {
         const radioSelectedValue = btnAddOtFormSelected4.name
         radioSelected(radioSelectedValue)
+        lastOtNumberFn(4)
     })
 }
 
@@ -606,6 +646,8 @@ for (let i = 0; i < radios.length; i++) {
         ociSeleccionada = event.target.value
         tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
         ociNumberK.setAttribute('value', i)
+        ociNumberHidden.setAttribute('value', ociSeleccionada)
+        lastOtNumberFn(i)
     })
 }
 
@@ -632,7 +674,7 @@ function messageNewOt(ociNumber, otArray) {
                 document.getElementById('formNewOt').submit()
                 Toast.fire({
                     icon: 'success',
-                    title: `OT's ${otArray.join(" - ")} agregadas!`
+                    title: `OT's ${otArray.join(" - ")} agregadas con éxito!`
                   })
             } else {
                 Swal.fire(
@@ -657,7 +699,7 @@ function messageNewOt(ociNumber, otArray) {
                 document.getElementById('formNewOt').submit()
                 Toast.fire({
                     icon: 'success',
-                    title: `OT ${otArray.join(" - ")} agregada!`
+                    title: `OT ${otArray.join(" - ")} agregada con éxito!`
                   })
             } else {
                 Swal.fire(
@@ -674,22 +716,24 @@ function messageNewOt(ociNumber, otArray) {
 const btnCreate = document.getElementById('btnNewOt')
 btnCreate.addEventListener('click', (event)=> {
     event.preventDefault()
-    if (ociNumberK) {
-        switch (ociNumberK) {
+    let ociNumberKValue = parseInt(document.getElementById('ociNumberK').value)
+    let ociNumberHiddenValue = parseInt(document.getElementById('ociNumberHidden').value)
+    if (ociNumberKValue) {
+        switch (ociNumberKValue) {
             case 4 : {
-                var ociSeleccionada = parseInt(btnAddOtFormSelected4.name)
+                var ociSeleccionada = parseInt(btnAddOtFormSelected4.name) || ociNumberHiddenValue
             }
             case 3 : {
-                var ociSeleccionada = parseInt(btnAddOtFormSelected3.name)
+                var ociSeleccionada = parseInt(btnAddOtFormSelected3.name) || ociNumberHiddenValue
             }
             case 2 : {
-                var ociSeleccionada = parseInt(btnAddOtFormSelected2.name)
+                var ociSeleccionada = parseInt(btnAddOtFormSelected2.name) || ociNumberHiddenValue
             }
             case 1 : {
-                var ociSeleccionada = parseInt(btnAddOtFormSelected1.name)
+                var ociSeleccionada = parseInt(btnAddOtFormSelected1.name) || ociNumberHiddenValue
             }
-            default : {
-                ociSeleccionada = document.getElementById(`ociNumberHidden`).value
+            case 0 : {
+                var ociSeleccionada = parseInt(btnAddOtFormSelected0.name) || ociNumberHiddenValue
             }
         }
     } else {

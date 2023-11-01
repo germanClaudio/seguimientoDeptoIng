@@ -11,6 +11,9 @@ const projects = new getProjects()
 // -------------------  Seleccionar todos los Proyectos ------------------
 routerProyectos.get('/', checkAuthentication, authUserMiddleware, projects.getAllProjects)
 
+// -------------------  Seleccionar todos los Proyectos ------------------
+routerProyectos.get('/sort/:sorted', checkAuthentication, authUserMiddleware, projects.getAllProjectsBySort)
+
 // -------------------  Seleccionar Proyecto por Cliente Id ------------------ 
 routerProyectos.get('/:id', checkAuthentication, authProductMiddleware, projects.getProjectsByClientId)
 
