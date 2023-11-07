@@ -11,9 +11,6 @@ const projects = new getProjects()
 // -------------------  Seleccionar todos los Proyectos ------------------
 routerProyectos.get('/', checkAuthentication, authUserMiddleware, projects.getAllProjects)
 
-// -------------------  Seleccionar todos los Proyectos ------------------
-routerProyectos.get('/sort/:sorted', checkAuthentication, authUserMiddleware, projects.getAllProjectsBySort)
-
 // -------------------  Seleccionar Proyecto por Cliente Id ------------------ 
 routerProyectos.get('/:id', checkAuthentication, authProductMiddleware, projects.getProjectsByClientId)
 
@@ -26,7 +23,10 @@ routerProyectos.get('/selectProject/:id', checkAuthentication, authProductMiddle
 // -------------------  Crear Nuevo Proyecto ------------------------ 
 routerProyectos.post('/', checkAuthentication, authProductMiddleware, projects.createNewProject)
 
-// -------------------  Actualizar Proyecto por Id ------------------ 
+// -------------------  Agregar OT a OCI --------------------------- 
+routerProyectos.post('/otInfoR14', checkAuthentication, authProductMiddleware, projects.addInfoR14ToOtProject)
+
+// -------------------  Agregar informacion R14 a OT ---------------- 
 routerProyectos.post('/oci', checkAuthentication, authProductMiddleware, projects.addOtToOciProject)
 
 // -------------------  Actualizar Proyecto por Id ------------------ 

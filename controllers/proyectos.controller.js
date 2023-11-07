@@ -51,39 +51,6 @@ class ProjectsController {
         }
     }
 
-    getAllProjectsBySort = async (req, res) => {
-        const sorted = req.params.sorted
-        console.log('nameController: ', sorted)
-        const proyectos = await this.projects.getAllProjectsBySort(sorted)
-
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
-
-        const cookie = req.session.cookie
-        const time = cookie.expires
-        const expires = new Date(time)
-
-        let cliente = await this.clients.getClientById()
-
-        try {
-            if (proyectos.error) return res.status(400).json({ msg: 'No hay proyectos cargados' })
-            res.render('projectsList', {
-                proyectos,
-                cliente,
-                username,
-                userInfo,
-                expires
-            })
-
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                msg: 'controllerError - getAllProjects',
-                error: error
-            })
-        }
-    }
-
     getProjectsByClientId = async (req, res) => {
         const { id } = req.params
         const cliente = await this.clients.getClientById(id)
@@ -1051,7 +1018,216 @@ class ProjectsController {
         }
     }
 
+    addInfoR14ToOtProject = async (req, res) => {
+        console.log('reqBody: ', req.body)
+        const clientId = req.body.clientIdHidden
+        const cliente = await this.clients.selectClientById(clientId)
+        
+        const ociNumberK = req.body.ociNumberK
+        const projectId = req.body.projectIdHidden
+        const otQuantity = parseInt(req.body.otQuantity)
 
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+        const userId = userInfo.id
+
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+
+        const userCreator = await this.users.getUserById(userId)
+
+        const user = [{
+            name: userCreator.name,
+            lastName: userCreator.lastName,
+            username: userCreator.username,
+            email: userCreator.email
+        }]
+
+        const now = formatDate(new Date())
+
+        switch (otQuantity) {
+            case 5: {
+                var infoAddedToOt = [{
+                    otNumber : parseInt(req.body.otNumberHidden0),
+                    procesoR14: req.body.procesoR140 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden1),
+                    procesoR14: req.body.procesoR141 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR141 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden2),
+                    procesoR14: req.body.procesoR142 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR142 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden3),
+                    procesoR14: req.body.procesoR143 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR143 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden4),
+                    procesoR14: req.body.procesoR144 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR144 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }]
+                break;
+            }
+            case 4: {
+                var infoAddedToOt = [{
+                    otNumber: parseInt(req.body.otNumberHidden0),
+                    procesoR14: req.body.procesoR140 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden1),
+                    procesoR14: req.body.procesoR141 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR141 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden2),
+                    procesoR14: req.body.procesoR142 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR142 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden3),
+                    procesoR14: req.body.procesoR143 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR143 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }]
+                break;
+            }
+            case 3: {
+                var infoAddedToOt = [{
+                    otNumber : parseInt(req.body.otNumberHidden0),
+                    procesoR14: req.body.procesoR140 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden1),
+                    procesoR14: req.body.procesoR141 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR141 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden2),
+                    procesoR14: req.body.procesoR142 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR142 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }]
+                break;
+            }
+            case 2: {
+                var infoAddedToOt = [{
+                    otNumber : parseInt(req.body.otNumberHidden0),
+                    procesoR14: req.body.procesoR140 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }, {
+                    otNumber : parseInt(req.body.otNumberHidden1),
+                    procesoR14: req.body.procesoR141 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR141 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }]
+                break;
+            }
+            default: {
+                var infoAddedToOt = [{
+                    otNumber : parseInt(req.body.otNumberHidden0),
+                    procesoR14: req.body.procesoR140 || "noAplica",
+                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
+                    timestamp: now,
+                    creator: user,
+                    modificator: [],
+                    modifiedOn: "",
+
+                }]
+                break;
+            }
+        }
+        
+        const proyecto = await this.projects.addInfoR14ToOtProject(
+            projectId,
+            otQuantity,
+            ociNumberK,
+            infoAddedToOt
+        )
+
+        try {
+            if (!proyecto) return res.status(404).json({ msg: 'OCI u OT no encontrada' })
+            res.render('projectSelectedDetail', {
+                proyecto,
+                username,
+                userInfo,
+                expires,
+                cliente
+            })
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                msg: 'controllerError - Adding OT to OCI Proyect',
+                error: error
+            })
+        }
+    }
 
     // updateProject = async (req, res) => {
     //     const id = req.params.id

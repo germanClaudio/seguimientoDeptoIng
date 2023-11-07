@@ -8,7 +8,7 @@
                     <input type="text" name="idDisable" id="idDisable" class="form-control-plaintext text-white"
                         value="<%=usuario._id%>" disabled>
                 </div>
-                <input type="text" name="id" id="id" class="form-control" value="<%=usuario._id%>" hidden>
+                <input type="hidden" name="id" id="id" class="form-control" value="<%=usuario._id%>">
                 <br>
                 <div class="col-2">
                     <label for="creatorDisable">Creado por</label>
@@ -135,9 +135,9 @@
                     width="200px" height="200px">
             </div>
             
-            <input type="text" value="<%= userInfo.name %>" name="userNameHidden" id="userNameHidden" hidden>
-            <input type="text" value="<%= userInfo.lastName %>" name="userLastNameHidden" id="userLastNameHidden" hidden>
-            <input type="text" value="<%= userInfo.id %>" name="userIdHidden" id="userIdHidden" hidden>
+            <input type="hidden" value="<%= userInfo.name %>" name="userNameHidden" id="userNameHidden">
+            <input type="hidden" value="<%= userInfo.lastName %>" name="userLastNameHidden" id="userLastNameHidden">
+            <input type="hidden" value="<%= userInfo.id %>" name="userIdHidden" id="userIdHidden">
             
             <div class="d-flex justify-content-center my-2">
                 <button id="btnUpdateUser" class="btn btn-success mx-auto my-2">Actualizar Usuario <i

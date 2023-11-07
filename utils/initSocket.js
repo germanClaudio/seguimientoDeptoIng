@@ -3,9 +3,6 @@ const logger = require('../utils/winston')
 const ContainerMessages = require("../daos/mensajes/MensajesDaoFactory.js")
 const containerMsg = ContainerMessages.getDaoMsg()
 
-// const ContainerProducts = require("../daos/productos/ProductosDaoFactory.js")
-// const containerProduct = ContainerProducts.getDao()
-
 const ContainerClients = require("../daos/clientes/ClientesDaoFactory.js")
 const containerClient = ContainerClients.getDao()
 
@@ -15,19 +12,16 @@ const containerProject = ContainerProjects.getDao()
 const ContainerUsers = require("../daos/usuarios/UsuariosDaoFactory.js")
 const containerUser = ContainerUsers.getDaoUsers()
 
-// const ContainerCarts = require("../daos/carritos/CarritosDaoFactory.js")
-// const containerCarts = ContainerCarts.getDaoCart()
-
 const { schema } = require("normalizr")
 
 const initSocket = (io) => {
-  io.on("connection", async (socket) => {
+    io.on("connection", async (socket) => {
         logger.info("Nuevo usuario conectado!")
         
-        // --------------------------  Clients --------------------------------
+        // --------------------------  Clientes --------------------------------
         socket.emit('clientsAll',
-        await containerClient.getAllClients(),
-        await containerUser.getAllUsers()
+            await containerClient.getAllClients(),
+            await containerUser.getAllUsers()
         )
 
         socket.on('newCliente', async (cliente) => {
@@ -51,9 +45,9 @@ const initSocket = (io) => {
 
         // --------------------------  Projects --------------------------------
         socket.emit('projectsAll',
-            await containerProject.getAllProjects(),
-            await containerUser.getAllUsers()
-        ) 
+                await containerProject.getAllProjects(),
+                await containerUser.getAllUsers()            
+        )
         
         // socket.on('newProducto', async (producto) => {
         //     await containerProduct.createNewProduct(producto)
@@ -99,18 +93,18 @@ const initSocket = (io) => {
         //   io.sockets.emit('searchProductsAll', await containerProduct.searchProductsAll(name))
         // })
         
-    //-------------------------------- Users  ----------------------------------
-    socket.on('newUsuario', async (usuario) => {
-        await containerUser.createNewUser(usuario)
-        io.sockets.emit('usersAll', await containerUser.getAllUsers())
-    })
-    
-    // --------------------------------  Orders  -------------------------------
-    //   socket.emit('ordersAll', await containerCarts.getAllOrders())
+        //-------------------------------- Users  ----------------------------------
+        socket.on('newUsuario', async (usuario) => {
+            await containerUser.createNewUser(usuario)
+            io.sockets.emit('usersAll', await containerUser.getAllUsers())
+        })
+        
+        // --------------------------------  Orders  -------------------------------
+        //   socket.emit('ordersAll', await containerCarts.getAllOrders())
 
-    // -----------------------------  Messages ---------------------------------
-        // const normalizarMensajes = (mensajesConId) =>
-        // normalize(mensajesConId, schemaMensajes)
+        // -----------------------------  Messages ---------------------------------
+            // const normalizarMensajes = (mensajesConId) =>
+            // normalize(mensajesConId, schemaMensajes)
 
         async function listarMensajesNormalizados() {
             const mensajes = await containerMsg.getAllMessages()

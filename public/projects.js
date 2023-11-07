@@ -1,17 +1,61 @@
 const socket = io.connect()
 
+function sortTable(columnName) {
+       
+    const table = document.querySelector('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const column = tbody.querySelector(`[data-column="${columnName}"]`);
+    const order = column.getAttribute('data-order');
+  
+    rows.sort((a, b) => {
+        const aValue = a.querySelector(`[data-column="${columnName}"]`).textContent;
+        const bValue = b.querySelector(`[data-column="${columnName}"]`).textContent;
+    
+        if (order === 'asc') {
+          return aValue.localeCompare(bValue);
+        } else {
+          return bValue.localeCompare(aValue);
+        }
+    });
+    
+      while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+      }
+    
+      rows.forEach(row => tbody.appendChild(row));
+    
+      const btnClicked = document.getElementById(`${columnName}`)
+      if(columnName === 'nombre' || columnName === 'nivel') {
+          var iconDesc = (`<i class="fa-solid fa-sort-alpha-desc" aria-hidden="true"></i>`)
+          var iconAsc = (`<i class="fa-solid fa-sort-alpha-asc" aria-hidden="true"></i>`)
+      } else {
+          var iconDesc = (`<i class="fa-solid fa-sort-amount-desc" aria-hidden="true"></i>`)
+          var iconAsc = (`<i class="fa-solid fa-sort-amount-asc" aria-hidden="true"></i>`)
+      }
+      
+      if (order === 'asc') {
+        column.setAttribute('data-order', 'desc');  
+        btnClicked.innerHTML = iconDesc
+    } else {
+        column.setAttribute('data-order', 'asc');
+        btnClicked.innerHTML = iconAsc
+    }
+}
+
 //  ---------------- Projects list ----------------
 socket.on('projectsAll', (arrayProjects, arrUsers) => {
+    
     const cadena = document.getElementById('mostrarUserName').innerText
     let indice = cadena.indexOf(",");
     const name = cadena.substring(0,indice)
     let index = arrUsers.findIndex(el=> el.name == name.trim())
     
-    if(index !== -1) {
-        let user = arrUsers[index].admin
-        let userId = arrUsers[index]._id
-        user ? renderProjectsForAdmin(arrayProjects, userId) : renderProjectsForUser(arrayProjects)
-    }   
+        if(index !== -1) {
+            let user = arrUsers[index].admin
+            let userId = arrUsers[index]._id
+            user ? renderProjectsForAdmin(arrayProjects, userId) : renderProjectsForUser(arrayProjects)
+        }   
 })
 
 // --------------- Render Project table for AdminS -----------------------------------
@@ -116,17 +160,17 @@ const renderProjectsForAdmin = (arrayProjects) => {
         
         return (`<tr>
                     <td class="text-center">${element.project[0].codeProject}</td>
-                    <td class="text-center">${element.project[0].projectName}</td>
-                    <td class="text-center">${loopOcis()}</td>
+                    <td class="text-center" data-column="nombre">${element.project[0].projectName}</td>
+                    <td class="text-center" data-column="oci">${loopOcis()}</td>
                     <td class="text-center"><img class="img-fluid rounded m-2" alt="Imagen Proyecto" src='${element.project[0].imageProject}' width="100px" height="80px"></td>
-                    <td class="text-center"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.client[0].logo}' width="70px" height="55px"></td>
-                    <td class="text-center"><span class="badge rounded-pill bg-dark">${element.project[0].prioProject}</span></td>
-                    <td class="text-center"><span class="badge rounded-pill bg-${colorResult} text-${colorLevel}">${text}</span></td>
+                    <td class="text-center" data-column="cliente"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.client[0].logo}' width="70px" height="55px"></td>
+                    <td class="text-center" data-column="prio"><span class="badge rounded-pill bg-dark">${element.project[0].prioProject}</span></td>
+                    <td class="text-center" data-column="nivel"><span class="badge rounded-pill bg-${colorResult} text-${colorLevel}">${text}</span></td>
                     <td class="text-center">${element.project[0].projectDescription}</td>
-                    <td class="text-center">${loopArrayOt()}</td>
+                    <td class="text-center" data-column="ot">${loopArrayOt()}</td>
                     <td class="text-center">${loopArrayOp()}</td>
                     <td class="text-center">${loopArrayDescription()}</td>
-                    <td class="text-center">${element.timestamp}</td>
+                    <td class="text-center" data-column="fecha">${element.timestamp}</td>
                     <td class="text-center">
                         <div class="d-block align-items-center">
                             <a href="#" class="btn btn-secondary btn-sm me-1 disabled" data-toggle="tooltip" data-placement="top" title="To Be Done"><i class="fa-solid fa-eye"></i></a>
@@ -247,17 +291,17 @@ const renderProjectsForUser = (arrayProjects) => {
         
         return (`<tr>
                     <td class="text-center">${element.project[0].codeProject}</td>
-                    <td class="text-center">${element.project[0].projectName}</td>
-                    <td class="text-center">${loopOcis()}</td>
+                    <td class="text-center" data-column="nombre">${element.project[0].projectName}</td>
+                    <td class="text-center" data-column="oci">${loopOcis()}</td>
                     <td class="text-center"><img class="img-fluid rounded m-2" alt="Imagen Proyecto" src='${element.project[0].imageProject}' width="100px" height="80px"></td>
-                    <td class="text-center"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.client[0].logo}' width="70px" height="55px"></td>
-                    <td class="text-center"><span class="badge rounded-pill bg-dark">${element.project[0].prioProject}</span></td>
-                    <td class="text-center"><span class="badge rounded-pill bg-${colorResult} text-${colorLevel}">${text}</span></td>
+                    <td class="text-center" data-column="cliente"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.client[0].logo}' width="70px" height="55px"></td>
+                    <td class="text-center" data-column="prio"><span class="badge rounded-pill bg-dark">${element.project[0].prioProject}</span></td>
+                    <td class="text-center" data-column="nivel"><span class="badge rounded-pill bg-${colorResult} text-${colorLevel}">${text}</span></td>
                     <td class="text-center">${element.project[0].projectDescription}</td>
-                    <td class="text-center">${loopArrayOt()}</td>
+                    <td class="text-center" data-column="ot">${loopArrayOt()}</td>
                     <td class="text-center">${loopArrayOp()}</td>
                     <td class="text-center">${loopArrayDescription()}</td>
-                    <td class="text-center">${element.timestamp}</td>
+                    <td class="text-center" data-column="fecha">${element.timestamp}</td>
                     <td class="text-center">
                         <div class="d-block align-items-center">
                             <a href="#" class="btn btn-secondary btn-sm me-1 disabled" data-toggle="tooltip" data-placement="top" title="To Be Done"><i class="fa-solid fa-eye"></i></a>
@@ -274,33 +318,3 @@ const renderProjectsForUser = (arrayProjects) => {
 
         document.getElementById('capProjectsList').innerHTML = htmlProjectsList
 }
-
-//-------------------------------------------------------
-// function order(icon) {
-//     //console.log('orden / icon', orden, icon)
-//     // arrayClient.sort((a, b) => {
-//     //     return a.nombre - b.nombre
-//     //   })
-
-//     const iconAsc = (`<i class="fa-solid fa-sort-alpha-asc" aria-hidden="true"></i>`)
-//     const iconDesc = (`<i class="fa-solid fa-sort-alpha-desc" aria-hidden="true"></i>`)
-//     const resultado = icon == iconDesc ? iconAsc : iconDesc
-    
-//     document.getElementById('btnNombre').innerHTML = resultado
-// }
-
-// const btnNombre = document.getElementById('btnNombre')
-// btnNombre.addEventListener('click', (event)=>{
-//     event.preventDefault()
-//     const icon = document.getElementById('btnNombre').innerHTML
-//     let categoria = document.getElementById("btnNombre").value
-//     console.log('categoria: ', categoria)
-//     let query = window.location.search
-//     if (query.includes("categoria=")) {
-//         query = query.replace(/categoria=[^&]*/, "categoria=" + categoria);
-//       } else {
-//         query += "&categoria=" + categoria
-//       }
-//     order(icon)
-//     window.location.replace(window.location.pathname + query)
-// })

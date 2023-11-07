@@ -105,12 +105,9 @@
                         </div>
                     </div>
                             <hr>
-                            <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>"
-                            hidden="true">
-                            <input type="text" name="clientIdHidden" id="clientIdHidden" class="form-control"
-                            value="<%= cliente._id %>" hidden="true">
-                            <input type="number" name="ociQuantity" id="ociQuantity" class="form-control"
-                            value="" hidden="true">
+                            <input type="hidden" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>">
+                            <input type="hidden" name="clientIdHidden" id="clientIdHidden" class="form-control" value="<%= cliente._id %>">
+                            <input type="hidden" name="ociQuantity" id="ociQuantity" class="form-control" value="">
                     <br>
                     <div class="d-flex justify-content-center my-2">
                         <button id="btnNewProject" type="submit" class="btn btn-primary mx-auto">Guardar <i

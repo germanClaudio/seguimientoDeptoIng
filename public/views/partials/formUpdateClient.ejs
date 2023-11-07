@@ -7,7 +7,7 @@
                     <input type="text" name="idDisable" id="idDisable" class="form-control-plaintext text-white" value="<%=cliente._id%>"
                         disabled="true">
                 </div>
-                <input type="text" name="id" id="id" class="form-control" value="<%=cliente._id%>" hidden="true">
+                <input type="hidden" name="id" id="id" class="form-control" value="<%=cliente._id%>">
                 <br>
                 <div class="col-2 mx-auto my-2">
                     <label for="idCreator">Creado por</label>
@@ -65,8 +65,8 @@
                                     <% } %>
                         </select>
                     </div>
-                    <input type="text" name="statusHidden" id="statusHidden" class="form-control"
-                        value="<%=cliente.status%>" hidden="true">
+                    <input type="hidden" name="statusHidden" id="statusHidden" class="form-control"
+                        value="<%=cliente.status%>">
                
                 <br>
                 
@@ -82,14 +82,10 @@
                         height="200px">
                 </div>
                 <br>
-                <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>"
-                    hidden="true">
-                <input type="text" name="usernameHidden" id="usernameHidden" class="form-control"
-                    value="<%= userInfo.username %>" hidden="true">
-                <input type="text" name="unameHidden" id="unameHidden" class="form-control" value="<%= userInfo.name %>"
-                    hidden="true">
-                <input type="text" name="lastNameHidden" id="lastNameHidden" class="form-control"
-                    value="<%= userInfo.lastName %>" hidden="true">
+                <input type="hidden" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>">
+                <input type="hidden" name="usernameHidden" id="usernameHidden" class="form-control" value="<%= userInfo.username %>">
+                <input type="hidden" name="unameHidden" id="unameHidden" class="form-control" value="<%= userInfo.name %>">
+                <input type="hidden" name="lastNameHidden" id="lastNameHidden" class="form-control" value="<%= userInfo.lastName %>">
 
                 <div class="d-flex justify-content-center my-2">
                     <button id="btnUpdateClient" class="btn btn-success mx-auto my-2">Update Cliente <i

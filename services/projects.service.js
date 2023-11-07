@@ -11,11 +11,6 @@ class ProjectService {
         return this.proyectos.getAllProjects()
     }
 
-    // returns all projects
-    async getAllProjectsBySort(sorted) {
-        return this.proyectos.getAllProjectsBySort(sorted)
-    }
-
     // returns all projects from one Client
     async getProjectsByClientId(data) {
         return this.proyectos.getProjectsByClientId(data)
@@ -33,11 +28,21 @@ class ProjectService {
     
     // add new Ot to OCI - Project
     async addOtToOciProject(projectId, numberOci, ociNumberK, otAddedToOci) {
-        return this.proyectos.addOtToOciProject(projectId,
+        return this.proyectos.addOtToOciProject(
+            projectId,
             numberOci,
             ociNumberK, 
             otAddedToOci
         )
+    }
+
+    // add Info R14 to Ot - Project
+    async addInfoR14ToOtProject(projectId, otQuantity, ociNumberK, infoAddedToOt) {
+        return this.proyectos.addInfoR14ToOtProject(
+            projectId,
+            otQuantity,
+            ociNumberK,
+            infoAddedToOt)
     }
 
     // Select OCI - Project

@@ -37,76 +37,70 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    // get all Projects by ProjectName form DB ----------------
-    async getAllProjectsBySort(sorted) {
-        console.log('nameDao: ', sorted)
-        if(sorted==='nombre'){
-            try {
-                const projects = await Proyectos.find()
-                .sort(
-                    {
-                        'project.0.projectName': 1,
-                        //'timestamp': -1
-                    }
-                )
-               
-                if ( projects === undefined || projects === null) {
-                    return new Error ('No hay proyectos cargados en ningún cliente!')
-                } else {
-                    console.log('Projets..... ',...projects)
-                    return projects
-                }
+    //get all Projects by Sort form DB ----------------
+    // async getAllProjectsBySort(sort) {
+    //     console.log('nameDao: ', sort)
+                
+    //     function result(projects) {
+    //         (projects === undefined || projects === null) ?
+    //             new Error ('No hay proyectos cargados en ningún cliente!')
+    //             :
+    //             projects
+    //     }
 
-            } catch (error) {
-                logger.error("Error MongoDB getClients: ",error)
-                return new Error ('No hay proyectos en la DB!')
-            }
+    //     if(sort === 'nombre') {
+    //         try {
+    //             const projects = await Proyectos.find()
+    //             .sort(
+    //                 {
+    //                     'project.0.projectName': 1,
+    //                     //'timestamp': -1
+    //                 }
+    //             )
+    //             result(projects)
 
-        } else if (sorted==='cliente') {
-            try {
-                const projects = await Proyectos.find()
-                .sort(
-                    {
-                        'client.name': 1, 
-                        //'project.0.prioProject': 1,
-                        //'timestamp': -1
-                    }
-                )
-               
-                if ( projects === undefined || projects === null) {
-                    return new Error ('No hay proyectos cargados en ningún cliente!')
-                } else {
-                    return projects
-                }    
-            } catch (error) {
-                logger.error("Error MongoDB getClients: ",error)
-                return new Error ('No hay proyectos en la DB!')
-            }
+    //         } catch (error) {
+    //             logger.error("Error MongoDB getClients: ",error)
+    //             return new Error ('No hay proyectos en la DB!')
+    //         }
 
-        } else if (sorted==='oci') {
-            try {
-                const projects = await Proyectos.find()
-                .sort(
-                    {
-                        'project.0.oci.0.ociNumber': 1,
-                        // 'timestamp': -1
-                    }
-                )
-               
-                if ( projects === undefined || projects === null) {
-                    return new Error ('No hay proyectos cargados en ningún cliente!')
-                } else {
-                    return projects
-                }    
-            } catch (error) {
-                logger.error("Error MongoDB getClients: ",error)
-                return new Error ('No hay proyectos en la DB!')
-            }
+    //     } else if (sort === 'cliente') {
+    //         try {
+    //             const projects = await Proyectos.find()
+    //             .sort(
+    //                 {
+    //                     'client.name': 1, 
+    //                     //'project.0.prioProject': 1,
+    //                     //'timestamp': -1
+    //                 }
+    //             )
+    //             result(projects)
 
-        } else {
-            return new Error ('No hay proyectos en la DB con ese nombre!')
-        }
-    }
+    //         } catch (error) {
+    //             logger.error("Error MongoDB getClients: ",error)
+    //             return new Error ('No hay proyectos en la DB!')
+    //         }
+
+    //     } else if (sort==='oci') {
+    //         try {
+    //             const projects = await Proyectos.find()
+    //             .sort(
+    //                 {
+    //                     'project.0.oci.0.ociNumber': 1,
+    //                     // 'timestamp': -1
+    //                 }
+    //             )
+    //             result(projects)
+
+    //         } catch (error) {
+    //             logger.error("Error MongoDB getClients: ",error)
+    //             return new Error ('No hay proyectos en la DB!')
+    //         }
+
+    //     } else {
+    //         return new Error ('No hay proyectos en la DB con ese nombre!')
+    //     }
+    // }
 
     // Search all Clients by Client Name o Code ----------------
     async searchClientsAll(name) {
@@ -216,6 +210,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    // Add Ot's to Oci Number ----------------
     async addOtToOciProject(idProjectTarget, numberOci, ociNumberK, infoOt) {
         
         if (idProjectTarget) {
@@ -314,6 +309,104 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    // Add Info R14 to Ot's ----------------
+    async addInfoR14ToOtProject(idProjectTarget, otQuantity, ociNumberK, infoAddedToOt) {
+        console.log('infoAddedToOt.. ',infoAddedToOt)
+        if (idProjectTarget) {
+            // try {
+            //     const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget})
+                                
+            //     if (itemMongoDB) {
+            //         const ociKNumber = parseInt(ociNumberK) || 0
+            //         const QuantityOt = parseInt(otQuantity)
+                    
+            //         switch (ociKNumber) {
+            //             case 4 : {
+            //                 var infoAddedToOt = await Proyectos.updateOne(
+            //                     { _id: itemMongoDB._id },
+            //                     {
+            //                         $push: {
+            //                             'project.0.oci.4.otProject' : infoAddedToOt
+            //                         }
+            //                     },
+            //                     { new: true }
+            //                 )
+            //                 break;
+            //             }
+            //             case 3: {
+            //                 var otAddedToOci = await Proyectos.updateOne(
+            //                     { _id: itemMongoDB._id },
+            //                     {
+            //                         $push: {
+            //                             'project.0.oci.3.otProject':
+            //                             infoOt
+            //                         }
+            //                     },
+            //                     { new: true }
+            //                 )
+            //                 break;
+            //             }
+            //             case 2: {
+            //                 var otAddedToOci = await Proyectos.updateOne(
+            //                     { _id: itemMongoDB._id },
+            //                     {
+            //                         $push: {
+            //                             'project.0.oci.2.otProject':
+            //                             infoOt
+            //                         }
+            //                     },
+            //                     { new: true }
+            //                 )
+            //                 break;
+            //             }
+            //             case 1 : {
+            //                 var otAddedToOci = await Proyectos.updateOne(
+            //                     { _id: itemMongoDB._id },
+            //                     {
+            //                         $push: {
+            //                             'project.0.oci.1.otProject':
+            //                             infoOt
+            //                         }
+            //                     },
+            //                     { new: true }
+            //                 )
+            //                 break;
+            //             }
+            //             default : {
+            //                 var otAddedToOci = await Proyectos.updateOne(
+            //                     { _id: itemMongoDB._id },
+            //                     {
+            //                         $push: {
+            //                             'project.0.oci.0.otProject':
+            //                             infoOt
+            //                         }
+            //                     },
+            //                     { new: true }
+            //                 )
+            //                 break;
+            //             }
+            //         }
+
+            //         logger.info('Ot agregada a OCI ', otAddedToOci)
+                    
+            //         if (otAddedToOci.acknowledged) {
+            //             const itemUpdated = await Proyectos.findById({_id: idProjectTarget})
+            //             return itemUpdated
+            //         } else {
+            //             return new Error (`No se actualizó el item: ${itemMongoDB._id}`)
+            //         }
+
+            //     } else {
+            //         logger.error(`No se encontró la OCI: ${numberOci}`)
+            //         return new Error (`No se encontró la OCI: ${numberOci}`)
+            //     }
+            // } catch (error) {
+            //     logger.error("Error MongoDB adding OT to a OCI: ",error)
+            // }
+        } else {
+            return new Error (`No se pudo agregar la OT a la OCI del Proyecto!`)
+        }
+    }
 
     async updateClient(id, client){
         const itemMongoDB = await Clientes.findById({_id: id})

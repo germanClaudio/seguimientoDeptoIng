@@ -428,12 +428,12 @@ btnAddNewRow.addEventListener('click', () => {
         `<div class="col-1">
                 <label for="otNumber${i}" id="labelOtNumber${i}">OT#</label>
                 <input type="number" name="otNumber${i}" id="otNumber${i}" class="form-control" min="0" max="9999"
-                placeholder="Número OT" value="${otNumberValue+i}">
+                placeholder="Número OT" value="${otNumberValue + i}">
             </div>
             <div class="col-1">
                 <label for="opNumber${i}" id="labelOpNumber${i}">OP#</label>
                 <input type="number" name="opNumber${i}" id="opNumber${i}" class="form-control" min="0" max="9999"
-                placeholder="Número OP" value="${opNumberValue+i*10}">
+                placeholder="Número OP" value="${opNumberValue + i * 10}">
             </div>
             <div class="col-2">
                 <label for="opDescription${i}" id="labelOpDescription${i}">Descripción OP</label>
@@ -547,36 +547,36 @@ const ociNumberHidden = document.getElementById('ociNumberHidden')
 const clientId = document.getElementById('clientIdHidden')
 
 // ------------- function bucle do/while para encontrar ultima OT ----------
-function lastOtNumberFn(i){
-    let n=10
-    let k=i || 5
+function lastOtNumberFn(i) {
+    let n = 10
+    let k = i || 5
 
-        do {
-            var lastOtNumber = document.getElementById(`lastOtNumber${k}_${n}`)
-            var lastOpNumber = document.getElementById(`lastOpNumber${k}_${n}`)    
-            
-            if (lastOtNumber && lastOpNumber) {
-                var otNumberValue = document.getElementById('otNumber')
-                var opNumberValue = document.getElementById('opNumber')
-                    
-                let lastOtNumberValue = parseInt(document.getElementById(`lastOtNumber${k}_${n}`).innerHTML)
-                let lastOpNumberValue = parseInt(document.getElementById(`lastOpNumber${k}_${n}`).innerHTML)
-                    
-                otNumberValue.setAttribute('value', lastOtNumberValue+1)
-                opNumberValue.setAttribute('value', lastOpNumberValue+10)
-                break;
-            }
+    do {
+        var lastOtNumber = document.getElementById(`lastOtNumber${k}_${n}`)
+        var lastOpNumber = document.getElementById(`lastOpNumber${k}_${n}`)
 
-            // Restar 1 a 'n' y ajustar 'k' si es necesario
-            if (n > 0) {
-                n--
-            } else if (k > 0) {
-                k--
-                n = 9
-            } else {
-                break;
-            }
-        } while (true)
+        if (lastOtNumber && lastOpNumber) {
+            var otNumberValue = document.getElementById('otNumber')
+            var opNumberValue = document.getElementById('opNumber')
+
+            let lastOtNumberValue = parseInt(document.getElementById(`lastOtNumber${k}_${n}`).innerHTML)
+            let lastOpNumberValue = parseInt(document.getElementById(`lastOpNumber${k}_${n}`).innerHTML)
+
+            otNumberValue.setAttribute('value', lastOtNumberValue + 1)
+            opNumberValue.setAttribute('value', lastOpNumberValue + 10)
+            break;
+        }
+
+        // Restar 1 a 'n' y ajustar 'k' si es necesario
+        if (n > 0) {
+            n--
+        } else if (k > 0) {
+            k--
+            n = 9
+        } else {
+            break;
+        }
+    } while (true)
 }
 
 //-------------------- Boton agregar nuevas OT's a OCI ------------------------
@@ -589,7 +589,7 @@ btnAddOtForm.addEventListener('click', () => {
     }
 })
 
-function radioSelected(radioSelectedValue){
+function radioSelected(radioSelectedValue) {
     const radioSelected = document.getElementById(`${radioSelectedValue}`)
     radioSelected.setAttribute('checked', true)
     tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${radioSelectedValue}</strong> / Proyecto: ${projectNameHidden}`
@@ -603,7 +603,7 @@ const btnAddOtFormSelected3 = document.getElementById('btnAddOtFormSelected3')
 const btnAddOtFormSelected4 = document.getElementById('btnAddOtFormSelected4')
 
 if (btnAddOtFormSelected0) {
-    btnAddOtFormSelected0.addEventListener('click', ()=> {
+    btnAddOtFormSelected0.addEventListener('click', () => {
         const radioSelectedValue = btnAddOtFormSelected0.name
         radioSelected(radioSelectedValue)
         lastOtNumberFn(0)
@@ -611,7 +611,7 @@ if (btnAddOtFormSelected0) {
 }
 
 if (btnAddOtFormSelected1) {
-    btnAddOtFormSelected1.addEventListener('click', ()=> {
+    btnAddOtFormSelected1.addEventListener('click', () => {
         const radioSelectedValue = btnAddOtFormSelected1.name
         radioSelected(radioSelectedValue)
         lastOtNumberFn(1)
@@ -619,7 +619,7 @@ if (btnAddOtFormSelected1) {
 }
 
 if (btnAddOtFormSelected2) {
-    btnAddOtFormSelected2.addEventListener('click', ()=> {
+    btnAddOtFormSelected2.addEventListener('click', () => {
         const radioSelectedValue = btnAddOtFormSelected2.name
         radioSelected(radioSelectedValue)
         lastOtNumberFn(2)
@@ -627,14 +627,14 @@ if (btnAddOtFormSelected2) {
 }
 
 if (btnAddOtFormSelected3) {
-    btnAddOtFormSelected3.addEventListener('click', ()=> {
+    btnAddOtFormSelected3.addEventListener('click', () => {
         const radioSelectedValue = btnAddOtFormSelected3.name
         radioSelected(radioSelectedValue)
         lastOtNumberFn(3)
     })
 }
 if (btnAddOtFormSelected4) {
-    btnAddOtFormSelected4.addEventListener('click', ()=> {
+    btnAddOtFormSelected4.addEventListener('click', () => {
         const radioSelectedValue = btnAddOtFormSelected4.name
         radioSelected(radioSelectedValue)
         lastOtNumberFn(4)
@@ -652,15 +652,15 @@ for (let i = 0; i < radios.length; i++) {
 }
 
 function messageNewOt(ociNumber, otArray) {
-    
+
     const Toast = Swal.mixin({
         toast: true,
         position: 'bottom',
-          showConfirmButton: false,
-          timer: 4000,
-          timerProgressBar: false,
-          })
-    
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+
     if (otArray.length > 1) {
         Swal.fire({
             title: 'Ingreso de datos!',
@@ -675,7 +675,7 @@ function messageNewOt(ociNumber, otArray) {
                 Toast.fire({
                     icon: 'success',
                     title: `OT's ${otArray.join(" - ")} agregadas con éxito!`
-                  })
+                })
             } else {
                 Swal.fire(
                     'OTs no agregadas!',
@@ -700,7 +700,7 @@ function messageNewOt(ociNumber, otArray) {
                 Toast.fire({
                     icon: 'success',
                     title: `OT ${otArray.join(" - ")} agregada con éxito!`
-                  })
+                })
             } else {
                 Swal.fire(
                     'OT no agregada!',
@@ -714,25 +714,25 @@ function messageNewOt(ociNumber, otArray) {
 }
 
 const btnCreate = document.getElementById('btnNewOt')
-btnCreate.addEventListener('click', (event)=> {
+btnCreate.addEventListener('click', (event) => {
     event.preventDefault()
     let ociNumberKValue = parseInt(document.getElementById('ociNumberK').value)
     let ociNumberHiddenValue = parseInt(document.getElementById('ociNumberHidden').value)
     if (ociNumberKValue) {
         switch (ociNumberKValue) {
-            case 4 : {
+            case 4: {
                 var ociSeleccionada = parseInt(btnAddOtFormSelected4.name) || ociNumberHiddenValue
             }
-            case 3 : {
+            case 3: {
                 var ociSeleccionada = parseInt(btnAddOtFormSelected3.name) || ociNumberHiddenValue
             }
-            case 2 : {
+            case 2: {
                 var ociSeleccionada = parseInt(btnAddOtFormSelected2.name) || ociNumberHiddenValue
             }
-            case 1 : {
+            case 1: {
                 var ociSeleccionada = parseInt(btnAddOtFormSelected1.name) || ociNumberHiddenValue
             }
-            case 0 : {
+            case 0: {
                 var ociSeleccionada = parseInt(btnAddOtFormSelected0.name) || ociNumberHiddenValue
             }
         }
@@ -742,12 +742,1120 @@ btnCreate.addEventListener('click', (event)=> {
 
     const otQuantity = parseInt(document.getElementById('otQuantity').value)
     let otArray = [document.getElementById(`otNumber`).value]
-           
+
     if (otQuantity > 1) {
         for (let j = 1; j < otQuantity; j++) {
             let otNumberSelected = document.getElementById(`otNumber${j}`).value
             otArray.push(otNumberSelected)
         }
-    } 
+    }
     messageNewOt(ociSeleccionada, otArray)
 })
+
+function getOtList(i) {
+    const parentDiv = document.getElementById(`tablaGeneral${i}`)
+    let tableBody = parentDiv.lastElementChild
+    const lastChild = parseInt(tableBody.childElementCount)
+
+    let k = i
+    let arrayOtNumber = [], arrayOpNumber = []
+    for (let n=0; n < lastChild; n++) {
+        const otNumber = document.getElementById(`lastOtNumber${k}_${n}`).innerText
+        const opNumber = document.getElementById(`lastOpNumber${k}_${n}`).innerText
+        arrayOtNumber.push(otNumber)
+        arrayOpNumber.push(opNumber)
+    }
+    return {
+        arrayOtNumber,
+        arrayOpNumber,
+        lastChild
+    }
+}
+
+function addDatoToR14(i) {
+    let res = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < res.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto">
+            <div class="col-2 my-auto align-self-middle">
+                <span id="${res.arrayOtNumber[y]}" class="badge rounded-pill bg-dark text-white">${res.arrayOtNumber[y]}</span>
+                <input type="hidden" name="otNumberHidden${y}" value="${res.arrayOtNumber[y]}">
+            </div>
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${res.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <select id="procesoR14${res.arrayOtNumber[y]}" name="procesoR14${y}" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="aprobadoR14${res.arrayOtNumber[y]}" name="aprobadoR14${y}" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formR14Values" action="/api/proyectos/otInfoR14" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto">
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="procesoR14"><strong>Proceso</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="aprobado"><strong>Aprobado PM</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                    <hr>
+                    <input type="hidden" name="projectIdHidden" value="${projectNumberId}">
+                    <input type="hidden" name="clientIdHidden" value="${clientId.value}">
+                    <input type="hidden" name="ociNumberK" value="${i}"> 
+                    <input type="hidden" name="otQuantity" value="${arrayBloque.length}">
+                </fieldset>
+            </form>
+    `
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+    
+    Swal.fire({
+        title: 'R-14',
+        html: html,
+        width: 500,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        //showConfirmButton: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+        // showLoaderOnConfirm: true,
+        // preConfirm: () => {
+        //     var arrayInputs = []
+        //     for (let y=0; y < res.lastChild; y++) {
+        //         arrayInputs.push(
+        //             document.getElementById(`${res.arrayOtNumber[y]}`).innerText,
+        //             document.getElementById(`procesoR14${res.arrayOtNumber[y]}`).value,
+        //             document.getElementById(`aprobadoR14${res.arrayOtNumber[y]}`).value
+        //         )
+        //     }
+        //     return arrayInputs
+        // }        
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log('clientId....', clientId)
+            const sarasa = document.getElementById('formR14Values')
+            sarasa.submit()
+            Toast.fire({
+                icon: 'success',
+                title: `Información de OT ${res.arrayOtNumber.join(" - ")} agregada con éxito!`
+            })
+        } else {
+            Swal.fire(
+                'Info R14 no agregada!',
+                `La información no fue agregada a las OTs# ${res.arrayOtNumber.join(" - ")}!`,
+                'warning'
+            )
+            return false
+        }
+    })
+}
+
+function addDatoToProceso3d(i) {
+    let resultado = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < resultado.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto">
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <select id="proceso" name="proceso" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <input type="number" id="hsProceso" name="hsProceso" class="form-control" min="0" max="9999" required>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formProceso3dValues" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto">
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="proceso"><strong>Proceso 3D</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="hsProceso"><strong>Hs. Proceso 3D</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                </fieldset>
+            </form>
+    `
+
+    Swal.fire({
+        title: 'Proceso 3D',
+        html: html,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
+            Swal.fire(`Seleccionaste: `)
+        }
+    })
+}
+
+function addDatoToDiseno(i) {
+    let resultado = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < resultado.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto justify-content-center">
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <input type="number" id="avDiseno" name="avDiseno" class="form-control" min="0" max="100" required>
+            </div>
+            <div class="col my-auto">
+                <input type="number" id="primerRev50" name="primerRev50" class="form-control" min="-1" max="100" required>
+            </div>
+            <div class="col my-auto">
+                <input type="number" id="segundaRev80" name="segundaRev80" class="form-control" min="0" max="100" required>
+            </div>
+            <div class="col my-auto">
+                <select id="envCliente" name="envCliente" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="revCliente" name="revCliente" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="ldmProv" name="ldmProv" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <input type="number" id="rev100" name="rev100" class="form-control" min="0" max="100" required>
+            </div>
+            <div class="col my-auto">
+                <select id="aprobCliente" name="aprobCliente" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formDisenoValues" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto justify-content-center">
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="avDiseno"><strong>Av. Diseño</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="primerRev50"><strong>1° Rev 50%</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="segundaRev80"><strong>2° Rev 80%</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="envCliente"><strong>Env. Cliente</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="revCliente"><strong>Rev. Cliente</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="ldmProv"><strong>LDM Prov.</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="rev100"><strong>Rev. 100%</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="aprobCliente"><strong>Aprob. Cliente</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                </fieldset>
+            </form>
+    `
+
+    Swal.fire({
+        title: 'Diseño',
+        html: html,
+        width: 1425,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
+            Swal.fire(`Seleccionaste: `)
+        }
+    })
+}
+
+function addDatoToInfo80(i) {
+    let resultado = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < resultado.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto justify-content-center">
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <select id="ldmAvanCG" name="ldmAvanCG" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="ldmAvanT" name="ldmAvanT" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+                </div>
+            <div class="col my-auto">
+                <select id="ldm80" name="ldm80" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>    
+            </div>
+            <div class="col my-auto">
+                <select id="infoModelo" name="infoModelo" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formInfo80Values" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto justify-content-center">
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="ldmAvanCG"><strong>LDM Avan. (Cil/Guia)</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="ldmAvanT"><strong>LDM Avan. (Tacos D2)</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="ldm80"><strong>LDM 80%</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="infoModelo"><strong>Info Modelo</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                </fieldset>
+            </form>
+    `
+
+    Swal.fire({
+        title: 'Info 80%',
+        html: html,
+        width: 700,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
+            Swal.fire(`Seleccionaste: `)
+        }
+    })
+}
+
+function addDatoToInfo100(i) {
+    let resultado = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < resultado.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto">
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <select id="ldm100" name="ldm100" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="info100" name="info100" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formInfo100Values" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto">
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="ldm100"><strong>LDM 100%</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="info100"><strong>Info 100%</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                </fieldset>
+            </form>
+    `
+
+    Swal.fire({
+        title: 'Info 100%',
+        html: html,
+        width: 500,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
+            Swal.fire(`Seleccionaste: `)
+        }
+    })
+}
+
+function addDatoToS0(i) {
+    let resultado = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < resultado.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto">
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <select id="sim0" name="sim0" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="docuS0" name="docuS0" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formS0Values" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto">
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="sim0"><strong>Simulación</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="docuS0"><strong>Documentación</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                </fieldset>
+            </form>
+    `
+
+    Swal.fire({
+        title: 'Simulación - S0',
+        html: html,
+        width: 500,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
+            Swal.fire(`Seleccionaste: `)
+        }
+    })
+}
+
+function addDatoToS1(i) {
+    let resultado = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < resultado.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto">
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <select id="sim1" name="sim1" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="video" name="video" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="informe" name="informe" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="ppt" name="ppt" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="s1pOp20" name="s1pOp20" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formS1Values" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto">
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="sim1"><strong>Simulación</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="video">
+                                <strong>Video <i class="fa-solid fa-video"></i>
+                                </strong>
+                            </label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="informe"><strong>Informe</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="ppt"><strong>PPT</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="s1pOp20"><strong>S1 p/Op20</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                </fieldset>
+            </form>
+    `
+
+    Swal.fire({
+        title: 'Simulación - S1',
+        html: html,
+        width: 950,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
+            Swal.fire(`Seleccionaste: `)
+        }
+    })
+}
+
+function addDatoToS23(i) {
+    let resultado = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < resultado.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto">
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <select id="sim2" name="sim2" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="reporte" name="reporte" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="dfnProdismo" name="dfnProdismo" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col-1 my-auto">
+            </div>
+            <div class="col my-auto">
+                <select id="sim3" name="sim3" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formS23Values" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto">
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="sim2"><strong>Simulación S2</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="reporte"><strong>Reporte</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="dfnProdismo"><strong>DFN Prodismo</strong></label>
+                        </div>
+                        <div class="col-1 my-auto">
+                        </div>
+                        <div class="col my-auto">
+                            <label for="sim3"><strong>Simulación S3</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                </fieldset>
+            </form>
+    `
+
+    Swal.fire({
+        title: 'Simulación - S2/3',
+        html: html,
+        width: 830,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
+            Swal.fire(`Seleccionaste: `)
+        }
+    })
+}
+
+function addDatoToS4(i) {
+    let resultado = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < resultado.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto">
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-1 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <select id="matEnsayo" name="matEnsayo" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="masMenos10" name="masMenos10" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="mpAlternativo" name="mpAlternativo" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="reuSim" name="reuSim" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="informe" name="informe" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="gc1" name="gc1" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="gc2" name="gc2" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col-1 my-auto">
+                <input type="number" id="hsSim" name="hsSim" class="form-control" min="0" max="9999" required>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formS4Values" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto">
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-1 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="matEnsayo"><strong>Mat. Ensayado</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="masMenos10"><strong><i class="fa-solid fa-plus-minus"></i>10%</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="mpAlternativo"><strong><i class="fa-solid fa-shapes"></i> MP</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="reuSim"><strong>Reunión Simulación</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="informe"><strong>Informe</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="gc1"><strong>Geometría Copiado #1</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="gc2"><strong>Geometría Copiado #2</strong></label>
+                        </div>
+                        <div class="col-1 my-auto">
+                            <label for="hsSim"><strong>Hs. Simulación</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                </fieldset>
+            </form>
+    `
+
+    Swal.fire({
+        title: 'Simulación - S4',
+        html: html,
+        width: 1425,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
+            Swal.fire(`Seleccionaste: `)
+        }
+    })
+}
+
+function addDatoToS5(i) {
+    let resultado = getOtList(i)
+
+    var arrayBloque = []
+    for (let y=0; y < resultado.lastChild; y++) {
+        arrayBloque.push(`
+        <div class="row my-1 mx-auto">
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+            </div>
+            <div class="col my-auto">
+                <select id="grillado" name="grillado" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="si">SI</option>
+                    <option value="no">NO</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+            <div class="col my-auto">
+                <select id="mpEnsayada" name="mpEnsayada" class="form-select" required>
+                    <option selected disabled value="">Seleccione...</option>
+                    <option value="ok">OK</option>
+                    <option value="noOk">No OK</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="noAplica">N/A</option>
+                </select>
+            </div>
+        </div>    
+        `)
+    }
+
+    const html = `
+            <form id="formS5Values" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+                <fieldset>
+                    <div class="row my-1 mx-auto">
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT#</strong></label>
+                        </div>
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="opNumber"><strong>OP#</strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="grillado"><strong>Grillado <i class="fa-solid fa-table-cells fa-lg"></i></strong></label>
+                        </div>
+                        <div class="col my-auto">
+                            <label for="mpEnsayada"><strong>MP Ensayada</strong></label>
+                        </div>
+                    </div>
+                    <hr>
+                        ${arrayBloque}
+                </fieldset>
+            </form>
+    `
+
+    Swal.fire({
+        title: 'Simulación - S5',
+        html: html,
+        width: 500,
+        //background: "#aaaaaa",
+        allowOutsideClick: false,
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
+            Swal.fire(`Seleccionaste: `)
+        }
+    })
+}
+
+const arrTables = []
+for (let i = 0; i<5; i++) {
+    if (document.getElementById(`tablaGeneral${i}`)) {
+        arrTables.push(i)
+    }
+}
+
+if(arrTables !=[]) {
+    let allButtonsR14 = document.querySelectorAll('button[name="btnR14"]')
+    let allButtonsProceso3d = document.querySelectorAll('button[name="btnProceso3d"]')
+    let allButtonsDiseno = document.querySelectorAll('button[name="btnDiseno"]')
+    let allButtonsInfo80 = document.querySelectorAll('button[name="btnInfo80"]')
+    let allButtonsInfo100 = document.querySelectorAll('button[name="btnInfo100"]')
+    let allButtonsS0 = document.querySelectorAll('button[name="btnS0"]')
+    let allButtonsS1 = document.querySelectorAll('button[name="btnS1"]')
+    let allButtonsS23 = document.querySelectorAll('button[name="btnS23"]')
+    let allButtonsS4 = document.querySelectorAll('button[name="btnS4"]')
+    let allButtonsS5 = document.querySelectorAll('button[name="btnS5"]')
+    
+    allButtonsR14.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            event.preventDefault()
+            let kValue = event.target.value
+            addDatoToR14(kValue)
+    	})
+    })
+
+    allButtonsProceso3d.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            addDatoToProceso3d(kValue)
+    	})
+    })
+
+    allButtonsDiseno.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            addDatoToDiseno(kValue)
+    	})
+    })
+
+    allButtonsInfo80.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            addDatoToInfo80(kValue)
+    	})
+    })
+
+    allButtonsInfo100.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            addDatoToInfo100(kValue)
+    	})
+    })
+
+    allButtonsS0.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            addDatoToS0(kValue)
+    	})
+    })
+
+    allButtonsS1.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            addDatoToS1(kValue)
+    	})
+    })
+
+    allButtonsS23.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            addDatoToS23(kValue)
+    	})
+    })
+
+    allButtonsS4.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            addDatoToS4(kValue)
+    	})
+    })
+
+    allButtonsS5.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            addDatoToS5(kValue)
+    	})
+    })
+}

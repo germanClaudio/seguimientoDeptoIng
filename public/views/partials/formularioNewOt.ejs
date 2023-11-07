@@ -12,10 +12,10 @@
                             <% let j=0;
                             if (proyecto.length> 0) {
                                 for ( let m = 0; proyecto.length > m; m++) { %>
-                                    <input class="form-control" type="text" name="projectIdHidden" id="projectIdHidden"
-                                        value="<%= proyecto[m]._id %>" hidden>
-                                    <input class="form-control" type="text" name="projectNameHidden" id="projectNameHidden"
-                                        value="<%= proyecto[0].project[0].projectName %>" hidden>
+                                    <input class="form-control" type="hidden" name="projectIdHidden" id="projectIdHidden"
+                                        value="<%= proyecto[m]._id %>">
+                                    <input class="form-control" type="hidden" name="projectNameHidden" id="projectNameHidden"
+                                        value="<%= proyecto[0].project[0].projectName %>">
                                     <% if (proyecto[m].project[j].oci.length> 1) {
                                         for ( let k = 0; proyecto[m].project[j].oci.length > k; k++) { %>
                                             <div class="form-check form-check-inline">
@@ -26,8 +26,8 @@
                                                     value="<%= proyecto[m].project[j].oci[k].ociNumber %>" required>
                                             </div>        
                                         <% } %>
-                                            <input class="form-input" type="text" name="ociNumberK" id="ociNumberK" value="" hidden>
-                                            <input class="form-input" type="text" name="ociNumberHidden" id="ociNumberHidden" value="" hidden>    
+                                            <input class="form-input" type="hidden" name="ociNumberK" id="ociNumberK" value="">
+                                            <input class="form-input" type="hidden" name="ociNumberHidden" id="ociNumberHidden" value="">    
                                     <%} else { %>
                                             <div class="form-check form-check-inline">
                                                 <label class="form-check-label"
@@ -36,14 +36,12 @@
                                                 <input class="form-check-input" type="radio" name="ociNumber"
                                                     id="<%= proyecto[m].project[j].oci[0].ociNumber %>"
                                                     value="<%= proyecto[m].project[j].oci[0].ociNumber %>" checked>
-                                                <input class="form-input" type="text" name="ociNumberId"
-                                                    id="ociNumberId0" value="<%=proyecto[m].project[j].oci[0]._id %>"
-                                                    hidden>
-                                                <input class="form-input" type="text" name="ociNumberK" id="ociNumberK"
-                                                    value="0" hidden>
-                                                <input class="form-input" type="text" name="ociNumberHidden"
-                                                    id="ociNumberHidden"
-                                                    value="<%= proyecto[m].project[j].oci[0].ociNumber %>" hidden>
+                                                <input class="form-input" type="hidden" name="ociNumberId"
+                                                    id="ociNumberId0" value="<%=proyecto[m].project[j].oci[0]._id %>">
+                                                <input class="form-input" type="hidden" name="ociNumberK" id="ociNumberK"
+                                                    value="0">
+                                                <input class="form-input" type="hidden" name="ociNumberHidden" id="ociNumberHidden"
+                                                    value="<%= proyecto[m].project[j].oci[0].ociNumber %>">
                                             </div>
                                     <% }
                                 }
@@ -137,9 +135,9 @@
                     </div>
                     <hr>
                     <% if (proyecto.length> 0) { %>
-                        <input type="text" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>" hidden>
-                        <input type="text" name="clientIdHidden" id="clientIdHidden" class="form-control" value="<%= proyecto[0].client[0]._id %>" hidden>
-                        <input type="number" name="otQuantity" id="otQuantity" class="form-control" value="1" hidden>
+                        <input type="hidden" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>" hidden>
+                        <input type="hidden" name="clientIdHidden" id="clientIdHidden" class="form-control" value="<%= proyecto[0].client[0]._id %>" hidden>
+                        <input type="hidden" name="otQuantity" id="otQuantity" class="form-control" value="1" hidden>
                         <br>
                     <% } %>
                         <div class="d-flex justify-content-center my-2">
