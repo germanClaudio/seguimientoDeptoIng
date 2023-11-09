@@ -311,100 +311,84 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
     // Add Info R14 to Ot's ----------------
     async addInfoR14ToOtProject(idProjectTarget, otQuantity, ociNumberK, infoAddedToOt) {
-        console.log('infoAddedToOt.. ',infoAddedToOt)
+        //console.log('infoAddedToOt.. ',infoAddedToOt)
+        const ociKNumber = parseInt(ociNumberK) || 0
+        const quantityOt = parseInt(otQuantity)
         if (idProjectTarget) {
-            // try {
-            //     const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget})
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget})
                                 
-            //     if (itemMongoDB) {
-            //         const ociKNumber = parseInt(ociNumberK) || 0
-            //         const QuantityOt = parseInt(otQuantity)
+                if (itemMongoDB) {
+                    let arrayQuantity = []
+                    //let arrayStructureTree = []
                     
-            //         switch (ociKNumber) {
-            //             case 4 : {
-            //                 var infoAddedToOt = await Proyectos.updateOne(
-            //                     { _id: itemMongoDB._id },
-            //                     {
-            //                         $push: {
-            //                             'project.0.oci.4.otProject' : infoAddedToOt
-            //                         }
-            //                     },
-            //                     { new: true }
-            //                 )
-            //                 break;
-            //             }
-            //             case 3: {
-            //                 var otAddedToOci = await Proyectos.updateOne(
-            //                     { _id: itemMongoDB._id },
-            //                     {
-            //                         $push: {
-            //                             'project.0.oci.3.otProject':
-            //                             infoOt
-            //                         }
-            //                     },
-            //                     { new: true }
-            //                 )
-            //                 break;
-            //             }
-            //             case 2: {
-            //                 var otAddedToOci = await Proyectos.updateOne(
-            //                     { _id: itemMongoDB._id },
-            //                     {
-            //                         $push: {
-            //                             'project.0.oci.2.otProject':
-            //                             infoOt
-            //                         }
-            //                     },
-            //                     { new: true }
-            //                 )
-            //                 break;
-            //             }
-            //             case 1 : {
-            //                 var otAddedToOci = await Proyectos.updateOne(
-            //                     { _id: itemMongoDB._id },
-            //                     {
-            //                         $push: {
-            //                             'project.0.oci.1.otProject':
-            //                             infoOt
-            //                         }
-            //                     },
-            //                     { new: true }
-            //                 )
-            //                 break;
-            //             }
-            //             default : {
-            //                 var otAddedToOci = await Proyectos.updateOne(
-            //                     { _id: itemMongoDB._id },
-            //                     {
-            //                         $push: {
-            //                             'project.0.oci.0.otProject':
-            //                             infoOt
-            //                         }
-            //                     },
-            //                     { new: true }
-            //                 )
-            //                 break;
-            //             }
-            //         }
+                    for(let i=0; i < quantityOt; i++) {
+                        // let estructuraACrear = {
+                        //     [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation`]:
+                        //         {
+                        //             otInfoR14: []
+                        //         }
+                        // }
+                        // arrayStructureTree.push(estructuraACrear)
 
-            //         logger.info('Ot agregada a OCI ', otAddedToOci)
+                        let updateQuery = {
+                            [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation.0.otInfoR14`]:
+                                {
+                                    procesoR14: infoAddedToOt[i].procesoR14,
+                                    aprobadoR14: infoAddedToOt[i].aprobadoR14
+                                }
+                        }
+                        arrayQuantity.push(updateQuery)
+                    }
+                    console.log('arrayQuantity--- ',arrayQuantity)
+
+                    let estructuraACrear = {
+                            [`project.0.oci.0.otProject.0.otInformation`]:
+                                {
+                                    otInfoR14: []
+                                }
+                        }
+                    console.log('structureTree--- ',estructuraACrear)
                     
-            //         if (otAddedToOci.acknowledged) {
-            //             const itemUpdated = await Proyectos.findById({_id: idProjectTarget})
-            //             return itemUpdated
-            //         } else {
-            //             return new Error (`No se actualizó el item: ${itemMongoDB._id}`)
-            //         }
+                    const treeInfoOtAddedToOt = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        { 
+                            $set: estructuraACrear //arrayStructureTree
+                        },
+                        { upsert: true }
+                    )
+                    console.log('Estructura arbol creada: ', treeInfoOtAddedToOt)
+                    
+                    if(treeInfoOtAddedToOt.acknowledged){
+                        const infoOtAddedToOt = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            { 
+                                $push: arrayQuantity[0]
+                            },
+                            { new: true }
+                            )
+                            
+                            console.log('Ot agregada a OCI: ', infoOtAddedToOt)
+                            
+                            if (infoOtAddedToOt.acknowledged) {
+                                const itemUpdated = await Proyectos.findById({_id: idProjectTarget})
+                                return itemUpdated
+                            } else {
+                                return new Error (`No se agregó la info de OT en el item: ${itemMongoDB._id}`)
+                            }
+                } else {
+                    return new Error (`No se creo la estructura del arbol correctamente!`)
+                }
 
-            //     } else {
-            //         logger.error(`No se encontró la OCI: ${numberOci}`)
-            //         return new Error (`No se encontró la OCI: ${numberOci}`)
-            //     }
-            // } catch (error) {
-            //     logger.error("Error MongoDB adding OT to a OCI: ",error)
-            // }
+                } else {
+                    return new Error (`No se encontró el Proyecto id#`)
+                }
+            } catch (error) {
+                logger.error("Error MongoDB adding info R14 to OT: ", error)
+            }
+
         } else {
-            return new Error (`No se pudo agregar la OT a la OCI del Proyecto!`)
+            return new Error (`No se pudo agregar la info a la OT del Proyecto!`)
         }
     }
 

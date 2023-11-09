@@ -117,14 +117,29 @@ function removeRow(e) {
 }
 
 function messageNewProject(projectName) {
-    Swal.fire({
-        position: 'center',
-        timer: 3500,
-        text: `El proyecto ${projectName} se creó exitosamente!`,
-        icon: 'success',
-        showCancelButton: false,
-        showConfirmButton: false,
-    })
+    const subtimFormNewProject = document.getElementById('formNewOt').submit()
+    
+    if(subtimFormNewProject){
+        Swal.fire({
+            position: 'center',
+            timer: 3500,
+            text: `El proyecto ${projectName} se creó exitosamente!`,
+            icon: 'success',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `El proyecto ${projectName} no se creó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
 }
 
 const btnCreate = document.getElementById('btnNewProject')

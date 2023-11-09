@@ -665,7 +665,7 @@ function messageNewOt(ociNumber, otArray) {
         Swal.fire({
             title: 'Ingreso de datos!',
             position: 'center',
-            text: `Se agregaran las OT's ${otArray.join(" - ")} a la OCI# ${ociNumber}`,
+            text: `Se agregarán las OT's ${otArray.join(" - ")} a la OCI# ${ociNumber}`,
             icon: 'info',
             showCancelButton: true,
             showConfirmButton: true,
@@ -752,6 +752,7 @@ btnCreate.addEventListener('click', (event) => {
     messageNewOt(ociSeleccionada, otArray)
 })
 
+//---------- Obtiene la lista de OT ------------
 function getOtList(i) {
     const parentDiv = document.getElementById(`tablaGeneral${i}`)
     let tableBody = parentDiv.lastElementChild

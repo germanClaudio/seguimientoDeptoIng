@@ -1019,10 +1019,10 @@ class ProjectsController {
     }
 
     addInfoR14ToOtProject = async (req, res) => {
-        console.log('reqBody: ', req.body)
+        //console.log('reqBody: ', req.body)
         const clientId = req.body.clientIdHidden
         const cliente = await this.clients.selectClientById(clientId)
-        
+        //console.log('Cliente: ', cliente)
         const ociNumberK = req.body.ociNumberK
         const projectId = req.body.projectIdHidden
         const otQuantity = parseInt(req.body.otQuantity)
@@ -1212,7 +1212,7 @@ class ProjectsController {
         )
 
         try {
-            if (!proyecto) return res.status(404).json({ msg: 'OCI u OT no encontrada' })
+            if (!proyecto) return res.status(404).json({ msg: 'Proyecto, OCI u OT no encontrada' })
             res.render('projectSelectedDetail', {
                 proyecto,
                 username,
@@ -1223,7 +1223,7 @@ class ProjectsController {
         } catch (error) {
             res.status(500).json({
                 status: false,
-                msg: 'controllerError - Adding OT to OCI Proyect',
+                msg: 'ControllerError - Adding OT to OCI Proyect',
                 error: error
             })
         }
