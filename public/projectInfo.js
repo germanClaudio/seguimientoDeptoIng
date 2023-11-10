@@ -665,7 +665,7 @@ function messageNewOt(ociNumber, otArray) {
         Swal.fire({
             title: 'Ingreso de datos!',
             position: 'center',
-            text: `Se agregarán las OT's ${otArray.join(" - ")} a la OCI# ${ociNumber}`,
+            text: `Se agregarán las OT's ${otArray.join(" - ")}, a la OCI# ${ociNumber}`,
             icon: 'info',
             showCancelButton: true,
             showConfirmButton: true,
@@ -674,12 +674,12 @@ function messageNewOt(ociNumber, otArray) {
                 document.getElementById('formNewOt').submit()
                 Toast.fire({
                     icon: 'success',
-                    title: `OT's ${otArray.join(" - ")} agregadas con éxito!`
+                    title: `OT's ${otArray.join(" - ")}, agregadas con éxito!`
                 })
             } else {
                 Swal.fire(
                     'OTs no agregadas!',
-                    `Las OT's ${otArray.join(" - ")} no fueron agregadas a la OCI# ${ociNumber}`,
+                    `Las OT's ${otArray.join(" - ")}, no fueron agregadas a la OCI# ${ociNumber}`,
                     'warning'
                 )
                 return false
@@ -690,7 +690,7 @@ function messageNewOt(ociNumber, otArray) {
         Swal.fire({
             title: 'Ingreso de datos!',
             position: 'center',
-            text: `Se agregará la OT ${otArray} a la OCI# ${ociNumber}`,
+            text: `Se agregará la OT ${otArray}, a la OCI# ${ociNumber}`,
             icon: 'info',
             showCancelButton: true,
             showConfirmButton: true,
@@ -699,12 +699,12 @@ function messageNewOt(ociNumber, otArray) {
                 document.getElementById('formNewOt').submit()
                 Toast.fire({
                     icon: 'success',
-                    title: `OT ${otArray.join(" - ")} agregada con éxito!`
+                    title: `OT ${otArray.join(" - ")}, agregada con éxito!`
                 })
             } else {
                 Swal.fire(
                     'OT no agregada!',
-                    `La OT ${otArray} no fue agregada a la OCI# ${ociNumber}`,
+                    `La OT ${otArray}, no fue agregada a la OCI# ${ociNumber}`,
                     'warning'
                 )
                 return false
@@ -759,16 +759,19 @@ function getOtList(i) {
     const lastChild = parseInt(tableBody.childElementCount)
 
     let k = i
-    let arrayOtNumber = [], arrayOpNumber = []
+    let arrayOtNumber = [], arrayOpNumber = [], arrayOtStatus = []
     for (let n=0; n < lastChild; n++) {
         const otNumber = document.getElementById(`lastOtNumber${k}_${n}`).innerText
         const opNumber = document.getElementById(`lastOpNumber${k}_${n}`).innerText
+        const otStatus = document.getElementById(`lastOtStatus${k}_${n}`).innerText
         arrayOtNumber.push(otNumber)
         arrayOpNumber.push(opNumber)
+        arrayOtStatus.push(otStatus)
     }
     return {
         arrayOtNumber,
         arrayOpNumber,
+        arrayOtStatus,
         lastChild
     }
 }
@@ -778,8 +781,20 @@ function addDatoToR14(i) {
 
     var arrayBloque = []
     for (let y=0; y < res.lastChild; y++) {
+        let color = ''
+        let disabled = 'required'
+        if (res.arrayOtStatus[y]==='Activo') {
+            color = 'success'
+        } else {
+            color = 'danger'
+            disabled = 'disabled'
+        }
         arrayBloque.push(`
         <div class="row my-1 mx-auto">
+            <div class="col-2 my-auto align-self-middle">
+                <span id="${res.arrayOtStatus[y]}" class="badge rounded-pill bg-${color} text-white">${res.arrayOtStatus[y]}</span>
+                <input type="hidden" name="otStatusHidden${y}" value="${res.arrayOtStatus[y]}">
+            </div>
             <div class="col-2 my-auto align-self-middle">
                 <span id="${res.arrayOtNumber[y]}" class="badge rounded-pill bg-dark text-white">${res.arrayOtNumber[y]}</span>
                 <input type="hidden" name="otNumberHidden${y}" value="${res.arrayOtNumber[y]}">
@@ -788,7 +803,7 @@ function addDatoToR14(i) {
                 <span class="badge rounded-pill bg-secondary text-white">${res.arrayOpNumber[y]}</span>
             </div>
             <div class="col my-auto">
-                <select id="procesoR14${res.arrayOtNumber[y]}" name="procesoR14${y}" class="form-select" required>
+                <select id="procesoR14${res.arrayOtNumber[y]}" name="procesoR14${y}" class="form-select" ${disabled}>
                     <option selected disabled value="">Seleccione...</option>
                     <option value="ok">OK</option>
                     <option value="noOk">No OK</option>
@@ -797,7 +812,7 @@ function addDatoToR14(i) {
                 </select>
             </div>
             <div class="col my-auto">
-                <select id="aprobadoR14${res.arrayOtNumber[y]}" name="aprobadoR14${y}" class="form-select" required>
+                <select id="aprobadoR14${res.arrayOtNumber[y]}" name="aprobadoR14${y}" class="form-select" ${disabled}>
                     <option selected disabled value="">Seleccione...</option>
                     <option value="ok">OK</option>
                     <option value="noOk">No OK</option>
@@ -813,6 +828,9 @@ function addDatoToR14(i) {
             <form id="formR14Values" action="/api/proyectos/otInfoR14" method="post" style="font-size: 10pt">
                 <fieldset>
                     <div class="row my-1 mx-auto">
+                        <div class="col-2 my-auto align-self-middle">
+                            <label for="otNumber"><strong>OT Status</strong></label>
+                        </div>
                         <div class="col-2 my-auto align-self-middle">
                             <label for="otNumber"><strong>OT#</strong></label>
                         </div>
@@ -848,7 +866,7 @@ function addDatoToR14(i) {
     Swal.fire({
         title: 'R-14',
         html: html,
-        width: 500,
+        width: 650,
         //background: "#aaaaaa",
         allowOutsideClick: false,
         //showConfirmButton: false,
@@ -870,7 +888,7 @@ function addDatoToR14(i) {
         // }        
     }).then((result) => {
         if (result.isConfirmed) {
-            console.log('clientId....', clientId)
+            // console.log('clientId....', clientId)
             const sarasa = document.getElementById('formR14Values')
             sarasa.submit()
             Toast.fire({

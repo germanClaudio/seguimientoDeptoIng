@@ -287,7 +287,7 @@ class ProjectsController {
             modifiedOn: ''
         }
 
-        const newProyecto = await this.projects.addProjectToClient(newProject)
+        await this.projects.addProjectToClient(newProject) //const newProyecto = 
         const proyectos = await this.projects.getProjectsByClientId(clientId)
 
         let username = res.locals.username
@@ -1046,180 +1046,217 @@ class ProjectsController {
 
         const now = formatDate(new Date())
 
-        switch (otQuantity) {
-            case 5: {
-                var infoAddedToOt = [{
-                    otNumber : parseInt(req.body.otNumberHidden0),
-                    procesoR14: req.body.procesoR140 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden1),
-                    procesoR14: req.body.procesoR141 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR141 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden2),
-                    procesoR14: req.body.procesoR142 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR142 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden3),
-                    procesoR14: req.body.procesoR143 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR143 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden4),
-                    procesoR14: req.body.procesoR144 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR144 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }]
-                break;
-            }
-            case 4: {
-                var infoAddedToOt = [{
-                    otNumber: parseInt(req.body.otNumberHidden0),
-                    procesoR14: req.body.procesoR140 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden1),
-                    procesoR14: req.body.procesoR141 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR141 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden2),
-                    procesoR14: req.body.procesoR142 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR142 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden3),
-                    procesoR14: req.body.procesoR143 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR143 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }]
-                break;
-            }
-            case 3: {
-                var infoAddedToOt = [{
-                    otNumber : parseInt(req.body.otNumberHidden0),
-                    procesoR14: req.body.procesoR140 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden1),
-                    procesoR14: req.body.procesoR141 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR141 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden2),
-                    procesoR14: req.body.procesoR142 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR142 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }]
-                break;
-            }
-            case 2: {
-                var infoAddedToOt = [{
-                    otNumber : parseInt(req.body.otNumberHidden0),
-                    procesoR14: req.body.procesoR140 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }, {
-                    otNumber : parseInt(req.body.otNumberHidden1),
-                    procesoR14: req.body.procesoR141 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR141 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }]
-                break;
-            }
-            default: {
-                var infoAddedToOt = [{
-                    otNumber : parseInt(req.body.otNumberHidden0),
-                    procesoR14: req.body.procesoR140 || "noAplica",
-                    aprobadoR14: req.body.aprobadoR140 || "noAplica",
-                    timestamp: now,
-                    creator: user,
-                    modificator: [],
-                    modifiedOn: "",
-
-                }]
-                break;
-            }
+        //------------------------------------
+        let arrayOtNumber=[], arrayOtStatus=[], arrayProcesoR14=[], arrayAprobadoR14=[]
+        for (const key in req.body) {
+            if (key.startsWith('otNumberHidden')) {
+                arrayOtNumber.push(req.body[key])
+            } else if (key.startsWith('otStatusHidden')) {
+                arrayOtStatus.push(req.body[key])
+            } else if (key.startsWith('procesoR14')) {
+                arrayProcesoR14.push(req.body[key])
+            } else if (key.startsWith('aprobadoR14')) {
+                arrayAprobadoR14.push(req.body[key])
+            } 
         }
+        // console.log('arrayOtNumber: ', arrayOtNumber,
+        //             'arrayOtStatus: ', arrayOtStatus,
+        //             'arrayProcesoR14: ', arrayProcesoR14,
+        //             'arrayAprobadoR14: ', arrayAprobadoR14
+        // )
+        //-----------------------------------
+
+        let arrayInfoAddedToOt = []
+        for (let i=0; i<otQuantity; i++ ) {
+            var infoAddedToOt = {
+                otStatus: arrayOtStatus[i],
+                otNumber: parseInt(arrayOtNumber[i]),
+                procesoR14: arrayProcesoR14[i] || "noAplica",
+                aprobadoR14: arrayAprobadoR14[i] || "noAplica",
+                timestamp: now,
+                creator: user,
+                modificator: [],
+                modifiedOn: "",
+            }
+            arrayInfoAddedToOt.push(infoAddedToOt)
+        }
+
+        // if it doesn't work properly, use the switch method ------------
+        // switch (otQuantity) {
+        //     case 5: {
+        //         var infoAddedToOt = [{
+        //             otNumber: parseInt(req.body.otNumberHidden0),
+        //             procesoR14: req.body.procesoR140 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden1),
+        //             procesoR14: req.body.procesoR141 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR141 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden2),
+        //             procesoR14: req.body.procesoR142 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR142 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden3),
+        //             procesoR14: req.body.procesoR143 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR143 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden4),
+        //             procesoR14: req.body.procesoR144 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR144 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }]
+        //         break;
+        //     }
+        //     case 4: {
+        //         var infoAddedToOt = [{
+        //             otNumber: parseInt(req.body.otNumberHidden0),
+        //             procesoR14: req.body.procesoR140 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden1),
+        //             procesoR14: req.body.procesoR141 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR141 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden2),
+        //             procesoR14: req.body.procesoR142 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR142 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden3),
+        //             procesoR14: req.body.procesoR143 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR143 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }]
+        //         break;
+        //     }
+        //     case 3: {
+        //         var infoAddedToOt = [{
+        //             otNumber: parseInt(req.body.otNumberHidden0),
+        //             procesoR14: req.body.procesoR140 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden1),
+        //             procesoR14: req.body.procesoR141 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR141 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden2),
+        //             procesoR14: req.body.procesoR142 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR142 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }]
+        //         break;
+        //     }
+        //     case 2: {
+        //         var infoAddedToOt = [{
+        //             otNumber: parseInt(req.body.otNumberHidden0),
+        //             procesoR14: req.body.procesoR140 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }, {
+        //             otNumber: parseInt(req.body.otNumberHidden1),
+        //             procesoR14: req.body.procesoR141 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR141 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+
+        //         }]
+        //         break;
+        //     }
+        //     default: {
+        //         var infoAddedToOt = [{
+        //             otNumber: parseInt(req.body.otNumberHidden0),
+        //             procesoR14: req.body.procesoR140 || "noAplica",
+        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
+        //             timestamp: now,
+        //             creator: user,
+        //             modificator: [],
+        //             modifiedOn: "",
+        //         }]
+        //         break;
+        //     }
+        // }
+        console.log('1- Controller_infoAddedToOt....', infoAddedToOt)
         
         const proyecto = await this.projects.addInfoR14ToOtProject(
             projectId,
             otQuantity,
             ociNumberK,
-            infoAddedToOt
+            arrayInfoAddedToOt
         )
 
         try {
             if (!proyecto) return res.status(404).json({ msg: 'Proyecto, OCI u OT no encontrada' })
-            res.render('projectSelectedDetail', {
-                proyecto,
+            res.render('projectsList', {
                 username,
                 userInfo,
                 expires,
-                cliente
+                cliente,
+                proyecto
             })
+
         } catch (error) {
             res.status(500).json({
                 status: false,

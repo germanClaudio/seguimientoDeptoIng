@@ -117,16 +117,38 @@ function removeRow(e) {
 }
 
 function messageNewProject(projectName) {
-    const subtimFormNewProject = document.getElementById('formNewOt').submit()
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
     
-    if(subtimFormNewProject){
+    if(projectName){
         Swal.fire({
+            title: 'Ingreso de Proyecto!',
             position: 'center',
-            timer: 3500,
-            text: `El proyecto ${projectName} se creó exitosamente!`,
-            icon: 'success',
-            showCancelButton: false,
-            showConfirmButton: false,
+            text: `Se creará el proyecto ${projectName}!`,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('formNewOt').submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `El proyecto ${projectName}, se creó con éxito!`
+                })
+            } else {
+                Swal.fire(
+                    'Proyecto no creado!',
+                    `El proyecto ${projectName}, no se creó correctamente!`,
+                    'warning'
+                )
+                return false
+            }
         })
 
     } else {
