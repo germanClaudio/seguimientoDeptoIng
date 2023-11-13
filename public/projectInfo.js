@@ -776,8 +776,28 @@ function getOtList(i) {
     }
 }
 
+function getOtListValues(i) {
+    const parentDiv = document.getElementById(`tablaR14${i}`)
+    let tableBody = parentDiv.lastElementChild
+    const lastChild = parseInt(tableBody.childElementCount)
+
+    let k = i
+    let arrayProcesoR14 = [], arrayAprobadoR14 = []
+    for (let n=0; n < lastChild; n++) {
+        const otProcesoR14 = document.getElementById(`resProcesoR14${k}_${n}`).innerText
+        const otAprobadoR14 = document.getElementById(`resAprobadoR14${k}_${n}`).innerText
+        arrayProcesoR14.push(otProcesoR14)
+        arrayAprobadoR14.push(otAprobadoR14)
+    }
+    return {
+        arrayProcesoR14,
+        arrayAprobadoR14
+    }
+}
+
 function addDatoToR14(i) {
     let res = getOtList(i)
+    let getValues = getOtListValues(i)
 
     var arrayBloque = []
     for (let y=0; y < res.lastChild; y++) {
@@ -789,6 +809,102 @@ function addDatoToR14(i) {
             color = 'danger'
             disabled = 'disabled'
         }
+
+        let valorProcesoR14 = ''
+
+        const optionOk = (`
+            <option value="noOk">No OK</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="noAplica">N/A</option>
+        `)
+
+        const optionNoOk = (`
+            <option value="ok">OK</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="noAplica">N/A</option>
+        `)
+
+        const optionPendiente = (`
+            <option value="ok">OK</option>
+            <option value="noOk">No OK</option>
+            <option value="noAplica">N/A</option>
+        `)
+
+        const optionNoAplica = (`
+            <option value="ok">OK</option>
+            <option value="noOk">No OK</option>
+            <option value="pendiente">Pendiente</option>
+        `)
+
+        const optionDefault = (`
+            <option value="ok">OK</option>
+            <option value="noOk">No OK</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="noAplica">N/A</option>
+        `)
+
+        let optionDefinedProcesoR14 = ''
+
+        switch (getValues.arrayProcesoR14[y]) {
+            case 'OK': {
+                valorProcesoR14 = 'ok'
+                optionDefinedProcesoR14 = optionOk
+            break;
+            }
+            case 'No OK': {
+                valorProcesoR14 = 'noOk'
+                optionDefinedProcesoR14 = optionNoOk
+            break;
+            }
+            case 'Pendiente': {
+                valorProcesoR14 = 'pendiente'
+                optionDefinedProcesoR14 = optionPendiente
+            break;
+            }
+            case 'N/A': {
+                valorProcesoR14 = 'noAplica'
+                optionDefinedProcesoR14 = optionNoAplica
+            break;
+            }
+            default: {
+                valorProcesoR14 = 'SinDato'
+                optionDefinedProcesoR14 = optionDefault
+            break;
+            }
+        }
+
+        let valorAprobadoR14 = ''
+        let optionDefinedAprobadoR14 = ''
+
+        switch (getValues.arrayAprobadoR14[y]) {
+            case 'OK': {
+                valorAprobadoR14 = 'ok'
+                optionDefinedAprobadoR14 = optionOk
+            break;
+            }
+            case 'No OK': {
+                valorAprobadoR14 = 'noOk'
+                optionDefinedAprobadoR14 = optionNoOk
+            break;
+            }
+            case 'Pendiente': {
+                valorAprobadoR14 = 'pendiente'
+                optionDefinedAprobadoR14 = optionPendiente
+            break;
+            }
+            case 'N/A': {
+                valorAprobadoR14 = 'noAplica'
+                optionDefinedAprobadoR14 = optionNoAplica
+            break;
+            }
+            default: {
+                valorProcesoR14 = 'SinDato'
+                optionDefinedAprobadoR14 = optionDefault
+            break;
+            }
+        }
+
+
         arrayBloque.push(`
         <div class="row my-1 mx-auto">
             <div class="col-2 my-auto align-self-middle">
@@ -804,20 +920,14 @@ function addDatoToR14(i) {
             </div>
             <div class="col my-auto">
                 <select id="procesoR14${res.arrayOtNumber[y]}" name="procesoR14${y}" class="form-select" ${disabled}>
-                    <option selected disabled value="">Seleccione...</option>
-                    <option value="ok">OK</option>
-                    <option value="noOk">No OK</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="noAplica">N/A</option>
+                    <option selected disabled value="${valorProcesoR14}">${getValues.arrayProcesoR14[y]}</option>
+                    ${optionDefinedProcesoR14}
                 </select>
             </div>
             <div class="col my-auto">
                 <select id="aprobadoR14${res.arrayOtNumber[y]}" name="aprobadoR14${y}" class="form-select" ${disabled}>
-                    <option selected disabled value="">Seleccione...</option>
-                    <option value="ok">OK</option>
-                    <option value="noOk">No OK</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="noAplica">N/A</option>
+                    <option selected disabled value="${valorAprobadoR14}">${getValues.arrayAprobadoR14[y]}</option>
+                    ${optionDefinedAprobadoR14}
                 </select>
             </div>
         </div>    

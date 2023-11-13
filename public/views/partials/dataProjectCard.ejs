@@ -335,7 +335,7 @@
                                                                                             name="btnR14"
                                                                                             class="btn btn-small btn-success m-1"
                                                                                             style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
-                                                                                            title="Agregar Datos"
+                                                                                            title="Agregar/Modificar Datos"
                                                                                             value="<%=k%>">
                                                                                             <i class="fa-solid fa-pencil fa-lg"
                                                                                                 aria-hidden="true"></i>                                                    
@@ -365,27 +365,27 @@
                                                                                                  
                                                                                             switch (resProcesoR14) { 
                                                                                                 case "ok": { %>
-                                                                                                        <span class="badge rounded-pill bg-success text-white my-2" >
+                                                                                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2" >
                                                                                                             OK
                                                                                                         </span>
                                                                                                 <% break; }        
                                                                                                 case "noOk": { %>
-                                                                                                        <span class="badge rounded-pill bg-danger text-white my-2">
+                                                                                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
                                                                                                             No OK
                                                                                                         </span>
                                                                                                 <% break; }        
                                                                                                 case "pendiente": { %>
-                                                                                                        <span class="badge rounded-pill bg-warning text-dark my-2">
+                                                                                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
                                                                                                             Pendiente
                                                                                                         </span>
                                                                                                 <% break; }
                                                                                                 case "noAplica": { %>
-                                                                                                        <span class="badge rounded-pill bg-secondary text-white my-2">
+                                                                                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-white my-2">
                                                                                                             N/A
                                                                                                         </span>
                                                                                                 <% break; }
                                                                                                 default: { %>
-                                                                                                        <span class="badge rounded-pill bg-info text-dark my-2">
+                                                                                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
                                                                                                             S/D
                                                                                                         </span>
                                                                                                 <% break; }
@@ -400,27 +400,27 @@
 
                                                                                             switch (resAprobadoR14) { 
                                                                                                 case "ok": { %>
-                                                                                                    <span class="badge rounded-pill bg-warning text-white my-2">
+                                                                                                    <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2">
                                                                                                         OK
                                                                                                     </span>
                                                                                                 <% break; }        
                                                                                                 case "noOk": { %>
-                                                                                                        <span class="badge rounded-pill bg-danger text-white my-2">
+                                                                                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
                                                                                                             No OK
                                                                                                         </span>
                                                                                                 <% break; }        
                                                                                                 case "pendiente": { %>
-                                                                                                        <span class="badge rounded-pill bg-warning text-dark my-2">
+                                                                                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
                                                                                                             Pendiente
                                                                                                         </span>
                                                                                                 <% break; }
                                                                                                 case "noAplica": { %>
-                                                                                                        <span class="badge rounded-pill bg-secondary text-withe my-2">
+                                                                                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-withe my-2">
                                                                                                             N/A
                                                                                                         </span>
                                                                                                 <% break; }
                                                                                                 default: { %>
-                                                                                                        <span class="badge rounded-pill bg-info text-dark my-2">
+                                                                                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
                                                                                                             S/D
                                                                                                         </span>
                                                                                                 <% break; }

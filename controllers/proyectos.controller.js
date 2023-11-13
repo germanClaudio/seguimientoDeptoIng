@@ -152,105 +152,128 @@ class ProjectsController {
         const userId = req.body.idHidden
         const user = await this.users.getUserById(userId)
 
-        const flagStatusProject = req.body.statusProject == 'on' ? true : false
+        // const flagStatusProject = req.body.statusProject == 'on' ? true : false
 
         const ociQuantity = parseInt(req.body.ociQuantity)
 
-        const flagOciStatus = req.body.ociStatus == 'on' ? true : false
-        const flagOciStatus1 = req.body.ociStatus1 == 'on' ? true : false
-        const flagOciStatus2 = req.body.ociStatus2 == 'on' ? true : false
-        const flagOciStatus3 = req.body.ociStatus3 == 'on' ? true : false
-        const flagOciStatus4 = req.body.ociStatus4 == 'on' ? true : false
+        // const flagOciStatus = req.body.ociStatus == 'on' ? true : false
+        // const flagOciStatus1 = req.body.ociStatus1 == 'on' ? true : false
+        // const flagOciStatus2 = req.body.ociStatus2 == 'on' ? true : false
+        // const flagOciStatus3 = req.body.ociStatus3 == 'on' ? true : false
+        // const flagOciStatus4 = req.body.ociStatus4 == 'on' ? true : false
 
-
-        switch (ociQuantity) {
-            case 4: {
-                var ociProject = [
-                    {
-                        ociNumber: parseInt(req.body.ociNumber),
-                        ociDescription: req.body.ociDescription,
-                        ociStatus: flagOciStatus
-                    }, {
-                        ociNumber: parseInt(req.body.ociNumber1),
-                        ociDescription: req.body.ociDescription1,
-                        ociStatus: flagOciStatus1
-                    }, {
-                        ociNumber: parseInt(req.body.ociNumber2),
-                        ociDescription: req.body.ociDescription2,
-                        ociStatus: flagOciStatus2
-                    }, {
-                        ociNumber: parseInt(req.body.ociNumber3),
-                        ociDescription: req.body.ociDescription3,
-                        ociStatus: flagOciStatus3
-                    }, {
-                        ociNumber: parseInt(req.body.ociNumber4),
-                        ociDescription: req.body.ociDescription4,
-                        ociStatus: flagOciStatus4
-                    }]
-                break;
-            }
-            case 3: {
-                var ociProject = [
-                    {
-                        ociNumber: parseInt(req.body.ociNumber),
-                        ociDescription: req.body.ociDescription,
-                        ociStatus: flagOciStatus
-                    }, {
-                        ociNumber: req.body.ociNumber1,
-                        ociDescription: req.body.ociDescription1,
-                        ociStatus: flagOciStatus1
-                    }, {
-                        ociNumber: req.body.ociNumber2,
-                        ociDescription: req.body.ociDescription2,
-                        ociStatus: flagOciStatus2
-                    }, {
-                        ociNumber: req.body.ociNumber3,
-                        ociDescription: req.body.ociDescription3,
-                        ociStatus: flagOciStatus3
-                    }]
-                break;
-            }
-            case 2: {
-                var ociProject = [
-                    {
-                        ociNumber: parseInt(req.body.ociNumber),
-                        ociDescription: req.body.ociDescription,
-                        ociStatus: flagOciStatus
-                    }, {
-                        ociNumber: req.body.ociNumber1,
-                        ociDescription: req.body.ociDescription1,
-                        ociStatus: flagOciStatus1
-                    }, {
-                        ociNumber: req.body.ociNumber2,
-                        ociDescription: req.body.ociDescription2,
-                        ociStatus: flagOciStatus2
-                    }]
-                emptyArray = emptyArray.concat(ociProjectPlus)
-                break;
-            }
-            case 1: {
-                var ociProject = [
-                    {
-                        ociNumber: parseInt(req.body.ociNumber),
-                        ociDescription: req.body.ociDescription,
-                        ociStatus: flagOciStatus
-                    }, {
-                        ociNumber: req.body.ociNumber1,
-                        ociDescription: req.body.ociDescription1,
-                        ociStatus: flagOciStatus1
-                    }]
-                break;
-            }
-            default: {
-                var ociProject = [
-                    {
-                        ociNumber: parseInt(req.body.ociNumber),
-                        ociDescription: req.body.ociDescription,
-                        ociStatus: flagOciStatus
-                    }]
-                break;
+        //----------Update  13/11/2023 ------------------
+        let arrayOciNumber=[], arrayOciDescription=[], arrayOciStatus=[]
+        for (const key in req.body) {
+            if (key.startsWith('ociNumber')) {
+                arrayOciNumber.push(req.body[key])
+            } else if (key.startsWith('ociDescription')) {
+                arrayOciDescription.push(req.body[key])
+            } else if (key.startsWith('ociStatus')) {
+                arrayOciStatus.push(req.body[key])
             }
         }
+
+        for(let i=0; i<ociQuantity; i++) {
+            var ociProject = [
+                {
+                    ociNumber: arrayOciNumber[i],
+                    ociDescription: arrayOciDescription[i],
+                    ociStatus: arrayOciStatus[i] == 'on' ? true : false
+                }
+            ]
+        }
+        //----------End of Update 13/11/2023 -----------------
+        
+        // if it doesn't wotk properly, continue using the swith loop----- 
+        // switch (ociQuantity) {
+        //     case 4: {
+        //         var ociProject = [
+        //             {
+        //                 ociNumber: parseInt(req.body.ociNumber),
+        //                 ociDescription: req.body.ociDescription,
+        //                 ociStatus: flagOciStatus
+        //             }, {
+        //                 ociNumber: parseInt(req.body.ociNumber1),
+        //                 ociDescription: req.body.ociDescription1,
+        //                 ociStatus: flagOciStatus1
+        //             }, {
+        //                 ociNumber: parseInt(req.body.ociNumber2),
+        //                 ociDescription: req.body.ociDescription2,
+        //                 ociStatus: flagOciStatus2
+        //             }, {
+        //                 ociNumber: parseInt(req.body.ociNumber3),
+        //                 ociDescription: req.body.ociDescription3,
+        //                 ociStatus: flagOciStatus3
+        //             }, {
+        //                 ociNumber: parseInt(req.body.ociNumber4),
+        //                 ociDescription: req.body.ociDescription4,
+        //                 ociStatus: flagOciStatus4
+        //             }]
+        //         break;
+        //     }
+        //     case 3: {
+        //         var ociProject = [
+        //             {
+        //                 ociNumber: parseInt(req.body.ociNumber),
+        //                 ociDescription: req.body.ociDescription,
+        //                 ociStatus: flagOciStatus
+        //             }, {
+        //                 ociNumber: req.body.ociNumber1,
+        //                 ociDescription: req.body.ociDescription1,
+        //                 ociStatus: flagOciStatus1
+        //             }, {
+        //                 ociNumber: req.body.ociNumber2,
+        //                 ociDescription: req.body.ociDescription2,
+        //                 ociStatus: flagOciStatus2
+        //             }, {
+        //                 ociNumber: req.body.ociNumber3,
+        //                 ociDescription: req.body.ociDescription3,
+        //                 ociStatus: flagOciStatus3
+        //             }]
+        //         break;
+        //     }
+        //     case 2: {
+        //         var ociProject = [
+        //             {
+        //                 ociNumber: parseInt(req.body.ociNumber),
+        //                 ociDescription: req.body.ociDescription,
+        //                 ociStatus: flagOciStatus
+        //             }, {
+        //                 ociNumber: req.body.ociNumber1,
+        //                 ociDescription: req.body.ociDescription1,
+        //                 ociStatus: flagOciStatus1
+        //             }, {
+        //                 ociNumber: req.body.ociNumber2,
+        //                 ociDescription: req.body.ociDescription2,
+        //                 ociStatus: flagOciStatus2
+        //             }]
+        //         emptyArray = emptyArray.concat(ociProjectPlus)
+        //         break;
+        //     }
+        //     case 1: {
+        //         var ociProject = [
+        //             {
+        //                 ociNumber: parseInt(req.body.ociNumber),
+        //                 ociDescription: req.body.ociDescription,
+        //                 ociStatus: flagOciStatus
+        //             }, {
+        //                 ociNumber: req.body.ociNumber1,
+        //                 ociDescription: req.body.ociDescription1,
+        //                 ociStatus: flagOciStatus1
+        //             }]
+        //         break;
+        //     }
+        //     default: {
+        //         var ociProject = [
+        //             {
+        //                 ociNumber: parseInt(req.body.ociNumber),
+        //                 ociDescription: req.body.ociDescription,
+        //                 ociStatus: flagOciStatus
+        //             }]
+        //         break;
+        //     }
+        // }
 
         function dividirArrayEnSubarrays(ociProject, longitudSubarray) {
             const subarrays = []
@@ -269,7 +292,7 @@ class ProjectsController {
 
         const project = {
             projectName: req.body.projectName,
-            statusProject: flagStatusProject,
+            statusProject: req.body.statusProject == 'on' ? true : false,
             levelProject: req.body.levelProject,
             codeProject: req.body.codeProject,
             projectDescription: req.body.projectDescription,
@@ -1046,7 +1069,6 @@ class ProjectsController {
 
         const now = formatDate(new Date())
 
-        //------------------------------------
         let arrayOtNumber=[], arrayOtStatus=[], arrayProcesoR14=[], arrayAprobadoR14=[]
         for (const key in req.body) {
             if (key.startsWith('otNumberHidden')) {
@@ -1064,15 +1086,14 @@ class ProjectsController {
         //             'arrayProcesoR14: ', arrayProcesoR14,
         //             'arrayAprobadoR14: ', arrayAprobadoR14
         // )
-        //-----------------------------------
 
         let arrayInfoAddedToOt = []
         for (let i=0; i<otQuantity; i++ ) {
             var infoAddedToOt = {
                 otStatus: arrayOtStatus[i],
                 otNumber: parseInt(arrayOtNumber[i]),
-                procesoR14: arrayProcesoR14[i] || "noAplica",
-                aprobadoR14: arrayAprobadoR14[i] || "noAplica",
+                procesoR14: arrayProcesoR14[i] || "sinDato",
+                aprobadoR14: arrayAprobadoR14[i] || "sinDato",
                 timestamp: now,
                 creator: user,
                 modificator: [],
@@ -1081,164 +1102,7 @@ class ProjectsController {
             arrayInfoAddedToOt.push(infoAddedToOt)
         }
 
-        // if it doesn't work properly, use the switch method ------------
-        // switch (otQuantity) {
-        //     case 5: {
-        //         var infoAddedToOt = [{
-        //             otNumber: parseInt(req.body.otNumberHidden0),
-        //             procesoR14: req.body.procesoR140 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden1),
-        //             procesoR14: req.body.procesoR141 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR141 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden2),
-        //             procesoR14: req.body.procesoR142 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR142 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden3),
-        //             procesoR14: req.body.procesoR143 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR143 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden4),
-        //             procesoR14: req.body.procesoR144 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR144 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }]
-        //         break;
-        //     }
-        //     case 4: {
-        //         var infoAddedToOt = [{
-        //             otNumber: parseInt(req.body.otNumberHidden0),
-        //             procesoR14: req.body.procesoR140 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden1),
-        //             procesoR14: req.body.procesoR141 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR141 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden2),
-        //             procesoR14: req.body.procesoR142 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR142 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden3),
-        //             procesoR14: req.body.procesoR143 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR143 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }]
-        //         break;
-        //     }
-        //     case 3: {
-        //         var infoAddedToOt = [{
-        //             otNumber: parseInt(req.body.otNumberHidden0),
-        //             procesoR14: req.body.procesoR140 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden1),
-        //             procesoR14: req.body.procesoR141 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR141 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden2),
-        //             procesoR14: req.body.procesoR142 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR142 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }]
-        //         break;
-        //     }
-        //     case 2: {
-        //         var infoAddedToOt = [{
-        //             otNumber: parseInt(req.body.otNumberHidden0),
-        //             procesoR14: req.body.procesoR140 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }, {
-        //             otNumber: parseInt(req.body.otNumberHidden1),
-        //             procesoR14: req.body.procesoR141 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR141 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-
-        //         }]
-        //         break;
-        //     }
-        //     default: {
-        //         var infoAddedToOt = [{
-        //             otNumber: parseInt(req.body.otNumberHidden0),
-        //             procesoR14: req.body.procesoR140 || "noAplica",
-        //             aprobadoR14: req.body.aprobadoR140 || "noAplica",
-        //             timestamp: now,
-        //             creator: user,
-        //             modificator: [],
-        //             modifiedOn: "",
-        //         }]
-        //         break;
-        //     }
-        // }
-        console.log('1- Controller_infoAddedToOt....', infoAddedToOt)
+        //console.log('1- Controller_infoAddedToOt....', infoAddedToOt)
         
         const proyecto = await this.projects.addInfoR14ToOtProject(
             projectId,

@@ -42,11 +42,11 @@ let otInformationR14Schema = new Schema({
     // },
     procesoR14: { 
         type: String,
-        default: 'noAplica',
+        default: 'sinDato',
     },
     aprobadoR14: {
         type: String,
-        default: 'noAplica',
+        default: 'sinDato',
     },
     creator: [creatorSchema],
     timestamp: {

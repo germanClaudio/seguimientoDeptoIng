@@ -37,71 +37,6 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    //get all Projects by Sort form DB ----------------
-    // async getAllProjectsBySort(sort) {
-    //     console.log('nameDao: ', sort)
-
-    //     function result(projects) {
-    //         (projects === undefined || projects === null) ?
-    //             new Error ('No hay proyectos cargados en ningún cliente!')
-    //             :
-    //             projects
-    //     }
-
-    //     if(sort === 'nombre') {
-    //         try {
-    //             const projects = await Proyectos.find()
-    //             .sort(
-    //                 {
-    //                     'project.0.projectName': 1,
-    //                     //'timestamp': -1
-    //                 }
-    //             )
-    //             result(projects)
-
-    //         } catch (error) {
-    //             logger.error("Error MongoDB getClients: ",error)
-    //             return new Error ('No hay proyectos en la DB!')
-    //         }
-
-    //     } else if (sort === 'cliente') {
-    //         try {
-    //             const projects = await Proyectos.find()
-    //             .sort(
-    //                 {
-    //                     'client.name': 1, 
-    //                     //'project.0.prioProject': 1,
-    //                     //'timestamp': -1
-    //                 }
-    //             )
-    //             result(projects)
-
-    //         } catch (error) {
-    //             logger.error("Error MongoDB getClients: ",error)
-    //             return new Error ('No hay proyectos en la DB!')
-    //         }
-
-    //     } else if (sort==='oci') {
-    //         try {
-    //             const projects = await Proyectos.find()
-    //             .sort(
-    //                 {
-    //                     'project.0.oci.0.ociNumber': 1,
-    //                     // 'timestamp': -1
-    //                 }
-    //             )
-    //             result(projects)
-
-    //         } catch (error) {
-    //             logger.error("Error MongoDB getClients: ",error)
-    //             return new Error ('No hay proyectos en la DB!')
-    //         }
-
-    //     } else {
-    //         return new Error ('No hay proyectos en la DB con ese nombre!')
-    //     }
-    // }
-
     // Search all Clients by Client Name o Code ----------------
     async searchClientsAll(name) {
         const query = name.clientName
@@ -220,74 +155,16 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 if (itemMongoDB) {
                     const ociKNumber = parseInt(ociNumberK) || 0
 
-                    switch (ociKNumber) {
-                        case 4: {
-                            var otAddedToOci = await Proyectos.updateOne(
-                                { _id: itemMongoDB._id },
-                                {
-                                    $push: {
-                                        'project.0.oci.4.otProject':
-                                            infoOt
-                                    }
-                                },
-                                { new: true }
-                            )
-                            break;
-                        }
-                        case 3: {
-                            var otAddedToOci = await Proyectos.updateOne(
-                                { _id: itemMongoDB._id },
-                                {
-                                    $push: {
-                                        'project.0.oci.3.otProject':
-                                            infoOt
-                                    }
-                                },
-                                { new: true }
-                            )
-                            break;
-                        }
-                        case 2: {
-                            var otAddedToOci = await Proyectos.updateOne(
-                                { _id: itemMongoDB._id },
-                                {
-                                    $push: {
-                                        'project.0.oci.2.otProject':
-                                            infoOt
-                                    }
-                                },
-                                { new: true }
-                            )
-                            break;
-                        }
-                        case 1: {
-                            var otAddedToOci = await Proyectos.updateOne(
-                                { _id: itemMongoDB._id },
-                                {
-                                    $push: {
-                                        'project.0.oci.1.otProject':
-                                            infoOt
-                                    }
-                                },
-                                { new: true }
-                            )
-                            break;
-                        }
-                        default: {
-                            var otAddedToOci = await Proyectos.updateOne(
-                                { _id: itemMongoDB._id },
-                                {
-                                    $push: {
-                                        'project.0.oci.0.otProject':
-                                            infoOt
-                                    }
-                                },
-                                { new: true }
-                            )
-                            break;
-                        }
-                    }
-
+                    var otAddedToOci = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $push: {
+                                [`project.0.oci.${ociKNumber}.otProject`]:
+                                    infoOt
+                            }
+                        },
+                        { new: true }
+                    )
                     logger.info('Ot agregada a OCI ', otAddedToOci)
 
                     if (otAddedToOci.acknowledged) {
@@ -345,8 +222,8 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                         }
                         arrayQuantity.push(updateQuery)
                     }
-                    console.log('1-Dao-arrayStructureTree--- ', arrayStructureTree)
-                    console.log('2-Dao-arrayQuantity--- ', arrayQuantity)
+                    // console.log('1-Dao-arrayStructureTree--- ', arrayStructureTree)
+                    // console.log('2-Dao-arrayQuantity--- ', arrayQuantity)
 
                     // Se agregan las estructuras al arbol de MongoDB ---
                     let arrayTreeCreation = []
@@ -360,7 +237,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                         )
                         arrayTreeCreation.push(treeInfoOtAddedToOt)
                     }
-                    console.log('3-Dao-Estructura arbol creada: ', arrayTreeCreation)
+                    // console.log('3-Dao-Estructura arbol creada: ', arrayTreeCreation)
 
                     // Se cuentan las estructuras del arbol agregadas ---
                     var countTreeCreation = 0
@@ -369,7 +246,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                             countTreeCreation++
                         }
                     }
-                    console.log('3.1-Dao-countTree: ', countTreeCreation)
+                    // console.log('3.1-Dao-countTree: ', countTreeCreation)
                     
                     // Si la cant. de estructuras agregadas es = a la cantidad de OT => continua ---
                     if (countTreeCreation === quantityOt) {
@@ -382,7 +259,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                                 { new: true }
                             )
                         }
-                        console.log('4-Dao-Ot agregada: ', infoR14OtAddedToOt)
+                    // console.log('4-Dao-Ot agregada: ', infoR14OtAddedToOt)
 
                         // Se cuentan las de datos agregados ---
                         var countInfoAdded = 0
@@ -391,7 +268,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                                 countInfoAdded++
                             }
                         }
-                        console.log('4.1-Dao-count: ', countInfoAdded)
+                        // console.log('4.1-Dao-count: ', countInfoAdded)
 
                         // Si la cant. de datos agregados es = a la cantidad de OT => continua ---
                         if (countInfoAdded === quantityOt) {
@@ -488,7 +365,6 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
     //         }
     //     }
     // }
-
 
     async getByNameOrCode(client) {
         if (client) {

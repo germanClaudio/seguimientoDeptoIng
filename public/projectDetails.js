@@ -136,7 +136,7 @@ function messageNewProject(projectName) {
             showConfirmButton: true,
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('formNewOt').submit()
+                document.getElementById('formNewProject').submit()
                 Toast.fire({
                     icon: 'success',
                     title: `El proyecto ${projectName}, se creó con éxito!`
