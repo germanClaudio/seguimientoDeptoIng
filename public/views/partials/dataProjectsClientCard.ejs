@@ -10,12 +10,14 @@
                 <p class="card-text">
                     <%= cliente.code %>
                 </p>
-                <% if (cliente.status==true) { %>
+                <% if (cliente.status === true) { %>
                     <span class="badge rounded-pill bg-success text-white"> Activo </span>
                 <% } else { %>
                     <span class="badge rounded-pill bg-danger text-white"> Inactivo </span>
                 <% } %>
-                    <p class="card-text"><small class="text-muted"> Proyectos: <%= cliente.project %></small></p>
+                    <p class="my-2 card-text">Proyectos:
+                        <small id="projectQuantity" class="badge rounded-pill bg-dark text-white"><%= cliente.project %></small>
+                    </p>
         </div>
         <div class="col-10 mx-auto">
             <div class="card-body px-1">
@@ -48,13 +50,13 @@
                                         <div class="accordion-body">
                                             <div class="container">
                                                 <div class="row">
-                                                    <div class="col-3 my-auto">
+                                                    <div class="col-2 my-auto">
                                                         <ul><img src="<%= proyectos[m].project[j].imageProject %>"
                                                                 class="img-fluid rounded" alt="Imagen Proyecto"
                                                                 width="200px">
                                                         </ul>
                                                     </div>
-                                                    <div class="col-4 my-auto">
+                                                    <div class="col-3 my-auto">
                                                         <ul>Descripción: <%= proyectos[m].project[j].projectDescription %>
                                                         </ul>
                                                         <ul>Prio: <span class="badge bg-dark text-white mx-2"> <%= proyectos[m].project[j].prioProject %> </span>
@@ -69,14 +71,22 @@
                                                             </ul>
                                                         <% } %>
                                                         <div class="d-flex justify-content-center">
-                                                            <button type="button" id="btnSeeProyectDetails" class="btn btn-secondary rounded-circle mx-2"><i class="fa-solid fa-eye"></i></button>
-                                                            <button type="button" id="btnChangeStatusProyect" class="btn btn-danger rounded-circle ms-1"><i class="fa-solid fa-power-off"></i></button>
+                                                            <a type="button" href="/api/proyectos/selectProject/<%= proyectos[m].project[j].id %>" id="btnSeeProyectDetails" class="btn btn-secondary rounded-circle mx-2"><i class="fa-solid fa-eye"></i></a>
+                                                            <button type="button" id="btnChangeStatusProyect<%= m %>_<%= j %>" class="btn btn-danger rounded-circle ms-1"><i class="fa-solid fa-power-off"></i></button>
                                                         </div>
+                                                        <form id="formChangeStatusProject<%= m %>_<%= j %>" action="/api/proyectos/updateStatusProject/<%= proyectos[m].project[j].id %>" method="post">
+                                                            <fieldset>
+                                                                <input type="hidden" name="projectNameHidden" id="projectNameHidden<%= m %>_<%= j %>" value="<%= proyectos[m].project[j].projectName %>">
+                                                                <input type="hidden" name="projectIdHidden" value="<%= proyectos[m].project[j].id %>">
+                                                                <input type="hidden" name="statusProjectHidden" id="statusProjectHidden<%= m %>_<%= j %>" value="<%= proyectos[m].project[j].statusProject %>">
+                                                            </fieldset>
+                                                        </form>
+
                                                     </div>           
                                                     <div class="col-5 my-auto">
                                                         <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
 
-                                                                <ul>OCI #: <%= proyectos[m].project[j].oci[k].ociNumber %> </ul>
+                                                                <ul>OCI #: <strong><%= proyectos[m].project[j].oci[k].ociNumber %></strong></ul>
                                                                 <ul>Descripcion: <%= proyectos[m].project[j].oci[k].ociDescription %> </ul>
                                                                 
                                                                     <% if (proyectos[m].project[j].oci[k].ociStatus) {
@@ -88,30 +98,54 @@
                                                                         <ul>Status OCI: <span class="badge rounded-pill bg-danger text-white"> <%= ociStatus %> </span> </ul>
                                                                     <% } %>
                                                                 <div class="d-flex justify-content-center">
-                                                                    <button type="button" id="btnAddNewOt" class="btn btn-primary rounded-circle me-1"><i class="fa fa-plus-circle"></i></button>
-                                                                    <button type="button" id="btnSeeOciDetails" class="btn btn-secondary rounded-circle mx-2"><i class="fa fa-eye"></i></button>
-                                                                    <button type="button" id="btnChangeStausOci" class="btn btn-danger rounded-circle ms-1"><i class="fa fa-power-off"></i></button>
+                                                                    <% if (proyectos[m].project[j].statusProject) { %>
+                                                                        <button type="button" id="btnAddNewOt" class="btn btn-primary rounded-circle me-1"><i class="fa-solid fa-plus-circle"></i></button>
+                                                                        <button type="button" id="btnSeeOciDetails" class="btn btn-secondary rounded-circle mx-2"><i class="fa-solid fa-eye"></i></button>
+                                                                        <button type="button" id="btnChangeStausOci" class="btn btn-danger rounded-circle ms-1"><i class="fa-solid fa-power-off"></i></button>
+                                                                    <% } else { %>
+                                                                        <button type="button" id="btnSeeOciDetails" class="btn btn-secondary rounded-circle mx-2"><i class="fa-solid fa-eye"></i></button>
+                                                                    <% } %>    
                                                                 </div>
                                                                 <% if ( proyectos[m].project[j].oci.length > (k+1) ) { %>
                                                                     <hr>
                                                                 <% } %>
                                                         <% } %>
                                                     </div>
+                                                    <div class="col my-auto" style="font-size: 9pt">
+                                                        <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
+                                                            <div class="container">
+                                                                <ul>OCI creada por: <%= proyectos[m].creator[j].name %>, <%= proyectos[m].creator[j].lastName %> </ul>
+                                                                <ul>Fecha: <%= proyectos[m].timestamp %> </ul>
+                                                            </div>
+                                                            <div class="container">
+                                                                <% if (proyectos[m].modificator[j]) { %>
+                                                                    <ul>OCI modificada por: <%= proyectos[m].modificator[j].name %>, <%= proyectos[m].modificator[j].lastName %> </ul>
+                                                                    <ul>Fecha modificación: <%= proyectos[m].modifiedOn %> </ul>
+                                                                <% } else { %>
+                                                                    <ul>OCI modificada por: </ul>
+                                                                    <ul>Fecha modificación: </ul>
+                                                                <% } %>
+                                                            </div>
+                                                            <% if ( proyectos[m].project[j].oci.length > (k+1) ) { %>
+                                                                <hr>
+                                                            <% } %>   
+                                                        <% } %>    
+                                                    </div>
                                                 </div>
                                                 <hr>
                                                 <div class="container" style="font-size: 9pt">
                                                     <div class="row my-auto">
-                                                        <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
+                                                        <% for ( let k = 0; proyectos[m].project.length > k; k++) { %>
                                                             <div class="col-6">
-                                                                <ul>Creador por: <%= proyectos[m].creator[j].name %>, <%= proyectos[m].creator[j].lastName %> </ul>
+                                                                <ul>Proyecto creador por: <%= proyectos[m].creator[j].name %>, <%= proyectos[m].creator[j].lastName %> </ul>
                                                                 <ul>Fecha: <%= proyectos[m].timestamp %> </ul>
                                                             </div>
                                                             <div class="col-6">
                                                                 <% if (proyectos[m].modificator[j]) { %>
-                                                                    <ul>Modificado por: <%= proyectos[m].modificator[j].name %>, <%= proyectos[m].modificator[j].lastName %> </ul>
+                                                                    <ul>Proyecto modificado por: <%= proyectos[m].modificator[j].name %>, <%= proyectos[m].modificator[j].lastName %> </ul>
                                                                     <ul>Fecha modificación: <%= proyectos[m].modifiedOn %> </ul>
                                                                 <% } else { %>
-                                                                    <ul>Modificado por: </ul>
+                                                                    <ul>Proyecto Modificado por: </ul>
                                                                     <ul>Fecha modificación: </ul>
                                                                 <% } %>
                                                             </div>      
@@ -135,7 +169,7 @@
 
     <div class="d-flex justify-content-center mt-2 mb-1 border-top">
         <a class="btn btn-primary me-3 mt-3 mb-1" href="/api/clientes/select/<%= cliente._id %>"><i
-                class="fa fa-list-ul"></i> Ver Cliente </a>
-        <a class="btn btn-secondary ms-3 mt-3 mb-1" href="/api/auth/index"><i class="fa fa-home"></i> Home </a>
+                class="fa-solid fa-list-ul"></i> Ver Cliente </a>
+        <a class="btn btn-secondary ms-3 mt-3 mb-1" href="/api/auth/index"><i class="fa-solid fa-home"></i> Volver al Home </a>
     </div>
 </div>

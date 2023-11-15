@@ -117,8 +117,9 @@ class ProjectsController {
     selectProjectById = async (req, res) => {
         const { id } = req.params
 
-        const cliente = await this.clients.getClientByProjectId(id)
         const proyecto = await this.projects.selectProjectByProjectId(id)
+        const idCliente = proyecto[0].client[0]._id
+        const cliente = await this.clients.getClientByProjectId(idCliente)
 
         let username = res.locals.username
         let userInfo = res.locals.userInfo
@@ -152,143 +153,37 @@ class ProjectsController {
         const userId = req.body.idHidden
         const user = await this.users.getUserById(userId)
 
-        // const flagStatusProject = req.body.statusProject == 'on' ? true : false
-
         const ociQuantity = parseInt(req.body.ociQuantity)
 
-        // const flagOciStatus = req.body.ociStatus == 'on' ? true : false
-        // const flagOciStatus1 = req.body.ociStatus1 == 'on' ? true : false
-        // const flagOciStatus2 = req.body.ociStatus2 == 'on' ? true : false
-        // const flagOciStatus3 = req.body.ociStatus3 == 'on' ? true : false
-        // const flagOciStatus4 = req.body.ociStatus4 == 'on' ? true : false
-
         //----------Update  13/11/2023 ------------------
-        let arrayOciNumber=[], arrayOciDescription=[], arrayOciStatus=[]
+        let arrayOciNumber=[],
+            arrayOciDescription=[],
+            arrayOciStatus=[]
+
         for (const key in req.body) {
             if (key.startsWith('ociNumber')) {
                 arrayOciNumber.push(req.body[key])
-            } else if (key.startsWith('ociDescription')) {
+            }
+            else if (key.startsWith('ociDescription')) {
                 arrayOciDescription.push(req.body[key])
-            } else if (key.startsWith('ociStatus')) {
+            }
+            else if (key.startsWith('ociStatus')) {
                 arrayOciStatus.push(req.body[key])
             }
         }
 
+        let arrayOciProjects = []
         for(let i=0; i<ociQuantity; i++) {
-            var ociProject = [
-                {
+            var ociProject = {
                     ociNumber: arrayOciNumber[i],
                     ociDescription: arrayOciDescription[i],
                     ociStatus: arrayOciStatus[i] == 'on' ? true : false
-                }
-            ]
-        }
-        //----------End of Update 13/11/2023 -----------------
-        
-        // if it doesn't wotk properly, continue using the swith loop----- 
-        // switch (ociQuantity) {
-        //     case 4: {
-        //         var ociProject = [
-        //             {
-        //                 ociNumber: parseInt(req.body.ociNumber),
-        //                 ociDescription: req.body.ociDescription,
-        //                 ociStatus: flagOciStatus
-        //             }, {
-        //                 ociNumber: parseInt(req.body.ociNumber1),
-        //                 ociDescription: req.body.ociDescription1,
-        //                 ociStatus: flagOciStatus1
-        //             }, {
-        //                 ociNumber: parseInt(req.body.ociNumber2),
-        //                 ociDescription: req.body.ociDescription2,
-        //                 ociStatus: flagOciStatus2
-        //             }, {
-        //                 ociNumber: parseInt(req.body.ociNumber3),
-        //                 ociDescription: req.body.ociDescription3,
-        //                 ociStatus: flagOciStatus3
-        //             }, {
-        //                 ociNumber: parseInt(req.body.ociNumber4),
-        //                 ociDescription: req.body.ociDescription4,
-        //                 ociStatus: flagOciStatus4
-        //             }]
-        //         break;
-        //     }
-        //     case 3: {
-        //         var ociProject = [
-        //             {
-        //                 ociNumber: parseInt(req.body.ociNumber),
-        //                 ociDescription: req.body.ociDescription,
-        //                 ociStatus: flagOciStatus
-        //             }, {
-        //                 ociNumber: req.body.ociNumber1,
-        //                 ociDescription: req.body.ociDescription1,
-        //                 ociStatus: flagOciStatus1
-        //             }, {
-        //                 ociNumber: req.body.ociNumber2,
-        //                 ociDescription: req.body.ociDescription2,
-        //                 ociStatus: flagOciStatus2
-        //             }, {
-        //                 ociNumber: req.body.ociNumber3,
-        //                 ociDescription: req.body.ociDescription3,
-        //                 ociStatus: flagOciStatus3
-        //             }]
-        //         break;
-        //     }
-        //     case 2: {
-        //         var ociProject = [
-        //             {
-        //                 ociNumber: parseInt(req.body.ociNumber),
-        //                 ociDescription: req.body.ociDescription,
-        //                 ociStatus: flagOciStatus
-        //             }, {
-        //                 ociNumber: req.body.ociNumber1,
-        //                 ociDescription: req.body.ociDescription1,
-        //                 ociStatus: flagOciStatus1
-        //             }, {
-        //                 ociNumber: req.body.ociNumber2,
-        //                 ociDescription: req.body.ociDescription2,
-        //                 ociStatus: flagOciStatus2
-        //             }]
-        //         emptyArray = emptyArray.concat(ociProjectPlus)
-        //         break;
-        //     }
-        //     case 1: {
-        //         var ociProject = [
-        //             {
-        //                 ociNumber: parseInt(req.body.ociNumber),
-        //                 ociDescription: req.body.ociDescription,
-        //                 ociStatus: flagOciStatus
-        //             }, {
-        //                 ociNumber: req.body.ociNumber1,
-        //                 ociDescription: req.body.ociDescription1,
-        //                 ociStatus: flagOciStatus1
-        //             }]
-        //         break;
-        //     }
-        //     default: {
-        //         var ociProject = [
-        //             {
-        //                 ociNumber: parseInt(req.body.ociNumber),
-        //                 ociDescription: req.body.ociDescription,
-        //                 ociStatus: flagOciStatus
-        //             }]
-        //         break;
-        //     }
-        // }
-
-        function dividirArrayEnSubarrays(ociProject, longitudSubarray) {
-            const subarrays = []
-            for (let i = 0; i < ociProject.length; i += longitudSubarray) {
-                subarrays.push(ociProject.slice(i, i + longitudSubarray))
             }
-            return subarrays
+            
+            arrayOciProjects.push(ociProject)
         }
-
-        const longitudDeseada = 1 // longitud que desees
-        const subarrays = dividirArrayEnSubarrays(ociProject, longitudDeseada)
-
-        const arraysSeparados = subarrays.reduce((acc, currentArray) => {
-            return acc.concat(currentArray)
-        }, [])
+        //console.log('arrayOciProjects: ',arrayOciProjects)
+        //----------End of Update 13/11/2023 -----------------
 
         const project = {
             projectName: req.body.projectName,
@@ -298,7 +193,7 @@ class ProjectsController {
             projectDescription: req.body.projectDescription,
             prioProject: req.body.prioProject,
             imageProject: req.body.imageProject,
-            oci: arraysSeparados
+            oci: arrayOciProjects
         }
 
         const newProject = {
@@ -346,9 +241,10 @@ class ProjectsController {
         const clientId = req.body.clientIdHidden
         const cliente = await this.clients.selectClientById(clientId)
 
-        const numberOci = req.body.ociNumber
-        const ociNumberK = req.body.ociNumberK
+        const numberOci = parseInt(req.body.ociNumber)
+        const ociNumberK = parseInt(req.body.ociNumberK)
         const projectId = id || req.body.projectIdHidden
+        console.log('projectId.... ',projectId)
         const otQuantity = parseInt(req.body.otQuantity)
 
         let username = res.locals.username
@@ -370,668 +266,73 @@ class ProjectsController {
 
         const now = formatDate(new Date())
 
-        switch (otQuantity) {
-            case 10: {
-                var otAddedToOci = [{
-                    otNumber: parseInt(req.body.otNumber1),
-                    opNumber: req.body.opNumber1,
-                    opDescription: req.body.opDescription1,
-                    otStatus: req.body.otStatus1 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno1,
-                    otSimulation: req.body.internoSimulacion1,
-                    otSupplier: req.body.externoDiseno1,
-                    timestamp: now,
-                    creator: user
+        let arrayOtNumber=[],
+            arrayOpNumber=[],
+            arrayOpDescription=[],
+            arrayOtStatus=[],
+            arrayOtDesign=[],
+            arrayOtSimulation=[],
+            arrayOtSupplier=[]
 
-                }, {
-                    otNumber: parseInt(req.body.otNumber2),
-                    opNumber: req.body.opNumber2,
-                    opDescription: req.body.opDescription2,
-                    otStatus: req.body.otStatus2 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno2,
-                    otSimulation: req.body.internoSimulacion2,
-                    otSupplier: req.body.externoDiseno2,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber3),
-                    opNumber: req.body.opNumber3,
-                    opDescription: req.body.opDescription3,
-                    otStatus: req.body.otStatus3 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno3,
-                    otSimulation: req.body.internoSimulacion3,
-                    otSupplier: req.body.externoDiseno3,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber4),
-                    opNumber: req.body.opNumber4,
-                    opDescription: req.body.opDescription4,
-                    otStatus: req.body.otStatus4 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno4,
-                    otSimulation: req.body.internoSimulacion4,
-                    otSupplier: req.body.externoDiseno4,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber5),
-                    opNumber: req.body.opNumber5,
-                    opDescription: req.body.opDescription5,
-                    otStatus: req.body.otStatus5 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno5,
-                    otSimulation: req.body.internoSimulacion5,
-                    otSupplier: req.body.externoDiseno5,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber6),
-                    opNumber: req.body.opNumber6,
-                    opDescription: req.body.opDescription6,
-                    otStatus: req.body.otStatus6 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno6,
-                    otSimulation: req.body.internoSimulacion6,
-                    otSupplier: req.body.externoDiseno6,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber7),
-                    opNumber: req.body.opNumber7,
-                    opDescription: req.body.opDescription7,
-                    otStatus: req.body.otStatus7 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno7,
-                    otSimulation: req.body.internoSimulacion7,
-                    otSupplier: req.body.externoDiseno7,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber8),
-                    opNumber: req.body.opNumber8,
-                    opDescription: req.body.opDescription8,
-                    otStatus: req.body.otStatus8 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno8,
-                    otSimulation: req.body.internoSimulacion8,
-                    otSupplier: req.body.externoDiseno8,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber9),
-                    opNumber: req.body.opNumber9,
-                    opDescription: req.body.opDescription9,
-                    otStatus: req.body.otStatus9 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno9,
-                    otSimulation: req.body.internoSimulacion9,
-                    otSupplier: req.body.externoDiseno9,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber),
-                    opNumber: req.body.opNumber,
-                    opDescription: req.body.opDescription,
-                    otStatus: req.body.otStatus == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno,
-                    otSimulation: req.body.internoSimulacion,
-                    otSupplier: req.body.externoDiseno,
-                    timestamp: now,
-                    creator: user
-
-                }]
-                break;
+        for (const key in req.body) {
+            if (key.startsWith('otNumber')) {
+                arrayOtNumber.push(req.body[key])
             }
-            case 9: {
-                var otAddedToOci = [{
-                    otNumber: parseInt(req.body.otNumber1),
-                    opNumber: req.body.opNumber1,
-                    opDescription: req.body.otDescription1,
-                    otStatus: req.body.otStatus1 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno1,
-                    otSimulation: req.body.internoSimulacion1,
-                    otSupplier: req.body.externoDiseno1,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber2),
-                    opNumber: req.body.opNumber2,
-                    opDescription: req.body.opDescription2,
-                    otStatus: req.body.otStatus2 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno2,
-                    otSimulation: req.body.internoSimulacion2,
-                    otSupplier: req.body.externoDiseno2,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber3),
-                    opNumber: req.body.opNumber3,
-                    opDescription: req.body.opDescription3,
-                    otStatus: req.body.otStatus3 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno3,
-                    otSimulation: req.body.internoSimulacion3,
-                    otSupplier: req.body.externoDiseno3,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber4),
-                    opNumber: req.body.opNumber4,
-                    opDescription: req.body.opDescription4,
-                    otStatus: req.body.otStatus4 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno4,
-                    otSimulation: req.body.internoSimulacion4,
-                    otSupplier: req.body.externoDiseno4,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber5),
-                    opNumber: req.body.opNumber5,
-                    opDescription: req.body.opDescription5,
-                    otStatus: req.body.otStatus5 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno5,
-                    otSimulation: req.body.internoSimulacion5,
-                    otSupplier: req.body.externoDiseno5,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber6),
-                    opNumber: req.body.opNumber6,
-                    opDescription: req.body.opDescription6,
-                    otStatus: req.body.otStatus6 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno6,
-                    otSimulation: req.body.internoSimulacion6,
-                    otSupplier: req.body.externoDiseno6,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber7),
-                    opNumber: req.body.opNumber7,
-                    opDescription: req.body.opDescription7,
-                    otStatus: req.body.otStatus7 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno7,
-                    otSimulation: req.body.internoSimulacion7,
-                    otSupplier: req.body.externoDiseno7,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber8),
-                    opNumber: req.body.opNumber8,
-                    opDescription: req.body.opDescription8,
-                    otStatus: req.body.otStatus8 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno8,
-                    otSimulation: req.body.internoSimulacion8,
-                    otSupplier: req.body.externoDiseno8,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber),
-                    opNumber: req.body.opNumber,
-                    opDescription: req.body.opDescription,
-                    otStatus: req.body.otStatus == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno,
-                    otSimulation: req.body.internoSimulacion,
-                    otSupplier: req.body.externoDiseno,
-                    timestamp: now,
-                    creator: user
-
-                }]
-                break;
+            else if (key.startsWith('opNumber')) {
+                arrayOpNumber.push(req.body[key])
             }
-            case 8: {
-                var otAddedToOci = [{
-                    otNumber: parseInt(req.body.otNumber1),
-                    opNumber: req.body.opNumber1,
-                    opDescription: req.body.opDescription1,
-                    otStatus: req.body.otStatus1 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno1,
-                    otSimulation: req.body.internoSimulacion1,
-                    otSupplier: req.body.externoDiseno1,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber2),
-                    opNumber: req.body.opNumber2,
-                    opDescription: req.body.opDescription2,
-                    otStatus: req.body.otStatus2 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno2,
-                    otSimulation: req.body.internoSimulacion2,
-                    otSupplier: req.body.externoDiseno2,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber3),
-                    opNumber: req.body.opNumber3,
-                    opDescription: req.body.opDescription3,
-                    otStatus: req.body.otStatus3 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno3,
-                    otSimulation: req.body.internoSimulacion3,
-                    otSupplier: req.body.externoDiseno3,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber4),
-                    opNumber: req.body.opNumber4,
-                    opDescription: req.body.opDescription4,
-                    otStatus: req.body.otStatus4 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno4,
-                    otSimulation: req.body.internoSimulacion4,
-                    otSupplier: req.body.externoDiseno4,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber5),
-                    opNumber: req.body.opNumber5,
-                    opDescription: req.body.opDescription5,
-                    otStatus: req.body.otStatus5 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno5,
-                    otSimulation: req.body.internoSimulacion5,
-                    otSupplier: req.body.externoDiseno5,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber6),
-                    opNumber: req.body.opNumber6,
-                    opDescription: req.body.opDescription6,
-                    otStatus: req.body.otStatus6 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno6,
-                    otSimulation: req.body.internoSimulacion6,
-                    otSupplier: req.body.externoDiseno6,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber7),
-                    opNumber: req.body.opNumber7,
-                    opDescription: req.body.opDescription7,
-                    otStatus: req.body.otStatus7 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno7,
-                    otSimulation: req.body.internoSimulacion7,
-                    otSupplier: req.body.externoDiseno7,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber),
-                    opNumber: req.body.opNumber,
-                    opDescription: req.body.opDescription,
-                    otStatus: req.body.otStatus == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno,
-                    otSimulation: req.body.internoSimulacion,
-                    otSupplier: req.body.externoDiseno,
-                    timestamp: now,
-                    creator: user
-
-                }]
-                break;
+            else if (key.startsWith('opDescription')) {
+                arrayOpDescription.push(req.body[key])
             }
-            case 7: {
-                var otAddedToOci = [{
-                    otNumber: parseInt(req.body.otNumber1),
-                    opNumber: req.body.opNumber1,
-                    opDescription: req.body.opDescription1,
-                    otStatus: req.body.otStatus1 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno1,
-                    otSimulation: req.body.internoSimulacion1,
-                    otSupplier: req.body.externoDiseno1,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber2),
-                    opNumber: req.body.opNumber2,
-                    opDescription: req.body.opDescription2,
-                    otStatus: req.body.otStatus2 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno2,
-                    otSimulation: req.body.internoSimulacion2,
-                    otSupplier: req.body.externoDiseno2,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber3),
-                    opNumber: req.body.opNumber3,
-                    opDescription: req.body.opDescription3,
-                    otStatus: req.body.otStatus3 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno3,
-                    otSimulation: req.body.internoSimulacion3,
-                    otSupplier: req.body.externoDiseno3,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber4),
-                    opNumber: req.body.opNumber4,
-                    opDescription: req.body.opDescription4,
-                    otStatus: req.body.otStatus4 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno4,
-                    otSimulation: req.body.internoSimulacion4,
-                    otSupplier: req.body.externoDiseno4,
-                    timestamp: now,
-                    creator: user
-                }, {
-                    otNumber: parseInt(req.body.otNumber5),
-                    opNumber: req.body.opNumber5,
-                    opDescription: req.body.opDescription5,
-                    otStatus: req.body.otStatus5 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno5,
-                    otSimulation: req.body.internoSimulacion5,
-                    otSupplier: req.body.externoDiseno5,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber6),
-                    opNumber: req.body.opNumber6,
-                    opDescription: req.body.opDescription6,
-                    otStatus: req.body.otStatus6 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno6,
-                    otSimulation: req.body.internoSimulacion6,
-                    otSupplier: req.body.externoDiseno6,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber),
-                    opNumber: req.body.opNumber,
-                    opDescription: req.body.opDescription,
-                    otStatus: req.body.otStatus == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno,
-                    otSimulation: req.body.internoSimulacion,
-                    otSupplier: req.body.externoDiseno,
-                    timestamp: now,
-                    creator: user
-
-                }]
-                break;
+            else if (key.startsWith('otStatus')) {
+                arrayOtStatus.push(req.body[key])
             }
-            case 6: {
-                var otAddedToOci = [{
-                    otNumber: parseInt(req.body.otNumber1),
-                    opNumber: req.body.opNumber1,
-                    opDescription: req.body.opDescription1,
-                    otStatus: req.body.otStatus1 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno1,
-                    otSimulation: req.body.internoSimulacion1,
-                    otSupplier: req.body.externoDiseno1,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber2),
-                    opNumber: req.body.opNumber2,
-                    opDescription: req.body.opDescription2,
-                    otStatus: req.body.otStatus2 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno2,
-                    otSimulation: req.body.internoSimulacion2,
-                    otSupplier: req.body.externoDiseno2,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber3),
-                    opNumber: req.body.opNumber3,
-                    opDescription: req.body.opDescription3,
-                    otStatus: req.body.otStatus3 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno3,
-                    otSimulation: req.body.internoSimulacion3,
-                    otSupplier: req.body.externoDiseno3,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber4),
-                    opNumber: req.body.opNumber4,
-                    opDescription: req.body.opDescription4,
-                    otStatus: req.body.otStatus4 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno4,
-                    otSimulation: req.body.internoSimulacion4,
-                    otSupplier: req.body.externoDiseno4,
-                    timestamp: now,
-                    creator: user
-                }, {
-                    otNumber: parseInt(req.body.otNumber5),
-                    opNumber: req.body.opNumber5,
-                    opDescription: req.body.opDescription5,
-                    otStatus: req.body.otStatus5 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno5,
-                    otSimulation: req.body.internoSimulacion5,
-                    otSupplier: req.body.externoDiseno5,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber),
-                    opNumber: req.body.opNumber,
-                    opDescription: req.body.opDescription,
-                    otStatus: req.body.otStatus == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno,
-                    otSimulation: req.body.internoSimulacion,
-                    otSupplier: req.body.externoDiseno,
-                    timestamp: now,
-                    creator: user
-
-                }]
-                break;
+            else if (key.startsWith('internoDiseno')) {
+                arrayOtDesign.push(req.body[key])
             }
-            case 5: {
-                var otAddedToOci = [{
-                    otNumber: parseInt(req.body.otNumber1),
-                    opNumber: req.body.opNumber1,
-                    opDescription: req.body.opDescription1,
-                    otStatus: req.body.otStatus1 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno1,
-                    otSimulation: req.body.internoSimulacion1,
-                    otSupplier: req.body.externoDiseno1,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber2),
-                    opNumber: req.body.opNumber2,
-                    opDescription: req.body.opDescription2,
-                    otStatus: req.body.otStatus2 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno2,
-                    otSimulation: req.body.internoSimulacion2,
-                    otSupplier: req.body.externoDiseno2,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber3),
-                    opNumber: req.body.opNumber3,
-                    opDescription: req.body.opDescription3,
-                    otStatus: req.body.otStatus3 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno3,
-                    otSimulation: req.body.internoSimulacion3,
-                    otSupplier: req.body.externoDiseno3,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber4),
-                    opNumber: req.body.opNumber4,
-                    opDescription: req.body.opDescription4,
-                    otStatus: req.body.otStatus4 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno4,
-                    otSimulation: req.body.internoSimulacion4,
-                    otSupplier: req.body.externoDiseno4,
-                    timestamp: now,
-                    creator: user
-                }, {
-                    otNumber: parseInt(req.body.otNumber),
-                    opNumber: req.body.opNumber,
-                    opDescription: req.body.opDescription,
-                    otStatus: req.body.otStatus == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno,
-                    otSimulation: req.body.internoSimulacion,
-                    otSupplier: req.body.externoDiseno,
-                    timestamp: now,
-                    creator: user
-
-                }]
-                break;
+            else if (key.startsWith('internoSimulacion')) {
+                arrayOtSimulation.push(req.body[key])
             }
-            case 4: {
-                var otAddedToOci = [{
-                    otNumber: parseInt(req.body.otNumber1),
-                    opNumber: req.body.opNumber1,
-                    opDescription: req.body.opDescription1,
-                    otStatus: req.body.otStatus1 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno1,
-                    otSimulation: req.body.internoSimulacion1,
-                    otSupplier: req.body.externoDiseno1,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber2),
-                    opNumber: req.body.opNumber2,
-                    opDescription: req.body.opDescription2,
-                    otStatus: req.body.otStatus2 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno2,
-                    otSimulation: req.body.internoSimulacion2,
-                    otSupplier: req.body.externoDiseno2,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber3),
-                    opNumber: req.body.opNumber3,
-                    opDescription: req.body.opDescription3,
-                    otStatus: req.body.otStatus3 == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno3,
-                    otSimulation: req.body.internoSimulacion3,
-                    otSupplier: req.body.externoDiseno3,
-                    timestamp: now,
-                    creator: user
-
-                }, {
-                    otNumber: parseInt(req.body.otNumber),
-                    opNumber: req.body.opNumber,
-                    opDescription: req.body.opDescription,
-                    otStatus: req.body.otStatus == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno,
-                    otSimulation: req.body.internoSimulacion,
-                    otSupplier: req.body.externoDiseno,
-                    timestamp: now,
-                    creator: user
-                }]
-                break;
-            }
-            case 3: {
-                var otAddedToOci = [
-                    {
-                        otNumber: parseInt(req.body.otNumber),
-                        opNumber: req.body.opNumber,
-                        opDescription: req.body.opDescription,
-                        otStatus: req.body.otStatus == 'on' ? true : false,
-                        otDesign: req.body.internoDiseno,
-                        otSimulation: req.body.internoSimulacion,
-                        otSupplier: req.body.externoDiseno,
-                        timestamp: now,
-                        creator: user
-
-                    }, {
-                        otNumber: parseInt(req.body.otNumber1),
-                        opNumber: req.body.opNumber1,
-                        opDescription: req.body.opDescription1,
-                        otStatus: req.body.otStatus1 == 'on' ? true : false,
-                        otDesign: req.body.internoDiseno1,
-                        otSimulation: req.body.internoSimulacion1,
-                        otSupplier: req.body.externoDiseno1,
-                        timestamp: now,
-                        creator: user
-
-                    }, {
-                        otNumber: parseInt(req.body.otNumber2),
-                        opNumber: req.body.opNumber2,
-                        opDescription: req.body.opDescription2,
-                        otStatus: req.body.otStatus2 == 'on' ? true : false,
-                        otDesign: req.body.internoDiseno2,
-                        otSimulation: req.body.internoSimulacion2,
-                        otSupplier: req.body.externoDiseno2,
-                        timestamp: now,
-                        creator: user
-
-                    }]
-                break;
-            }
-            case 2: {
-                var otAddedToOci = [
-                    {
-                        otNumber: parseInt(req.body.otNumber),
-                        opNumber: req.body.opNumber,
-                        opDescription: req.body.opDescription,
-                        otStatus: req.body.otStatus == 'on' ? true : false,
-                        otDesign: req.body.internoDiseno,
-                        otSimulation: req.body.internoSimulacion,
-                        otSupplier: req.body.externoDiseno,
-                        timestamp: now,
-                        creator: user
-
-                    }, {
-                        otNumber: parseInt(req.body.otNumber1),
-                        opNumber: req.body.opNumber1,
-                        opDescription: req.body.opDescription1,
-                        otStatus: req.body.otStatus1 == 'on' ? true : false,
-                        otDesign: req.body.internoDiseno1,
-                        otSimulation: req.body.internoSimulacion1,
-                        otSupplier: req.body.externoDiseno1,
-                        timestamp: now,
-                        creator: user
-
-                    }]
-                break;
-            }
-            default: {
-                var otAddedToOci = [{
-                    otNumber: parseInt(req.body.otNumber),
-                    opNumber: req.body.opNumber,
-                    opDescription: req.body.opDescription,
-                    otStatus: req.body.otStatus == 'on' ? true : false,
-                    otDesign: req.body.internoDiseno,
-                    otSimulation: req.body.internoSimulacion,
-                    otSupplier: req.body.externoDiseno,
-                    timestamp: now,
-                    creator: user
-
-                }]
-                break;
+            else if (key.startsWith('externoDiseno')) {
+                arrayOtSupplier.push(req.body[key])
             }
         }
 
-        const proyecto = await this.projects.addOtToOciProject(
+        let arrayOtAddedToOci = []
+        for(let i=0; i<otQuantity; i++) {
+            var otAddedToOci = {
+                otNumber: arrayOtNumber[i],
+                opNumber: arrayOpNumber[i],
+                opDescription: arrayOpDescription[i],
+                otStatus: arrayOtStatus[i] == 'on' ? true : false,
+                otDesign: arrayOtDesign[i],
+                otSimulation: arrayOtSimulation[i],
+                otSupplier: arrayOtSupplier[i],
+                timestamp: now,
+                creator: user
+            }
+            arrayOtAddedToOci.push(otAddedToOci)
+        }
+
+        await this.projects.addOtToOciProject(
             projectId,
             numberOci,
             ociNumberK,
-            otAddedToOci
+            arrayOtAddedToOci
         )
 
+        const proyecto = await this.projects.selectProjectsByMainProjectId(projectId)
+            console.log('proyectoController ',proyecto)
         try {
             if (!proyecto) return res.status(404).json({ msg: 'OCI no encontrada' })
-            res.render('projectsList', {
+            res.render('projectSelectedDetail', {
                 proyecto,
                 username,
                 userInfo,
                 expires,
                 cliente
             })
+
         } catch (error) {
             res.status(500).json({
                 status: false,
@@ -1069,18 +370,26 @@ class ProjectsController {
 
         const now = formatDate(new Date())
 
-        let arrayOtNumber=[], arrayOtStatus=[], arrayProcesoR14=[], arrayAprobadoR14=[]
+        let arrayOtNumber=[],
+            arrayOtStatus=[],
+            arrayProcesoR14=[],
+            arrayAprobadoR14=[]
+
         for (const key in req.body) {
             if (key.startsWith('otNumberHidden')) {
                 arrayOtNumber.push(req.body[key])
-            } else if (key.startsWith('otStatusHidden')) {
+            }
+            else if (key.startsWith('otStatusHidden')) {
                 arrayOtStatus.push(req.body[key])
-            } else if (key.startsWith('procesoR14')) {
+            }
+            else if (key.startsWith('procesoR14')) {
                 arrayProcesoR14.push(req.body[key])
-            } else if (key.startsWith('aprobadoR14')) {
+            }
+            else if (key.startsWith('aprobadoR14')) {
                 arrayAprobadoR14.push(req.body[key])
             } 
         }
+
         // console.log('arrayOtNumber: ', arrayOtNumber,
         //             'arrayOtStatus: ', arrayOtStatus,
         //             'arrayProcesoR14: ', arrayProcesoR14,
@@ -1130,30 +439,48 @@ class ProjectsController {
         }
     }
 
-    // updateProject = async (req, res) => {
-    //     const id = req.params.id
-    //     req.body.category ? req.body.category : req.body.categoryHidden
+    updateStatusProject = async (req, res) => {
+        const id = req.params.id
+        //console.log('id-params: ',id)
+        const proyecto = await this.projects.selectProjectByProjectId(id)
+        //console.log('proyecto.... ', proyecto)
+        const statusProjectHidden = req.body.statusProjectHidden
+        const clientId = proyecto[0].client[0]._id
+        const cliente = await this.clients.selectClientById(clientId)
 
-    //     const producto = req.body
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+        
+        await this.projects.updateStatusProject(
+            id, 
+            proyecto, 
+            statusProjectHidden,
+            userInfo
+        )        
 
-    //     let username = res.locals.username
-    //     let userInfo = res.locals.userInfo
+        const proyectos = await this.projects.getProjectsByClientId(clientId)
+        //console.log('proyectosController.... ', proyectos)
+        try {
+            if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+            res.render('clientProjectsDetails', {
+                username,
+                userInfo,
+                expires,
+                cliente,
+                proyectos
+            })
 
-    //     const cookie = req.session.cookie
-    //     const time = cookie.expires
-    //     const expires = new Date(time)
-
-
-    //     try {
-    //         const productUpdated = await this.products.updateProduct(id, producto)
-    //         res.render('addNewProducts', { productUpdated, username, userInfo, expires })
-    //     } catch (error) {
-    //         res.status(500).json({
-    //             status: false,
-    //             error: error
-    //         })
-    //     }
-    // }
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
 
     // deleteProductById = async (req, res) => {
     //     const { id } = req.params

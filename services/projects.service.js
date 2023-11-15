@@ -21,6 +21,11 @@ class ProjectService {
         return this.proyectos.selectProjectByProjectId(idProject)
     }
 
+    // returns all projects from a Main ProjectId
+    async selectProjectsByMainProjectId(idProject) {
+        return this.proyectos.selectProjectsByMainProjectId(idProject)
+    }
+
     // add new project to a Client
     async addProjectToClient(payload) {
         return this.proyectos.createNewProject(payload)
@@ -48,6 +53,15 @@ class ProjectService {
     // Select OCI - Project
     async selectOciByOciNumber(numberOci) {
         return this.proyectos.selectOciByOciNumber(numberOci)
+    }
+
+    // Update Status Project by id
+    async updateStatusProject(id, project, statusProject, userInfo) {
+        return this.proyectos.updateStatusProject(
+            id,
+            project,
+            statusProject,
+            userInfo)
     }
 
     // // remove one project from Client

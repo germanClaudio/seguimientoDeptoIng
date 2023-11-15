@@ -9,7 +9,7 @@
                 <%= proyecto[0].project[0].projectName %>
             </h6>
             <br>
-            <a href="/api/proyectos/select/<%= proyecto._id %>">
+            <a href="/api/clientes/<%= proyecto[0].client[0].id %>">
                 <img src="<%= proyecto[0].project[0].imageProject %>" class="img-fluid rounded mb-2"
                     alt="Imagen Proyecto" width="120px">
             </a>
@@ -20,9 +20,9 @@
                 </small>
             </p>
             <% if (proyecto[0].project[0].levelProject === true) { %>
-                <span class="badge rounded-pill bg-success text-white"> Ganado </span>
+                <span class="badge rounded-pill bg-success text-white">Ganado</span>
             <% } else { %>
-                    <span class="badge rounded-pill bg-secondary text-warning"> Cotizado </span>
+                    <span class="badge rounded-pill bg-secondary text-warning">Cotizado</span>
             <% } %>
                         <p class="card-text"><small class="text-muted"> Prio: <span
                                     class="badge bg-dark text-white mx-2">
@@ -31,12 +31,12 @@
 
             <% if (proyecto[0].project[0].statusProject) {
                 const status="Activo" %>
-                            <span class="badge rounded-pill bg-primary text-white mx-2">
+                            <span id="statusProjectBoolean" class="badge rounded-pill bg-primary text-white mx-2">
                                 <%= status %>
                             </span>
             <% } else {
                 const status="Inactivo" %>
-                                <span class="badge rounded-pill bg-danger text-white mx-2">
+                                <span id="statusProjectBoolean" class="badge rounded-pill bg-danger text-white mx-2">
                                     <%= status %>
                                 </span>
             <% } %>
@@ -45,8 +45,12 @@
                                         <%= proyecto[0].project[0].codeProject %>
                                     </p>
         </div>
-
-        <div class="col-11 mx-auto">
+        
+        <% if (proyecto[0].project[0].statusProject) { %>
+            <div class="col-11 mx-auto">
+        <% } else {  %>
+            <div class="col-11 mx-auto pe-none" contenteditable="false" style="background-color: rgba(0, 0, 0, 0.25); opacity: 0.5">
+        <% } %>
             <div class="card-body px-1">
                 <% let j=0;
                     if (proyecto.length> 0) { 
@@ -95,6 +99,18 @@
                                                 <div class="container-fluid">
                                                     <% if (proyecto[m].project[j].oci[k].otProject.length> 0) { %>
                                                         <div class="container my-2 mw-100">
+                                                            Puedes agregar mas datos de OT en esta OCI haciendo click en el siguiente botón
+                                                            <button class="btn btn-success m-1 rounded-circle"
+                                                                id="btnAddOtFormSelected<%=k%>"
+                                                                aria-controls="collapseExample"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                                style="--bs-btn-font-size: .75rem; color: var(--bs-white);"
+                                                                type="button"
+                                                                name="<%= proyecto[m].project[j].oci[k].ociNumber %>"
+                                                                title="Agregar OT">
+                                                                <i class="fa-regular fa-plus" aria-hidden="true"></i>
+                                                            </button>
                                                             <hr class="border border-primary opacity-75">
                                                             <div class="row">
                                                                 <div id="posBtnHiddeTableGeneral<%=k%>" class="col-3">
@@ -1206,8 +1222,8 @@
     </div>
 
     <div class="d-flex justify-content-center mt-2 mb-1 border-top">
-        <a class="btn btn-primary me-3 mt-3 mb-1" href="/api/proyectos"><i class="fa fa-reply"></i> Volver Atrás </a>
-        <a class="btn btn-secondary ms-3 mt-3 mb-1" href="/api/auth/index"><i class="fa fa-home"></i> Volver al Home
+        <a class="btn btn-primary me-3 mt-3 mb-1" href="/api/proyectos"><i class="fa-solid fa-reply"></i> Volver Atrás </a>
+        <a class="btn btn-secondary ms-3 mt-3 mb-1" href="/api/auth/index"><i class="fa-solid fa-home"></i> Volver al Home
         </a>
     </div>
 </div>

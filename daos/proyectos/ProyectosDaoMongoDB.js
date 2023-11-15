@@ -77,13 +77,14 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    // Select one project by project Id ----------------
-    async selectProjectByProjectId(id) {
+    // Select all projects by Main project Id ----------------
+    async selectProjectsByMainProjectId(id) {
         if (id) {
             try {
                 const project = await Proyectos.find({
-                    'project.0._id': id
+                    '_id': id
                 })
+                console.log('project...',project)
                 return project
 
             } catch (error) {
@@ -99,7 +100,30 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    // Select one project by project Id ----------------
+    async selectProjectByProjectId(id) {
+        if (id) {
+            try {
+                const project = await Proyectos.find({
+                    'project.0._id': id
+                })
+                return project
+
+            } catch (error) {
+                logger.error("Error MongoDB getProjectsByProjectId: ", error)
+            }
+        } else {
+            try {
+                const projects = await Proyectos.find()
+                return projects
+            } catch (error) {
+                logger.error("Error MongoDB getOneProjectById: ", error)
+            }
+        }
+    }
+
     async createNewProject(project) {
+        
         if (project) {
             try {
                 const itemMongoDB = await Proyectos.findOne({ projectName: `${project.name}` })
@@ -122,11 +146,11 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
     // Select one OCI by Oci Number ----------------
     async selectOciByOciNumber(numberOci) {
-        if (numberOci) {
-
+        const numberOciParsed = parseInt(numberOci)
+        if (numberOciParsed) {
             try {
                 const project = await Proyectos.find({
-                    'project.0.oci.0.ociNumber': numberOci
+                    [`project.0.oci.${numberOciParsed}.ociNumber`]: numberOciParsed
                 })
                 return project
 
@@ -135,7 +159,6 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
             }
 
         } else {
-
             try {
                 const projects = await Proyectos.find()
                 return projects
@@ -147,7 +170,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
     // Add Ot's to Oci Number ----------------
     async addOtToOciProject(idProjectTarget, numberOci, ociNumberK, infoOt) {
-
+        
         if (idProjectTarget) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget })
@@ -293,6 +316,52 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
         } else {
             return new Error(`No se pudo agregar la info a la OT del Proyecto!`)
+        }
+    }
+
+    // Update Status Project by Project Id
+    async updateStatusProject(id, project, statusProject, userInfo) {
+        //console.log('Project...', project)
+        //console.log('userInfo...', userInfo)
+        
+        let booleanStatus
+        statusProject=='true' ? booleanStatus=true : booleanStatus=false
+        
+        if (project) {
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
+                console.log('itemMongoDB...', itemMongoDB)
+                if (itemMongoDB) {
+                    
+                    var updatedProject = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                'project.0.statusProject': !booleanStatus,
+                                modificator: userInfo,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
+                    console.log('Status proyecto modificado: ', updatedProject)
+
+                    if(updatedProject.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
+                        console.log('itemUpdated...', itemUpdated)
+                        return itemUpdated
+                    } else {
+                        return new Error(`No se actualizó el item: ${itemUpdated._id}`)
+                    }
+                    
+                } else {
+                    return new Error(`Proyecto no existe con este id: ${id}!`)
+                }
+            } catch (error) {
+                logger.error("Error MongoDB updatingProject: ", error)
+            }
+        } else {
+            return new Error(`No se pudo modificar el status del Proyecto!`)
         }
     }
 

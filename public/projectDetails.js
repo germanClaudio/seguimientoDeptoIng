@@ -170,3 +170,61 @@ btnCreate.addEventListener('click', (event) => {
     const projectName = document.getElementById('projectName').value
     messageNewProject(projectName)
 })
+
+function messageChangeStatus(projectName, statusProject, k) {
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+    
+        Swal.fire({
+            title: 'Cambio status del Proyecto!',
+            position: 'center',
+            html: `El status del proyecto <b>${projectName}</b> se modificará a
+                    <span class="badge rounded-pill bg-${ statusProject=='true' ? 'danger' : 'primary' } text-white">
+                    ${ statusProject=='true' ? 'Inactivo' : 'Activo' }
+                    </span> y ${ statusProject=='true' ? 'no' : '' } podrá ingresar o modificar datos en este proyecto!`,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Continuar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formChangeStatusProject${k}_0`).submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `El status del proyecto <b>${projectName}</b>, se modificó con éxito!`
+                })
+            } else {
+                Swal.fire(
+                    'Status de proyecto no modificado!',
+                    `El status del proyecto <b>${projectName}</b>, no se modificó!`,
+                    'warning'
+                )
+                return false
+            }
+        })
+}
+
+const projectQuantity = parseInt(document.getElementById('projectQuantity').innerHTML)
+var arrayBtnChangeStatusProject = []
+let j=0
+for (let k=0; k<projectQuantity; k++) {
+    var btnChangeStatusProject = document.getElementById(`btnChangeStatusProyect${k}_${j}`)
+    if(btnChangeStatusProject) {
+        arrayBtnChangeStatusProject.push(btnChangeStatusProject)
+    }
+
+        arrayBtnChangeStatusProject[k].addEventListener('click', (event) => {
+            event.preventDefault()
+            const projectName = document.getElementById(`projectNameHidden${k}_${j}`).value
+            const statusProject = document.getElementById(`statusProjectHidden${k}_${j}`).value
+            console.log('statusProject 256: ', statusProject, k)
+            messageChangeStatus(projectName, statusProject, k)
+        })
+}

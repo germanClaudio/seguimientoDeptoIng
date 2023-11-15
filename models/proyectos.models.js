@@ -488,6 +488,10 @@ let projectSchema = new Schema({
         type: Boolean,
         default: true,
     },
+    visible:{
+        type: Boolean,
+        default: true,
+    },
     oci: [ociProjectSchema],
 })
 

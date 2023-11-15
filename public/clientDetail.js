@@ -10,6 +10,10 @@ function formatDate(date) {
     return day + "-" + month + "-" + year + "_" + hours + "." + min + "." + sec
 }
 
+const newLogoUrl = document.getElementById('formFile')
+console.log('formFile', newLogoUrl.files)
+
+
 function message(clientName) {
         Swal.fire({
         title: 'Esta seguro?',
