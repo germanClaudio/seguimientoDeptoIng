@@ -15,16 +15,7 @@
         </div>
             <br>
             <div class="d-block mx-auto my-2 pb-4 text-center">
-                <button id="btnAddOtForm" class="btn btn-primary my-2 me-5" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Agregar OT's
-                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
-                </button>
-                <a class="btn btn-info my-2 mx-5" href="/api/proyectos"><i class="fa-solid fa-reply"
-                        aria-hidden="true"></i> Volver Atrás
-                </a>
-                <a class="btn btn-secondary my-2 ms-5" href="/api/auth/index"><i class="fa-solid fa-home"
-                        aria-hidden="true"></i> Volver al Home
-                </a>
+                <%- include('../partials/btnProjectSelectedDetail'); %>
             </div>
 
             <h5 id="projectNameTitle" class="d-block mx-auto mt-2 mb-3 text-center"> </h5>

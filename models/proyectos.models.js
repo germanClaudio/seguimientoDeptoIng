@@ -1,5 +1,5 @@
 const { Schema, model, mongoose } = require('mongoose')
-const now = require('../utils/formatDate.js')
+let now = require('../utils/formatDate.js')
 
 // ------- Client Schema -------------
 let ClientSchema = new Schema({
@@ -443,10 +443,21 @@ let ociProjectSchema = new Schema({
         type: Number, maxlength: 4
     },
     ociDescription: {
-        type: String, maxlength: 50
+        type: String, maxlength: 100
     },
     ociStatus: {
         type: Boolean, default: true
+    },
+    creator: [creatorSchema],
+    timestamp: {
+        type: String,
+        default: now,
+    },
+    modificator: {
+        type: Array,
+    },
+    modifiedOn: {
+        type: String,
     },
     otProject: [otProjectSchema]
     

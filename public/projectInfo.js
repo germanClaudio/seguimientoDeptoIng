@@ -596,52 +596,67 @@ function radioSelected(radioSelectedValue) {
     formulario.scrollIntoView({ behavior: 'smooth' })
 }
 
-const btnAddOtFormSelected0 = document.getElementById(`btnAddOtFormSelected0`)
-const btnAddOtFormSelected1 = document.getElementById('btnAddOtFormSelected1')
-const btnAddOtFormSelected2 = document.getElementById('btnAddOtFormSelected2')
-const btnAddOtFormSelected3 = document.getElementById('btnAddOtFormSelected3')
-const btnAddOtFormSelected4 = document.getElementById('btnAddOtFormSelected4')
-
-if (btnAddOtFormSelected0) {
-    btnAddOtFormSelected0.addEventListener('click', () => {
-        const radioSelectedValue = btnAddOtFormSelected0.name
-        radioSelected(radioSelectedValue)
-        lastOtNumberFn(0)
-    })
+var arraybtnAddOtFormSelected = []
+for (let i=0; i<radios.length; i++) {
+    var btnAddOtFormSelected = document.getElementById(`btnAddOtFormSelected${i}`)
+    if(btnAddOtFormSelected) {
+        arraybtnAddOtFormSelected.push(btnAddOtFormSelected)
+    }
 }
 
-if (btnAddOtFormSelected1) {
-    btnAddOtFormSelected1.addEventListener('click', () => {
-        const radioSelectedValue = btnAddOtFormSelected1.name
+arraybtnAddOtFormSelected.forEach(function(elemento) {
+    elemento.addEventListener('click', (event) => {
+        event.preventDefault()
+        const radioSelectedValue = event.target.name   //elemento.name
         radioSelected(radioSelectedValue)
-        lastOtNumberFn(1)
+        lastOtNumberFn(elemento.id)
     })
-}
+})
 
-if (btnAddOtFormSelected2) {
-    btnAddOtFormSelected2.addEventListener('click', () => {
-        const radioSelectedValue = btnAddOtFormSelected2.name
-        radioSelected(radioSelectedValue)
-        lastOtNumberFn(2)
-    })
-}
+// const btnAddOtFormSelected0 = document.getElementById(`btnAddOtFormSelected0`)
+// const btnAddOtFormSelected1 = document.getElementById('btnAddOtFormSelected1')
+// const btnAddOtFormSelected2 = document.getElementById('btnAddOtFormSelected2')
+// const btnAddOtFormSelected3 = document.getElementById('btnAddOtFormSelected3')
+// const btnAddOtFormSelected4 = document.getElementById('btnAddOtFormSelected4')
 
-if (btnAddOtFormSelected3) {
-    btnAddOtFormSelected3.addEventListener('click', () => {
-        const radioSelectedValue = btnAddOtFormSelected3.name
-        radioSelected(radioSelectedValue)
-        lastOtNumberFn(3)
-    })
-}
-if (btnAddOtFormSelected4) {
-    btnAddOtFormSelected4.addEventListener('click', () => {
-        const radioSelectedValue = btnAddOtFormSelected4.name
-        radioSelected(radioSelectedValue)
-        lastOtNumberFn(4)
-    })
-}
+// if (btnAddOtFormSelected0) {
+//     btnAddOtFormSelected0.addEventListener('click', () => {
+//         const radioSelectedValue = btnAddOtFormSelected0.name
+//         radioSelected(radioSelectedValue)
+//         lastOtNumberFn(0)
+//     })
+// }
+// if (btnAddOtFormSelected1) {
+//     btnAddOtFormSelected1.addEventListener('click', () => {
+//         const radioSelectedValue = btnAddOtFormSelected1.name
+//         radioSelected(radioSelectedValue)
+//         lastOtNumberFn(1)
+//     })
+// }
+// if (btnAddOtFormSelected2) {
+//     btnAddOtFormSelected2.addEventListener('click', () => {
+//         const radioSelectedValue = btnAddOtFormSelected2.name
+//         radioSelected(radioSelectedValue)
+//         lastOtNumberFn(2)
+//     })
+// }
+// if (btnAddOtFormSelected3) {
+//     btnAddOtFormSelected3.addEventListener('click', () => {
+//         const radioSelectedValue = btnAddOtFormSelected3.name
+//         radioSelected(radioSelectedValue)
+//         lastOtNumberFn(3)
+//     })
+// }
+// if (btnAddOtFormSelected4) {
+//     btnAddOtFormSelected4.addEventListener('click', () => {
+//         const radioSelectedValue = btnAddOtFormSelected4.name
+//         radioSelected(radioSelectedValue)
+//         lastOtNumberFn(4)
+//     })
+// }
 
 for (let i = 0; i < radios.length; i++) {
+    
     radios[i].addEventListener("change", function (event) {
         ociSeleccionada = event.target.value
         tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
@@ -713,8 +728,8 @@ function messageNewOt(ociNumber, otArray) {
     }
 }
 
-const btnCreate = document.getElementById('btnNewOt')
-btnCreate.addEventListener('click', (event) => {
+const btnCreateNewOt = document.getElementById('btnNewOt')
+btnCreateNewOt.addEventListener('click', (event) => {
     event.preventDefault()
     let ociNumberKValue = parseInt(document.getElementById('ociNumberK').value)
     let ociNumberHiddenValue = parseInt(document.getElementById('ociNumberHidden').value)

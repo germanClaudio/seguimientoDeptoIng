@@ -20,12 +20,12 @@
                 data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Nuevo Proyecto
                 <i class="fa-solid fa-plus" aria-hidden="true"></i>
             </button>
-            <a class="btn btn-secondary my-2 ms-5" href="/api/auth/index"><i class="fa fa-home" aria-hidden="true"></i>
+            <a class="btn btn-secondary my-2 ms-5" href="/api/auth/index"><i class="fa-solid fa-home" aria-hidden="true"></i>
                 Volver al Home </a>
         </div>
 
 
-        <h3 class="d-block mx-auto mt-2 mb-3 text-center">Proyectos del Cliente</h3>
+        <h4 class="d-block mx-auto mt-2 mb-3 text-center">Proyectos del Cliente <%= cliente.name %></h4>
         <div id="updateCliente">
         </div>
         <%- include('../partials/dataProjectsClientCard'); %>

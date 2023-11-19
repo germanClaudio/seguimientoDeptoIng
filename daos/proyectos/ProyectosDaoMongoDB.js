@@ -3,7 +3,7 @@ const ContenedorMongoDB = require('../../contenedores/proyectos/containerMongoDB
 const Proyectos = require('../../models/proyectos.models.js')
 const Clientes = require('../../models/clientes.models.js')
 const logger = require('../../utils/winston.js')
-const now = require('../../utils/formatDate.js')
+let now = require('../../utils/formatDate.js')
 
 class ProyectosDaoMongoDB extends ContenedorMongoDB {
     constructor(cnxStr) {
@@ -169,7 +169,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
     }
 
     // Add Ot's to Oci Number ----------------
-    async addOtToOciProject(idProjectTarget, numberOci, ociNumberK, infoOt) {
+    async addOtToOciProject(idProjectTarget, numberOci, ociNumberK, infoOt, userInfo) {
         
         if (idProjectTarget) {
             try {
@@ -178,32 +178,60 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 if (itemMongoDB) {
                     const ociKNumber = parseInt(ociNumberK) || 0
 
-                    var otAddedToOci = await Proyectos.updateOne(
-                        { _id: itemMongoDB._id },
-                        {
-                            $push: {
-                                [`project.0.oci.${ociKNumber}.otProject`]:
-                                    infoOt
-                            }
-                        },
-                        { new: true }
-                    )
-                    logger.info('Ot agregada a OCI ', otAddedToOci)
-
-                    if (otAddedToOci.acknowledged) {
-                        const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
-                        return itemUpdated
+                    if(itemMongoDB[0].oci[ociKNumber].otProject != []) {
+                        var otAddedToOci = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $push: {
+                                    [`project.0.oci.${ociKNumber}.otProject`]: infoOt,
+                                    [`project.0.oci.${ociKNumber}.modificator`]: userInfo,
+                                    [`project.0.oci.${ociKNumber}.modifiedOn`]: now
+    
+                                }
+                            },
+                            { new: true }
+                        )
+                        logger.info('Ot agregada a OCI ', otAddedToOci)
+    
+                        if (otAddedToOci.acknowledged) {
+                            const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
+                            return itemUpdated
+                        } else {
+                            return new Error(`No se actualizó el item: ${itemMongoDB._id}`)
+                        }
+                        
                     } else {
-                        return new Error(`No se actualizó el item: ${itemMongoDB._id}`)
+                        var otAddedToOci = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $push: {
+                                    [`project.0.oci.${ociKNumber}.otProject`]: infoOt,
+                                    [`project.0.oci.${ociKNumber}.creator`]: userInfo,
+                                    [`project.0.oci.${ociKNumber}.timestamp`]: now
+    
+                                }
+                            },
+                            { new: true }
+                        )
+                        logger.info('Ot agregada a OCI ', otAddedToOci)
+    
+                        if (otAddedToOci.acknowledged) {
+                            const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
+                            return itemUpdated
+                        } else {
+                            return new Error(`No se actualizó el item: ${itemMongoDB._id}`)
+                        }
                     }
 
                 } else {
                     logger.error(`No se encontró la OCI: ${numberOci}`)
                     return new Error(`No se encontró la OCI: ${numberOci}`)
                 }
+
             } catch (error) {
                 logger.error("Error MongoDB adding OT to a OCI: ", error)
             }
+
         } else {
             return new Error(`No se pudo agregar la OT a la OCI del Proyecto!`)
         }
@@ -309,6 +337,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 } else {
                     return new Error(`No se encontró el Proyecto id#`)
                 }
+
             } catch (error) {
                 console.log("Error MongoDB adding info R14 to OT: ", error)
                 logger.error("Error MongoDB adding info R14 to OT: ", error)
@@ -318,6 +347,9 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
             return new Error(`No se pudo agregar la info a la OT del Proyecto!`)
         }
     }
+
+
+
 
     // Update Status Project by Project Id
     async updateStatusProject(id, project, statusProject, userInfo) {
@@ -357,9 +389,110 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 } else {
                     return new Error(`Proyecto no existe con este id: ${id}!`)
                 }
+
             } catch (error) {
                 logger.error("Error MongoDB updatingProject: ", error)
             }
+
+        } else {
+            return new Error(`No se pudo modificar el status del Proyecto!`)
+        }
+    }
+
+    // Update Level Project by Project Id
+    async updateLevelProject(id, project, levelProject, userInfo) {
+        //console.log('Project...', project)
+        //console.log('userInfo...', userInfo)
+        
+        let booleanLevel
+        levelProject=='true' ? booleanLevel=true : booleanLevel=false
+        
+        if (project) {
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
+                //console.log('itemMongoDB...', itemMongoDB)
+                console.log('now...dao. ', now)
+                if (itemMongoDB) {
+                    
+                    var updatedProject = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                'project.0.levelProject': !booleanLevel,
+                                modificator: userInfo,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
+                    //console.log('Status proyecto modificado: ', updatedProject)
+
+                    if(updatedProject.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
+                        //console.log('itemUpdated...', itemUpdated)
+                        return itemUpdated
+                    } else {
+                        return new Error(`No se actualizó el item: ${itemUpdated._id}`)
+                    }
+                    
+                } else {
+                    return new Error(`Proyecto no existe con este id: ${id}!`)
+                }
+
+            } catch (error) {
+                logger.error("Error MongoDB updatingProject: ", error)
+            }
+
+        } else {
+            return new Error(`No se pudo modificar el nivel del Proyecto!`)
+        }
+    }
+
+    // Update Status Oci by Project Id
+    async updateStatusOci(id, project, statusOci, ociKNumber, userInfo) {
+        //console.log('Project...', project)
+        //console.log('userInfo...', userInfo)
+        //console.log('statusOci...', typeof statusOci)
+        //console.log('ociKNumber...', ociKNumber)
+        let booleanStatus
+        statusOci=='true' ? booleanStatus=true : booleanStatus=false
+        
+        if (project) {
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
+                // console.log('itemMongoDB...', itemMongoDB)
+                if (itemMongoDB) {
+                    const ociNumberK = parseInt(ociKNumber) || 0
+
+                    var updatedProject = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                [`project.0.oci.${ociNumberK}.ociStatus`]: !booleanStatus,
+                                [`project.0.oci.${ociNumberK}.modificator`]: userInfo,
+                                [`project.0.oci.${ociNumberK}.modifiedOn`]: now
+                            }
+                        },
+                        { new: true }
+                    )
+                    //console.log('Status OCI modificado: ', updatedProject)
+
+                    if(updatedProject.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
+                        // console.log('itemUpdated...', itemUpdated)
+                        return itemUpdated
+                    } else {
+                        return new Error(`No se actualizó el item: ${itemUpdated._id}`)
+                    }
+                    
+                } else {
+                    return new Error(`Proyecto no existe con este id: ${id}!`)
+                }
+
+            } catch (error) {
+                logger.error("Error MongoDB updatingProject: ", error)
+            }
+
         } else {
             return new Error(`No se pudo modificar el status del Proyecto!`)
         }

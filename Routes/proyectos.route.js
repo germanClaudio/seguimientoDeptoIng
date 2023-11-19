@@ -29,8 +29,14 @@ routerProyectos.post('/otInfoR14', checkAuthentication, authProductMiddleware, p
 // -------------------  Agregar informacion R14 a OT ---------------- 
 routerProyectos.post('/oci', checkAuthentication, authProductMiddleware, projects.addOtToOciProject)
 
-// -------------------  Actualizar Proyecto por Id ------------------ 
+// -------------------  Actualizar Estado del Proyecto por Id ------------------ 
 routerProyectos.post('/updateStatusProject/:id', checkAuthentication, authProductMiddleware, projects.updateStatusProject)
+
+// -------------------  Actualizar Nivel del Proyecto por Id ------------------ 
+routerProyectos.post('/updateLevelProject/:id', checkAuthentication, authProductMiddleware, projects.updateLevelProject)
+
+// -------------------  Actualizar Estado de OCI por Id Proyecto ------------------ 
+routerProyectos.post('/updateStatusOci/:id', checkAuthentication, authProductMiddleware, projects.updateStatusOci)
 
 // -------------------  Eliminar Proyecto por Id (Status = Inactivo) ------------------ 
 // routerProyectos.get('/delete/:id', checkAuthentication, authProductMiddleware, projects.deleteClientById)

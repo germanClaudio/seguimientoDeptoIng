@@ -2,16 +2,24 @@ const ProyectosService = require("../services/projects.service.js")
 const ClientesService = require("../services/clients.service.js")
 const UserService = require("../services/users.service.js")
 
-function formatDate(date) {
-    const day = date.getDate()
-    const month = date.getMonth() + 1
-    const year = date.getFullYear()
-    const hours = date.getHours()
-    const min = date.getMinutes()
-    const sec = date.getSeconds()
+let now = require('../utils/formatDate.js')
 
-    return day + "-" + month + "-" + year + "_" + hours + "." + min + "." + sec
-}
+// function formatDate(date) {
+//     const day = date.getDate()
+//     const month = date.getMonth() + 1
+//     const year = date.getFullYear()
+//     const hours = date.getHours()
+//     const min = date.getMinutes()
+//     const sec = date.getSeconds()
+    
+//     return day + "-" +
+//      date.format(month, 'MM') + "-" +
+//      year + "_" + hours + "." +
+//      date.format(min, mm) + "." +
+//      date.format(sec, 'ss')
+//     // const dayNow = new Date();
+//     // return date.format(dayNow, 'DD-MM-YYYY_HH.mm.ss');
+// }
 
 class ProjectsController {
     constructor() {
@@ -200,10 +208,12 @@ class ProjectsController {
             creator: user,
             client: clienteSeleccionado,
             project: project,
-            timestamp: formatDate(new Date()),
+            timestamp: now,  //formatDate(new Date()),
             modificator: [],
             modifiedOn: ''
         }
+
+        console.log('newProject... ',newProject)
 
         await this.projects.addProjectToClient(newProject) //const newProyecto = 
         const proyectos = await this.projects.getProjectsByClientId(clientId)
@@ -244,7 +254,7 @@ class ProjectsController {
         const numberOci = parseInt(req.body.ociNumber)
         const ociNumberK = parseInt(req.body.ociNumberK)
         const projectId = id || req.body.projectIdHidden
-        console.log('projectId.... ',projectId)
+        //console.log('projectId.... ',projectId)
         const otQuantity = parseInt(req.body.otQuantity)
 
         let username = res.locals.username
@@ -264,7 +274,7 @@ class ProjectsController {
             email: userCreator.email
         }]
 
-        const now = formatDate(new Date())
+        //const now = formatDate(new Date())
 
         let arrayOtNumber=[],
             arrayOpNumber=[],
@@ -318,11 +328,12 @@ class ProjectsController {
             projectId,
             numberOci,
             ociNumberK,
-            arrayOtAddedToOci
+            arrayOtAddedToOci,
+            userInfo
         )
 
         const proyecto = await this.projects.selectProjectsByMainProjectId(projectId)
-            console.log('proyectoController ',proyecto)
+            // console.log('proyectoController ',proyecto)
         try {
             if (!proyecto) return res.status(404).json({ msg: 'OCI no encontrada' })
             res.render('projectSelectedDetail', {
@@ -368,7 +379,7 @@ class ProjectsController {
             email: userCreator.email
         }]
 
-        const now = formatDate(new Date())
+        //const now = formatDate(new Date())
 
         let arrayOtNumber=[],
             arrayOtStatus=[],
@@ -459,6 +470,95 @@ class ProjectsController {
             id, 
             proyecto, 
             statusProjectHidden,
+            userInfo
+        )        
+
+        const proyectos = await this.projects.getProjectsByClientId(clientId)
+        //console.log('proyectosController.... ', proyectos)
+        try {
+            if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+            res.render('clientProjectsDetails', {
+                username,
+                userInfo,
+                expires,
+                cliente,
+                proyectos
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
+    updateLevelProject = async (req, res) => {
+        const id = req.params.id
+        //console.log('id-params: ',id)
+        const proyecto = await this.projects.selectProjectByProjectId(id)
+        //console.log('proyecto.... ', proyecto)
+        const levelProjectHidden = req.body.levelProjectHidden
+        const clientId = proyecto[0].client[0]._id
+        const cliente = await this.clients.selectClientById(clientId)
+
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+        
+        await this.projects.updateLevelProject(
+            id, 
+            proyecto, 
+            levelProjectHidden,
+            userInfo
+        )        
+
+        const proyectos = await this.projects.getProjectsByClientId(clientId)
+        //console.log('proyectosController.... ', proyectos)
+        try {
+            if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+            res.render('clientProjectsDetails', {
+                username,
+                userInfo,
+                expires,
+                cliente,
+                proyectos
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
+    updateStatusOci = async (req, res) => {
+        const id = req.params.id
+        //console.log('id-params: ',id)
+        const proyecto = await this.projects.selectProjectByProjectId(id)
+        //console.log('proyecto.... ', proyecto)
+        const statusOciHidden = req.body.statusOciHidden
+        const ociKNumber = parseInt(req.body.ociKNumberHidden)
+        // console.log('ociKNumber.... ', ociKNumber)
+        const clientId = proyecto[0].client[0]._id
+        const cliente = await this.clients.selectClientById(clientId)
+
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+        
+        await this.projects.updateStatusOci(
+            id, 
+            proyecto,
+            statusOciHidden,
+            ociKNumber,
             userInfo
         )        
 

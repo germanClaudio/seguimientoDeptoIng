@@ -116,7 +116,8 @@ function removeRow(e) {
     }
 }
 
-function messageNewProject(projectName) {
+// --------------- Create New Project ------------------------
+function messageNewProject(projectName, ociQuantity) {
 
     const Toast = Swal.mixin({
         toast: true,
@@ -126,11 +127,16 @@ function messageNewProject(projectName) {
         timerProgressBar: false,
     })
     
-    if(projectName){
+    if(projectName) {
+        let html=''
+        parseInt(ociQuantity) > 1 ? 
+        html = `Se creará el proyecto ${projectName}, con ${ociQuantity} OCI's !` :
+        html = `Se creará el proyecto ${projectName}, con ${ociQuantity} OCI !`
+
         Swal.fire({
-            title: 'Ingreso de Proyecto!',
+            title: `Ingreso de Proyecto ${projectName}`,
             position: 'center',
-            text: `Se creará el proyecto ${projectName}!`,
+            text: html,
             icon: 'info',
             showCancelButton: true,
             showConfirmButton: true,
@@ -156,22 +162,25 @@ function messageNewProject(projectName) {
             title: 'Error',
             position: 'center',
             timer: 3500,
-            text: `El proyecto ${projectName} no se creó correctamente!`,
+            text: `El proyecto no se creó correctamente!`,
             icon: 'error',
-            showCancelButton: false,
+            showCancelButton: true,
             showConfirmButton: false,
         })
     }
 }
 
-const btnCreate = document.getElementById('btnNewProject')
-btnCreate.addEventListener('click', (event) => {
+const btnCreateNewProject = document.getElementById('btnNewProject')
+btnCreateNewProject.addEventListener('click', (event) => {
     event.preventDefault()
     const projectName = document.getElementById('projectName').value
-    messageNewProject(projectName)
+    const ociQuantity = document.getElementById('ociQuantity').value
+    
+    messageNewProject(projectName, ociQuantity)
 })
 
-function messageChangeStatus(projectName, statusProject, k) {
+//---- Change Project Status ----------------
+function messageChangeProjectStatus(projectName, statusProject, k) {
 
     const Toast = Swal.mixin({
         toast: true,
@@ -181,6 +190,7 @@ function messageChangeStatus(projectName, statusProject, k) {
         timerProgressBar: false,
     })
     
+    if(projectName) {
         Swal.fire({
             title: 'Cambio status del Proyecto!',
             position: 'center',
@@ -209,9 +219,23 @@ function messageChangeStatus(projectName, statusProject, k) {
                 return false
             }
         })
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `El status del proyecto no se modificó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
+        
 }
 
 const projectQuantity = parseInt(document.getElementById('projectQuantity').innerHTML)
+
 var arrayBtnChangeStatusProject = []
 let j=0
 for (let k=0; k<projectQuantity; k++) {
@@ -219,12 +243,210 @@ for (let k=0; k<projectQuantity; k++) {
     if(btnChangeStatusProject) {
         arrayBtnChangeStatusProject.push(btnChangeStatusProject)
     }
+    
+    arrayBtnChangeStatusProject[k].addEventListener('click', (event) => {
+        event.preventDefault()
+        const projectName = document.getElementById(`projectNameHidden${k}_${j}`).value
+        const statusProject = document.getElementById(`statusProjectHidden${k}_${j}`).value
+        messageChangeProjectStatus(projectName, statusProject, k)
+    })
+}
 
-        arrayBtnChangeStatusProject[k].addEventListener('click', (event) => {
-            event.preventDefault()
-            const projectName = document.getElementById(`projectNameHidden${k}_${j}`).value
-            const statusProject = document.getElementById(`statusProjectHidden${k}_${j}`).value
-            console.log('statusProject 256: ', statusProject, k)
-            messageChangeStatus(projectName, statusProject, k)
+//---- Change Project Level ----------------
+function messageChangeProjectLevel(projectName, levelProject, k) {
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+    
+    if(projectName) {
+        Swal.fire({
+            title: 'Cambio nivel del Proyecto!',
+            position: 'center',
+            html: `El nivel del proyecto <b>${projectName}</b> se modificará a
+                    <span class="badge rounded-pill bg-${ levelProject=='true' ?
+                                                            'secondary text-warning">' :
+                                                            'success text-white">' }
+                    ${ levelProject=='true' ? 'Cotizado' : 'Ganado' }
+                    </span> y ${ levelProject=='true' ?
+                                'solo podrá ingresar o modificar datos de S0 en este proyecto!' :
+                                'podrá ingresar o modificar todos los datos de este proyecto!' }`,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Continuar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formChangeLevelProject${k}_0`).submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `El nivel del proyecto <b>${projectName}</b>, se modificó con éxito!`
+                })
+            } else {
+                Swal.fire(
+                    'Nivel de proyecto no modificado!',
+                    `El nivel del proyecto <b>${projectName}</b>, no se modificó!`,
+                    'warning'
+                )
+                return false
+            }
+        })
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `El nivel del proyecto no se modificó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
+}
+
+
+var arrayBtnChangeLevelProject = []
+let x=0
+for (let k=0; k<projectQuantity; k++) {
+    var btnChangeLevelProject = document.getElementById(`btnChangeLevelProyect${k}_${x}`)
+    if(btnChangeLevelProject) {
+        arrayBtnChangeLevelProject.push(btnChangeLevelProject)
+    }
+    
+    arrayBtnChangeLevelProject[k].addEventListener('click', (event) => {
+        event.preventDefault()
+        const projectName = document.getElementById(`projectNameHidden${k}_${x}`).value
+        const levelProject = document.getElementById(`levelProjectHidden${k}_${x}`).value
+        messageChangeProjectLevel(projectName, levelProject, k)
+    })
+}
+
+
+//------- Change OCI status ----------------
+function messageChangeOciStatus(statusOci, ociNumber, elementoId) {
+    
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+    
+        Swal.fire({
+            title: `Cambio status de OCI# ${ociNumber}`,
+            position: 'center',
+            html: `El status de la OCI# <b>${ociNumber}</b> se modificará a
+                    <span class="badge rounded-pill bg-${ statusOci=='true' ? 'danger' : 'primary' } text-white">
+                    ${ statusOci=='true' ? 'Inactiva' : 'Activa' }
+                    </span> y ${ statusOci=='true' ? 'no' : '' } podrá ingresar o modificar datos en esta OCI !`,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Continuar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formChangeStatusOci${elementoId}`).submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `El status de la OCI# <b>${ociNumber}</b>, se modificó con éxito!`
+                })
+            } else {
+                Swal.fire(
+                    'Status de OCI no modificado!',
+                    `El status de la OCI# <b>${ociNumber}</b>, no se modificó!`,
+                    'warning'
+                )
+                return false
+            }
         })
 }
+
+const maxOciQuantity = parseInt(document.getElementsByName('ociQuantityHidden').length)
+var arrayBtnChangeStatusOci = []
+
+for (let m=0; m<maxOciQuantity; m++) {
+    for (let n=0; n<maxOciQuantity; n++) {
+        var btnChangeStatusOci = document.getElementById(`${m}_${n}`)
+        
+        if (btnChangeStatusOci) {
+            arrayBtnChangeStatusOci.push(btnChangeStatusOci)
+        }
+    }
+}
+
+arrayBtnChangeStatusOci.forEach(function(elemento) {
+        elemento.addEventListener('click', (event) => {
+            event.preventDefault()
+            const statusOci = document.getElementById(`statusOciHidden${elemento.id}`).value
+            const ociNumber = document.getElementById(`ociNumberHidden${elemento.id}`).value
+            messageChangeOciStatus(statusOci, ociNumber, elemento.id)
+        })
+    })
+
+// --------------- Adding New OCI to an existing Project ------------------------
+function messageAddNewOciToProject(projectName, ociQuantity) {
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+    
+    if(projectName) {
+        const html = `Se creará el proyecto ${projectName}, con ${ociQuantity} OCI !`
+
+        Swal.fire({
+            title: `Ingreso de Proyecto ${projectName}`,
+            position: 'center',
+            text: html,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('formNewOci').submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `El proyecto ${projectName}, se creó con éxito!`
+                })
+            } else {
+                Swal.fire(
+                    'Proyecto no creado!',
+                    `El proyecto ${projectName}, no se creó correctamente!`,
+                    'warning'
+                )
+                return false
+            }
+        })
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `El proyecto ${projectName} no se creó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
+}
+
+const btnAddNewOciToProject = document.getElementById('btnAddNewOciToProject')
+btnAddNewOciToProject.addEventListener('click', (event) => {
+    event.preventDefault()
+    const projectName = document.getElementById('projectName').value
+    const ociQuantity = document.getElementById('ociQuantity').value
+    
+    messageAddNewOciToProject(projectName, ociQuantity)
+})

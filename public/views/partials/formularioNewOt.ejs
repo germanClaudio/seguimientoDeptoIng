@@ -5,8 +5,7 @@
             <form id="formNewOt" action="/api/proyectos/oci" method="post" name="formNewOt">
 
                 <fieldset>
-                    <h5 id="tituloForm" class="d-block mx-auto my-2 text-center">Agregar Nueva/s OT's a OCI #
-                        (Seleccionar # OCI) / Proyecto: </h5>
+                    <h5 id="tituloForm" class="d-block mx-auto my-2 text-center">Agregar Nueva/s OT's a OCI # (Seleccionar # OCI) / Proyecto: </h5>
                     <div class="row my-3">
                         <div class="col-12">
                             <% let j=0;
@@ -19,11 +18,18 @@
                                     <% if (proyecto[m].project[j].oci.length> 1) {
                                         for ( let k = 0; proyecto[m].project[j].oci.length > k; k++) { %>
                                             <div class="form-check form-check-inline">
-                                                <label class="form-check-label" for="ociNumber">OCI # <%=
-                                                        proyecto[m].project[j].oci[k].ociNumber %></label>
-                                                <input class="form-check-input" type="radio" name="ociNumber"
-                                                    id="<%= proyecto[m].project[j].oci[k].ociNumber %>"
-                                                    value="<%= proyecto[m].project[j].oci[k].ociNumber %>" required>
+                                                <label class="form-check-label" for="ociNumber">OCI # <%= proyecto[m].project[j].oci[k].ociNumber %></label>
+
+                                                <% if (proyecto[m].project[j].oci[k].ociStatus) { %>
+                                                    <input class="form-check-input" type="radio" name="ociNumber"
+                                                        id="<%= proyecto[m].project[j].oci[k].ociNumber %>"
+                                                        value="<%= proyecto[m].project[j].oci[k].ociNumber %>" required>
+                                                <% } else { %>
+                                                    <input class="form-check-input" type="radio" name="ociNumber"
+                                                        id="<%= proyecto[m].project[j].oci[k].ociNumber %>"
+                                                        value="<%= proyecto[m].project[j].oci[k].ociNumber %>" disabled>
+                                                <% } %>
+
                                             </div>        
                                         <% } %>
                                             <input class="form-input" type="hidden" name="ociNumberK" id="ociNumberK" value="">
@@ -33,9 +39,11 @@
                                                 <label class="form-check-label"
                                                     for="ociNumber<%= proyecto[m].project[j].oci[0].ociNumber %>">OCI #
                                                     <%= proyecto[m].project[j].oci[0].ociNumber %></label>
+
                                                 <input class="form-check-input" type="radio" name="ociNumber"
                                                     id="<%= proyecto[m].project[j].oci[0].ociNumber %>"
                                                     value="<%= proyecto[m].project[j].oci[0].ociNumber %>" checked>
+
                                                 <input class="form-input" type="hidden" name="ociNumberId"
                                                     id="ociNumberId0" value="<%=proyecto[m].project[j].oci[0]._id %>">
                                                 <input class="form-input" type="hidden" name="ociNumberK" id="ociNumberK"
@@ -45,10 +53,11 @@
                                             </div>
                                     <% }
                                 }
+
                             } else { %>
-                                                <span class="badge rounded-pill bg-danger text-white"> No hay datos
-                                                    cargados </span>
+                                <span class="badge rounded-pill bg-danger text-white"> No hay datos cargados </span>
                             <% } %>
+
                         </div>
 
                         <br>
