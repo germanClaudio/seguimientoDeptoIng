@@ -596,15 +596,15 @@ function radioSelected(radioSelectedValue) {
     formulario.scrollIntoView({ behavior: 'smooth' })
 }
 
-var arraybtnAddOtFormSelected = []
+var arrayBtnAddOtFormSelected = []
 for (let i=0; i<radios.length; i++) {
     var btnAddOtFormSelected = document.getElementById(`btnAddOtFormSelected${i}`)
     if(btnAddOtFormSelected) {
-        arraybtnAddOtFormSelected.push(btnAddOtFormSelected)
+        arrayBtnAddOtFormSelected.push(btnAddOtFormSelected)
     }
 }
 
-arraybtnAddOtFormSelected.forEach(function(elemento) {
+arrayBtnAddOtFormSelected.forEach(function(elemento) {
     elemento.addEventListener('click', (event) => {
         event.preventDefault()
         const radioSelectedValue = event.target.name   //elemento.name
@@ -656,7 +656,7 @@ arraybtnAddOtFormSelected.forEach(function(elemento) {
 // }
 
 for (let i = 0; i < radios.length; i++) {
-    
+
     radios[i].addEventListener("change", function (event) {
         ociSeleccionada = event.target.value
         tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
@@ -733,6 +733,7 @@ btnCreateNewOt.addEventListener('click', (event) => {
     event.preventDefault()
     let ociNumberKValue = parseInt(document.getElementById('ociNumberK').value)
     let ociNumberHiddenValue = parseInt(document.getElementById('ociNumberHidden').value)
+    
     if (ociNumberKValue) {
         switch (ociNumberKValue) {
             case 4: {
@@ -1014,8 +1015,8 @@ function addDatoToR14(i) {
     }).then((result) => {
         if (result.isConfirmed) {
             // console.log('clientId....', clientId)
-            const sarasa = document.getElementById('formR14Values')
-            sarasa.submit()
+            const formR14Values = document.getElementById('formR14Values')
+            formR14Values.submit()
             Toast.fire({
                 icon: 'success',
                 title: `Información de OT ${res.arrayOtNumber.join(" - ")} agregada con éxito!`
@@ -1914,7 +1915,7 @@ function addDatoToS5(i) {
 }
 
 const arrTables = []
-for (let i = 0; i<5; i++) {
+for (let i = 0; i<10; i++) { //ver limite maximo de proyectos por Cliente
     if (document.getElementById(`tablaGeneral${i}`)) {
         arrTables.push(i)
     }

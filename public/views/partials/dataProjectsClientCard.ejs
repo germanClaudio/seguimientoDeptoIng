@@ -25,7 +25,7 @@
                     let ociCount=0 %>
                     <% for ( let m = 0;  proyectos.length > m; m++) { %>
                         
-                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                        <div class="accordion" id="accordionPanelsStayOpen<%=m %>">
                             <% for ( let j = 0;  proyectos[m].project.length > j; j++) { %>
 
                                 <div class="accordion-item">
@@ -54,13 +54,12 @@
                                                 <div class="row">
                                                     <!-- -------------- seccion Foto Proyecto ---------------------- -->
                                                     <div class="col-2 my-auto">
-                                                        <ul><img src="<%= proyectos[m].project[j].imageProject %>"
-                                                                class="img-fluid rounded" alt="Imagen Proyecto"
-                                                                width="200px">
-                                                        </ul>
+                                                        <img src="<%= proyectos[m].project[j].imageProject %>"
+                                                                class="img-fluid rounded px-1" alt="Imagen Proyecto"
+                                                                width="180px">
                                                     </div>
                                                     <!-- -------------- seccion Proyecto ---------------------- -->
-                                                    <div class="col-3 my-auto">
+                                                    <div class="col-4 my-auto">
                                                         <ul>Descripción: <%= proyectos[m].project[j].projectDescription %>
                                                         </ul>
                                                         <ul>Prio: <span class="badge bg-dark text-white mx-2"> <%= proyectos[m].project[j].prioProject %> </span>
@@ -77,7 +76,7 @@
                                                         
                                                         <div class="d-flex justify-content-center">
                                                             <a type="button" title="Ver Proyecto" href="/api/proyectos/selectProject/<%= proyectos[m].project[j].id %>" id="btnSeeProyectDetails" class="btn btn-secondary rounded-circle me-2"><i class="fa-solid fa-eye"></i></a>
-                                                            <button type="button" title="Agregar Nueva OCI" id="btnAddNewOciToProject" class="btn btn-primary rounded-circle mx-2"><i class="fa-solid fa-plus-circle"></i></button>
+                                                            <button type="button" value="<%= m%>" title="Agregar Nueva OCI" id="btnAddNewOciToProject<%= m %>" name="btnAddNewOciToProject" class="btn btn-primary rounded-circle mx-2"><i class="fa-solid fa-plus-circle"></i></button>
                                                             <button type="button" title="Cambiar Nivel Proyecto" id="btnChangeLevelProyect<%= m %>_<%= j %>" class="btn btn-info rounded-circle mx-2"><i class="fa-regular fa-chess-king fa-lg"></i></button>
                                                             <button type="button" title="Cambiar Estado Proyecto" id="btnChangeStatusProyect<%= m %>_<%= j %>" class="btn btn-dark rounded-circle mx-2"><i class="fa-solid fa-power-off"></i></button>
                                                             <button type="button" title="Eliminar Proyecto" id="btnDeleteProyect<%= m %>_<%= j %>" class="btn btn-danger rounded-circle ms-2"><i class="fa-regular fa-trash-can fa-lg"></i></button>
@@ -101,8 +100,8 @@
                                                         </form>
 
                                                     </div>
-                                                    <!-- -------------- seccion OCI ---------------------- -->
-                                                    <div class="col-5 my-auto">
+                                                    <!-- -------------- seccion OCI's ---------------------- -->
+                                                    <div class="col my-auto">
                                                         <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
                                                                 <ul>OCI #: <strong><%= proyectos[m].project[j].oci[k].ociNumber %></strong></ul>
                                                                 <ul>Descripcion: <%= proyectos[m].project[j].oci[k].ociDescription %> </ul>
@@ -143,7 +142,8 @@
 
                                                             <% } %>
                                                     </div>
-                                                    <div class="col my-auto" style="font-size: 9pt">
+                                                    <!-- -------------- seccion creador / modificador de OCI's --------- -->
+                                                    <div class="col-2 my-auto" style="font-size: 9pt">
                                                         <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
                                                             <div class="container">
                                                                 <ul>OCI creada por: <%= proyectos[m].project[j].oci[k].creator.name %>, <%= proyectos[m].project[j].oci[k].creator.lastName %> </ul>
@@ -165,6 +165,7 @@
                                                     </div>
                                                 </div>
                                                 <hr>
+                                                <!-- -------------- seccion creador / modificador de Proyecto --------- -->
                                                 <div class="container" style="font-size: 9pt">
                                                     <div class="row my-auto">
                                                         <% for ( let k = 0; proyectos[m].project.length > k; k++) { %>
