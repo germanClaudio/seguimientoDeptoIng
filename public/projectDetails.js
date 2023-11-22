@@ -394,30 +394,29 @@ arrayBtnChangeStatusOci.forEach(function(elemento) {
     
 
 // --------------- Adding New OCI to an existing Project ------------------------
-
-function addNewOciToProject(i, projectName) {
+function addNewOciToProject(i, projectName, lastOciNumber) {
    
     var arrayBloque = []
-    
+
         arrayBloque.push(`
-        <div id="ociItemRow0" class="row my-1 mx-3">
-            <div class="col-3 my-1 align-self-middle">
-                <input type="number" name="ociNumber" id="ociNumber" class="form-control" min="0" max="9999"
-                placeholder="Número OCI" value="" required>
-            </div>
-            <div class="col-4 my-1 align-self-middle">
-                <input type="text" name="ociDescription" id="ociDescription" class="form-control"
-                placeholder="Descripcion OCI" required>
-            </div>
-            <div class="col-3 mt-3 align-self-middle">
-                <div class="form-check form-switch d-inline-block">
-                    <input class="form-check-input" type="checkbox" id="ociStatus" name="ociStatus" aria-checked="true" style="cursor: pointer;" checked>
-                    <label class="form-check-label" for="ociStatus">Activa</label>
+            <div id="ociItemRow0" class="row my-1 mx-3">
+                <div class="col-3 my-1 align-self-middle">
+                    <input type="number" name="ociNumber0" id="ociNumber0" class="form-control" min="0" max="9999"
+                    placeholder="Número OCI" value="${lastOciNumber+1}" required>
                 </div>
-            <div class="col my-1 align-self-middle">
-                
+                <div class="col-4 my-1 align-self-middle">
+                    <input type="text" name="ociDescription0" id="ociDescription0" class="form-control"
+                    placeholder="Descripcion OCI" required>
+                </div>
+                <div class="col-3 mt-3 align-self-middle">
+                    <div class="form-check form-switch d-inline-block">
+                        <input class="form-check-input" type="checkbox" name="ociStatus0" id="ociStatus0" aria-checked="true" style="cursor: pointer;" checked>
+                        <label class="form-check-label" for="ociStatus">Activa</label>
+                    </div>
+                <div class="col my-1 align-self-middle">
+                    
+                </div>
             </div>
-        </div>
         `)
     
 
@@ -435,13 +434,13 @@ function addNewOciToProject(i, projectName) {
                             <label for="ociStatus"><strong>OCI Status</strong></label>
                         </div>
                         <div class="col my-auto align-self-middle">
-                            <button type="button" id="btnAddNewOciRow" class="btn btn-primary rounded-circle mx-1 my-auto"><i class="fa fa-plus-circle"></i></button>
+                            <button type="button" id="btnAddNewOciRow0" class="btn btn-primary rounded-circle mx-1 my-auto"><i class="fa fa-plus-circle"></i></button>
                         </div>
                     </div>
                     <hr>
                         ${arrayBloque}
-                    <input type="text" name="ociNumberK" value="${i}"> 
-                    <input type="text" id="ociQuantity" name="ociQuantity" value="${arrayBloque.length}">
+                    <input type="hidden" name="ociNumberKModal" value="${i}"> 
+                    <input type="hidden" id="ociQuantityModal" name="ociQuantityModal" value="${arrayBloque.length}">
                 </fieldset>
             </form>
     `
@@ -487,19 +486,19 @@ function addNewOciToProject(i, projectName) {
 
 
     //-------------------------- Add New OCI Row Modal Form--------------------------------
-    const btnAddNewOciRow = document.getElementById("btnAddNewOciRow")
+    const btnAddNewOciRow = document.getElementById("btnAddNewOciRow0")
 
     btnAddNewOciRow.addEventListener('click', () => {
         const parentDiv = document.getElementById('ociNewItemRow')
                 
-        let i = parseInt(document.getElementById('ociQuantity').value)
+        let i = parseInt(document.getElementById('ociQuantityModal').value)
         
-        const ociNumberValue = parseInt(document.getElementById('ociNumber').value)
+        const ociNumberValue = parseInt(document.getElementById(`ociNumber${i-1}`).value)
 
         const originalDiv = (
             `   <div class="col-3 my-1 align-self-middle">
                     <input type="number" name="ociNumber${i}" id="ociNumber${i}" class="form-control" min="0" max="9999"
-                    placeholder="Número OCI" value="${ociNumberValue+i}" required>
+                    placeholder="Número OCI" value="${ociNumberValue+1}" required>
                 </div>
                 <div class="col-4 my-1 align-self-middle">
                     <input type="text" name="ociDescription${i}" id="ociDescription${i}" class="form-control"
@@ -512,7 +511,7 @@ function addNewOciToProject(i, projectName) {
                     </div>
                 </div>
                 <div class="col my-1 align-self-middle">
-                    <button type="button" id="btnRemoveNewOciRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" name="btnRemoveNewOciRow" id="btnRemoveNewOciRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `
         )
@@ -522,11 +521,11 @@ function addNewOciToProject(i, projectName) {
 
         } else if (i !== 1 && i < 4) { //cantidad maxima de OCI en conjunto a agregar 5
             originalDiv
-            btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${i-1}`) //i-1
+            btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${i-1}`)
             btnRemoveNewItem.style.display = 'none'
 
         } else {
-            btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${i-1}`) //i-1
+            btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${i-1}`)
             btnRemoveNewItem.style.display = 'none'
             btnAddNewOciRow.setAttribute('disabled', true)
         }
@@ -536,10 +535,10 @@ function addNewOciToProject(i, projectName) {
         newDiv.id = `ociItemRow${i}`
         newDiv.innerHTML = originalDiv
         parentDiv.appendChild(newDiv)
-        const ociQty = document.getElementById("ociQuantity")
+        const ociQty = document.getElementById("ociQuantityModal")
         ociQty.setAttribute('value', i + 1)
 
-        const buttons = document.querySelectorAll('button')
+        const buttons = document.querySelectorAll('button[name="btnRemoveNewOciRow"]')
         buttons.forEach((button) => {
             button.addEventListener("click", removeNewOciRow)
         })
@@ -547,25 +546,25 @@ function addNewOciToProject(i, projectName) {
 
 //-------------------------- Remove OCI Row from Modal Form ----------------------------------
     function removeNewOciRow(e) {
-        console.log('eventooooo.. ',e)
-        let i = parseInt(document.getElementById('ociQuantity').value)
         
-        if (e.target.id) {
-            let btnRemoveNewRow = e.target.id
-            const numberId1 = parseInt(btnRemoveNewRow.slice(-1))
-            const numberId2 = parseInt(btnRemoveNewRow.slice(-2))
+        let i = document.getElementById('ociQuantityModal').value
+        
+        if (e.target.id && i > 1) {
+            let btnRemoveRow = e.target.id
+            const numberId1 = parseInt(btnRemoveRow.slice(-1))
+            const numberId2 = parseInt(btnRemoveRow.slice(-2))
             let numberIdToDelete
-
+            
             numberId1 >= 0 && numberId2 ? numberIdToDelete = numberId2 : numberIdToDelete = numberId1;
-
+            
             function checkString(string) {
-                return /^[0-9]*$/.test(string);
+            return /^[0-9]*$/.test(string);
             }
 
             if (checkString(numberIdToDelete)) {
                 const rowToDelete = document.getElementById(`ociItemRow${numberIdToDelete}`)
                 rowToDelete.remove()
-                const ociQty = document.getElementById("ociQuantity")
+                const ociQty = document.getElementById("ociQuantityModal")
                 ociQty.setAttribute('value', (i - 1))
 
                 if (numberIdToDelete === 1) {
@@ -586,14 +585,14 @@ function addNewOciToProject(i, projectName) {
     // --------------------------------------
 }
 
-const arrTables = []
+const arrayProjectList = []
 for (let i = 0; i<projectQuantity; i++) {  //ver limite maximo de proyectos por Cliente
     if (document.getElementById(`accordionPanelsStayOpen${i}`)) {
-        arrTables.push(i)
+        arrayProjectList.push(i)
     }
 }
 
-if(arrTables !=[]) {
+if(arrayProjectList !=[]) {
     let allButtonsNewOci = document.querySelectorAll('button[name="btnAddNewOciToProject"]')
     
     allButtonsNewOci.forEach(function(btn){
@@ -601,7 +600,16 @@ if(arrTables !=[]) {
             event.preventDefault()
             let kValue = event.target.value
             const projectName = document.getElementById(`projectNameHidden${btn.value}_0`).value
-            addNewOciToProject(kValue, projectName)
+            
+            let arrayLastOciNumber=[]
+            for(let n=0; n<10; n++) {
+                if(document.getElementById(`ociNumberHidden${btn.value}_${n}`)) {
+                    arrayLastOciNumber.push(parseInt(document.getElementById(`ociNumberHidden${btn.value}_${n}`).value))
+                }
+            }
+
+            let lastOciIndex = parseInt(arrayLastOciNumber.length-1)
+            addNewOciToProject(kValue, projectName, arrayLastOciNumber[lastOciIndex])
     	})
     })
 }
