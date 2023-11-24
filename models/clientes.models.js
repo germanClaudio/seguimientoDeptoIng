@@ -12,7 +12,7 @@ const ClientsSchema = new Schema({
     },
     code: {
         type: String,
-        maxlength: 4
+        maxlength: 8
     },
     logo: { 
         type: String,
@@ -38,7 +38,11 @@ const ClientsSchema = new Schema({
     modifiedOn: {
         type: String,
         default: now
-    }
+    },
+    visible: {
+        type: Boolean,
+        default: true
+    },
 },{
     versionKey: false
 })

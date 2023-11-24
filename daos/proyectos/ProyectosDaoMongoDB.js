@@ -312,7 +312,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                         }
                     // console.log('4-Dao-Ot agregada: ', infoR14OtAddedToOt)
 
-                        // Se cuentan las de datos agregados ---
+                        // Se cuentan las estructuras de datos agregados ---
                         var countInfoAdded = 0
                         for (let i = 0; i < quantityOt; i++) {
                             if (infoR14OtAddedToOt.modifiedCount===1) {
@@ -411,7 +411,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
                 //console.log('itemMongoDB...', itemMongoDB)
-                console.log('now...dao. ', now)
+                //console.log('now...dao. ', now)
                 if (itemMongoDB) {
                     
                     var updatedProject = await Proyectos.updateOne(
@@ -498,92 +498,67 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    async updateClient(id, client) {
-        const itemMongoDB = await Clientes.findById({ _id: id })
-        if (itemMongoDB) {
+    // Add new Oci to Project
+    async addNewOciToProject(idProjectTarget, ociQuantity, arrayOciAddedToProject) {
+        
+        if (idProjectTarget) {
             try {
-                const newValues = {
-                    clientName: client.clientName,
-                    clientCode: client.clientCode,
-                    logoClient: client.logoClient,
-                    status: client.status,
-                    timestamp: now,
-                    creator: client.creator
-                }
+                const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget })
+                
+                if (itemMongoDB) {
 
-                const clientUpdated = await Clientes.findOneAndUpdate(
-                    { _id: id },
-                    newValues,
-                    { new: true })
-                logger.info('Cliente actualizado ', clientUpdated)
+                        let arrayQueryQuantity = []
+                        for (let i = 0; i < ociQuantity; i++) {
+                            
+                            let updateQuery = {
+                                    ociNumber: arrayOciAddedToProject[i].ociNumber,
+                                    ociDescription: arrayOciAddedToProject[i].ociDescription,
+                                    ociStatus: arrayOciAddedToProject[i].ociStatus,
+                                    creator: arrayOciAddedToProject[i].creator,
+                                    timestamp: now,
+                                    modificator: [],
+                                    modifiedOn: '',
+                                    visible: true
+                            }
+                            arrayQueryQuantity.push(updateQuery)
+                        }    
+                        //console.log('updateQuery= ', arrayQueryQuantity)
 
-                return clientUpdated
+                        // Se agregan las estructuras al arbol de MongoDB ---
+                        for (let n=0; n<ociQuantity; n++) {
 
-            } catch (error) {
-                logger.error("Error MongoDB updateClient: ", error)
-                return new Error(`No se pudo actualizar el Cliente!`)
-            }
-        } else {
-            logger.info('El Cliente no existe! ', itemMongoDB)
-            return new Error(`No se pudo actualizar el Cliente!`)
-        }
-    }
+                            var ociAddedToProyecto = await Proyectos.updateOne(
+                                { _id: itemMongoDB._id },
+                                {
+                                    $push: {
+                                        [`project.0.oci`]: arrayQueryQuantity[n]
+                                    }
+                                },
+                                { new: true }
+                            )
+                            logger.info('Oci agregada a Proyecto ', ociAddedToProyecto)
+                        }
 
-    async deleteClientById(id) {
-        const itemMongoDB = await Clientes.findById({ _id: `${id}` })
+                        // Si se agrega correctamente las OCI => true ---
+                        if (ociAddedToProyecto.acknowledged) {
+                            const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
+                            return itemUpdated
 
-        if (itemMongoDB) {
-            try {
-                const newValues = {
-                    clientName: itemMongoDB.clientName,
-                    logoClient: itemMongoDB.logoClient,
-                    timestamp: now,
-                    creator: itemMongoDB.creator,
-                    status: 'Inactivo' //Borrado logico del cliente Status=Inactivo
-                }
-                const client = await Clientes.findOneAndUpdate(
-                    { _id: id }, newValues, { new: true })
-                return client
-            } catch (error) {
-                logger.error("Error MongoDB deleteClient: ", error)
-            }
-        } else {
-            logger.info('El Cliente no existe! ', itemMongoDB)
-        }
-    }
+                        } else {
+                            return new Error(`No se actualizó el item: ${itemMongoDB._id}`)
+                        }
 
-    // async deleteAllProducts() {
-    //     const newStockQuantity = 0  //Borrado logico de todos los productos New Stock = 0  -----
-    //     const products = await Productos.find()
-    //     if ( products === [] || products === undefined || products === null) {
-    //         return new Error ('No hay productos en la DB!')
-    //     } else {    
-    //         try {
-    //             const productsStockUpdated = await Productos.updateMany({}, { $set: { stock: newStockQuantity } }, { new: true })
-
-    //             return productsStockUpdated
-    //         } catch (error) {
-    //             logger.error("Error MongoDB deleteAllProduct: ", error)
-    //         }
-    //     }
-    // }
-
-    async getByNameOrCode(client) {
-        if (client) {
-            try {
-                const nameClient = await Clientes.findOne({ clientName: `${client}` }).exec();
-                const codeClient = await Clientes.findOne({ ClientCode: `${client}` }).exec();
-
-                if (nameClient || codeClient) {
-                    return nameClient
                 } else {
-                    return false
+                    logger.error(`No se encontró la OCI`)
+                    return new Error(`No se encontró la OCI`)
                 }
+
             } catch (error) {
-                logger.error("Error MongoDB getByNameOrCode: ", error)
+                logger.error("Error MongoDB adding OCI to a Project: ", error)
             }
+
         } else {
-            return new Error(`No se pudo concretar la busqueda en la DB!`)
+            return new Error(`No se pudo agregar la OCI al Proyecto!`)
         }
     }
 

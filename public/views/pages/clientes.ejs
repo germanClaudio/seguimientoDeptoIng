@@ -14,23 +14,23 @@
         <h2 class="d-block mx-auto my-2 text-center">Lista de Clientes</h2>
     </div>
     <div class="d-block mx-auto my-3 text-center">
-        <a class="btn btn-primary my-2 mx-5" href="/api/auth/index"><i class="fa fa-home" aria-hidden="true"></i> Regresar al Home </a>
+        <a class="btn btn-primary my-2 mx-5" href="/api/auth/index"><i class="fa-solid fa-home" aria-hidden="true"></i> Regresar al Home </a>
         <% if( userInfo.admin ){ %>
-        <a class="btn btn-danger my-2 mx-5" href="/api/clientes/all/delete"><i class="fa fa-trash" aria-hidden="true"></i> Eliminar Todos </a>
+        <a class="btn btn-danger my-2 mx-5 disabled" href="/api/clientes/all/delete"><i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar Todos </a>
         <% } %>
     </div>
         <br>
         <div class="d-block mx-auto mb-3 text-center w-100 px-5">
         <%- include('../partials/dataClientTable'); %>
         </div>
-            <div class="d-block mx-auto my-4 pb-5 text-center">
-                <a class="btn btn-primary my-2" href="/api/auth/index"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Regresar al Home </a>
-            </div>
-            <footer>
-                <%- include('../partials/footer'); %>
-            </footer>
+    <div class="d-block mx-auto my-4 pb-5 text-center">
+        <a class="btn btn-primary my-2" href="/api/auth/index"><i class="fa-solid fa-chevron-circle-left" aria-hidden="true"></i> Regresar al Home </a>
+    </div>
+    <footer>
+        <%- include('../partials/footer'); %>
+    </footer>
 <!--    scripts     -->
-<script type="text/javascript" src="../../../historial.js"></script>
+<script type="text/javascript" src="../../../clientes.js"></script>
 <script type="text/javascript" src="../../../clock.js"></script>
 <script type="text/javascript" src="../../expiresSession.js"></script>
 

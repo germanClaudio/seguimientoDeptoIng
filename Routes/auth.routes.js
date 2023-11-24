@@ -18,8 +18,6 @@ const serverMongoDB = require('../usuarios/userMongoDB')
 const constructor = serverMongoDB.ServerMongoDB
 const server = new constructor()
 
-// const GetCarts = require('../daos/carritos/CarritosDaoMongoDB.js')
-// const carts = new GetCarts()
 
 //_______________________________ login _____________________________________ //
 authRouter.get('/login', (req, res) => { // lleva la vista del formulario de login
@@ -32,7 +30,7 @@ authRouter.get('/login', (req, res) => { // lleva la vista del formulario de log
 authRouter.post('/login', sessionPostLogin, countVisits, users.login)
 
 //----------------------------------------------------------------
-authRouter.get('/historial', checkAuthentication, authUserMiddleware, async (req, res) => {
+authRouter.get('/clientes', checkAuthentication, authUserMiddleware, async (req, res) => {
     
     let username = res.locals.username
     let userInfo = res.locals.userInfo
@@ -44,7 +42,7 @@ authRouter.get('/historial', checkAuthentication, authUserMiddleware, async (req
     try {
         const visits = req.session.visits
         const user = await server.getUserByUsername(username)
-        // const cart = await carts.getCartByUserId(user._id) 
+        
         const { flag, fail } = true
         
         if (!user) {
@@ -56,7 +54,7 @@ authRouter.get('/historial', checkAuthentication, authUserMiddleware, async (req
             const access_token = generateToken(user)
             req.session.admin = true
             req.session.username = userInfo.username
-            return res.render('historial', {
+            return res.render('clientes', {
                 userInfo,
                 username,
                 expires
@@ -87,7 +85,7 @@ authRouter.get('/index', checkAuthentication, authUserMiddleware ,async (req, re
     try {
         const visits = req.session.visits
         const user = await server.getUserByUsername(username)
-        // const cart = await carts.getCartByUserId(user._id)
+        
         const { flag, fail } = true
 
         if (!user) {

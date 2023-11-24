@@ -83,6 +83,16 @@ class ProjectService {
             userInfo)
     }
 
+    // add New Oci To Project
+    async addNewOciToProject(id, project, ociKNumber, userInfo) {
+        return this.proyectos.addNewOciToProject(
+            id,
+            project,
+            ociKNumber,
+            userInfo
+        )
+    }
+
     // // remove one project from Client
     // async deleteProjectFromClient(id) {
     //     return this.proyectos.deleteItemFromCart()

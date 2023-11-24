@@ -159,10 +159,16 @@ class ProjectsController {
         const clienteSeleccionado = await this.clients.selectClientById(clientId)
 
         const userId = req.body.idHidden
-        const user = await this.users.getUserById(userId)
-
+        const userCreator = await this.users.getUserById(userId)
+        
         const ociQuantity = parseInt(req.body.ociQuantity)
 
+        const user = [{
+            name: userCreator.name,
+            lastName: userCreator.lastName,
+            username: userCreator.username,
+            email: userCreator.email
+        }]
         //----------Update  13/11/2023 ------------------
         let arrayOciNumber=[],
             arrayOciDescription=[],
@@ -185,7 +191,10 @@ class ProjectsController {
             var ociProject = {
                     ociNumber: arrayOciNumber[i],
                     ociDescription: arrayOciDescription[i],
-                    ociStatus: arrayOciStatus[i] == 'on' ? true : false
+                    ociStatus: arrayOciStatus[i] == 'on' ? true : false,
+                    creator: user,
+                    visible: true
+
             }
             
             arrayOciProjects.push(ociProject)
@@ -201,6 +210,8 @@ class ProjectsController {
             projectDescription: req.body.projectDescription,
             prioProject: req.body.prioProject,
             imageProject: req.body.imageProject,
+            visible: true,
+            creator: user,
             oci: arrayOciProjects
         }
 
@@ -208,14 +219,14 @@ class ProjectsController {
             creator: user,
             client: clienteSeleccionado,
             project: project,
-            timestamp: now,  //formatDate(new Date()),
+            timestamp: now,
             modificator: [],
-            modifiedOn: ''
+            modifiedOn: '',
+            visible: true
         }
 
-        console.log('newProject... ',newProject)
-
-        await this.projects.addProjectToClient(newProject) //const newProyecto = 
+        //console.log('newProject... ',newProject)
+        await this.projects.addProjectToClient(newProject)
         const proyectos = await this.projects.getProjectsByClientId(clientId)
 
         let username = res.locals.username
@@ -582,6 +593,96 @@ class ProjectsController {
         }
     }
 
+    addNewOciToProject = async (req, res) => {
+        const id = req.params.id
+        const proyecto = await this.projects.selectProjectByProjectId(id)
+        
+        const clientId = proyecto[0].client[0]._id
+        const cliente = await this.clients.selectClientById(clientId)
+        const projectId = proyecto[0]._id
+        
+        const ociQuantity = parseInt(req.body.ociQuantityModal)
+        
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+        const userId = userInfo.id
+
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+
+        const userCreator = await this.users.getUserById(userId)
+
+        const user = [{
+            name: userCreator.name,
+            lastName: userCreator.lastName,
+            username: userCreator.username,
+            email: userCreator.email
+        }]
+
+        let arrayOciNumber=[],
+            arrayOciDescription=[],
+            arrayOciStatus=[]
+
+        for (const key in req.body) {
+            if (key.startsWith('ociNumber')) {
+                arrayOciNumber.push(req.body[key])
+            }
+            else if (key.startsWith('ociDescription')) {
+                arrayOciDescription.push(req.body[key])
+            }
+            else if (key.startsWith('ociStatus')) {
+                arrayOciStatus.push(req.body[key] === 'on' ? true : false)
+            }
+        }
+
+        // console.log('arrayOtNumber: ', arrayOtNumber,
+        //             'arrayOtStatus: ', arrayOtStatus,
+        //             'arrayProcesoR14: ', arrayProcesoR14
+        // )
+
+        let arrayOciAddedToProject = []
+        for (let i=0; i<ociQuantity; i++ ) {
+            var infoOciAddedToProject = {
+                ociNumber: parseInt(arrayOciNumber[i]),
+                ociDescription: arrayOciDescription[i] || "sinDatos",
+                ociStatus: arrayOciStatus[i],
+                timestamp: now,
+                creator: user,
+                modificator: [],
+                modifiedOn: "",
+            }
+            arrayOciAddedToProject.push(infoOciAddedToProject)
+        }
+
+        //console.log('1- Controller_infoAddedToOt....', infoAddedToOt)
+        
+        await this.projects.addNewOciToProject(
+            projectId,
+            ociQuantity,
+            arrayOciAddedToProject
+        )
+
+        const proyectos = await this.projects.getProjectsByClientId(clientId)
+
+        try {
+            if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+            res.render('clientProjectsDetails', {
+                username,
+                userInfo,
+                expires,
+                cliente,
+                proyectos
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
     // deleteProductById = async (req, res) => {
     //     const { id } = req.params
 
@@ -607,29 +708,6 @@ class ProjectsController {
     //     }
     // }
 
-    // deleteAllProducts = async (req, res) => {
-    //     let username = res.locals.username
-    //     let userInfo = res.locals.userInfo
-
-    //     const cookie = req.session.cookie
-    //     const time = cookie.expires
-    //     const expires = new Date(time)
-
-    //     const usuarios = await this.users.getUserByUsername(username)
-    //     const userId = usuarios._id // User Id
-    //     let cart = await this.carts.getCartByUserId(userId)
-
-    //     try {
-    //         const productsDeleted = await this.products.deleteAllProducts()
-    //         res.render('addNewProducts', { productsDeleted, username, userInfo, cart, expires })
-
-    //     } catch (error) {
-    //         res.status(500).json({
-    //             status: false,
-    //             error: error
-    //         })
-    //     }
-    // }
 }
 
 module.exports = { ProjectsController }

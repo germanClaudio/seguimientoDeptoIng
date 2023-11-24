@@ -2,16 +2,7 @@ const ClientsService = require("../services/clients.service.js")
 const UserService = require("../services/users.service.js")
 const ProjectsService = require("../services/projects.service.js")
 
-function formatDate(date) {
-    const day = date.getDate()
-    const month = date.getMonth() + 1
-    const year = date.getFullYear()
-    const hours = date.getHours()
-    const min = date.getMinutes()
-    const sec = date.getSeconds()
-
-    return day + "-" + month + "-" + year + "_" + hours + "." + min + "." + sec
-}
+let now = require('../utils/formatDate.js')
 
 class ClientsController {
     constructor() {
@@ -146,23 +137,27 @@ class ClientsController {
     }
 
     createNewClient = async (req, res) => {
-        const user = []
-        user.push(
-            req.body.unameHidden,
-            req.body.lastNameHidden,
-            req.body.usernameHidden
-        )
-
+        const userId = req.body.idHidden
+        const userCreator = await this.users.getUserById(userId)
+        
+        const user = [{
+            name: userCreator.name,
+            lastName: userCreator.lastName,
+            username: userCreator.username,
+            email: userCreator.email
+        }]
+        
         const newCliente = {
             creator: user,
-            modificator: [],
             name: req.body.name,
             status: Boolean(true),
             code: req.body.code,
             project: 0,
             logo: req.body.logo,
-            timestamp: formatDate(new Date()),
-            modifiedOn: ''//formatDate(new Date())
+            timestamp: now,
+            modificator: [],
+            modifiedOn: '',
+            visible: true
         }
 
         const cliente = await this.clients.addClient(newCliente)
@@ -196,27 +191,26 @@ class ClientsController {
         const proyectosQty = await this.projects.getProjectsByClientId(id)
         const creador = await this.clients.getClientById(id)
 
-        const modifier = []
-        modifier.push(
-            req.body.unameHidden,
-            req.body.lastNameHidden,
-            req.body.username
-        )
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+                
+        const modifier = [{
+            name: userInfo.name,
+            lastName: userInfo.lastName,
+            username: userInfo.username
+        }]
 
         const updatedCliente = {
             creator: creador.creator,
             name: req.body.name,
-            status: Boolean(true),
+            status: req.body.status === 'true' ? Boolean(true): Boolean(false),
             code: req.body.code,
             project: proyectosQty.length,
             logo: req.body.logo,
             timestamp: creador.timestamp,
             modificator: modifier,
-            modifiedOn: formatDate(new Date())
+            modifiedOn: now
         }
-
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
 
         const cookie = req.session.cookie
         const time = cookie.expires
@@ -249,12 +243,11 @@ class ClientsController {
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
-        const modifier = []
-        modifier.push(
-            req.body.unameHidden, 
-            req.body.lastNameHidden, 
-            username
-        )
+        const modifier = [{
+            name: userInfo.name,
+            lastName: userInfo.lastName,
+            username: userInfo.username
+        }]
 
         const updatedClienteProjectsQty = {
             creator: creador.creator,
@@ -265,7 +258,7 @@ class ClientsController {
             logo: clientToUpdateProjectQty.logo,
             timestamp: creador.timestamp,
             modificator: modifier,
-            modifiedOn: formatDate(new Date())
+            modifiedOn: now
         }
 
         const cookie = req.session.cookie
@@ -290,17 +283,23 @@ class ClientsController {
     }
 
     deleteClientById = async (req, res) => {
-        const { id } = req.params
+        const clientId = req.params.id
 
         let username = res.locals.username
         let userInfo = res.locals.userInfo
+
+        const modifier = [{
+            name: userInfo.name,
+            lastName: userInfo.lastName,
+            username: userInfo.username
+        }]
 
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
 
         try {
-            const clientDeleted = await this.clients.deleteClientById(req.params.id)
+            const clientDeleted = await this.clients.deleteClientById(clientId)
             res.render('addNewClients', {
                 clientDeleted,
                 username,

@@ -46,19 +46,23 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
     }
 
     async getClientById(id) {
+        
         if(id){
-            //console.log('id-getClientById.....',id)
+            
             try {
                 const client = await Clientes.findById({_id: id })
                 logger.info('Cliente encontrado: ',client)
                 return client
+
             } catch (error) {
                 logger.error("Error MongoDB getClientById-Dao: ",error)
             }
+
         } else {
             try {
                 const clients = await Clientes.find()
                 return clients
+
             } catch (error) {
                 logger.error("Error MongoDB getClientById-Dao: ",error)
             }
@@ -66,18 +70,22 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
     }
 
     async selectClientById(id) {
+
         if(id){
             try {
                 const client = await Clientes.findById({_id: id })
                 logger.info('Cliente encontrado: ',client)
                 return client
+                
             } catch (error) {
                 logger.error("Error MongoDB selectClientById-Dao: ",error)
             }
+            
         } else {
             try {
                 const clients = await Clientes.find()
                 return clients
+                
             } catch (error) {
                 logger.error("Error MongoDB selectClientById: ",error)
             }
@@ -226,51 +234,39 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                 }
                 
                 const client = await Clientes.findOneAndUpdate(
-                    { _id: id }, newValues , { new: true })
+                    { _id: id }, 
+                    newValues, 
+                    { new: true }
+                )
                     return client
+
             } catch (error) {
                 logger.error("Error MongoDB deleteClient: ",error)
             }
+
         } else {
             logger.info('El Cliente no existe! ', itemMongoDB)
         }
     }
 
-    // async deleteAllClients() {
-    //     const newStockQuantity = 0  //Borrado logico de todos los productos New Stock = 0  -----
-    //     const products = await Productos.find()
-    //     if ( products === [] || products === undefined || products === null) {
-    //         return new Error ('No hay productos en la DB!')
-    //     } else {    
+    // async getClientByNameOrCode(client) {
+    //     if(client) {
     //         try {
-    //             const productsStockUpdated = await Productos.updateMany({}, { $set: { stock: newStockQuantity } }, { new: true })
-                    
-    //             return productsStockUpdated
+    //             const nameClient = await Clientes.findOne({ name: `${client}`}).exec();
+    //             const codeClient = await Clientes.findOne({ code: `${client}`}).exec();
+    
+    //             if(nameClient || codeClient) {
+    //                 return nameClient
+    //             } else {
+    //                 return false
+    //             }
     //         } catch (error) {
-    //             logger.error("Error MongoDB deleteAllProduct: ", error)
+    //             logger.error("Error MongoDB getByNameOrCode: ",error)
     //         }
+    //     } else {
+    //         return new Error (`No se pudo concretar la busqueda en la DB!`)
     //     }
     // }
-    
-
-    async getByNameOrCode(client) {
-        if(client) {
-            try {
-                const nameClient = await Clientes.findOne({ name: `${client}`}).exec();
-                const codeClient = await Clientes.findOne({ code: `${client}`}).exec();
-    
-                if(nameClient || codeClient) {
-                    return nameClient
-                } else {
-                    return false
-                }
-            } catch (error) {
-                logger.error("Error MongoDB getByNameOrCode: ",error)
-            }
-        } else {
-            return new Error (`No se pudo concretar la busqueda en la DB!`)
-        }
-    }
 
     async disconnet() {
         await this.disconnection

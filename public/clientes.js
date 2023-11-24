@@ -14,27 +14,6 @@ socket.on('clientsAll', (arrClient, arrUsers) => {
     }   
 })
 
-const addClient = () => {
-    const newCliente = {
-        creator: {
-            // userId: document.getElementById('idHidden').value,
-            // userName: document.getElementById('usernameHidden').value,
-            // userLastName: document.getElementById('lastNameHidden').value,
-            uname: document.getElementById('unameHidden').value
-        },
-        name: document.getElementById('name').value,
-        code: document.getElementById('code').value,
-        logo: document.getElementById('logo').value,
-        project: document.getElementById('project').value,
-        status: Boolean(true),
-        timestamp: formatDate(new Date())
-    }
-    
-    socket.emit('newCliente', newCliente
-    )
-    return false
-}
-
 // --------------- Render Admin -----------------------------------
 const renderClientAdmin = (arrClient) => {
     const arrayClient = arrClient
@@ -53,7 +32,10 @@ const renderClientAdmin = (arrClient) => {
         let userArr = []
         function loopUserId() {
             for (let i=0; i < element.creator.length; i++) {
-                userArr.push(element.creator[i])
+                userArr.push(
+                    element.creator[i].name,
+                    element.creator[i].lastName
+                )
             }
             return userArr.join('<br>')
         }
@@ -61,7 +43,10 @@ const renderClientAdmin = (arrClient) => {
         let modifArr = []
         function loopModifId() {
             for (let i=0; i < element.modificator.length; i++) {
-                modifArr.push(element.modificator[i])
+                modifArr.push(
+                    element.modificator[i].name,
+                    element.modificator[i].lastName
+                )
             }
             return modifArr.join('<br>')
         }
@@ -152,8 +137,8 @@ const renderClientUser = (arrClient) => {
                     <td class="text-center">${element.creator}</td>
                     <td class="text-center">${element.timestamp}</td>
                     <td class="text-center">
-                        <a href="#" class="btn btn-secondary btn-sm me-1disabled" data-toggle="tooltip" data-placement="top" title="To Be Done"><i class="fa fa-eye"></i></a>
-                        <i class="fa fa-info-circle fa-2x ms-1" data-toggle="tooltip" data-placement="top" title="Solo Admin puede modificar esto" aria-hidden="true"></i>
+                        <a href="#" class="btn btn-secondary btn-sm me-1disabled" data-toggle="tooltip" data-placement="top" title="To Be Done"><i class="fa-solid fa-eye"></i></a>
+                        <i class="fa-solid fa-info-circle fa-2x ms-1" data-toggle="tooltip" data-placement="top" title="Solo Admin puede modificar esto" aria-hidden="true"></i>
                     </td>
                 </tr>`)
     }).join(" ");

@@ -13,8 +13,8 @@
                     <div class="col-4">
                         <label for="status">Status</label>
                         <select id="status" name="status" class="form-select" required>
-                            <option selected disabled value="">Seleccione un status</option>
-                            <option value="true">Activo</option>
+                            <option disabled value="">Seleccione un status</option>
+                            <option value="true" selected>Activo</option>
                             <option value="false">Inactivo</option>
                         </select>
                     </div>
@@ -36,12 +36,12 @@
                         </div>
                     </div>
                     <input type="hidden" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>">
-                    <input type="hidden" name="usernameHidden" id="usernameHidden" class="form-control"
+                    <!-- <input type="hidden" name="usernameHidden" id="usernameHidden" class="form-control"
                         value="<%= userInfo.username %>">
                     <input type="hidden" name="unameHidden" id="unameHidden" class="form-control"
                         value="<%= userInfo.name %>">
                     <input type="hidden" name="lastNameHidden" id="lastNameHidden" class="form-control"
-                        value="<%= userInfo.lastName %>">
+                        value="<%= userInfo.lastName %>"> -->
                     <br>
                     <div class="d-flex justify-content-center my-2">
                         <button type="submit" class="btn btn-primary mx-auto w-25">Guardar Cliente <i

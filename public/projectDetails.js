@@ -394,7 +394,7 @@ arrayBtnChangeStatusOci.forEach(function(elemento) {
     
 
 // --------------- Adding New OCI to an existing Project ------------------------
-function addNewOciToProject(i, projectName, lastOciNumber) {
+function addNewOciToProject(i, projectName, lastOciNumber, projectIdHidden) {
    
     var arrayBloque = []
 
@@ -421,7 +421,7 @@ function addNewOciToProject(i, projectName, lastOciNumber) {
     
 
     const html = `
-            <form id="formNewOciValues" action="/api/proyectos/newOciToProject" method="post" style="font-size: 10pt">
+            <form id="formNewOciValues" action="/api/proyectos/addNewOciToProject/${projectIdHidden}" method="post" style="font-size: 10pt">
                 <fieldset id="ociNewItemRow">
                     <div class="row my-auto mx-3">
                         <div class="col-3 my-auto align-self-middle">
@@ -439,11 +439,9 @@ function addNewOciToProject(i, projectName, lastOciNumber) {
                     </div>
                     <hr>
                         ${arrayBloque}
-                    <input type="hidden" name="ociNumberKModal" value="${i}"> 
                     <input type="hidden" id="ociQuantityModal" name="ociQuantityModal" value="${arrayBloque.length}">
                 </fieldset>
-            </form>
-    `
+            </form>`
 
 
     const Toast = Swal.mixin({
@@ -460,24 +458,31 @@ function addNewOciToProject(i, projectName, lastOciNumber) {
         width: 850,
         //background: "#aaaaaa",
         allowOutsideClick: false,
-        //showConfirmButton: false,
         showCloseButton: true,
         showCancelButton: true,
         confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
         cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
     }).then((result) => {
         if (result.isConfirmed) {
-            // console.log('clientId....', clientId)
-            //const formR14Values = document.getElementById('formNewOciValues')
-            //formNewOciValues.submit()
-            Toast.fire({
-                icon: 'success',
-                title: `OCI agregada con éxito!`
-            })
+            const formNewOci = document.getElementById('formNewOciValues')
+            formNewOci.submit()
+            let ociQuantityModal = document.getElementById('ociQuantityModal').value
+            
+            if (ociQuantityModal===1) {
+                Toast.fire({
+                    icon: 'success',
+                    title: `OCI agregada con éxito!`
+                })
+            } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: `OCI's agregadas con éxito!`
+                })
+            }
         } else {
             Swal.fire(
                 'Nueva OCI no agregada!',
-                `La información no fue agregada al proyecto !`,
+                `La información no fue agregada al proyecto!`,
                 'warning'
             )
             return false
@@ -490,9 +495,7 @@ function addNewOciToProject(i, projectName, lastOciNumber) {
 
     btnAddNewOciRow.addEventListener('click', () => {
         const parentDiv = document.getElementById('ociNewItemRow')
-                
         let i = parseInt(document.getElementById('ociQuantityModal').value)
-        
         const ociNumberValue = parseInt(document.getElementById(`ociNumber${i-1}`).value)
 
         const originalDiv = (
@@ -602,14 +605,24 @@ if(arrayProjectList !=[]) {
             const projectName = document.getElementById(`projectNameHidden${btn.value}_0`).value
             
             let arrayLastOciNumber=[]
-            for(let n=0; n<10; n++) {
+            let arrayProjectId=[]
+            for(let n=0; n<maxOciQuantity; n++) { 
                 if(document.getElementById(`ociNumberHidden${btn.value}_${n}`)) {
                     arrayLastOciNumber.push(parseInt(document.getElementById(`ociNumberHidden${btn.value}_${n}`).value))
+                    arrayProjectId.push(document.getElementById(`projectIdHidden${btn.value}_${n}`).value)
                 }
             }
 
             let lastOciIndex = parseInt(arrayLastOciNumber.length-1)
-            addNewOciToProject(kValue, projectName, arrayLastOciNumber[lastOciIndex])
+            let projectIdHidden = arrayProjectId[0]
+            
+            addNewOciToProject(
+                kValue, 
+                projectName, 
+                arrayLastOciNumber[lastOciIndex], 
+                projectIdHidden
+            )
     	})
     })
 }
+// --------------------------------------------------------------------------------------

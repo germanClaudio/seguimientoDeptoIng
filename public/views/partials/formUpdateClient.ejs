@@ -10,7 +10,7 @@
                                 
                 <div class="col-2 mx-auto my-2">
                     <label for="idCreator">Creado por</label>
-                    <input type="text" name="idCreator" id="idCreator" class="form-control-plaintext text-white small" value="<%=cliente.creator[0]%> <%=cliente.creator[1]%>"
+                    <input type="text" name="idCreator" id="idCreator" class="form-control-plaintext text-white small" value="<%=cliente.creator[0].name%> <%=cliente.creator[0].lastName%>"
                         disabled>
                 </div>
                 
@@ -22,7 +22,7 @@
                 
                 <div class="col-2 mx-auto my-2">
                     <label for="modificatorDisable">Modificado por</label>
-                    <input type="text" name="modificatorDisable" id="modificatorDisable" class="form-control-plaintext text-white small" value="<%=cliente.modificator[0]%> <%=cliente.modificator[1]%>"
+                    <input type="text" name="modificatorDisable" id="modificatorDisable" class="form-control-plaintext text-white small" value="<%=cliente.modificator[0].name%> <%=cliente.modificator[0].lastName%>"
                         disabled>
                 </div>
                 
@@ -83,20 +83,13 @@
                 </div>
                 
                 <input type="hidden" name="id" id="id" class="form-control" value="<%=cliente._id%>">
-                <input type="hidden" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>">
-                <input type="hidden" name="usernameHidden" id="usernameHidden" class="form-control" value="<%= userInfo.username %>">
-                <input type="hidden" name="unameHidden" id="unameHidden" class="form-control" value="<%= userInfo.name %>">
-                <input type="hidden" name="lastNameHidden" id="lastNameHidden" class="form-control" value="<%= userInfo.lastName %>">
                 <input type="hidden" name="logo" id="logo" class="form-control" value="<%=cliente.logo%>">
                 <input type="hidden" name="newLogo" id="newLogo" class="form-control">
-                <input type="hidden" name="statusHidden" id="statusHidden" class="form-control" value="<%=cliente.status%>">
-
+                
                 <div class="d-flex justify-content-center my-2">
-                    <button id="btnUpdateClient" class="btn btn-success mx-auto my-2">Actualizar Cliente <i
-                            class="fa-solid fa-save"></i></button>
-                    <a class="btn btn-primary my-2" href="/api/clientes"> Volver <i class="fa-solid fa-arrow-left"></i></a>
-                    <a class="btn btn-danger mx-auto my-2" href="/api/clientes/delete/<%=cliente._id%>">Eliminar <i
-                            class="fa-solid fa-trash"></i></a>
+                    <button id="btnUpdateClient" class="btn btn-success me-3 my-2">Actualizar Cliente <i class="fa-solid fa-save"></i></button>
+                    <a class="btn btn-primary mx-3 my-2" href="/api/clientes"> Volver <i class="fa-solid fa-arrow-left"></i></a>
+                    <a class="btn btn-danger ms-3 my-2" href="/api/clientes/delete/<%=cliente._id%>">Eliminar <i class="fa-solid fa-trash"></i></a>
                 </div>
         </fieldset>
     </form>

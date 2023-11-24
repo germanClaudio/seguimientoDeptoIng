@@ -431,6 +431,10 @@ let otProjectSchema = new Schema({
     modifiedOn: {
         type: String,
     },
+    visible: {
+        type: Boolean,
+        default: true,
+    }
 
 })
 
@@ -458,6 +462,10 @@ let ociProjectSchema = new Schema({
     },
     modifiedOn: {
         type: String,
+    },
+    visible:{
+        type: Boolean,
+        default: true,
     },
     otProject: [otProjectSchema]
     
@@ -499,6 +507,17 @@ let projectSchema = new Schema({
         type: Boolean,
         default: true,
     },
+    creator: [creatorSchema],
+    timestamp: {
+        type: String,
+        default: now,
+    },
+    modificator: {
+        type: Array,
+    },
+    modifiedOn: {
+        type: String,
+    },
     visible:{
         type: Boolean,
         default: true,
@@ -521,6 +540,10 @@ const ProyectoSchema = new Schema({
     modifiedOn: {
         type: String,
         default: now,
+    },
+    visible:{
+        type: Boolean,
+        default: true,
     },
 },{
     versionKey: false
