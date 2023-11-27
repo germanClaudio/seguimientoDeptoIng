@@ -4,7 +4,6 @@ const Clientes = require('../../models/clientes.models.js')
 const logger = require('../../utils/winston.js')
 const now = require('../../utils/formatDate.js')
 
-
 class ClientesDaoMongoDB extends ContenedorMongoDB {
     constructor(cnxStr) {
         super(cnxStr)   

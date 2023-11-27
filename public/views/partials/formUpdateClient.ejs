@@ -22,8 +22,13 @@
                 
                 <div class="col-2 mx-auto my-2">
                     <label for="modificatorDisable">Modificado por</label>
-                    <input type="text" name="modificatorDisable" id="modificatorDisable" class="form-control-plaintext text-white small" value="<%=cliente.modificator[0].name%> <%=cliente.modificator[0].lastName%>"
+                    <% if(cliente.modificator === []) { %>
+                        <input type="text" name="modificatorDisable" id="modificatorDisable" class="form-control-plaintext text-white small" value=""
                         disabled>
+                    <% } else { %>
+                        <input type="text" name="modificatorDisable" id="modificatorDisable" class="form-control-plaintext text-white small" value="<%=cliente.modificator[0].name%> <%=cliente.modificator[0].lastName%>"
+                        disabled>
+                    <% } %>        
                 </div>
                 
                 <div class="col-auto mx-auto my-2">

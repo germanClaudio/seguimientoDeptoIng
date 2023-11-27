@@ -397,6 +397,16 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
 // ---------------- Event Add New Ot Row to OCI --------------------
 const btnAddNewRow = document.getElementById("btnAddNewRow")
+const buttonOne = document.getElementById('buttonOne')
+
+buttonOne.addEventListener('click', () => {
+    let ariaExpanded = buttonOne.getAttribute('aria-expanded')
+
+    ariaExpanded==='true' ?
+        btnAddNewRow.removeAttribute('disabled')
+    :
+        btnAddNewRow.setAttribute('disabled', true)
+})
 
 //-------------------------- Add New OT Row --------------------------------
 btnAddNewRow.addEventListener('click', () => {
@@ -665,6 +675,12 @@ for (let i = 0; i < radios.length; i++) {
         lastOtNumberFn(i)
     })
 }
+
+const searchDesignUser = document.getElementById('searchDesignUser')
+searchDesignUser.addEventListener('click', (event) => {
+    event.preventDefault()
+    
+})
 
 function messageNewOt(ociNumber, otArray) {
 

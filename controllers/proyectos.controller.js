@@ -169,6 +169,14 @@ class ProjectsController {
             username: userCreator.username,
             email: userCreator.email
         }]
+
+        const modificator = [{
+            name: "",
+            lastName: "",
+            username: "",
+            email: ""
+        }]
+
         //----------Update  13/11/2023 ------------------
         let arrayOciNumber=[],
             arrayOciDescription=[],
@@ -220,7 +228,7 @@ class ProjectsController {
             client: clienteSeleccionado,
             project: project,
             timestamp: now,
-            modificator: [],
+            modificator: modificator,
             modifiedOn: '',
             visible: true
         }
@@ -272,10 +280,6 @@ class ProjectsController {
         let userInfo = res.locals.userInfo
         const userId = userInfo.id
 
-        const cookie = req.session.cookie
-        const time = cookie.expires
-        const expires = new Date(time)
-
         const userCreator = await this.users.getUserById(userId)
 
         const user = [{
@@ -285,7 +289,16 @@ class ProjectsController {
             email: userCreator.email
         }]
 
-        //const now = formatDate(new Date())
+        const modificator = [{
+            name: "",
+            lastName: "",
+            username: "",
+            email: ""
+        }]
+
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
 
         let arrayOtNumber=[],
             arrayOpNumber=[],
@@ -329,8 +342,10 @@ class ProjectsController {
                 otDesign: arrayOtDesign[i],
                 otSimulation: arrayOtSimulation[i],
                 otSupplier: arrayOtSupplier[i],
+                creator: user,
                 timestamp: now,
-                creator: user
+                modificator: modificator,
+                modifiedOn: ''
             }
             arrayOtAddedToOci.push(otAddedToOci)
         }
@@ -339,8 +354,7 @@ class ProjectsController {
             projectId,
             numberOci,
             ociNumberK,
-            arrayOtAddedToOci,
-            userInfo
+            arrayOtAddedToOci
         )
 
         const proyecto = await this.projects.selectProjectsByMainProjectId(projectId)
@@ -390,6 +404,13 @@ class ProjectsController {
             email: userCreator.email
         }]
 
+        const modificator = [{
+            name: "",
+            lastName: "",
+            username: "",
+            email: ""
+        }]
+
         //const now = formatDate(new Date())
 
         let arrayOtNumber=[],
@@ -427,7 +448,7 @@ class ProjectsController {
                 aprobadoR14: arrayAprobadoR14[i] || "sinDato",
                 timestamp: now,
                 creator: user,
-                modificator: [],
+                modificator: modificator,
                 modifiedOn: "",
             }
             arrayInfoAddedToOt.push(infoAddedToOt)
@@ -472,6 +493,15 @@ class ProjectsController {
 
         let username = res.locals.username
         const userInfo = res.locals.userInfo
+        const userId = userInfo.id
+        const userCreator = await this.users.getUserById(userId)
+        
+        const userModificator = [{
+                    name: userCreator.name,
+                    lastName: userCreator.lastName,
+                    username: userCreator.username,
+                    email: userCreator.email
+                }]
         
         const cookie = req.session.cookie
         const time = cookie.expires
@@ -481,7 +511,7 @@ class ProjectsController {
             id, 
             proyecto, 
             statusProjectHidden,
-            userInfo
+            userModificator
         )        
 
         const proyectos = await this.projects.getProjectsByClientId(clientId)
@@ -515,7 +545,16 @@ class ProjectsController {
 
         let username = res.locals.username
         const userInfo = res.locals.userInfo
+        const userId = userInfo.id
+        const userCreator = await this.users.getUserById(userId)
         
+        const userModificator = [{
+                    name: userCreator.name,
+                    lastName: userCreator.lastName,
+                    username: userCreator.username,
+                    email: userCreator.email
+                }]
+
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
@@ -524,7 +563,7 @@ class ProjectsController {
             id, 
             proyecto, 
             levelProjectHidden,
-            userInfo
+            userModificator
         )        
 
         const proyectos = await this.projects.getProjectsByClientId(clientId)
@@ -560,7 +599,16 @@ class ProjectsController {
 
         let username = res.locals.username
         const userInfo = res.locals.userInfo
+        const userId = userInfo.id
+        const userCreator = await this.users.getUserById(userId)
         
+        const userModificator = [{
+                    name: userCreator.name,
+                    lastName: userCreator.lastName,
+                    username: userCreator.username,
+                    email: userCreator.email
+                }]
+
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
@@ -570,7 +618,7 @@ class ProjectsController {
             proyecto,
             statusOciHidden,
             ociKNumber,
-            userInfo
+            userModificator
         )        
 
         const proyectos = await this.projects.getProjectsByClientId(clientId)
@@ -620,6 +668,13 @@ class ProjectsController {
             email: userCreator.email
         }]
 
+        const modificator = [{
+                    name: "",
+                    lastName: "",
+                    username: "",
+                    email: ""
+                }]
+
         let arrayOciNumber=[],
             arrayOciDescription=[],
             arrayOciStatus=[]
@@ -649,7 +704,7 @@ class ProjectsController {
                 ociStatus: arrayOciStatus[i],
                 timestamp: now,
                 creator: user,
-                modificator: [],
+                modificator: modificator,
                 modifiedOn: "",
             }
             arrayOciAddedToProject.push(infoOciAddedToProject)

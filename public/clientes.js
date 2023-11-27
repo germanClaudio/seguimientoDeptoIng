@@ -1,5 +1,66 @@
 const socket = io.connect()
 
+const inputName = document.getElementById('name')
+function mostrarNombre() {
+    const titleNewClient = document.getElementById('titleNewClient')
+    titleNewClient.innerText = 'Nuevo Cliente: '+ inputName.value
+  }
+
+inputName.addEventListener('keyup', () => {
+    mostrarNombre()    
+})
+
+inputName.addEventListener('blur', () => {
+    mostrarNombre()    
+})
+
+
+// Obtener el elemento de input file
+const inputFile = document.getElementById('inputFile')
+
+// Escuchar cambios en el input file
+inputFile.addEventListener('change', function() {
+  
+    // Verificar si se seleccionó un archivo
+  if (this.files && this.files[0]) {
+      // Crear un objeto FileReader
+      const reader = new FileReader()
+      
+      // Cuando la lectura del archivo esté lista
+      reader.onload = function(e) {
+            
+        const imageURL = e.target.result // Obtener la URL de la imagen
+        const imagePreview = document.getElementById('imagePreview')
+        
+        // Mostrar la imagen en la vista previa
+        imagePreview.src = imageURL
+        imagePreview.style.display = 'block'
+        
+        // Escribir ruta + nombre de archivo
+        const urlImagen = inputFile.value
+        
+        // Obtener el nombre de la imagen
+        let nombreImagen = urlImagen.substring(urlImagen.lastIndexOf('\\') + 1);
+
+        const fullPathImage = `../src/images/output/image_${nombreImagen}`
+        
+        const inputFileUrl = document.getElementById('inputFileUrl')
+        inputFileUrl.value = fullPathImage
+
+        const urlImagenLink = document.getElementById('urlImagen')
+        urlImagenLink.innerText = 'URL: '+ fullPathImage
+
+    }
+    reader.readAsDataURL(this.files[0])
+  }
+})
+
+
+
+
+
+//-------------------------------------
+
 //  ---------------- Clients list ----------------
 socket.on('clientsAll', (arrClient, arrUsers) => {
     const cadena = document.getElementById('mostrarUserName').innerText

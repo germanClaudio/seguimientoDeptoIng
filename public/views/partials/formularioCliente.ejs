@@ -2,53 +2,61 @@
     <div class="form-group col-10 mx-auto my-2 w-75 border p-3 bg-dark bg-gradient text-white bg-opacity-75">
         <form action="/api/clientes" method="post">
             <fieldset>
-                <h4 class="d-block mx-auto my-2 text-center">Nuevo Cliente</h4>
-                <div class="row my-3">
-                    <div class="col-4">
-                        <label for="name">Nombre Cliente</label>
-                        <input type="text" name="name" id="name" class="form-control" placeholder="Nombre Cliente"
-                            required>
-                    </div>
-                    <br>
-                    <div class="col-4">
-                        <label for="status">Status</label>
-                        <select id="status" name="status" class="form-select" required>
-                            <option disabled value="">Seleccione un status</option>
-                            <option value="true" selected>Activo</option>
-                            <option value="false">Inactivo</option>
-                        </select>
-                    </div>
-                    <br>
-                </div>
+                <h4 id="titleNewClient" class="d-block mx-auto my-2 text-center">Nuevo Cliente</h4>
+                <div class="row m-3">
+                    <div class="col-10">
+                        <div class="row my-3">
+                            <div class="col-6">
+                                <label for="name">Nombre Cliente</label>
+                                <input type="text" name="name" id="name" class="form-control" placeholder="Nombre Cliente"
+                                    required>
+                            </div>
+                            
+                            <div class="col-4">
+                                <label for="status">Status</label>
+                                <select id="status" name="status" class="form-select" required>
+                                    <option disabled value="">Seleccione un status</option>
+                                    <option value="true" selected>Activo</option>
+                                    <option value="false">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="row my-3">
-                    <div class="col-4">
-                        <label for="code">Codigo Cliente</label>
-                        <input type="text" name="code" id="code" class="form-control" placeholder="Codigo Cliente"
-                            required>
-                    </div>
-                    <br>
-                    <div class="row my-3">
-                        <div class="col-10">
-                            <label for="logo">URL Logo Cliente</label>
-                            <input type="text" name="logo" id="logo" class="form-control" placeholder="Logo url"
+                        <div class="row my-3">
+                            <div class="col-4">
+                                <label for="code">Codigo Cliente</label>
+                                <input type="text" name="code" id="code" class="form-control" placeholder="Codigo Cliente"
                                 required>
+                            </div>
+                        </div>    
+                        
+                        <div class="row my-3">
+                            <div class="col-10">
+                                <label for="inputFile">Logo Cliente</label>
+                                <input class="form-control form-control" id="inputFile" name="" type="file">    
+                                <input type="text" name="inputFileUrl" id="inputFileUrl" class="form-control" alt="Logo Cliente" placeholder="Logo cliente" required>
+                                <span class="my-2" id="urlImagen" aria-disabled="true">URL: </span>
+                            </div>
+                        </div>                  
+                    </div>
+
+                    <div class="col my-auto">
+                        <div class="container-fluid my-auto p-1 text-center">
+                            <img id="imagePreview" src="" class="img-thumbnail rounded mx-auto" alt="Vista previa Logo Cliente" width="120px" height="120px" style="display: none;"> 
                         </div>
                     </div>
-                    <input type="hidden" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>">
-                    <!-- <input type="hidden" name="usernameHidden" id="usernameHidden" class="form-control"
-                        value="<%= userInfo.username %>">
-                    <input type="hidden" name="unameHidden" id="unameHidden" class="form-control"
-                        value="<%= userInfo.name %>">
-                    <input type="hidden" name="lastNameHidden" id="lastNameHidden" class="form-control"
-                        value="<%= userInfo.lastName %>"> -->
-                    <br>
-                    <div class="d-flex justify-content-center my-2">
-                        <button type="submit" class="btn btn-primary mx-auto w-25">Guardar Cliente <i
-                                class="fa-solid fa-save"></i></button>
-                        <button type="reset" class="btn btn-danger mx-auto w-25">Reset <i
-                                class="fa-solid fa-rotate-left"></i></button>
-                    </div>
+                </div>    
+                
+                <input type="hidden" name="idHidden" id="idHidden" class="form-control" value="<%= userInfo.id %>">
+                
+                <div class="d-flex justify-content-center my-2">
+                    <button type="submit" class="btn btn-primary mx-auto w-25">Guardar Cliente <i
+                            class="fa-solid fa-save"></i>
+                    </button>
+                    <button type="reset" class="btn btn-danger mx-auto w-25">Reset <i
+                            class="fa-solid fa-rotate-left"></i>
+                    </button>
+                </div>
             </fieldset>
         </form>
     </div>

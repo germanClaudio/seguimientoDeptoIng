@@ -49,17 +49,17 @@
 
                                     <div id="panelsStayOpen-collapseOneCard<%=m %>" class="accordion-collapse collapse"
                                         aria-labelledby="panelsStayOpen-headingOne">
-                                        <div class="accordion-body">
-                                            <div class="container">
+                                        <div class="accordion-body px-1 my-auto">
+                                            <div class="container px-1">
                                                 <div class="row">
                                                     <!-- -------------- seccion Foto Proyecto ---------------------- -->
-                                                    <div class="col-2 my-auto">
+                                                    <div class="col-2 my-auto px-1">
                                                         <img src="<%= proyectos[m].project[j].imageProject %>"
                                                                 class="img-fluid rounded px-1" alt="Imagen Proyecto"
                                                                 width="180px">
                                                     </div>
                                                     <!-- -------------- seccion Proyecto ---------------------- -->
-                                                    <div class="col-4 my-auto">
+                                                    <div class="col-4 my-auto px-1">
                                                         <ul>Descripción: <%= proyectos[m].project[j].projectDescription %>
                                                         </ul>
                                                         <ul>Prio: <span class="badge bg-dark text-white mx-2"> <%= proyectos[m].project[j].prioProject %> </span>
@@ -76,10 +76,11 @@
                                                         
                                                         <div class="d-flex justify-content-center">
                                                             <a type="button" title="Ver Proyecto" href="/api/proyectos/selectProject/<%= proyectos[m].project[j].id %>" id="btnSeeProyectDetails" class="btn btn-secondary rounded-circle me-2"><i class="fa-solid fa-eye"></i></a>
-                                                            <button type="button" title="Agregar Nueva OCI" id="btnAddNewOciToProject<%= m %>" name="btnAddNewOciToProject" class="btn btn-primary rounded-circle mx-2" value="<%= m%>"><i class="fa-solid fa-plus-circle"></i></button>
-                                                            <button type="button" title="Cambiar Nivel Proyecto" id="btnChangeLevelProyect<%= m %>_<%= j %>" class="btn btn-info rounded-circle mx-2"><i class="fa-regular fa-chess-king fa-lg"></i></button>
-                                                            <button type="button" title="Cambiar Estado Proyecto" id="btnChangeStatusProyect<%= m %>_<%= j %>" class="btn btn-dark rounded-circle mx-2"><i class="fa-solid fa-power-off"></i></button>
-                                                            <button type="button" title="Eliminar Proyecto" id="btnDeleteProyect<%= m %>_<%= j %>" class="btn btn-danger rounded-circle ms-2"><i class="fa-regular fa-trash-can fa-lg"></i></button>
+                                                            <button type="button" title="Agregar Nueva OCI" id="btnAddNewOciToProject<%= m %>" name="btnAddNewOciToProject" class="btn btn-success rounded-circle mx-2" value="<%= m%>"><i class="fa-solid fa-plus-circle"></i></button>
+                                                            <button type="button" title="Editar proyecto <%= proyectos[m].project[j].projectDescription %>" id="btnEditProject<%= m %>" name="btnEditProject" class="btn btn-primary rounded-circle mx-2" value="<%= m%>"><i class="fa-solid fa-pencil"></i></button>
+                                                            <button type="button" title="Cambiar Nivel Proyecto <%= proyectos[m].project[j].projectDescription %>" id="btnChangeLevelProyect<%= m %>_<%= j %>" class="btn btn-info rounded-circle mx-2"><i class="fa-regular fa-chess-king fa-lg"></i></button>
+                                                            <button type="button" title="Cambiar Estado Proyecto <%= proyectos[m].project[j].projectDescription %>" id="btnChangeStatusProyect<%= m %>_<%= j %>" class="btn btn-dark rounded-circle mx-2"><i class="fa-solid fa-power-off"></i></button>
+                                                            <button type="button" title="Eliminar Proyecto <%= proyectos[m].project[j].projectDescription %>" id="btnDeleteProyect<%= m %>_<%= j %>" class="btn btn-danger rounded-circle ms-2"><i class="fa-regular fa-trash-can fa-lg"></i></button>
                                                         </div>
                                                         <form id="formChangeStatusProject<%= m %>_<%= j %>" action="/api/proyectos/updateStatusProject/<%= proyectos[m].project[j].id %>" method="post">
                                                             <fieldset>
@@ -101,7 +102,7 @@
 
                                                     </div>
                                                     <!-- -------------- seccion OCI's ---------------------- -->
-                                                    <div class="col my-auto">
+                                                    <div class="col my-auto px-1">
                                                         <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
                                                                 <ul>OCI #: <strong><%= proyectos[m].project[j].oci[k].ociNumber %></strong></ul>
                                                                 <ul>Descripcion: <%= proyectos[m].project[j].oci[k].ociDescription %> </ul>
@@ -144,13 +145,13 @@
                                                             <% } %>
                                                     </div>
                                                     <!-- -------------- seccion creador / modificador de OCI's --------- -->
-                                                    <div class="col-2 my-auto" style="font-size: 9pt">
+                                                    <div class="col-2 my-auto px-1" style="font-size: 9pt">
                                                         <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
-                                                            <div class="container">
+                                                            <div class="container mb-4">
                                                                 <ul>OCI creada por: <%= proyectos[m].project[j].oci[k].creator[0].name %>, <%= proyectos[m].project[j].oci[k].creator[0].lastName %> </ul>
                                                                 <ul>Fecha: <%= proyectos[m].project[j].oci[k].timestamp %> </ul>
                                                             </div>
-                                                            <div class="container">
+                                                            <div class="container mb-4">
                                                                 <% if (proyectos[m].project[j].oci[k].modificator[j]) { %>
                                                                     <ul>OCI modificada por: <%= proyectos[m].project[j].oci[k].modificator[j].name %>, <%= proyectos[m].project[j].oci[k].modificator[j].lastName %> </ul>
                                                                     <ul>Fecha modificación: <%= proyectos[m].project[j].oci[k].modifiedOn %> </ul>
@@ -167,7 +168,7 @@
                                                 </div>
                                                 <hr>
                                                 <!-- -------------- seccion creador / modificador de Proyecto --------- -->
-                                                <div class="container" style="font-size: 9pt">
+                                                <div class="container px-1" style="font-size: 9pt">
                                                     <div class="row my-auto">
                                                         <% for ( let k = 0; proyectos[m].project.length > k; k++) { %>
                                                             <div class="col-6">
@@ -197,7 +198,23 @@
                     <% } %>
 
                 <% } else { %>
-                    <span class="badge rounded-pill bg-danger text-white"> No hay proyectos cargados </span>
+                    <% let m = 0, j = 0 %>
+                        <span class="badge rounded-pill bg-danger text-white"> No hay proyectos cargados </span>
+                        <div class="container my-2 mw-100">
+                            Puedes agregar proyectos en el cliente <strong><%= cliente.name %></strong>, haciendo click en el siguiente botón
+                            <button class="btn btn-success m-1 rounded-circle"
+                                id="btnAddProjectToClient<%=m%>"
+                                aria-controls="collapseExample"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseExample" aria-expanded="false"
+                                style="--bs-btn-font-size: .75rem; color: var(--bs-white);"
+                                type="button"
+                                name="<%= cliente.name %>"
+                                title="Agregar Proyecto">
+                                <i class="fa-regular fa-plus" aria-hidden="true"></i>
+                            </button>                        
+                        </div>
+
                 <% } %>
             </div>
         </div>

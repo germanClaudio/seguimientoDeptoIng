@@ -3,6 +3,7 @@ const UserService = require("../services/users.service.js")
 const ProjectsService = require("../services/projects.service.js")
 
 let now = require('../utils/formatDate.js')
+const fs = require('fs');
 
 class ClientsController {
     constructor() {
@@ -146,16 +147,23 @@ class ClientsController {
             username: userCreator.username,
             email: userCreator.email
         }]
-        
+
+        const modificator = [{
+            name: "",
+            lastName: "",
+            username: "",
+            email: ""
+        }]
+
         const newCliente = {
             creator: user,
             name: req.body.name,
             status: Boolean(true),
             code: req.body.code,
             project: 0,
-            logo: req.body.logo,
+            logo: req.body.inputFileUrl,
             timestamp: now,
-            modificator: [],
+            modificator: modificator,
             modifiedOn: '',
             visible: true
         }
@@ -197,7 +205,8 @@ class ClientsController {
         const modifier = [{
             name: userInfo.name,
             lastName: userInfo.lastName,
-            username: userInfo.username
+            username: userInfo.username,
+            email: userInfo.email
         }]
 
         const updatedCliente = {
@@ -246,7 +255,8 @@ class ClientsController {
         const modifier = [{
             name: userInfo.name,
             lastName: userInfo.lastName,
-            username: userInfo.username
+            username: userInfo.username,
+            email: userInfo.email
         }]
 
         const updatedClienteProjectsQty = {
@@ -291,7 +301,8 @@ class ClientsController {
         const modifier = [{
             name: userInfo.name,
             lastName: userInfo.lastName,
-            username: userInfo.username
+            username: userInfo.username,
+            email: userInfo.email
         }]
 
         const cookie = req.session.cookie

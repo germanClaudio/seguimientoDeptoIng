@@ -86,7 +86,7 @@ class UsersController {
         } catch (error) {
             res.status(500).json({
                 status: false,
-                msg: 'controllerError - getUserByusername',
+                msg: 'controllerError - getUserByUsername',
                 error: error
             })
         }

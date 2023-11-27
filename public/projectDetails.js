@@ -1,5 +1,15 @@
 const btnAddNewRow = document.getElementById("btnAddNewRow")
+const buttonOne = document.getElementById('buttonOne')
 
+buttonOne.addEventListener('click', () => {
+    let ariaExpanded = buttonOne.getAttribute('aria-expanded')
+
+    ariaExpanded==='true' ?
+        btnAddNewRow.removeAttribute('disabled')
+    :
+        btnAddNewRow.setAttribute('disabled', true)
+})
+    
 //-------------------------- Add New OCI Row --------------------------------
 btnAddNewRow.addEventListener('click', () => {
 
