@@ -263,28 +263,80 @@ for (let k=0; k<projectQuantity; k++) {
 }
 
 //---- Change Project Level ----------------
-function messageChangeProjectLevel(projectName, levelProject, k) {
+function messageChangeProjectLevel(projectName, levelProject, k, idProject) {
 
     const Toast = Swal.mixin({
         toast: true,
         position: 'bottom',
+        width: 550,
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: false,
     })
     
     if(projectName) {
+
+        if(levelProject=='ganado') {
+                          
+            var html = `<form id="formChangeLevelProject${k}_0" action="/api/proyectos/updateLevelProject/${idProject}" method="post">
+                            <fieldset>
+                                El nivel del proyecto <b>${projectName}</b> se modificará a
+                                <div class="container mt-2 mx-auto">
+                                    <div class="row justify-content-center">
+                                        <select id="levelProjectSelection" name="levelProject" class="form-select w-25 my-2 px-auto" required>
+                                            <option selected disabled value="ganado">Ganado</option>
+                                            <option value="paraCotizar">Para Cotizar</option>
+                                            <option value="aRiesgo">A riesgo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        `
+
+        } else if (levelProject=='paraCotizar') {
+            
+            var html = `<form id="formChangeLevelProject${k}_0" action="/api/proyectos/updateLevelProject/${idProject}" method="post">
+                            <fieldset>
+                                El nivel del proyecto <b>${projectName}</b> se modificará a
+                                <div class="container mt-2 mx-auto">
+                                    <div class="row justify-content-center">
+                                        <select id="levelProjectSelection" name="levelProject" class="form-select w-25 my-2 px-auto" required>
+                                            <option selected disabled value="paraCotizar">Para Cotizar</option>
+                                            <option value="ganado">Ganado</option>
+                                            <option value="aRiesgo">A riesgo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        `
+
+        } else {
+            
+            var html = `<form id="formChangeLevelProject${k}_0" action="/api/proyectos/updateLevelProject/${idProject}" method="post">
+                            <fieldset>
+                                El nivel del proyecto <b>${projectName}</b> se modificará a
+                                <div class="container mt-2 mx-auto">
+                                    <div class="row justify-content-center">
+                                        <select id="levelProjectSelection" name="levelProject" class="form-select w-25 my-2 px-auto" required>
+                                            <option selected disabled value="aRiesgo">A riesgo</option>
+                                            <option value="ganado">Ganado</option>
+                                            <option value="paraCotizar">Para Cotizar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        `
+        }
+
+        
         Swal.fire({
             title: 'Cambio nivel del Proyecto!',
             position: 'center',
-            html: `El nivel del proyecto <b>${projectName}</b> se modificará a
-                    <span class="badge rounded-pill bg-${ levelProject=='true' ?
-                                                            'secondary text-warning">' :
-                                                            'success text-white">' }
-                    ${ levelProject=='true' ? 'Cotizado' : 'Ganado' }
-                    </span> y ${ levelProject=='true' ?
-                                'solo podrá ingresar o modificar datos de S0 en este proyecto!' :
-                                'podrá ingresar o modificar todos los datos de este proyecto!' }`,
+            width: 600,
+            html: html,
             icon: 'info',
             showCancelButton: true,
             showConfirmButton: true,
@@ -292,11 +344,33 @@ function messageChangeProjectLevel(projectName, levelProject, k) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
+
+                const levelProjectSelected = document.getElementById('levelProjectSelection').value
+                console.log(levelProjectSelected)
+                
+                if(levelProjectSelected =='ganado') {
+                    var levelProjectBadge = 'Ganado'
+                    var levelProjectColor = 'success text-white'
+                    var levelProjectMessage = 'podrá ingresar o modificar todos los datos de este proyecto!'
+                } else if (levelProjectSelected =='paraCotizar') {
+                    var levelProjectBadge = 'Para Cotizar'
+                    var levelProjectColor = 'secondary text-warning'
+                    var levelProjectMessage = 'solo podrá ingresar o modificar datos de S0 y proceso 3D en este proyecto!'
+                } else {
+                    var levelProjectBadge = 'A Riesgo'
+                    var levelProjectColor = 'danger text-white'
+                    var levelProjectMessage = 'solo podrá ingresar o modificar datos hasta S3 en este proyecto!'
+                }
+
                 document.getElementById(`formChangeLevelProject${k}_0`).submit()
+                
                 Toast.fire({
                     icon: 'success',
-                    title: `El nivel del proyecto <b>${projectName}</b>, se modificó con éxito!`
+                    title: `El nivel del proyecto <b>${projectName}</b>, se modificó a
+                    <span class="badge rounded-pill bg-${levelProjectColor}">${levelProjectBadge}</span> con éxito!
+                    Y ${levelProjectMessage}                    `
                 })
+
             } else {
                 Swal.fire(
                     'Nivel de proyecto no modificado!',
@@ -320,7 +394,6 @@ function messageChangeProjectLevel(projectName, levelProject, k) {
     }
 }
 
-
 var arrayBtnChangeLevelProject = []
 let x=0
 for (let k=0; k<projectQuantity; k++) {
@@ -333,7 +406,8 @@ for (let k=0; k<projectQuantity; k++) {
         event.preventDefault()
         const projectName = document.getElementById(`projectNameHidden${k}_${x}`).value
         const levelProject = document.getElementById(`levelProjectHidden${k}_${x}`).value
-        messageChangeProjectLevel(projectName, levelProject, k)
+        const idProject = document.getElementById(`projectIdHidden${k}_${x}`).value
+        messageChangeProjectLevel(projectName, levelProject, k, idProject)
     })
 }
 

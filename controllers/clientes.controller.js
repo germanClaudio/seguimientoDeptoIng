@@ -202,7 +202,7 @@ class ClientsController {
         let username = res.locals.username
         let userInfo = res.locals.userInfo
                 
-        const modifier = [{
+        const modificator = [{
             name: userInfo.name,
             lastName: userInfo.lastName,
             username: userInfo.username,
@@ -217,7 +217,7 @@ class ClientsController {
             project: proyectosQty.length,
             logo: req.body.logo,
             timestamp: creador.timestamp,
-            modificator: modifier,
+            modificator: modificator,
             modifiedOn: now
         }
 
@@ -226,7 +226,7 @@ class ClientsController {
         const expires = new Date(time)
 
         try {
-            const clientUpdated = this.clients.updateClient(id, updatedCliente)
+            const clientUpdated = this.clients.updateClient(id, updatedCliente, modificator)
             res.render('addNewClients', {
                 clientUpdated,
                 username,

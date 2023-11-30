@@ -148,14 +148,18 @@ const renderProjectsForAdmin = (arrayProjects) => {
         }    
 
 
-        if ( element.project[0].levelProject === true) {
+        if ( element.project[0].levelProject === "ganado") {
             colorLevel = white
             colorResult = green
             text = "Ganado"
-        } else {
+        } else if ( element.project[0].levelProject === "paraCotizar") {
             colorLevel = yellow
             colorResult = grey
-            text = "Cotizado"
+            text = "Para Cotizar"
+        } else {
+            colorLevel = white
+            colorResult = red
+            text = "A Riesgo"
         }
         
         return (`<tr>

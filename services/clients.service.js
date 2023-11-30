@@ -43,8 +43,8 @@ class ClientService {
     }
     
     // update one client
-    async updateClient(id, cliente) {
-        return await this.clientes.updateClient(id, cliente)
+    async updateClient(id, cliente, user) {
+        return await this.clientes.updateClient(id, cliente, user)
     }
 
     // update Project Qty. of one client

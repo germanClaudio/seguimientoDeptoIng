@@ -152,7 +152,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    async updateClient(id, client) {
+    async updateClient(id, client, user) {
         const itemMongoDB = await Clientes.findById({_id: id})
             if (itemMongoDB) {
                 try {
@@ -164,7 +164,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                         project: client.project,
                         creator: client.creator,
                         timestamp: client.timestamp,
-                        modificator: client.modificator,
+                        modificator: user,
                         modifiedOn: now
                     }
 
@@ -183,7 +183,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
             }
     }
 
-    async updateClientProjectsQty(id, clienteSelected){
+    async updateClientProjectsQty(id, clienteSelected, user){
         const clientMongoDB = await Clientes.findById({_id: id})
         
         if (clientMongoDB) {
@@ -196,7 +196,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                     project: clienteSelected.project + 1,
                     creator: clienteSelected.creator,
                     timestamp: clienteSelected.timestamp,
-                    modificator: clienteSelected.modificator,
+                    modificator: user,
                     modifiedOn: now
                 }
 

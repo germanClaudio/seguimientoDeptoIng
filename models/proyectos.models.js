@@ -35,6 +35,26 @@ let creatorSchema = new Schema({
     }
 })
 
+// ------- Modificator Schema -------------
+let modificatorSchema = new Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Usuarios",
+    },
+    name: { 
+        type: String,
+    },
+    lastName: {
+        type: String,
+    },
+    username:{
+        type: String,
+    },
+    email: {
+        type: String,
+    }
+})
+
 // ------- OT Information R-14 Schema ---------
 let otInformationR14Schema = new Schema({
     // otInfoR14Id: {
@@ -53,11 +73,10 @@ let otInformationR14Schema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -79,11 +98,10 @@ let otInformationProcesoSchema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -129,11 +147,10 @@ let otInformationDisenoSchema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -163,11 +180,10 @@ let otInformationInfo80Schema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -189,11 +205,10 @@ let otInformationInfo100Schema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -215,11 +230,10 @@ let otInformationSim0Schema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -253,11 +267,10 @@ let otInformationSim1Schema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -287,11 +300,10 @@ let otInformationSim2_3Schema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -337,11 +349,10 @@ let otInformationSim4Schema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -363,11 +374,10 @@ let otInformationSim5Schema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
 })
 
@@ -425,11 +435,10 @@ let otProjectSchema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
     visible: {
         type: Boolean,
@@ -452,16 +461,20 @@ let ociProjectSchema = new Schema({
     ociStatus: {
         type: Boolean, default: true
     },
+    imageOci: { 
+        type: String,
+        maxlength: 1000,
+        value: 'https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png'
+    },
     creator: [creatorSchema],
     timestamp: {
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
     visible:{
         type: Boolean,
@@ -504,19 +517,18 @@ let projectSchema = new Schema({
         default: true,
     },
     levelProject:{
-        type: Boolean,
-        default: true,
+        type: String,
+        default: 'paraCotizar',
     },
     creator: [creatorSchema],
     timestamp: {
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
+        default: ""
     },
     visible:{
         type: Boolean,
@@ -534,12 +546,10 @@ const ProyectoSchema = new Schema({
         type: String,
         default: now,
     },
-    modificator: {
-        type: Array,
-    },
+    modificator: [modificatorSchema],
     modifiedOn: {
         type: String,
-        default: now,
+        default: ""
     },
     visible:{
         type: Boolean,

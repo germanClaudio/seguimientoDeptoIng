@@ -1,397 +1,149 @@
-// Manejador de eventos de tablas -------------------
+// Manejador de eventos de tablas General y Seguimiento -------------------
+
+const arrBtnHidde = []
+for (let i = 0; i<25; i++) { //ver limite maximo de OCI por Proyecto
+    if (document.getElementById(`tablaGeneral${i}`)) {
+        arrBtnHidde.push(i)
+    }
+}
+
+function hiddeTableGeneral(k) {
+    const tablaGeneral = document.getElementById(`tablaGeneral${k}`)
+    const tablaSeguimiento = document.getElementById(`tablaSeguimiento${k}`)
+    const btnHiddeTableGeneral = document.getElementById(`btnHiddeTableGeneral${k}`)
+    const posBtnHiddeTableGeneral = document.getElementById(`posBtnHiddeTableGeneral${k}`)
+
+    if (tablaGeneral.style.display === 'none') {
+        tablaGeneral.style.display = ''
+        tablaGeneral.classList.add("col-3")
+        tablaSeguimiento.classList.add("col-3")
+        btnHiddeTableGeneral.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
+
+        posBtnHiddeTableGeneral.classList.remove("col-1")
+        posBtnHiddeTableGeneral.classList.add("col-3")
+        btnHiddeTableGeneral.setAttribute('title', 'Ocultar General')
+
+    } else {
+        tablaGeneral.style.display = 'none'
+        tablaGeneral.classList.remove("col-3")
+        tablaSeguimiento.classList.add("col-3")
+        btnHiddeTableGeneral.innerHTML = '<i class="fa-solid fa-eye"></i>'
+        posBtnHiddeTableGeneral.classList.remove("col-3")
+        posBtnHiddeTableGeneral.classList.add("col-1")
+        btnHiddeTableGeneral.setAttribute('title', 'Mostrar General')
+    }
+}
+
+function hiddeTableSeguimiento(k) {
+    const tablaSeguimiento = document.getElementById(`tablaSeguimiento${k}`)
+    const btnHiddeTableSeguimiento = document.getElementById(`btnHiddeTableSeguimiento${k}`)
+    const posBtnHiddeTableSeguimiento = document.getElementById(`posBtnHiddeTableSeguimiento${k}`)
+
+    if (tablaSeguimiento.style.display === 'none') {
+        tablaSeguimiento.style.display = ''
+        btnHiddeTableSeguimiento.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
+        posBtnHiddeTableSeguimiento.classList.remove("col-1")
+        posBtnHiddeTableSeguimiento.classList.add("col-3")
+        btnHiddeTableSeguimiento.setAttribute('title', 'Ocultar Int/Ext')
+    } else {
+        tablaSeguimiento.style.display = 'none'
+        btnHiddeTableSeguimiento.innerHTML = '<i class="fa-solid fa-eye"></i>'
+        posBtnHiddeTableSeguimiento.classList.remove("col-3")
+        posBtnHiddeTableSeguimiento.classList.add("col-1")
+        btnHiddeTableSeguimiento.setAttribute('title', 'Mostrar Int/Ext')
+    }
+}
+
+function extractNumbers(str) {
+    const numbers = str.match(/\d{1,2}/g); // Extract 1 or 2 digit numbers from the string
+    
+    if (numbers) {
+        if (numbers.length === 2) {
+            // If two numbers are found, check if both are numbers
+            if (!isNaN(parseInt(numbers[0])) && !isNaN(parseInt(numbers[1]))) {
+                return numbers; // Return both numbers as an array
+            }
+        } else if (numbers.length === 1) {
+            // If only one number is found, check if it's a number
+            if (!isNaN(parseInt(numbers[0]))) {
+                return numbers[0]; // Return the single number
+            }
+        }
+    }
+    return null; // Return null if no valid numbers are found
+}
+
+
+if(arrBtnHidde !=[]) {
+    let allButtonsHiddeTableGeneral = document.querySelectorAll('button[name="btnHiddeTableGeneral"]')
+    let allButtonsHiddeTableSeguimiento = document.querySelectorAll('button[name="btnHiddeTableSeguimiento"]')
+    
+    allButtonsHiddeTableGeneral.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            event.preventDefault()
+            let kValue = event.target.id
+            hiddeTableGeneral(extractNumbers(kValue))
+    	})
+    })
+
+    allButtonsHiddeTableSeguimiento.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            event.preventDefault()
+            let kValue = event.target.id
+            hiddeTableSeguimiento(extractNumbers(kValue))
+    	})
+    })
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-    const btnHiddeTableGeneral0 = document.getElementById('btnHiddeTableGeneral0')
-    const posBtnHiddeTableGeneral0 = document.getElementById('posBtnHiddeTableGeneral0')
-    const btnHiddeTableSeguimiento0 = document.getElementById('btnHiddeTableSeguimiento0')
-    const posBtnHiddeTableSeguimiento0 = document.getElementById('posBtnHiddeTableSeguimiento0')
-
-    const btnHiddeTableGeneral1 = document.getElementById('btnHiddeTableGeneral1')
-    const posBtnHiddeTableGeneral1 = document.getElementById('posBtnHiddeTableGeneral1')
-    const btnHiddeTableSeguimiento1 = document.getElementById('btnHiddeTableSeguimiento1')
-    const posBtnHiddeTableSeguimiento1 = document.getElementById('posBtnHiddeTableSeguimiento1')
-
-    const btnHiddeTableGeneral2 = document.getElementById('btnHiddeTableGeneral2')
-    const posBtnHiddeTableGeneral2 = document.getElementById('posBtnHiddeTableGeneral2')
-    const btnHiddeTableSeguimiento2 = document.getElementById('btnHiddeTableSeguimiento2')
-    const posBtnHiddeTableSeguimiento2 = document.getElementById('posBtnHiddeTableSeguimiento2')
-
-    const btnHiddeTableGeneral3 = document.getElementById('btnHiddeTableGeneral3')
-    const posBtnHiddeTableGeneral3 = document.getElementById('posBtnHiddeTableGeneral3')
-    const btnHiddeTableSeguimiento3 = document.getElementById('btnHiddeTableSeguimiento3')
-    const posBtnHiddeTableSeguimiento3 = document.getElementById('posBtnHiddeTableSeguimiento3')
-
-    const btnHiddeTableGeneral4 = document.getElementById('btnHiddeTableGeneral4')
-    const posBtnHiddeTableGeneral4 = document.getElementById('posBtnHiddeTableGeneral4')
-    const btnHiddeTableSeguimiento4 = document.getElementById('btnHiddeTableSeguimiento4')
-    const posBtnHiddeTableSeguimiento4 = document.getElementById('posBtnHiddeTableSeguimiento4')
-
-    const tablaGeneral0 = document.getElementById('tablaGeneral0')
-    const tablaSeguimiento0 = document.getElementById('tablaSeguimiento0')
-
-    const tablaGeneral1 = document.getElementById('tablaGeneral1')
-    const tablaSeguimiento1 = document.getElementById('tablaSeguimiento1')
-
-    const tablaGeneral2 = document.getElementById('tablaGeneral2')
-    const tablaSeguimiento2 = document.getElementById('tablaSeguimiento2')
-
-    const tablaGeneral3 = document.getElementById('tablaGeneral3')
-    const tablaSeguimiento3 = document.getElementById('tablaSeguimiento3')
-
-    const tablaGeneral4 = document.getElementById('tablaGeneral4')
-    const tablaSeguimiento4 = document.getElementById('tablaSeguimiento4')
-
-    // Manejador de eventos para ocultar la tablas Generales
-    if (tablaGeneral0) {
-        btnHiddeTableGeneral0.addEventListener('click', function () {
-            if (tablaGeneral0.style.display === 'none') {
-                tablaGeneral0.style.display = ''
-                tablaGeneral0.classList.add("col-3")
-                tablaSeguimiento0.classList.add("col-3")
-                btnHiddeTableGeneral0.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-
-                posBtnHiddeTableGeneral0.classList.remove("col-1")
-                posBtnHiddeTableGeneral0.classList.add("col-3")
-                btnHiddeTableGeneral0.setAttribute('title', 'Ocultar General')
-
-            } else {
-                tablaGeneral0.style.display = 'none'
-                tablaGeneral0.classList.remove("col-3")
-                tablaSeguimiento0.classList.add("col-3")
-                btnHiddeTableGeneral0.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableGeneral0.classList.remove("col-3")
-                posBtnHiddeTableGeneral0.classList.add("col-1")
-                btnHiddeTableGeneral0.setAttribute('title', 'Mostrar General')
-            }
-        })
-    }
-
-    if (tablaGeneral1) {
-        btnHiddeTableGeneral1.addEventListener('click', function () {
-            if (tablaGeneral1.style.display === 'none') {
-                tablaGeneral1.style.display = ''
-                tablaGeneral1.classList.add("col-3")
-                tablaSeguimiento1.classList.add("col-3")
-                btnHiddeTableGeneral1.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-                posBtnHiddeTableGeneral1.classList.remove("col-1")
-                posBtnHiddeTableGeneral1.classList.add("col-3")
-                btnHiddeTableGeneral1.setAttribute('title', 'Ocultar General')
-
-            } else {
-                tablaGeneral1.style.display = 'none'
-                tablaGeneral1.classList.remove("col-3")
-                tablaSeguimiento1.classList.add("col-3")
-                btnHiddeTableGeneral1.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableGeneral1.classList.remove("col-3")
-                posBtnHiddeTableGeneral1.classList.add("col-1")
-                btnHiddeTableGeneral1.setAttribute('title', 'Mostrar General')
-            }
-        })
-    }
-
-    if (tablaGeneral2) {
-        btnHiddeTableGeneral2.addEventListener('click', function () {
-            if (tablaGeneral2.style.display === 'none') {
-                tablaGeneral2.style.display = ''
-                tablaGeneral2.classList.add("col-3")
-                tablaSeguimiento2.classList.add("col-3")
-                btnHiddeTableGeneral2.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-                posBtnHiddeTableGeneral2.classList.remove("col-1")
-                posBtnHiddeTableGeneral2.classList.add("col-3")
-                btnHiddeTableGeneral2.setAttribute('title', 'Ocultar General')
-
-            } else {
-                tablaGeneral2.style.display = 'none'
-                tablaGeneral2.classList.remove("col-3")
-                tablaSeguimiento2.classList.add("col-3")
-                btnHiddeTableGeneral2.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableGeneral2.classList.remove("col-3")
-                posBtnHiddeTableGeneral2.classList.add("col-1")
-                btnHiddeTableGeneral2.setAttribute('title', 'Mostrar General')
-            }
-        })
-    }
-
-    if (tablaGeneral3) {
-        btnHiddeTableGeneral3.addEventListener('click', function () {
-            if (tablaGeneral3.style.display === 'none') {
-                tablaGeneral3.style.display = ''
-                tablaGeneral3.classList.add("col-3")
-                tablaSeguimiento3.classList.add("col-3")
-                btnHiddeTableGeneral3.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-                posBtnHiddeTableGeneral3.classList.remove("col-1")
-                posBtnHiddeTableGeneral3.classList.add("col-3")
-                btnHiddeTableGeneral3.setAttribute('title', 'Ocultar General')
-
-            } else {
-                tablaGeneral3.style.display = 'none'
-                tablaGeneral3.classList.remove("col-3")
-                tablaSeguimiento3.classList.add("col-3")
-                btnHiddeTableGeneral3.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableGeneral3.classList.remove("col-3")
-                posBtnHiddeTableGeneral3.classList.add("col-1")
-                btnHiddeTableGeneral3.setAttribute('title', 'Mostrar General')
-            }
-        })
-    }
-
-    if (tablaGeneral4) {
-        btnHiddeTableGeneral4.addEventListener('click', function () {
-            if (tablaGeneral4.style.display === 'none') {
-                tablaGeneral4.style.display = ''
-                tablaGeneral4.classList.add("col-3")
-                tablaSeguimiento4.classList.add("col-3")
-                btnHiddeTableGeneral4.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-                posBtnHiddeTableGeneral4.classList.remove("col-1")
-                posBtnHiddeTableGeneral4.classList.add("col-3")
-                btnHiddeTableGeneral4.setAttribute('title', 'Ocultar General')
-
-            } else {
-                tablaGeneral4.style.display = 'none'
-                tablaGeneral4.classList.remove("col-3")
-                tablaSeguimiento4.classList.add("col-3")
-                btnHiddeTableGeneral4.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableGeneral4.classList.remove("col-3")
-                posBtnHiddeTableGeneral4.classList.add("col-1")
-                btnHiddeTableGeneral4.setAttribute('title', 'Mostrar General')
-            }
-        })
-    }
-
-    // Manejador de eventos para ocultar la tablas Seguimientos
-    if (tablaSeguimiento0) {
-        btnHiddeTableSeguimiento0.addEventListener('click', function () {
-            if (tablaSeguimiento0.style.display === 'none') {
-                tablaSeguimiento0.style.display = ''
-                btnHiddeTableSeguimiento0.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-                posBtnHiddeTableSeguimiento0.classList.remove("col-1")
-                posBtnHiddeTableSeguimiento0.classList.add("col-3")
-                btnHiddeTableSeguimiento0.setAttribute('title', 'Ocultar Int/Ext')
-            } else {
-                tablaSeguimiento0.style.display = 'none'
-                btnHiddeTableSeguimiento0.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableSeguimiento0.classList.remove("col-3")
-                posBtnHiddeTableSeguimiento0.classList.add("col-1")
-                btnHiddeTableSeguimiento0.setAttribute('title', 'Mostrar Int/Ext')
-            }
-        })
-    }
-
-    if (tablaSeguimiento1) {
-        btnHiddeTableSeguimiento1.addEventListener('click', function () {
-            if (tablaSeguimiento1.style.display === 'none') {
-                tablaSeguimiento1.style.display = ''
-                btnHiddeTableSeguimiento1.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-                posBtnHiddeTableSeguimiento1.classList.remove("col-1")
-                posBtnHiddeTableSeguimiento1.classList.add("col-3")
-                btnHiddeTableSeguimiento1.setAttribute('title', 'Ocultar Int/Ext')
-            } else {
-                tablaSeguimiento1.style.display = 'none'
-                btnHiddeTableSeguimiento1.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableSeguimiento1.classList.remove("col-3")
-                posBtnHiddeTableSeguimiento1.classList.add("col-1")
-                btnHiddeTableSeguimiento1.setAttribute('title', 'Mostrar Int/Ext')
-            }
-        })
-    }
-
-    if (tablaSeguimiento2) {
-        btnHiddeTableSeguimiento2.addEventListener('click', function () {
-            if (tablaSeguimiento2.style.display === 'none') {
-                tablaSeguimiento2.style.display = ''
-                btnHiddeTableSeguimiento2.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-                posBtnHiddeTableSeguimiento2.classList.remove("col-1")
-                posBtnHiddeTableSeguimiento2.classList.add("col-3")
-                btnHiddeTableSeguimiento2.setAttribute('title', 'Ocultar Int/Ext')
-            } else {
-                tablaSeguimiento2.style.display = 'none'
-                btnHiddeTableSeguimiento2.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableSeguimiento2.classList.remove("col-3")
-                posBtnHiddeTableSeguimiento2.classList.add("col-1")
-                btnHiddeTableSeguimiento2.setAttribute('title', 'Mostrar Int/Ext')
-            }
-        })
-    }
-
-    if (tablaSeguimiento3) {
-        btnHiddeTableSeguimiento3.addEventListener('click', function () {
-            if (tablaSeguimiento3.style.display === 'none') {
-                tablaSeguimiento3.style.display = ''
-                btnHiddeTableSeguimiento3.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-                posBtnHiddeTableSeguimiento3.classList.remove("col-1")
-                posBtnHiddeTableSeguimiento3.classList.add("col-3")
-                btnHiddeTableSeguimiento3.setAttribute('title', 'Ocultar Int/Ext')
-            } else {
-                tablaSeguimiento3.style.display = 'none'
-                btnHiddeTableSeguimiento3.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableSeguimiento3.classList.remove("col-3")
-                posBtnHiddeTableSeguimiento3.classList.add("col-1")
-                btnHiddeTableSeguimiento3.setAttribute('title', 'Mostrar Int/Ext')
-            }
-        })
-    }
-
-    if (tablaSeguimiento4) {
-        btnHiddeTableSeguimiento4.addEventListener('click', function () {
-            if (tablaSeguimiento4.style.display === 'none') {
-                tablaSeguimiento4.style.display = ''
-                btnHiddeTableSeguimiento4.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
-                posBtnHiddeTableSeguimiento4.classList.remove("col-1")
-                posBtnHiddeTableSeguimiento4.classList.add("col-3")
-                btnHiddeTableSeguimiento4.setAttribute('title', 'Ocultar Int/Ext')
-            } else {
-                tablaSeguimiento4.style.display = 'none'
-                btnHiddeTableSeguimiento4.innerHTML = '<i class="fa-solid fa-eye"></i>'
-                posBtnHiddeTableSeguimiento4.classList.remove("col-3")
-                posBtnHiddeTableSeguimiento4.classList.add("col-1")
-                btnHiddeTableSeguimiento4.setAttribute('title', 'Mostrar Int/Ext')
-            }
-        })
-    }
-
     const projectNameHidden = document.getElementById('projectNameHidden').value
     const projectNameTitle = document.getElementById('projectNameTitle')
     projectNameTitle.innerHTML = `Nombre Proyecto: ${projectNameHidden}`
 })
 
-// Manejador de eventos para Carouseles --------------------
+
+// ---- Manejador de eventos para Carouseles --------------------
 document.addEventListener('DOMContentLoaded', function (event) {
     let initIndex = event.eventPhase
 
-    let myCarousel0 = document.getElementById('carouselExampleControls0')
-    let myCarousel1 = document.getElementById('carouselExampleControls1')
-    let myCarousel2 = document.getElementById('carouselExampleControls2')
-    let myCarousel3 = document.getElementById('carouselExampleControls3')
-    let myCarousel4 = document.getElementById('carouselExampleControls4')
-
-    if (myCarousel0) {
-        if (initIndex === 2) {
-            myCarousel0.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-        } else {
-            myCarousel0.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
+    const arrayCarousel = []
+    for (let i = 0; i<25; i++) {
+        if (document.getElementById(`carouselExampleControls${i}`)) {
+            arrayCarousel.push(i)
         }
-
-        // Detectar cuando el slide cambia
-        myCarousel0.addEventListener('slid.bs.carousel', function (event) {
-            let slideCount = event.relatedTarget.parentElement.children.length
-            let currentIndex = event.to
-
-            // Si el slide actual es el último, deshabilita el botón "Next"
-            if (currentIndex === slideCount - 1) {
-                myCarousel0.querySelector('[data-bs-slide="next"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel0.querySelector('[data-bs-slide="next"]').removeAttribute('disabled')
-            }
-            // Si el slide actual es el primero, deshabilita el botón "Prev"
-            if (currentIndex === 0) {
-                myCarousel0.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel0.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-            }
-        })
     }
-    if (myCarousel1) {
-        if (initIndex === 2) {
-            myCarousel1.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-        } else {
-            myCarousel1.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
+
+    if(arrayCarousel !=[]) {
+        for (let i=0; i<arrayCarousel.length; i++) {
+            let myCarousel = document.getElementById(`carouselExampleControls${arrayCarousel[i]}`)
+            
+            if (myCarousel) {
+                if (initIndex === 2) {
+                    myCarousel.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
+                } else {
+                    myCarousel.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
+                }
+            }
+
+            // Detectar cuando el slide cambia
+            myCarousel.addEventListener('slid.bs.carousel', function (event) {
+                let slideCount = event.relatedTarget.parentElement.children.length
+                let currentIndex = event.to
+
+                // Si el slide actual es el último, deshabilita el botón "Next"
+                if (currentIndex === slideCount - 1) {
+                    myCarousel.querySelector('[data-bs-slide="next"]').setAttribute('disabled', 'disabled')
+                } else {
+                    myCarousel.querySelector('[data-bs-slide="next"]').removeAttribute('disabled')
+                }
+                // Si el slide actual es el primero, deshabilita el botón "Prev"
+                if (currentIndex === 0) {
+                    myCarousel.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
+                } else {
+                    myCarousel.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
+                }
+            })
         }
-
-        // Detectar cuando el slide cambia
-        myCarousel1.addEventListener('slid.bs.carousel', function (event) {
-            let slideCount = event.relatedTarget.parentElement.children.length
-            let currentIndex = event.to
-
-            // Si el slide actual es el último, deshabilita el botón "Next"
-            if (currentIndex === slideCount - 1) {
-                myCarousel1.querySelector('[data-bs-slide="next"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel1.querySelector('[data-bs-slide="next"]').removeAttribute('disabled')
-            }
-            // Si el slide actual es el primero, deshabilita el botón "Prev"
-            if (currentIndex === 0) {
-                myCarousel1.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel1.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-            }
-        })
-    }
-    if (myCarousel2) {
-        if (initIndex === 2) {
-            myCarousel2.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-        } else {
-            myCarousel2.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-        }
-
-        // Detectar cuando el slide cambia
-        myCarousel2.addEventListener('slid.bs.carousel', function (event) {
-            let slideCount = event.relatedTarget.parentElement.children.length
-            let currentIndex = event.to
-
-            // Si el slide actual es el último, deshabilita el botón "Next"
-            if (currentIndex === slideCount - 1) {
-                myCarousel2.querySelector('[data-bs-slide="next"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel2.querySelector('[data-bs-slide="next"]').removeAttribute('disabled')
-            }
-            // Si el slide actual es el primero, deshabilita el botón "Prev"
-            if (currentIndex === 0) {
-                myCarousel2.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel2.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-            }
-        })
-    }
-    if (myCarousel3) {
-        if (initIndex === 2) {
-            myCarousel3.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-        } else {
-            myCarousel3.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-        }
-
-        // Detectar cuando el slide cambia
-        myCarousel3.addEventListener('slid.bs.carousel', function (event) {
-            let slideCount = event.relatedTarget.parentElement.children.length
-            let currentIndex = event.to
-
-            // Si el slide actual es el último, deshabilita el botón "Next"
-            if (currentIndex === slideCount - 1) {
-                myCarousel3.querySelector('[data-bs-slide="next"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel3.querySelector('[data-bs-slide="next"]').removeAttribute('disabled')
-            }
-            // Si el slide actual es el primero, deshabilita el botón "Prev"
-            if (currentIndex === 0) {
-                myCarousel3.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel3.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-            }
-        })
-    }
-    if (myCarousel4) {
-        if (initIndex === 2) {
-            myCarousel4.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-        } else {
-            myCarousel4.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-        }
-
-        // Detectar cuando el slide cambia
-        myCarousel4.addEventListener('slid.bs.carousel', function (event) {
-            let slideCount = event.relatedTarget.parentElement.children.length
-            let currentIndex = event.to
-
-            // Si el slide actual es el último, deshabilita el botón "Next"
-            if (currentIndex === slideCount - 1) {
-                myCarousel4.querySelector('[data-bs-slide="next"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel4.querySelector('[data-bs-slide="next"]').removeAttribute('disabled')
-            }
-            // Si el slide actual es el primero, deshabilita el botón "Prev"
-            if (currentIndex === 0) {
-                myCarousel4.querySelector('[data-bs-slide="prev"]').setAttribute('disabled', 'disabled')
-            } else {
-                myCarousel4.querySelector('[data-bs-slide="prev"]').removeAttribute('disabled')
-            }
-        })
     }
 })
 
@@ -405,7 +157,7 @@ buttonOne.addEventListener('click', () => {
     ariaExpanded==='true' ?
         btnAddNewRow.removeAttribute('disabled')
     :
-        btnAddNewRow.setAttribute('disabled', true)
+        btnAddNewRow.disabled = true
 })
 
 //-------------------------- Add New OT Row --------------------------------
@@ -490,7 +242,7 @@ btnAddNewRow.addEventListener('click', () => {
     } else {
         btnRemoveItem = document.getElementById(`btnRemoveRow${i - 1}`)
         btnRemoveItem.style.display = 'none'
-        btnAddNewRow.setAttribute('disabled', true)
+        btnAddNewRow.disabled = true
     }
 
     const newDiv = document.createElement('div')
@@ -499,7 +251,7 @@ btnAddNewRow.addEventListener('click', () => {
     newDiv.innerHTML = originalDiv
     parentDiv.appendChild(newDiv)
     const otQty = document.getElementById("otQuantity")
-    otQty.setAttribute('value', i + 1)
+    otQty.value = i+1
 
     const buttons = document.querySelectorAll('button')
     buttons.forEach((button) => {
@@ -558,8 +310,8 @@ const clientId = document.getElementById('clientIdHidden')
 
 // ------------- function bucle do/while para encontrar ultima OT ----------
 function lastOtNumberFn(i) {
-    let n = 10
-    let k = i || 5
+    let n = 25
+    let k = i || 25
 
     do {
         var lastOtNumber = document.getElementById(`lastOtNumber${k}_${n}`)
@@ -572,8 +324,8 @@ function lastOtNumberFn(i) {
             let lastOtNumberValue = parseInt(document.getElementById(`lastOtNumber${k}_${n}`).innerHTML)
             let lastOpNumberValue = parseInt(document.getElementById(`lastOpNumber${k}_${n}`).innerHTML)
 
-            otNumberValue.setAttribute('value', lastOtNumberValue + 1)
-            opNumberValue.setAttribute('value', lastOpNumberValue + 10)
+            otNumberValue.value = lastOtNumberValue + 1
+            opNumberValue.value = lastOpNumberValue + 10
             break;
         }
 
@@ -582,7 +334,7 @@ function lastOtNumberFn(i) {
             n--
         } else if (k > 0) {
             k--
-            n = 9
+            n = 24
         } else {
             break;
         }
@@ -599,10 +351,13 @@ btnAddOtForm.addEventListener('click', () => {
     }
 })
 
-function radioSelected(radioSelectedValue) {
+function radioSelected(radioSelectedValue, elementoId) {
     const radioSelected = document.getElementById(`${radioSelectedValue}`)
-    radioSelected.setAttribute('checked', true)
+    radioSelected.checked = true
     tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${radioSelectedValue}</strong> / Proyecto: ${projectNameHidden}`
+    ociNumberK.value = extractNumbers(elementoId)
+    ociNumberHidden.value = radioSelectedValue
+    lastOtNumberFn(extractNumbers(elementoId))
     formulario.scrollIntoView({ behavior: 'smooth' })
 }
 
@@ -618,69 +373,104 @@ arrayBtnAddOtFormSelected.forEach(function(elemento) {
     elemento.addEventListener('click', (event) => {
         event.preventDefault()
         const radioSelectedValue = event.target.name   //elemento.name
-        radioSelected(radioSelectedValue)
+        radioSelected(radioSelectedValue, elemento.id)
         lastOtNumberFn(elemento.id)
     })
 })
-
-// const btnAddOtFormSelected0 = document.getElementById(`btnAddOtFormSelected0`)
-// const btnAddOtFormSelected1 = document.getElementById('btnAddOtFormSelected1')
-// const btnAddOtFormSelected2 = document.getElementById('btnAddOtFormSelected2')
-// const btnAddOtFormSelected3 = document.getElementById('btnAddOtFormSelected3')
-// const btnAddOtFormSelected4 = document.getElementById('btnAddOtFormSelected4')
-
-// if (btnAddOtFormSelected0) {
-//     btnAddOtFormSelected0.addEventListener('click', () => {
-//         const radioSelectedValue = btnAddOtFormSelected0.name
-//         radioSelected(radioSelectedValue)
-//         lastOtNumberFn(0)
-//     })
-// }
-// if (btnAddOtFormSelected1) {
-//     btnAddOtFormSelected1.addEventListener('click', () => {
-//         const radioSelectedValue = btnAddOtFormSelected1.name
-//         radioSelected(radioSelectedValue)
-//         lastOtNumberFn(1)
-//     })
-// }
-// if (btnAddOtFormSelected2) {
-//     btnAddOtFormSelected2.addEventListener('click', () => {
-//         const radioSelectedValue = btnAddOtFormSelected2.name
-//         radioSelected(radioSelectedValue)
-//         lastOtNumberFn(2)
-//     })
-// }
-// if (btnAddOtFormSelected3) {
-//     btnAddOtFormSelected3.addEventListener('click', () => {
-//         const radioSelectedValue = btnAddOtFormSelected3.name
-//         radioSelected(radioSelectedValue)
-//         lastOtNumberFn(3)
-//     })
-// }
-// if (btnAddOtFormSelected4) {
-//     btnAddOtFormSelected4.addEventListener('click', () => {
-//         const radioSelectedValue = btnAddOtFormSelected4.name
-//         radioSelected(radioSelectedValue)
-//         lastOtNumberFn(4)
-//     })
-// }
 
 for (let i = 0; i < radios.length; i++) {
 
     radios[i].addEventListener("change", function (event) {
         ociSeleccionada = event.target.value
         tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
-        ociNumberK.setAttribute('value', i)
-        ociNumberHidden.setAttribute('value', ociSeleccionada)
+        ociNumberK.value = i
+        ociNumberHidden.value = ociSeleccionada
         lastOtNumberFn(i)
     })
 }
 
+//-----En desarrollo ----------------------------------------
 const searchDesignUser = document.getElementById('searchDesignUser')
 searchDesignUser.addEventListener('click', (event) => {
     event.preventDefault()
+
+    function cargarUsuario() {
+        fetch('/api/usuarios/searchUsers/all')
+          .then(response => console.log(response))
+          .then(users => {
+            console.log('users: ', users)
+            // Obtener un usuario aleatorio (aquí puedes aplicar la lógica deseada)
+            const randomUser = users[Math.floor(Math.random() * users.length)]
+            
+            // Mostrar el usuario en el input
+            document.getElementById('internoDiseno').value = randomUser.username; // Suponiendo que el usuario tiene una propiedad 'username'
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+      cargarUsuario()
     
+    // arrayBloque = []
+
+    // arrayBloque.push(`
+    //     <div class="row my-1 mx-auto">
+    //         <div class="col-2 m-auto align-self-middle">
+    //                 <input class="form-check-input" type="checkbox" value="" id="">
+    //         </div>    
+    //         <div class="col my-auto align-self-middle">
+    //             <span id="" class="badge rounded-pill bg-dark text-white">Usuario #1</span>
+    //         </div>
+    //     </div>  
+    //     `)
+
+    // const html = `
+    //         <form id="" action="" method="post" style="font-size: 10pt">
+    //             <fieldset>
+    //                 <div class="row my-1 mx-auto">
+    //                     <div class="col-4 my-auto align-self-middle">
+    //                         <label for="otNumber"><strong>Seleccionar</strong></label>
+    //                     </div>
+    //                     <div class="col my-auto align-self-middle">
+    //                         <label for="otNumber"><strong>Usuarios</strong></label>
+    //                     </div>
+    //                 </div>
+    //                 <hr>
+    //                     ${arrayBloque}
+    //                 <hr>
+    //             </fieldset>
+    //         </form>
+    // `
+    // Swal.fire({
+    //     title: 'BD Usuarios',
+    //     html: html,
+    //     width: 400,
+    //     //background: "#aaaaaa",
+    //     allowOutsideClick: false,
+    //     showCloseButton: true,
+    //     showCancelButton: true,
+    //     confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
+    //     cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+    // }).then((result) => {
+    //     if (result.isConfirmed) {
+    //         // console.log('clientId....', clientId)
+    //         const formR14Values = document.getElementById('')
+    //         // formR14Values.submit()
+    //         // Toast.fire({
+    //         //     icon: 'success',
+    //         //     title: `Información de OT ${res.arrayOtNumber.join(" - ")} agregada con éxito!`
+    //         // })
+    //     } else {
+    //         Swal.fire(
+    //             'No agregada!',
+    //             `La información no fue agregada!`,
+    //             'warning'
+    //         )
+    //         return false
+    //     }
+    // })
 })
+//-----En desarrollo -----------------------------------------
 
 function messageNewOt(ociNumber, otArray) {
 
@@ -747,41 +537,23 @@ function messageNewOt(ociNumber, otArray) {
 const btnCreateNewOt = document.getElementById('btnNewOt')
 btnCreateNewOt.addEventListener('click', (event) => {
     event.preventDefault()
-    let ociNumberKValue = parseInt(document.getElementById('ociNumberK').value)
     let ociNumberHiddenValue = parseInt(document.getElementById('ociNumberHidden').value)
     
-    if (ociNumberKValue) {
-        switch (ociNumberKValue) {
-            case 4: {
-                var ociSeleccionada = parseInt(btnAddOtFormSelected4.name) || ociNumberHiddenValue
-            }
-            case 3: {
-                var ociSeleccionada = parseInt(btnAddOtFormSelected3.name) || ociNumberHiddenValue
-            }
-            case 2: {
-                var ociSeleccionada = parseInt(btnAddOtFormSelected2.name) || ociNumberHiddenValue
-            }
-            case 1: {
-                var ociSeleccionada = parseInt(btnAddOtFormSelected1.name) || ociNumberHiddenValue
-            }
-            case 0: {
-                var ociSeleccionada = parseInt(btnAddOtFormSelected0.name) || ociNumberHiddenValue
+    if (ociNumberHiddenValue) {
+        const otQuantity = parseInt(document.getElementById('otQuantity').value)
+        let otArray = [document.getElementById(`otNumber`).value]
+    
+        if (otQuantity > 1) {
+            for (let j = 1; j < otQuantity; j++) {
+                let otNumberSelected = document.getElementById(`otNumber${j}`).value
+                otArray.push(otNumberSelected)
             }
         }
+        messageNewOt(ociNumberHiddenValue, otArray)
+
     } else {
-        ociSeleccionada = document.getElementById(`ociNumberHidden`).value
+        console.log('Hubo un error al seleccionar la OCI!!') //Hacer sweetAlert2
     }
-
-    const otQuantity = parseInt(document.getElementById('otQuantity').value)
-    let otArray = [document.getElementById(`otNumber`).value]
-
-    if (otQuantity > 1) {
-        for (let j = 1; j < otQuantity; j++) {
-            let otNumberSelected = document.getElementById(`otNumber${j}`).value
-            otArray.push(otNumberSelected)
-        }
-    }
-    messageNewOt(ociSeleccionada, otArray)
 })
 
 //---------- Obtiene la lista de OT ------------
@@ -1931,7 +1703,7 @@ function addDatoToS5(i) {
 }
 
 const arrTables = []
-for (let i = 0; i<10; i++) { //ver limite maximo de proyectos por Cliente
+for (let i = 0; i<25; i++) { //ver limite maximo de proyectos por Cliente
     if (document.getElementById(`tablaGeneral${i}`)) {
         arrTables.push(i)
     }

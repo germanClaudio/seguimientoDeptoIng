@@ -44,6 +44,11 @@ class UserService {
     async updateUser(id, user) {
         return await this.usuarios.updateUser(id, user)
     }
+
+    // search user sort by permission
+    async searchUsers() {
+        return await this.usuarios.searchUsers()
+    }
     
     // delete one user by Id
     async deleteUserById(id) {

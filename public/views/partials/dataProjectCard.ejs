@@ -19,10 +19,12 @@
                     </strong>
                 </small>
             </p>
-            <% if (proyecto[0].project[0].levelProject) { %>
+            <% if (proyecto[0].project[0].levelProject == 'ganado') { %>
                 <span class="badge rounded-pill bg-success text-white">Ganado</span>
+            <% } else if (proyecto[0].project[0].levelProject == 'paraCotizar') { %>
+                <span class="badge rounded-pill bg-secondary text-warning">Para Cotizar</span>
             <% } else { %>
-                    <span class="badge rounded-pill bg-secondary text-warning">Cotizado</span>
+                <span class="badge rounded-pill bg-danger text-white">A riesgo</span>
             <% } %>
                 <p class="card-text"><small class="text-muted"> Prio: <span
                     class="badge bg-dark text-white mx-2">
@@ -125,6 +127,7 @@
                                                                 <div id="posBtnHiddeTableGeneral<%=k%>" class="col-3">
 
                                                                     <button id="btnHiddeTableGeneral<%=k%>"
+                                                                        name="btnHiddeTableGeneral"
                                                                         type="button" class="btn btn-primary"
                                                                         title="Ocultar General"
                                                                         style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #ccc; border: none">
@@ -135,6 +138,7 @@
                                                                 <div id="posBtnHiddeTableSeguimiento<%=k%>" class="col-3">
 
                                                                     <button id="btnHiddeTableSeguimiento<%=k%>"
+                                                                        name="btnHiddeTableSeguimiento"
                                                                         type="button" class="btn btn-secondary"
                                                                         title="Ocultar Int/Ext"
                                                                         style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #bbc; border: none">
@@ -148,6 +152,7 @@
                                                         <div class="d-flex flex-row my-3">
 
                                                             <table id="tablaGeneral<%=k%>"
+                                                                name="tablaGeneral"
                                                                 class="table-responsive align-middle col-3 border-end border-dark"
                                                                 style="font-size: 10pt">
                                                                 <thead class="align-middle"
@@ -252,6 +257,7 @@
                                                             </table>
 
                                                             <table id="tablaSeguimiento<%=k%>"
+                                                                name="tablaSeguimiento"
                                                                 class="table-responsive align-middle col-3 border-end border-dark"
                                                                 style="font-size: 10pt">
                                                                 <thead class="align-middle"
@@ -300,14 +306,60 @@
                                                                 class="carousel slide" data-bs-ride="carousel">
                                                                 <!-- mostrar botones de acuerdo a cantidad de slides -->
                                                                 <div class="carousel-indicators position-absolute top-100 start-0 pb-5">
-                                                                    <% if (!proyecto[0].project[0].levelProject) { %>
+                                                                    <% if (proyecto[0].project[0].levelProject == 'paraCotizar') { %>
                                                                         <button type="button"
                                                                             data-bs-target="#carouselExampleControls<%=k%>"
-                                                                            data-bs-slide-to="0" class="bg-dark"
+                                                                            data-bs-slide-to="0" class="active bg-dark"
                                                                             aria-current="true" aria-label="Slide 1"
                                                                             title="S0">
                                                                         </button>
-                                                                    <% } else { %>                                            
+                                                                        <button type="button"
+                                                                            data-bs-target="#carouselExampleControls<%=k%>"
+                                                                            data-bs-slide-to="1" class="bg-dark"
+                                                                            aria-label="Slide 2"
+                                                                            title="Proceso 3D">
+                                                                        </button>
+
+                                                                    <% } else if (proyecto[0].project[0].levelProject == 'aRiesgo') { %>                                            
+                                                                        <button type="button"
+                                                                            data-bs-target="#carouselExampleControls<%=k%>"
+                                                                            data-bs-slide-to="0" class="active bg-dark"
+                                                                            aria-current="true" aria-label="Slide 1"
+                                                                            title="R-14">
+                                                                        </button>
+                                                                        <button type="button"
+                                                                            data-bs-target="#carouselExampleControls<%=k%>"
+                                                                            data-bs-slide-to="1" class="bg-dark"
+                                                                            aria-label="Slide 2"
+                                                                            title="Proceso 3D">
+                                                                        </button>
+                                                                        <button type="button"
+                                                                            data-bs-target="#carouselExampleControls<%=k%>"
+                                                                            data-bs-slide-to="2" class="bg-dark"
+                                                                            aria-label="Slide 3" title="Diseño">
+                                                                        </button>
+                                                                        <button type="button"
+                                                                            data-bs-target="#carouselExampleControls<%=k%>"
+                                                                            data-bs-slide-to="3" class="bg-dark"
+                                                                            aria-label="Slide 4" title="Info 80%">
+                                                                        </button>
+                                                                        <button type="button"
+                                                                            data-bs-target="#carouselExampleControls<%=k%>"
+                                                                            data-bs-slide-to="4" class="bg-dark"
+                                                                            aria-label="Slide 5" title="S0">
+                                                                        </button>
+                                                                        <button type="button"
+                                                                            data-bs-target="#carouselExampleControls<%=k%>"
+                                                                            data-bs-slide-to="5" class="bg-dark"
+                                                                            aria-label="Slide 6" title="S1">
+                                                                        </button>
+                                                                        <button type="button"
+                                                                            data-bs-target="#carouselExampleControls<%=k%>"
+                                                                            data-bs-slide-to="6" class="bg-dark"
+                                                                            aria-label="Slide 7" title="S2-3">
+                                                                        </button>
+                                                                        
+                                                                    <% } else { %>
                                                                         <button type="button"
                                                                             data-bs-target="#carouselExampleControls<%=k%>"
                                                                             data-bs-slide-to="0" class="active bg-dark"
@@ -363,7 +415,7 @@
                                                                     <% } %>        
                                                                 </div>
 
-                                                                <% if (!proyecto[0].project[0].levelProject) { %>
+                                                                <% if (proyecto[0].project[0].levelProject == 'paraCotizar') { %>
                                                                     <div class="carousel-inner">
                                                                         <div class="carousel-item active"
                                                                             data-bs-interval="600000">
@@ -415,8 +467,638 @@
                                                                                 </tbody>
                                                                             </table>
                                                                         </div>
+                                                                        <div class="carousel-item"
+                                                                            data-bs-interval="600000">
+                                                                            <table id="tablaProceso3D<%=k%>"
+                                                                                class="table-responsive align-middle col-5 border-end border-dark"
+                                                                                style="font-size: 10pt; width: 100%">
+                                                                                <thead class="align-middle"
+                                                                                    style="background-color: #aac">
+                                                                                    <tr>
+                                                                                        <th colspan="2" class="text-center">
+                                                                                            PROCESO 3D
+                                                                                            <button
+                                                                                                id="posBtnAddDataProceso3d<%=k%>"
+                                                                                                name="btnProceso3d"
+                                                                                                class="btn btn-small btn-success m-1"
+                                                                                                style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                                                                                                title="Agregar Datos"
+                                                                                                value="<%=k%>">
+                                                                                                <i class="fa-solid fa-plus"
+                                                                                                    aria-hidden="true"></i>
+                                                                                            </button>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th style="width:50vw" scope="col-1"
+                                                                                            class="text-center"> Proceso 3D
+                                                                                        </th>
+                                                                                        <th style="width:50vw" scope="col-1"
+                                                                                            class="text-center"> Hs Proceso
+                                                                                            3D </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody class="table-group-divider">
+                                                                                    <% for ( let n=0;
+                                                                                        proyecto[m].project[j].oci[k].otProject.length>
+                                                                                        n; n++) { %>
+
+                                                                                        <tr style="height: 7vh;">
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    OK </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="text-black mx-1">
+                                                                                                    25</span>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <% } %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
                                                                     </div>
-                                                                <% } else { %>                                                                
+                                                                <% } else if (proyecto[0].project[0].levelProject == 'aRiesgo'){ %>                                                                
+                                                                    <div class="carousel-inner">
+                                                                        <div class="carousel-item active"
+                                                                            data-bs-interval="600000">
+                                                                            <table id="tablaR14<%=k%>"
+                                                                                class="table-responsive align-middle col-5 border-end border-dark"
+                                                                                style="font-size: 10pt; width: 100%">
+                                                                                <thead class="align-middle"
+                                                                                    style="background-color: #aac">
+                                                                                    <tr>
+                                                                                        <th colspan="2" class="text-center">
+                                                                                            R-14
+                                                                                            <button
+                                                                                                id="posBtnAddDataR14<%=k%>"
+                                                                                                name="btnR14"
+                                                                                                class="btn btn-small btn-success m-1"
+                                                                                                style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                                                                                                title="Agregar/Modificar Datos"
+                                                                                                value="<%=k%>">
+                                                                                                <i class="fa-solid fa-pencil fa-lg"
+                                                                                                    aria-hidden="true"></i>                                                    
+                                                                                            </button>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th style="width:50vw" scope="col-1"
+                                                                                            class="text-center"> Proceso
+                                                                                        </th>
+                                                                                        <th style="width:50vw" scope="col-1"
+                                                                                            class="text-center"> Aprobado PM
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody class="table-group-divider">
+                                                                                    <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length> n; n++) { %>
+
+                                                                                        <tr style="height: 7vh;">
+                                                                                            <td class="text-center align-middle">
+
+                                                                                                <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) {
+                                                                                                    var resProcesoR14 = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoR14[0].procesoR14
+                                                                                                } else {
+                                                                                                    var resProcesoR14 = ''
+                                                                                                }
+                                                                                                    
+                                                                                                switch (resProcesoR14) { 
+                                                                                                    case "ok": { %>
+                                                                                                            <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2" >
+                                                                                                                OK
+                                                                                                            </span>
+                                                                                                    <% break; }        
+                                                                                                    case "noOk": { %>
+                                                                                                            <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
+                                                                                                                No OK
+                                                                                                            </span>
+                                                                                                    <% break; }        
+                                                                                                    case "pendiente": { %>
+                                                                                                            <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
+                                                                                                                Pendiente
+                                                                                                            </span>
+                                                                                                    <% break; }
+                                                                                                    case "noAplica": { %>
+                                                                                                            <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-white my-2">
+                                                                                                                N/A
+                                                                                                            </span>
+                                                                                                    <% break; }
+                                                                                                    default: { %>
+                                                                                                            <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
+                                                                                                                S/D
+                                                                                                            </span>
+                                                                                                    <% break; }
+                                                                                                } %>
+                                                                                            </td>
+                                                                                            <td class="text-center align-middle">
+                                                                                                <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) { 
+                                                                                                    var resAprobadoR14 = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoR14[0].aprobadoR14
+                                                                                                } else {
+                                                                                                    var resAprobadoR14 = ''
+                                                                                                }
+
+                                                                                                switch (resAprobadoR14) { 
+                                                                                                    case "ok": { %>
+                                                                                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2">
+                                                                                                            OK
+                                                                                                        </span>
+                                                                                                    <% break; }        
+                                                                                                    case "noOk": { %>
+                                                                                                            <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
+                                                                                                                No OK
+                                                                                                            </span>
+                                                                                                    <% break; }        
+                                                                                                    case "pendiente": { %>
+                                                                                                            <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
+                                                                                                                Pendiente
+                                                                                                            </span>
+                                                                                                    <% break; }
+                                                                                                    case "noAplica": { %>
+                                                                                                            <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-withe my-2">
+                                                                                                                N/A
+                                                                                                            </span>
+                                                                                                    <% break; }
+                                                                                                    default: { %>
+                                                                                                            <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
+                                                                                                                S/D
+                                                                                                            </span>
+                                                                                                    <% break; }
+                                                                                                } %>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    <% } %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <div class="carousel-item"
+                                                                            data-bs-interval="600000">
+                                                                            <table id="tablaProceso3D<%=k%>"
+                                                                                class="table-responsive align-middle col-5 border-end border-dark"
+                                                                                style="font-size: 10pt; width: 100%">
+                                                                                <thead class="align-middle"
+                                                                                    style="background-color: #aac">
+                                                                                    <tr>
+                                                                                        <th colspan="2" class="text-center">
+                                                                                            PROCESO 3D
+                                                                                            <button
+                                                                                                id="posBtnAddDataProceso3d<%=k%>"
+                                                                                                name="btnProceso3d"
+                                                                                                class="btn btn-small btn-success m-1"
+                                                                                                style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                                                                                                title="Agregar Datos"
+                                                                                                value="<%=k%>">
+                                                                                                <i class="fa-solid fa-plus"
+                                                                                                    aria-hidden="true"></i>
+                                                                                            </button>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th style="width:50vw" scope="col-1"
+                                                                                            class="text-center"> Proceso 3D
+                                                                                        </th>
+                                                                                        <th style="width:50vw" scope="col-1"
+                                                                                            class="text-center"> Hs Proceso
+                                                                                            3D </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody class="table-group-divider">
+                                                                                    <% for ( let n=0;
+                                                                                        proyecto[m].project[j].oci[k].otProject.length>
+                                                                                        n; n++) { %>
+
+                                                                                        <tr style="height: 7vh;">
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    OK </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="text-black mx-1">
+                                                                                                    25</span>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <% } %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <div class="carousel-item"
+                                                                            data-bs-interval="600000">
+                                                                            <table id="tablaDiseno<%=k%>"
+                                                                                class="table-responsive align-middle col-5 border-end border-dark"
+                                                                                style="font-size: 10pt; width: 100%">
+                                                                                <thead class="align-middle"
+                                                                                    style="background-color: #aac">
+                                                                                    <tr>
+                                                                                        <th colspan="8" class="text-center">
+                                                                                            DISEÑO
+                                                                                            <button
+                                                                                                id="posBtnAddDataDiseno<%=k%>"
+                                                                                                name="btnDiseno"
+                                                                                                class="btn btn-small btn-success m-1"
+                                                                                                style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                                                                                                title="Agregar Datos"
+                                                                                                value="<%=k%>">
+                                                                                                <i class="fa-solid fa-plus"
+                                                                                                    aria-hidden="true"></i>
+                                                                                            </button>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th style="width:12.5vw"
+                                                                                            scope="col-1"
+                                                                                            class="text-center"> Av. Diseño
+                                                                                        </th>
+                                                                                        <th style="width:12.5vw"
+                                                                                            scope="col-1"
+                                                                                            class="text-center"> 1° Rev 50%
+                                                                                        </th>
+                                                                                        <th style="width:12.5vw"
+                                                                                            scope="col-1"
+                                                                                            class="text-center"> 2° Rev 80%
+                                                                                        </th>
+                                                                                        <th style="width:12.5vw"
+                                                                                            scope="col-1"
+                                                                                            class="text-center"> Env.
+                                                                                            Cliente</th>
+                                                                                        <th style="width:12.5vw"
+                                                                                            scope="col-1"
+                                                                                            class="text-center"> Rev.
+                                                                                            Cliente</th>
+                                                                                        <th style="width:12.5vw"
+                                                                                            scope="col-1"
+                                                                                            class="text-center"> LDM Prov.
+                                                                                        </th>
+                                                                                        <th style="width:12.5vw"
+                                                                                            scope="col-1"
+                                                                                            class="text-center"> Rev. 100%
+                                                                                        </th>
+                                                                                        <th style="width:12.5vw"
+                                                                                            scope="col-1"
+                                                                                            class="text-center"> Aprob. Clie
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody class="table-group-divider">
+                                                                                    <% for ( let n=0;
+                                                                                        proyecto[m].project[j].oci[k].otProject.length>
+                                                                                        n; n++) { %>
+
+                                                                                        <tr style="height: 7vh;">
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <% } %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <div class="carousel-item"
+                                                                            data-bs-interval="600000">
+                                                                            <table id="tablaInfo80<%=k%>"
+                                                                                class="table-responsive align-middle col-5 border-end border-dark"
+                                                                                style="font-size: 10pt; width: 100%">
+                                                                                <thead class="align-middle"
+                                                                                    style="background-color: #aac">
+                                                                                    <tr>
+                                                                                        <th colspan="4" class="text-center">
+                                                                                            INFO 80%
+                                                                                            <button
+                                                                                                id="posBtnAddDatainfo80<%=k%>"
+                                                                                                name="btnInfo80"
+                                                                                                class="btn btn-small btn-success m-1"
+                                                                                                style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                                                                                                title="Agregar Datos"
+                                                                                                value="<%=k%>">
+                                                                                                <i class="fa-solid fa-plus"
+                                                                                                    aria-hidden="true"></i>
+                                                                                            </button>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th style="width:30vw" scope="col-1"
+                                                                                            class="text-center"> LDM Avan.
+                                                                                            (Cil/Guia)</th>
+                                                                                        <th style="width:30vw" scope="col-1"
+                                                                                            class="text-center"> LDM Avan.
+                                                                                            (Tacos
+                                                                                            D2)</th>
+                                                                                        <th style="width:20vw" scope="col-1"
+                                                                                            class="text-center"> LDM 80%
+                                                                                        </th>
+                                                                                        <th style="width:20vw" scope="col-1"
+                                                                                            class="text-center"> Info Modelo
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody class="table-group-divider">
+                                                                                    <% for ( let n=0;
+                                                                                        proyecto[m].project[j].oci[k].otProject.length>
+                                                                                        n; n++) { %>
+
+                                                                                        <tr style="height: 7vh;">
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    OK </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-warning text-black my-2">
+                                                                                                    N/A</span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    100% </span>
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    OK </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-warning text-black my-2">
+                                                                                                    Pendiente</span>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <% } %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <div class="carousel-item"
+                                                                            data-bs-interval="600000">
+                                                                            <table id="tablaS0<%=k%>"
+                                                                                class="table-responsive align-middle col-5 border-end border-dark"
+                                                                                style="font-size: 10pt; width: 100%">
+                                                                                <thead class="align-middle"
+                                                                                    style="background-color: #99c">
+                                                                                    <tr>
+                                                                                        <th colspan="2" class="text-center">
+                                                                                            S0
+                                                                                            <button
+                                                                                                id="posBtnAddDataS0<%=k%>"
+                                                                                                name="btnS0"
+                                                                                                class="btn btn-small btn-success m-1"
+                                                                                                style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                                                                                                title="Agregar Datos"
+                                                                                                value="<%=k%>">
+                                                                                                <i class="fa-solid fa-pencil fa-lg"
+                                                                                                    aria-hidden="true"></i>
+                                                                                            </button>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th style="width:50vw" scope="col-1"
+                                                                                            class="text-center"> Sim </th>
+                                                                                        <th style="width:50vw" scope="col-1"
+                                                                                            class="text-center"> Doc </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody class="table-group-divider">
+                                                                                    <% for ( let n=0;
+                                                                                        proyecto[m].project[j].oci[k].otProject.length>
+                                                                                        n; n++) { %>
+
+                                                                                        <tr style="height: 7vh;">
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    OK </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-warning text-black my-2">
+                                                                                                    Pendiente </span>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <% } %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <div class="carousel-item"
+                                                                            data-bs-interval="600000">
+                                                                            <table id="tablaS1<%=k%>"
+                                                                                class="table-responsive align-middle col-2 border-end border-dark"
+                                                                                style="font-size: 10pt; width: 100%">
+                                                                                <thead class="align-middle"
+                                                                                    style="background-color: #88c">
+                                                                                    <tr>
+                                                                                        <th colspan="5" class="text-center">
+                                                                                            S1
+                                                                                            <button
+                                                                                                id="posBtnAddDataS1<%=k%>"
+                                                                                                name="btnS1"
+                                                                                                class="btn btn-small btn-success m-1"
+                                                                                                style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                                                                                                title="Agregar Datos"
+                                                                                                value="<%=k%>">
+                                                                                                <i class="fa-solid fa-plus"
+                                                                                                    aria-hidden="true"></i>
+                                                                                            </button>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th style="width:20vw" scope="col-1"
+                                                                                            class="text-center"> Sim </th>
+                                                                                        <th style="width:20vw" scope="col-1"
+                                                                                            class="text-center"> <i
+                                                                                                class="fa-solid fa-video"></i>
+                                                                                        </th>
+                                                                                        <th style="width:20vw" scope="col-1"
+                                                                                            class="text-center"> Informe
+                                                                                        </th>
+                                                                                        <th style="width:20vw" scope="col-1"
+                                                                                            class="text-center"> PPT </th>
+                                                                                        <th style="width:20vw" scope="col-1"
+                                                                                            class="text-center"> S1 p/Op20
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody class="table-group-divider">
+                                                                                    <% for ( let n=0;
+                                                                                        proyecto[m].project[j].oci[k].otProject.length>
+                                                                                        n; n++) { %>
+
+                                                                                        <tr style="height: 7vh;">
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    OK </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-warning text-black my-2">
+                                                                                                    Pendiente </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    OK </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-warning text-black my-2">
+                                                                                                    Pendiente </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-warning text-black my-2">
+                                                                                                    Pendiente </span>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <% } %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <div class="carousel-item"
+                                                                            data-bs-interval="600000">
+                                                                            <table id="tablaS2_3<%=k%>"
+                                                                                class="table-responsive align-middle col-2 border-end border-dark"
+                                                                                style="font-size: 10pt; width: 100%">
+                                                                                <thead class="align-middle"
+                                                                                    style="background-color: #88c">
+                                                                                    <tr>
+                                                                                        <th colspan="3" class="text-center">
+                                                                                            S2
+                                                                                            <button
+                                                                                                id="posBtnAddDataS2_3<%=k%>"
+                                                                                                name="btnS23"
+                                                                                                class="btn btn-small btn-success m-1 ms-5"
+                                                                                                style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                                                                                                title="Agregar Datos"
+                                                                                                value="<%=k%>">
+                                                                                                <i class="fa-solid fa-plus"
+                                                                                                    aria-hidden="true"></i>
+                                                                                            </button>
+                                                                                        </th>
+                                                                                        <th colspan="1" class="text-center">
+                                                                                            S3
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th style="width:25vw" scope="col-1"
+                                                                                            class="text-center"> Sim </th>
+                                                                                        <th style="width:25vw" scope="col-1"
+                                                                                            class="text-center"> Reporte
+                                                                                        </th>
+                                                                                        <th style="width:25vw" scope="col-1"
+                                                                                            class="text-center"> DFN
+                                                                                            Prodismo </th>
+                                                                                        <th style="width:25vw" scope="col-1"
+                                                                                            class="text-center"> Sim </th>
+
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody class="table-group-divider">
+                                                                                    <% for ( let n=0;
+                                                                                        proyecto[m].project[j].oci[k].otProject.length>
+                                                                                        n; n++) { %>
+
+                                                                                        <tr style="height: 7vh;">
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-success text-white my-2">
+                                                                                                    OK </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-warning text-black my-2">
+                                                                                                    Pendiente </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-warning text-black my-2">
+                                                                                                    Pendiente </span>
+                                                                                            </td>
+                                                                                            <td
+                                                                                                class="text-center align-middle">
+                                                                                                <span
+                                                                                                    class="badge rounded-pill bg-warning text-black my-2">
+                                                                                                    Pendiente </span>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <% } %>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>                                                
+                                                                    </div>
+                                                                
+                                                                <% } else { %>
                                                                     <div class="carousel-inner">
                                                                         <div class="carousel-item active"
                                                                             data-bs-interval="600000">
@@ -1188,10 +1870,7 @@
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody class="table-group-divider">
-                                                                                    <% for ( let n=0;
-                                                                                        proyecto[m].project[j].oci[k].otProject.length>
-                                                                                        n; n++) { %>
-
+                                                                                    <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length>n; n++) { %>
                                                                                         <tr style="height: 7vh;">
                                                                                             <td
                                                                                                 class="text-center align-middle">
@@ -1211,23 +1890,25 @@
                                                                             </table>
                                                                         </div>                                                    
                                                                     </div>
-                                                                
+                                                                <% } %>
 
                                                                     <button class="carousel-control-prev text-dark"
                                                                         type="button"
                                                                         data-bs-target="#carouselExampleControls<%=k%>"
-                                                                        data-bs-slide="prev">
+                                                                        data-bs-slide="prev"
+                                                                        name="prev">
                                                                         <span class="position-absolute top-0 start-0"><i
                                                                                 class="fa-solid fa-caret-left"></i></span>
                                                                     </button>
                                                                     <button class="carousel-control-next text-dark"
                                                                         type="button"
                                                                         data-bs-target="#carouselExampleControls<%=k%>"
-                                                                        data-bs-slide="next">
+                                                                        data-bs-slide="next"
+                                                                        name="next">
                                                                         <span class="position-absolute top-0 start-100"><i
                                                                                 class="fa-solid fa-caret-right"></i></span>
                                                                     </button>
-                                                                <% } %>
+                                                                
                                                             </div>
                                                         </div>
                                                         <hr>

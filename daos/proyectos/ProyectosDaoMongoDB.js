@@ -84,7 +84,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 const project = await Proyectos.find({
                     '_id': id
                 })
-                console.log('project...',project)
+                // console.log('project...',project)
                 return project
 
             } catch (error) {
@@ -170,23 +170,37 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
     // Add Ot's to Oci Number ----------------
     async addOtToOciProject(idProjectTarget, numberOci, ociNumberK, arrayOtAddedToOci) {
-        
+        console.log('arrayOtAddedToOci: ', arrayOtAddedToOci)
         if (idProjectTarget) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget })
-
+                
                 if (itemMongoDB) {
                     const ociKNumber = parseInt(ociNumberK) || 0
+                    
+                    let infoOtToAddOci = {
+                        [`project.0.oci.${ociKNumber}.otProject`]: arrayOtAddedToOci,
+                    }
 
-                    if(itemMongoDB[0].oci[ociKNumber].otProject != []) {
+                    let infoOtModificator = {
+                        [`project.0.oci.${ociKNumber}.modificator`]: arrayOtAddedToOci[0].modificator,
+                        [`project.0.oci.${ociKNumber}.modifiedOn`]: ""
+                    }
+
+                    if(itemMongoDB.project[0].oci[ociKNumber].otProject != []) {
+
                         var otAddedToOci = await Proyectos.updateOne(
                             { _id: itemMongoDB._id },
                             {
-                                $push: {
-                                    [`project.0.oci.${ociKNumber}.otProject`]: arrayOtAddedToOci,
-                                    [`project.0.oci.${ociKNumber}.modificator`]: arrayOtAddedToOci[0].creator,
-                                    [`project.0.oci.${ociKNumber}.modifiedOn`]: now
-                                }
+                                $set: infoOtModificator
+                            },
+                            { new: true }
+                        )
+
+                        var otAddedToOci = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $push: infoOtToAddOci
                             },
                             { new: true }
                         )
@@ -195,22 +209,31 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                         if (otAddedToOci.acknowledged) {
                             const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
                             return itemUpdated
+
                         } else {
                             return new Error(`No se actualizó el item: ${itemMongoDB._id}`)
                         }
                         
                     } else {
+
+                        let infoOtToAddOci = {
+                            [`project.0.oci.${ociKNumber}.otProject`]: arrayOtAddedToOci,
+                            [`project.0.oci.${ociKNumber}.creator`]: arrayOtAddedToOci[0].creator,
+                            [`project.0.oci.${ociKNumber}.timestamp`]: arrayOtAddedToOci[0].timestamp,
+                        }
+
                         var otAddedToOci = await Proyectos.updateOne(
                             { _id: itemMongoDB._id },
                             {
-                                $push: {
-                                    [`project.0.oci.${ociKNumber}.otProject`]: arrayOtAddedToOci,
-                                    [`project.0.oci.${ociKNumber}.creator`]: arrayOtAddedToOci[0].creator,
-                                    [`project.0.oci.${ociKNumber}.timestamp`]: now,
-                                    [`project.0.oci.${ociKNumber}.modificator`]: arrayOtAddedToOci[0].modificator,
-                                    [`project.0.oci.${ociKNumber}.modifiedOn`]: ''
-    
-                                }
+                                $set: infoOtModificator
+                            },
+                            { new: true }
+                        )
+
+                        var otAddedToOci = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $push: infoOtToAddOci
                             },
                             { new: true }
                         )
@@ -219,6 +242,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                         if (otAddedToOci.acknowledged) {
                             const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
                             return itemUpdated
+
                         } else {
                             return new Error(`No se actualizó el item: ${itemMongoDB._id}`)
                         }
@@ -353,13 +377,9 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
     }
 
 
-
-
     // Update Status Project by Project Id
     async updateStatusProject(id, project, statusProject, userModificator) {
-        //console.log('Project...', project)
-        //console.log('userInfo...', userInfo)
-        
+                
         let booleanStatus
         statusProject=='true' ? booleanStatus=true : booleanStatus=false
         
@@ -408,21 +428,17 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         //console.log('Project...', project)
         //console.log('userInfo...', userInfo)
         
-        let booleanLevel
-        levelProject=='true' ? booleanLevel=true : booleanLevel=false
-        
         if (project) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
                 //console.log('itemMongoDB...', itemMongoDB)
-                //console.log('now...dao. ', now)
                 if (itemMongoDB) {
                     
                     var updatedProject = await Proyectos.updateOne(
                         { _id: itemMongoDB._id },
                         {
                             $set: {
-                                'project.0.levelProject': !booleanLevel,
+                                'project.0.levelProject': levelProject,
                                 modificator: userModificator,
                                 modifiedOn: now
                             }

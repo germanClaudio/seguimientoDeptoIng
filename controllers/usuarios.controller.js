@@ -177,6 +177,28 @@ class UsersController {
         }
     }
 
+    searchUsers = async (req, res) => {
+        const usuarios = await this.users.getAllUsers()
+        // let username = res.locals.username
+        // let userInfo = res.locals.userInfo
+
+        // const cookie = req.session.cookie
+        // const time = cookie.expires
+        // const expires = new Date(time)
+
+        try {
+            if(usuarios.error) return res.status(400).json({msg: 'No hay usuarios cargados!'}) 
+            res.send(usuarios)
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                msg: 'controllerError - getAllUsers',
+                error: error
+            })
+        }
+    }
+
     deleteUserById = async (req, res) => {
         const { id } = req.params
         let username = res.locals.username
