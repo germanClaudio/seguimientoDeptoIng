@@ -211,8 +211,8 @@ function messageChangeProjectStatus(projectName, statusProject, k) {
             icon: 'info',
             showCancelButton: true,
             showConfirmButton: true,
-            confirmButtonText: 'Continuar',
-            cancelButtonText: 'Cancelar'
+            confirmButtonText: 'Continuar <i class="fa-regular fa-pen-to-square"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById(`formChangeStatusProject${k}_0`).submit()
@@ -340,8 +340,8 @@ function messageChangeProjectLevel(projectName, levelProject, k, idProject) {
             icon: 'info',
             showCancelButton: true,
             showConfirmButton: true,
-            confirmButtonText: 'Continuar',
-            cancelButtonText: 'Cancelar'
+            confirmButtonText: 'Continuar <i class="fa-regular fa-pen-to-square"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
         }).then((result) => {
             if (result.isConfirmed) {
 
@@ -709,4 +709,355 @@ if(arrayProjectList !=[]) {
     	})
     })
 }
-// --------------------------------------------------------------------------------------
+
+//---- Update Project Data ----------------
+function messageUpdateProject(
+    projectId, 
+    projectName, 
+    statusProject, 
+    imgProject, 
+    descriptionProject,
+    prioProject,
+    codeProject,
+    levelProject,
+    k
+    ) {
+        
+        let projectDescription = descriptionProject.slice(13)
+        let projectPrio = parseInt(prioProject.slice(5))
+        let checked = 'checked'
+        statusProject=='on' ? checked : checked = ''
+
+        let projectLevel
+        if (levelProject==='ganado') {
+            projectLevel = `<option selected disabled value="ganado">Ganado</option>
+                            <option value="paraCotizar">Para Cotizar</option>
+                            <option value="aRiesgo">A Riesgo</option>`
+
+        } else if (levelProject==='paraCotizar') {
+            projectLevel = `<option selected disabled value="paraCotizar">Para Cotizar</option>
+                            <option value="ganado">Ganado</option>
+                            <option value="aRiesgo">A Riesgo</option>`
+
+        } else {
+            projectLevel = `<option selected disabled value="aRiesgo">A Riesgo</option>
+                            <option value="ganado">Ganado</option>
+                            <option value="paraCotizar">Para Cotizar</option>`
+        }
+        
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+
+    var html = `<form id="formUpdateProject${k}" action="/api/proyectos/updateProject/${projectId}" method="post">
+                    <fieldset>
+                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
+                            <div class="col-6">
+                                <label for="projectName" class="form-label">Nombre Proyecto</label>
+                                <input type="text" name="projectName" class="form-control"
+                                    placeholder="Nombre Proyecto" value="${projectName}" required>
+                            </div>
+                            
+                            <div class="col-6" style="background-color: #ddd;">
+                                <label for="statusProject" class="form-label">Status Proyecto</label><br>
+                                <div>
+                                    <p class="d-inline-block me-1">Inactivo</p>
+                                    <div class="form-check form-switch d-inline-block mt-2">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                            name="statusProject" style="cursor: pointer;" ${checked}>
+                                        <label class="form-check-label" for="statusProject">Activo</label>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>    
+                        
+                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
+                            <div class="col-8">
+                                <label for="projectDescription" class="form-label">Descripción Proyecto</label>
+                                <input type="text" name="projectDescription" class="form-control"
+                                    placeholder="Descripción Proyecto" value="${projectDescription}" required>
+                            </div>
+                            
+                            <div class="col-4">
+                                <label for="prioProject" class="form-label">Prioridad Proyecto</label>
+                                <input type="number" name="prioProject" class="form-control"
+                                    placeholder="Prioridad Proyecto" value="${projectPrio}">
+                            </div>
+                        </div> 
+
+                        <div class="row justify-content-between mb-2 mx-1 px-1">    
+                            <div class="col-4">
+                                <label for="levelProject" class="form-label">Nivel</label>
+                                <select name="levelProject" class="form-select" required>
+                                    ${projectLevel}
+                                </select>
+                            </div>
+                            
+                            <div class="col-4">
+                                <label for="codeProject" class="form-label">Codigo Proyecto</label>
+                                <input type="text" name="codeProject" class="form-control"
+                                    placeholder="Codigo Proyecto" value="${codeProject}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
+                            <div class="col-12">
+                                <label for="imageProject" class="form-label">URL Imagen Proyecto</label>
+                                <input type="text" name="imageProject" class="form-control"
+                                    placeholder="Imagen proyecto url" value="${imgProject}" required>
+                                <div class="badge sm-badge bg-warning text-dark mt-2 ms-1">
+                                    <a href="${imgProject}" target="blank" class="alert-link">${imgProject}</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row justify-content-evenly mb-2 px-1 mx-auto">
+                            <div class="col-12 my-1 mx-auto px-1">
+                                <img src="${imgProject}" class="img-fluid rounded px-1"
+                                    alt="Imagen Proyecto" width="115px">
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>`
+    
+
+    if(projectName) {
+        Swal.fire({
+            title: `Actualizar Proyecto ${projectName}`,
+            position: 'center',
+            html: html,
+            width: 700,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Actualizar <i class="fa-regular fa-pen-to-square"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formUpdateProject${k}`).submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `El proyecto <b>${projectName}</b>, se modificó con éxito!`
+                })
+            } else {
+                Swal.fire(
+                    'Proyecto no modificado!',
+                    `El proyecto <b>${projectName}</b>, no se modificó!`,
+                    'warning'
+                )
+                return false
+            }
+        })
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `El proyecto no se actualizó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
+        
+}
+
+const projectQty = parseInt(document.getElementById('projectQuantity').innerText)
+
+var arrayBtnUpdateProject = []
+let l=0
+for (let k=0; k<projectQty; k++) {
+    var btnUpdateProject = document.getElementById(`btnUpdateProject${k}_${l}`)
+    if(btnUpdateProject) {
+        arrayBtnUpdateProject.push(btnUpdateProject)
+    }
+    
+    arrayBtnUpdateProject[k].addEventListener('click', (event) => {
+        event.preventDefault()
+        const projectId = document.getElementById(`projectIdHidden${k}_${l}`).value
+        const projectName = document.getElementById(`projectNameHidden${k}_${l}`).value
+        const statusProject = document.getElementById(`statusProjectHidden${k}_${l}`).value
+        const imgProject = document.getElementById(`imageProject${k}`).src
+        const descriptionProject = document.getElementById(`projectDescription${k}`).innerText
+        const prioProject = document.getElementById(`prioProject${k}`).innerText
+        const codeProject = document.getElementById(`codeProject${k}`).innerText
+        const levelProject = document.getElementById(`levelProjectHidden${k}_${l}`).value
+
+        messageUpdateProject(
+            projectId,
+            projectName,
+            statusProject,
+            imgProject,
+            descriptionProject,
+            prioProject,
+            codeProject,
+            levelProject,
+            k
+        )
+    })
+}
+
+//---- Update OCI Data ----------------
+function messageUpdateOci(
+        projectId,
+        statusOci,
+        imageOci,
+        ociDescription,
+        ociNumber,
+        ociKNumber,
+        k
+    ) {
+        console.log(statusOci)
+        let descriptionOci = ociDescription.slice(13)
+        let numberOci = parseInt(ociNumber)
+        let checked = 'checked'
+        statusOci=='on' ? checked : checked = ''
+
+        console.log(
+            projectId,
+            statusOci,
+            imageOci,
+            ociDescription,
+            descriptionOci,
+            ociNumber,
+            ociKNumber,
+            k
+        )
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+
+    var html = `<form id="formUpdateOci${k}" action="/api/proyectos/updateOci/${projectId}" method="post">
+                    <fieldset>
+                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
+                            <div class="col-6">
+                                <label for="numberOci" class="form-label">Número OCI</label>
+                                <input type="text" name="numberOci" class="form-control"
+                                    placeholder="Número OCI" value="${numberOci}" required>
+                            </div>
+                            
+                            <div class="col-6" style="background-color: #ddd;">
+                                <label for="statusOci" class="form-label">Status OCI</label><br>
+                                <div>
+                                    <p class="d-inline-block me-1">Inactiva</p>
+                                    <div class="form-check form-switch d-inline-block mt-2">
+                                        <input class="form-check-input" type="checkbox"
+                                            name="statusOci" style="cursor: pointer;" ${checked}>
+                                        <label class="form-check-label" for="statusOci">Activa</label>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>    
+                        
+                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
+                            <div class="col-8">
+                                <label for="descriptionOci" class="form-label">Descripción OCI</label>
+                                <input type="text" name=descriptionOci" class="form-control"
+                                    placeholder="Descripción OCI" value="${descriptionOci}" required>
+                            </div>                            
+                        </div> 
+
+                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
+                            <div class="col-12">
+                                <label for="imageOci" class="form-label">URL Imagen OCI</label>
+                                <input type="text" name="imageOci" class="form-control"
+                                    placeholder="Imagen OCI url" value="${imageOci}" required>
+                                <div class="badge sm-badge bg-warning text-dark mt-2 ms-1">
+                                    <a href="${imageOci}" target="blank" class="alert-link">${imageOci}</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row justify-content-evenly mb-2 px-1 mx-auto">
+                            <div class="col-12 my-1 mx-auto px-1">
+                                <img src="${imageOci}" class="img-fluid rounded px-1"
+                                    alt="Imagen OCI" width="115px">
+                            </div>
+                        </div>
+                        <input type="hidden" name="ociKNumberHidden" id="ociKNumberHidden${ociKNumber}" value="${ociKNumber}">
+                    </fieldset>
+                </form>`
+    
+
+    if(projectId && numberOci) {
+        Swal.fire({
+            title: `Actualizar OCI# ${numberOci}`,
+            position: 'center',
+            html: html,
+            width: 700,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Actualizar <i class="fa-regular fa-pen-to-square"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formUpdateOci${k}`).submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `La OCI# <b>${numberOci}</b>, se modificó con éxito!`
+                })
+            } else {
+                Swal.fire(
+                    'OCI no modificada!',
+                    `La OCI# <b>${numberOci}</b>, no se modificó!`,
+                    'warning'
+                )
+                return false
+            }
+        })
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `La OCI# ${numberOci} no se actualizó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
+        
+}
+
+const ociQuantity = parseInt(document.getElementById('ociQuantityHidden0_0').value)
+console.log()
+var arrayBtnUpdateOci = []
+let m=0
+for (let k=0; k<ociQuantity; k++) {
+    var btnUpdateOci = document.getElementById(`btnUpdateOci${k}_${m}`)
+    if(btnUpdateOci) {
+        arrayBtnUpdateOci.push(btnUpdateProject)
+    }
+    
+    arrayBtnUpdateOci[k].addEventListener('click', (event) => {
+        event.preventDefault()
+        const projectId = document.getElementById(`projectIdHidden${k}_${m}`).value
+        const statusOci = document.getElementById(`statusOciHidden${k}_${m}`).value
+        const imageOci = document.getElementById(`imageOci${k}_${m}`).src
+        const ociDescription = document.getElementById(`ociDescription${k}_${m}`).innerText
+        const ociNumber = document.getElementById(`ociNumberHidden${k}_${m}`).value
+        const ociKNumber = document.getElementById(`ociKNumberHidden${k}_${m}`).value
+        
+        messageUpdateOci(
+            projectId,
+            statusOci,
+            imageOci,
+            ociDescription,
+            ociNumber,
+            ociKNumber,
+            k
+        )
+    })
+}

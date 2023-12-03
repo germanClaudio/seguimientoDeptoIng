@@ -735,6 +735,144 @@ class ProjectsController {
         }
     }
 
+    updateProject = async (req, res) => {
+        const id = req.params.id
+        const proyecto = await this.projects.selectProjectByProjectId(id)
+        
+        const clientId = proyecto[0].client[0]._id
+        const cliente = await this.clients.selectClientById(clientId)
+        
+        const statusProject = req.body.statusProject
+        const projectName = req.body.projectName
+        const projectDescription = req.body.projectDescription
+        const prioProject = req.body.prioProject
+        const levelProject = req.body.levelProject
+        const codeProject = req.body.codeProject
+        const imageProject = req.body.imageProject
+
+
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        const userId = userInfo.id
+        const userCreator = await this.users.getUserById(userId)
+        
+        const userModificator = [{
+                    name: userCreator.name,
+                    lastName: userCreator.lastName,
+                    username: userCreator.username,
+                    email: userCreator.email
+                }]
+        
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+        
+        await this.projects.updateProject(
+            id,
+            proyecto,
+            statusProject,
+            projectName,
+            projectDescription,
+            prioProject,
+            levelProject,
+            codeProject,
+            imageProject,
+            userModificator
+        )
+
+        await this.clients.updateClient(
+            clientId, 
+            cliente, 
+            userModificator
+        )
+
+        const proyectos = await this.projects.getProjectsByClientId(clientId)
+        
+        try {
+            if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+            res.render('clientProjectsDetails', {
+                username,
+                userInfo,
+                expires,
+                cliente,
+                proyectos
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
+    updateOci = async (req, res) => {
+        const id = req.params.id
+        const proyecto = await this.projects.selectProjectByProjectId(id)
+        
+        const clientId = proyecto[0].client[0]._id
+        const cliente = await this.clients.selectClientById(clientId)
+        
+        const statusOci = req.body.statusOci
+        const ociDescription = req.body.descriptionOci
+        const ociNumber = req.body.numberOci
+        const ociKNumber = req.body.ociKNumberHidden
+        const ociImage = req.body.imageOci
+
+
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        const userId = userInfo.id
+        const userCreator = await this.users.getUserById(userId)
+        
+        const userModificator = [{
+                    name: userCreator.name,
+                    lastName: userCreator.lastName,
+                    username: userCreator.username,
+                    email: userCreator.email
+                }]
+        
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+        
+        await this.projects.updateOci(
+            id,
+            proyecto,
+            statusOci,
+            ociDescription,
+            ociNumber,
+            ociImage,
+            ociKNumber,
+            userModificator
+        )
+
+        await this.clients.updateClient(
+            clientId, 
+            cliente, 
+            userModificator
+        )
+
+        const proyectos = await this.projects.getProjectsByClientId(clientId)
+        
+        try {
+            if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+            res.render('clientProjectsDetails', {
+                username,
+                userInfo,
+                expires,
+                cliente,
+                proyectos
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
     // deleteProductById = async (req, res) => {
     //     const { id } = req.params
 

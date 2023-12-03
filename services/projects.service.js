@@ -93,6 +93,42 @@ class ProjectService {
         )
     }
 
+    // Update Project by id
+    async updateProject(
+            id,
+            project,
+            statusProject,
+            projectName,
+            projectDescription,
+            prioProject,
+            levelProject,
+            codeProject,
+            imageProject,
+            userInfo
+    ) {
+        return this.proyectos.updateProject(
+            id,
+            project,
+            statusProject,
+            projectName,
+            projectDescription,
+            prioProject,
+            levelProject,
+            codeProject,
+            imageProject,
+            userInfo
+        )
+    }
+
+    // Update Oci by Project id
+    async updateOci(id, project, statusProject, userInfo) {
+        return this.proyectos.updateOci(
+            id,
+            project,
+            statusProject,
+            userInfo)
+    }
+
     // // remove one project from Client
     // async deleteProjectFromClient(id) {
     //     return this.proyectos.deleteItemFromCart()

@@ -41,6 +41,12 @@ routerProyectos.post('/updateStatusOci/:id', checkAuthentication, authProductMid
 // -------------------  Agregar Nueva OCI a Proyecto por Id Proyecto ------------------ 
 routerProyectos.post('/addNewOciToProject/:id', checkAuthentication, authProductMiddleware, projects.addNewOciToProject)
 
+// -------------------  Actualizar Proyecto por Id ------------------ 
+routerProyectos.post('/updateProject/:id', checkAuthentication, authProductMiddleware, projects.updateProject)
+
+// -------------------  Actualizar OCI por Id de Proyecto ------------------ 
+routerProyectos.post('/updateOci/:id', checkAuthentication, authProductMiddleware, projects.updateOci)
+
 // -------------------  Eliminar Proyecto por Id (Visible = false) ------------------ 
 // routerProyectos.get('/delete/:id', checkAuthentication, authProductMiddleware, projects.deleteClientById)
 

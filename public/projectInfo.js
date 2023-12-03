@@ -21,7 +21,7 @@ function hiddeTableGeneral(k) {
 
         posBtnHiddeTableGeneral.classList.remove("col-1")
         posBtnHiddeTableGeneral.classList.add("col-3")
-        btnHiddeTableGeneral.setAttribute('title', 'Ocultar General')
+        btnHiddeTableGeneral.title = 'Ocultar General'
 
     } else {
         tablaGeneral.style.display = 'none'
@@ -30,7 +30,7 @@ function hiddeTableGeneral(k) {
         btnHiddeTableGeneral.innerHTML = '<i class="fa-solid fa-eye"></i>'
         posBtnHiddeTableGeneral.classList.remove("col-3")
         posBtnHiddeTableGeneral.classList.add("col-1")
-        btnHiddeTableGeneral.setAttribute('title', 'Mostrar General')
+        btnHiddeTableGeneral.title = 'Mostrar General'
     }
 }
 
@@ -44,13 +44,13 @@ function hiddeTableSeguimiento(k) {
         btnHiddeTableSeguimiento.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'
         posBtnHiddeTableSeguimiento.classList.remove("col-1")
         posBtnHiddeTableSeguimiento.classList.add("col-3")
-        btnHiddeTableSeguimiento.setAttribute('title', 'Ocultar Int/Ext')
+        btnHiddeTableSeguimiento.title = 'Ocultar Int/Ext'
     } else {
         tablaSeguimiento.style.display = 'none'
         btnHiddeTableSeguimiento.innerHTML = '<i class="fa-solid fa-eye"></i>'
         posBtnHiddeTableSeguimiento.classList.remove("col-3")
         posBtnHiddeTableSeguimiento.classList.add("col-1")
-        btnHiddeTableSeguimiento.setAttribute('title', 'Mostrar Int/Ext')
+        btnHiddeTableSeguimiento.title = 'Mostrar Int/Ext'
     }
 }
 
@@ -189,24 +189,24 @@ btnAddNewRow.addEventListener('click', () => {
     const originalDiv = (
         `<div class="col-1">
                 <label for="otNumber${i}" id="labelOtNumber${i}">OT#</label>
-                <input type="number" name="otNumber${i}" id="otNumber${i}" class="form-control" min="0" max="9999"
+                <input type="number" name="otNumber${i}" id="otNumber${i}" class="form-control mt-3" min="0" max="9999"
                 placeholder="Número OT" value="${otNumberValue + i}">
             </div>
             <div class="col-1">
                 <label for="opNumber${i}" id="labelOpNumber${i}">OP#</label>
-                <input type="number" name="opNumber${i}" id="opNumber${i}" class="form-control" min="0" max="9999"
+                <input type="number" name="opNumber${i}" id="opNumber${i}" class="form-control mt-3" min="0" max="9999"
                 placeholder="Número OP" value="${opNumberValue + i * 10}">
             </div>
             <div class="col-2">
                 <label for="opDescription${i}" id="labelOpDescription${i}">Descripción OP</label>
-                <input type="text" name="opDescription${i}" id="opDescription${i}" class="form-control"
+                <input type="text" name="opDescription${i}" id="opDescription${i}" class="form-control mt-3"
                 placeholder="Descripción OP">
             </div>
             <div class="col-1">
                 <label for="otStatus${i}" id="labelOtStatus${i}">Status OT</label><br>
                 <div class="form-check form-switch d-inline-block mt-2">
-                    <input class="form-check-input" type="checkbox" id="otStatus${i}" aria-checked="true" name="otStatus${i}" style="cursor: pointer;" checked>
-                    <label class="form-check-label" for="otStatus${i}">Activa</label>
+                    <input class="form-check-input mt-3" type="checkbox" id="otStatus${i}" aria-checked="true" name="otStatus${i}" style="cursor: pointer;" checked>
+                    <label class="form-check-label mt-2" for="otStatus${i}">Activa</label>
                 </div>
             </div>
             <div class="col-2">
@@ -221,12 +221,12 @@ btnAddNewRow.addEventListener('click', () => {
             </div>
             <div class="col-2">
             <label for="externoDiseno${i}" id="labelExternoDiseno${i}">Proveedor externo</label>
-                <input type="text" name="externoDiseno${i}" id="externoDiseno${i}" class="form-control"
+                <input type="text" name="externoDiseno${i}" id="externoDiseno${i}" class="form-control mt-3"
                 placeholder="Proveedor" value="${externoDiseno}">    
             </div>
             <div class="col-1 my-auto">
                 <div class="d-flex">
-                    <button type="button" id="btnRemoveRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
+                    <button name="btnRemoveRow" type="button" id="btnRemoveRow${i}" class="btn btn-danger rounded-circle m-2 boton"><i class="fa-solid fa-trash"></i></button>
                 </div>    
             </div>`
     )
@@ -253,7 +253,7 @@ btnAddNewRow.addEventListener('click', () => {
     const otQty = document.getElementById("otQuantity")
     otQty.value = i+1
 
-    const buttons = document.querySelectorAll('button')
+    const buttons = document.querySelectorAll('button[name="btnRemoveRow"]')
     buttons.forEach((button) => {
         button.addEventListener("click", removeRow)
     })
@@ -389,88 +389,179 @@ for (let i = 0; i < radios.length; i++) {
     })
 }
 
-//-----En desarrollo ----------------------------------------
+//-----Btns Buscar en BBDD el Usuario Seguidor de Diseño --------------
 const searchDesignUser = document.getElementById('searchDesignUser')
 searchDesignUser.addEventListener('click', (event) => {
     event.preventDefault()
 
-    function cargarUsuario() {
-        fetch('/api/usuarios/searchUsers/all')
-          .then(response => console.log(response))
+    function cargarUsuarioDiseno() {
+        fetch('../../../api/usuarios/searchUsers/simulacion')
+          .then(response => response.json())
           .then(users => {
-            console.log('users: ', users)
-            // Obtener un usuario aleatorio (aquí puedes aplicar la lógica deseada)
-            const randomUser = users[Math.floor(Math.random() * users.length)]
+            const arrayUsauriosDiseno = []
+            const arrayUsersAll = []
+
+            for(let i=0; i<users.usersAll.length; i++) {
+
+                if(users.usersAll[i].status && users.usersAll[i].permiso ==='diseno') {
+                    arrayUsauriosDiseno.push(`
+                                    <label>
+                                        <span id="${users.usersAll[i]._id}" class="badge rounded-pill bg-info text-dark my-2">
+                                            <input class="form-check-input mb-1" type="radio" name="radioUsuarios" value="${users.usersAll[i].name}, ${users.usersAll[i].lastName}" id="${i}">
+                                            ${users.usersAll[i].name} ${users.usersAll[i].lastName}
+                                        </span>
+                                    </label>`)
+
+                } else if (users.usersAll[i].status && users.usersAll[i].permiso !=='diseno') {
+                    arrayUsersAll.push(`
+                                <label>
+                                    <span id="${users.usersAll[i]._id}" class="badge rounded-pill bg-light text-dark my-2">
+                                        <input class="form-check-input mb-1" type="radio" name="radioUsuarios" value="${users.usersAll[i].name}, ${users.usersAll[i].lastName}" id="${i}">
+                                        ${users.usersAll[i].name} ${users.usersAll[i].lastName}
+                                    </span>
+                                </label>`)
+                }
+            }
             
-            // Mostrar el usuario en el input
-            document.getElementById('internoDiseno').value = randomUser.username; // Suponiendo que el usuario tiene una propiedad 'username'
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
+            const html = `
+                    <hr>
+                        <label>Usuarios Diseño</label>
+                        <div name='container' class="container">
+                            ${arrayUsauriosDiseno.join(' ')}
+                        </div>
+                    <hr>
+                        <label>Usuarios</label>
+                        <div name='container' class="container">
+                            ${arrayUsersAll.join(' ')}
+                        </div>
+                    <hr>`
+
+                    Swal.fire({
+                        title: 'Usuarios',
+                        html: html,
+                        width: 450,
+                        background: "#eee",
+                        allowOutsideClick: false,
+                        showCloseButton: true,
+                        confirmButtonText: 'Seleccionar <i class="fa-regular fa-circle-check"></i>'    
+                    }).then((result) => {
+                        const radiosToSelect = document.getElementsByName('radioUsuarios')
+
+                        for(let i=0; i<radiosToSelect.length; i++) {
+                            const radioSelected = document.getElementById(i)
+                            
+                            if (radioSelected.checked) {
+                                var usuariosSeleccionado = radioSelected.value
+                            }
+                        }
+                        
+                        if (result.isConfirmed) {
+                            const inputUserSelected = document.getElementById('internoDiseno')
+                            inputUserSelected.value = usuariosSeleccionado
+                        
+                        } else {
+                            Swal.fire(
+                                'Usuario no seleccionado!',
+                                `No ha seleccionado ningún usuario!`,
+                                'warning'
+                            )
+                            return false
+                        }
+                    })
+        })
+        .catch(error => {
+        console.error('Error:', error)
+        })
       }
-      cargarUsuario()
-    
-    // arrayBloque = []
-
-    // arrayBloque.push(`
-    //     <div class="row my-1 mx-auto">
-    //         <div class="col-2 m-auto align-self-middle">
-    //                 <input class="form-check-input" type="checkbox" value="" id="">
-    //         </div>    
-    //         <div class="col my-auto align-self-middle">
-    //             <span id="" class="badge rounded-pill bg-dark text-white">Usuario #1</span>
-    //         </div>
-    //     </div>  
-    //     `)
-
-    // const html = `
-    //         <form id="" action="" method="post" style="font-size: 10pt">
-    //             <fieldset>
-    //                 <div class="row my-1 mx-auto">
-    //                     <div class="col-4 my-auto align-self-middle">
-    //                         <label for="otNumber"><strong>Seleccionar</strong></label>
-    //                     </div>
-    //                     <div class="col my-auto align-self-middle">
-    //                         <label for="otNumber"><strong>Usuarios</strong></label>
-    //                     </div>
-    //                 </div>
-    //                 <hr>
-    //                     ${arrayBloque}
-    //                 <hr>
-    //             </fieldset>
-    //         </form>
-    // `
-    // Swal.fire({
-    //     title: 'BD Usuarios',
-    //     html: html,
-    //     width: 400,
-    //     //background: "#aaaaaa",
-    //     allowOutsideClick: false,
-    //     showCloseButton: true,
-    //     showCancelButton: true,
-    //     confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
-    //     cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
-    // }).then((result) => {
-    //     if (result.isConfirmed) {
-    //         // console.log('clientId....', clientId)
-    //         const formR14Values = document.getElementById('')
-    //         // formR14Values.submit()
-    //         // Toast.fire({
-    //         //     icon: 'success',
-    //         //     title: `Información de OT ${res.arrayOtNumber.join(" - ")} agregada con éxito!`
-    //         // })
-    //     } else {
-    //         Swal.fire(
-    //             'No agregada!',
-    //             `La información no fue agregada!`,
-    //             'warning'
-    //         )
-    //         return false
-    //     }
-    // })
+      cargarUsuarioDiseno()
 })
-//-----En desarrollo -----------------------------------------
+
+//-----Btns Buscar en BBDD el Usuario Seguidor de Simulacion --------------
+const searchSimulationUser = document.getElementById('searchSimulationUser')
+searchSimulationUser.addEventListener('click', (event) => {
+    event.preventDefault()
+
+    function cargarUsuarioSimulacion() {
+        fetch('../../../api/usuarios/searchUsers/all')
+          .then(response => response.json())
+          .then(users => {
+            const arrayUsauriosSimulacion = []
+            const arrayUsersAll = []
+
+            for(let i=0; i<users.usersAll.length; i++) {
+
+                if(users.usersAll[i].status && users.usersAll[i].permiso ==='simulacion') {
+                    arrayUsauriosSimulacion.push(`
+                                    <label>
+                                        <span id="${users.usersAll[i]._id}" class="badge rounded-pill bg-warning text-dark my-2">
+                                            <input class="form-check-input mb-1" type="radio" name="radioUsuarios" value="${users.usersAll[i].name}, ${users.usersAll[i].lastName}" id="${i}">
+                                            ${users.usersAll[i].name} ${users.usersAll[i].lastName}
+                                        </span>
+                                    </label>`)
+
+                } else if (users.usersAll[i].status && users.usersAll[i].permiso !=='simulacion') {
+                    arrayUsersAll.push(`
+                                <label>
+                                    <span id="${users.usersAll[i]._id}" class="badge rounded-pill bg-light text-dark my-2">
+                                        <input class="form-check-input mb-1" type="radio" name="radioUsuarios" value="${users.usersAll[i].name}, ${users.usersAll[i].lastName}" id="${i}">
+                                        ${users.usersAll[i].name} ${users.usersAll[i].lastName}
+                                    </span>
+                                </label>`)
+                }
+            }
+            
+            const html = `
+                    <hr>
+                        <label>Usuarios Simulación</label>
+                        <div name='container' class="container">
+                            ${arrayUsauriosSimulacion.join(' ')}
+                        </div>
+                    <hr>
+                        <label>Usuarios</label>
+                        <div name='container' class="container">
+                            ${arrayUsersAll.join(' ')}
+                        </div>
+                    <hr>`
+
+                    Swal.fire({
+                        title: 'Usuarios',
+                        html: html,
+                        width: 450,
+                        background: "#eee",
+                        allowOutsideClick: false,
+                        showCloseButton: true,
+                        confirmButtonText: 'Seleccionar <i class="fa-regular fa-circle-check"></i>'    
+                    }).then((result) => {
+                        const radiosToSelect = document.getElementsByName('radioUsuarios')
+
+                        for(let i=0; i<radiosToSelect.length; i++) {
+                            const radioSelected = document.getElementById(i)
+                            
+                            if (radioSelected.checked) {
+                                var usuariosSeleccionado = radioSelected.value
+                            }
+                        }
+                        
+                        if (result.isConfirmed) {
+                            const inputUserSelected = document.getElementById('internoSimulacion')
+                            inputUserSelected.value = usuariosSeleccionado
+                        
+                        } else {
+                            Swal.fire(
+                                'Usuario no seleccionado!',
+                                `No ha seleccionado ningún usuario!`,
+                                'warning'
+                            )
+                            return false
+                        }
+                    })
+        })
+        .catch(error => {
+        console.error('Error:', error)
+        })
+      }
+      cargarUsuarioSimulacion()
+})
 
 function messageNewOt(ociNumber, otArray) {
 
@@ -802,7 +893,6 @@ function addDatoToR14(i) {
         // }        
     }).then((result) => {
         if (result.isConfirmed) {
-            // console.log('clientId....', clientId)
             const formR14Values = document.getElementById('formR14Values')
             formR14Values.submit()
             Toast.fire({

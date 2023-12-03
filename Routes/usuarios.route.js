@@ -25,7 +25,7 @@ routerUsers.post('/update/:username', checkAuthentication, authUserMiddleware, u
 routerUsers.get('/delete/:id', checkAuthentication, authUserMiddleware, users.deleteUserById)
 
 //---------------- Search a User sort by permission -----------------------
-routerUsers.get('/searchUsers/all', checkAuthentication, authUserMiddleware, users.searchUsers)
+routerUsers.get('/searchUsers/:all', checkAuthentication, authUserMiddleware, users.searchUsers)
 
 //routerUsers.get('/username/:username', users.getUserByUsername)
 

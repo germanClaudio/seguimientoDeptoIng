@@ -46,8 +46,8 @@ class UserService {
     }
 
     // search user sort by permission
-    async searchUsers() {
-        return await this.usuarios.searchUsers()
+    async searchUsers(permiso) {
+        return await this.usuarios.searchUsers(permiso)
     }
     
     // delete one user by Id

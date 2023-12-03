@@ -19,7 +19,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
    async getAllUsers(){
        try {
            const users = await Usuarios.find()
-           if ( users === undefined || users === null) {
+           if (!users) {
                 return new Error ('No hay usuarios en la DB!')
            } else {
                 return users    
@@ -62,6 +62,24 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
             }
         } else {
             return logger.error('Aca esta el error(username invalid)')
+        }
+    }
+
+    async searchUsers(permiso) {
+        if(permiso){
+            try {
+                const users = await Usuarios.find( { permiso: `simulacion` })
+                
+                 if (!users) {
+                    return false
+                 } else {
+                    return users
+                 }
+            } catch (error) {
+                logger.error('Aca esta el error: ', error)
+            }
+        } else {
+            return logger.error('Aca esta el error(permiso: invalid)')
         }
     }
     

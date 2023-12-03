@@ -582,6 +582,130 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    // Update Project by Project Id
+    async updateProject(
+                id,
+                project,
+                statusProject,
+                projectName,
+                projectDescription,
+                prioProject,
+                levelProject,
+                codeProject,
+                imageProject,
+                userModificator
+    ) {
+               console.log(statusProject) 
+        let booleanStatus
+        statusProject=='on' ? booleanStatus=true : booleanStatus=false
+        console.log(booleanStatus) 
+        if (project) {
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
+                //console.log('itemMongoDB...', itemMongoDB)
+                if (itemMongoDB) {
+                    
+                    var updatedProject = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                'project.0.projectName': projectName,
+                                'project.0.projectDescription': projectDescription,
+                                'project.0. prioProject': prioProject,
+                                'project.0.imageProject': imageProject,
+                                'project.0.codeProject': codeProject,
+                                'project.0.statusProject': booleanStatus,
+                                'project.0.levelProject': levelProject,
+                                modificator: userModificator,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
+                    
+                    if(updatedProject.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
+                        //console.log('itemUpdated...', itemUpdated)
+                        return itemUpdated
+                    } else {
+                        return new Error(`No se actualizó el item: ${itemUpdated._id}`)
+                    }
+                    
+                } else {
+                    return new Error(`Proyecto no existe con este id: ${id}!`)
+                }
+
+            } catch (error) {
+                logger.error("Error MongoDB updatingProject: ", error)
+            }
+
+        } else {
+            return new Error(`No se pudo modificar el status del Proyecto!`)
+        }
+    }
+
+    // Update Oci by Project Id
+    async updateOci(
+        id,
+        project,
+        statusOci,
+        ociDescription,
+        ociNumber,
+        ociKNumber,
+        ociImage,
+        userModificator
+    ) {
+        
+        let numberOciK = parseInt(ociKNumber)
+        let numberOci = parseInt(ociNumber)
+        let booleanStatus
+        statusOci=='true' ? booleanStatus=true : booleanStatus=false
+
+        if (project) {
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
+                //console.log('itemMongoDB...', itemMongoDB)
+                if (itemMongoDB) {
+                    
+                    var updatedProject = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                [`project.0.oci.${numberOciK}.ociNumber`]: numberOci,
+                                'project.0.projectDescription': projectDescription,
+                                'project.0. prioProject': prioProject,
+                                'project.0.imageProject': imageProject,
+                                'project.0.codeProject': codeProject,
+                                'project.0.statusProject': booleanStatus,
+                                'project.0.levelProject': levelProject,
+                                modificator: userModificator,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
+                    
+                    if(updatedProject.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
+                        //console.log('itemUpdated...', itemUpdated)
+                        return itemUpdated
+                    } else {
+                        return new Error(`No se actualizó el item: ${itemUpdated._id}`)
+                    }
+                    
+                } else {
+                    return new Error(`Proyecto no existe con este id: ${id}!`)
+                }
+
+            } catch (error) {
+                logger.error("Error MongoDB updatingProject: ", error)
+            }
+
+        } else {
+            return new Error(`No se pudo modificar el status del Proyecto!`)
+        }
+    }
+
     async disconnet() {
         await this.disconnection
     }
