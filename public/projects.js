@@ -63,6 +63,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
     let arrayProyectos = arrayProjects
         
     const html = arrayProyectos.map((element) => {
+
         let green = 'success'
         let red = 'danger'
         let text = "Cotizado"
@@ -74,7 +75,9 @@ const renderProjectsForAdmin = (arrayProjects) => {
         // let result = 'S/P'
         let colorResult = grey
         let colorLevel
+    
         
+            
         // ----------- Loops de Array OCI ----------------
         let ociArr = []
         function loopOcis() {
@@ -126,7 +129,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
             return arrOpArr.join('<hr>')
         }    
 
-    // ----------- Loops de Array Descriptions ----------------
+        // ----------- Loops de Array Descriptions ----------------
         function loopDescription(j) {
             let DescriptionArr = []
             if (element.project[0].oci[j].otProject.length > 0 ) {
@@ -161,7 +164,9 @@ const renderProjectsForAdmin = (arrayProjects) => {
             colorResult = red
             text = "A Riesgo"
         }
-        
+    
+        if(element.project[0].visible){
+
         return (`<tr>
                     <td class="text-center">${element.project[0].codeProject}</td>
                     <td class="text-center" data-column="nombre">${element.project[0].projectName}</td>
@@ -183,6 +188,8 @@ const renderProjectsForAdmin = (arrayProjects) => {
                         </div>
                     </td>
                 </tr>`)
+        }
+
     }).join(" ");
 
     document.getElementById('mostrarProyectos').innerHTML = html

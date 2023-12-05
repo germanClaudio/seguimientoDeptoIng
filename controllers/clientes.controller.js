@@ -325,6 +325,62 @@ class ClientsController {
         }
     }
 
+    reduceClientProjectQty = async (req, res) => {
+        const id = req.params.id
+        // const proyectos = await this.projects.getProjectsByClientId(id)
+        
+        const clientToUpdateProjectQty = await this.clients.getClientById(id)
+        // const creador = await this.clients.getClientById(id)
+
+        // let username = res.locals.username
+        let userInfo = res.locals.userInfo
+
+        const modifier = [{
+            name: userInfo.name,
+            lastName: userInfo.lastName,
+            username: userInfo.username,
+            email: userInfo.email
+        }]
+
+        // const updatedClienteProjectsQty = {
+        //     creator: creador.creator,
+        //     name: clientToUpdateProjectQty.name,
+        //     status: Boolean(true),
+        //     code: clientToUpdateProjectQty.code,
+        //     project: proyectos.length,
+        //     logo: clientToUpdateProjectQty.logo,
+        //     timestamp: creador.timestamp,
+        //     modificator: modifier,
+        //     modifiedOn: now
+        // }
+
+        // const cookie = req.session.cookie
+        // const time = cookie.expires
+        //const expires = new Date(time)
+
+        try {
+            // const cliente = 
+            await this.clients.reduceClientProjectsQty(
+                id, 
+                clientToUpdateProjectQty,
+                modifier
+            )
+            // res.render('clientProjectsDetails', {
+            //     cliente,
+            //     username,
+            //     userInfo,
+            //     expires,
+            //     proyectos
+            // })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
     deleteAllClients = async (req, res) => {
         let username = res.locals.username
         let userInfo = res.locals.userInfo

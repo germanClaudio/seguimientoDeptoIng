@@ -51,6 +51,11 @@ class ClientService {
     async updateClientProjectQty(id, cliente) {
         return await this.clientes.updateClientProjectsQty(id, cliente)
     }
+
+    // reduce Project Qty. of one client
+    async reduceClientProjectQty(id, cliente, user) {
+        return await this.clientes.reduceClientProjectQty(id, cliente, user)
+    }
     
     // delete one client by Id
     async deleteClientById(id) {

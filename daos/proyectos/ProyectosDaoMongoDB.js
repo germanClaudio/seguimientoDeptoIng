@@ -536,6 +536,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                                     ociStatus: arrayOciAddedToProject[i].ociStatus,
                                     creator: arrayOciAddedToProject[i].creator,
                                     timestamp: now,
+                                    ociImage: arrayOciAddedToProject[i].ociImage,
                                     modificator: arrayOciAddedToProject[i].modificator,
                                     modifiedOn: '',
                                     visible: true
@@ -582,23 +583,23 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    // Update Project by Project Id
+    // Update Project Data by Project Id
     async updateProject(
-                id,
-                project,
-                statusProject,
-                projectName,
-                projectDescription,
-                prioProject,
-                levelProject,
-                codeProject,
-                imageProject,
-                userModificator
+        id,
+        project,
+        statusProject,
+        projectName,
+        projectDescription,
+        prioProject,
+        levelProject,
+        codeProject,
+        imageProject,
+        userModificator
     ) {
-               console.log(statusProject) 
+         
         let booleanStatus
         statusProject=='on' ? booleanStatus=true : booleanStatus=false
-        console.log(booleanStatus) 
+        
         if (project) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
@@ -611,7 +612,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                             $set: {
                                 'project.0.projectName': projectName,
                                 'project.0.projectDescription': projectDescription,
-                                'project.0. prioProject': prioProject,
+                                'project.0.prioProject': prioProject,
                                 'project.0.imageProject': imageProject,
                                 'project.0.codeProject': codeProject,
                                 'project.0.statusProject': booleanStatus,
@@ -644,7 +645,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    // Update Oci by Project Id
+    // Update Oci Data by Project Id
     async updateOci(
         id,
         project,
@@ -659,38 +660,96 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         let numberOciK = parseInt(ociKNumber)
         let numberOci = parseInt(ociNumber)
         let booleanStatus
-        statusOci=='true' ? booleanStatus=true : booleanStatus=false
+        statusOci=='on' ? booleanStatus=true : booleanStatus=false
 
         if (project) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
-                //console.log('itemMongoDB...', itemMongoDB)
+                //console.log('itemMongoDB.oci: ', itemMongoDB.project[0].oci)
                 if (itemMongoDB) {
                     
-                    var updatedProject = await Proyectos.updateOne(
+                    var updatedOci = await Proyectos.updateOne(
                         { _id: itemMongoDB._id },
                         {
                             $set: {
                                 [`project.0.oci.${numberOciK}.ociNumber`]: numberOci,
-                                'project.0.projectDescription': projectDescription,
-                                'project.0. prioProject': prioProject,
-                                'project.0.imageProject': imageProject,
-                                'project.0.codeProject': codeProject,
-                                'project.0.statusProject': booleanStatus,
-                                'project.0.levelProject': levelProject,
-                                modificator: userModificator,
-                                modifiedOn: now
+                                [`project.0.oci.${numberOciK}.ociDescription`]: ociDescription,
+                                [`project.0.oci.${numberOciK}.ociStatus`]: booleanStatus,
+                                [`project.0.oci.${numberOciK}.ociImage`]: ociImage,
+                                [`project.0.oci.${numberOciK}.modificator`]: userModificator,
+                                [`project.0.oci.${numberOciK}.modifiedOn`]: now
                             }
                         },
                         { new: true }
                     )
                     
-                    if(updatedProject.acknowledged) {
+                    if(updatedOci.acknowledged) {
                         const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
                         //console.log('itemUpdated...', itemUpdated)
                         return itemUpdated
                     } else {
-                        return new Error(`No se actualizó el item: ${itemUpdated._id}`)
+                        return new Error(`No se actualizó el item: ${itemMongoDB._id}`)
+                    }
+                    
+                } else {
+                    return new Error(`Oci no existe con este id: ${id}!`)
+                }
+
+            } catch (error) {
+                logger.error("Error MongoDB updatingOci: ", error)
+            }
+
+        } else {
+            return new Error(`No se pudo modificar el status del Proyecto!`)
+        }
+    }
+
+    // Delete Project by Project Id
+    async deleteProjectById(id, project, userModificator) {
+                        
+        if (id) {
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
+                //console.log('itemMongoDB...', itemMongoDB)
+                if (itemMongoDB) {
+                    
+                    if(itemMongoDB.project[0].visible) {
+                        var deleteProject = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $set: {
+                                    'project.0.visible': Boolean(false),
+                                    'project.0.modificator': userModificator,
+                                    'project.0.modifiedOn': now,
+                                    modificator: userModificator,
+                                    modifiedOn: now
+                                }
+                            },
+                            { new: true }
+                        )
+
+                    } else {
+                        var deleteProject = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $set: {
+                                    'project.0.visible': Boolean(true),
+                                    'project.0.modificator': userModificator,
+                                    'project.0.modifiedOn': now,
+                                    modificator: userModificator,
+                                    modifiedOn: now
+                                }
+                            },
+                            { new: true }
+                        )
+                    }
+
+                    if(deleteProject.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
+                        return itemUpdated
+
+                    } else {
+                        return new Error(`No se eliminó el proyecto`)
                     }
                     
                 } else {
@@ -698,11 +757,11 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 }
 
             } catch (error) {
-                logger.error("Error MongoDB updatingProject: ", error)
+                logger.error("Error MongoDB deletingProject: ", error)
             }
 
         } else {
-            return new Error(`No se pudo modificar el status del Proyecto!`)
+            return new Error(`No se pudo eliminar el Proyecto!`)
         }
     }
 

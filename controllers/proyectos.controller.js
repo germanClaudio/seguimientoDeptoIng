@@ -3,6 +3,7 @@ const ClientesService = require("../services/clients.service.js")
 const UserService = require("../services/users.service.js")
 
 let now = require('../utils/formatDate.js')
+let imageNotFound = "https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png"
 
 class ProjectsController {
     constructor() {
@@ -163,7 +164,8 @@ class ProjectsController {
         //----------Update  13/11/2023 ------------------
         let arrayOciNumber=[],
             arrayOciDescription=[],
-            arrayOciStatus=[]
+            arrayOciStatus=[],
+            arrayOciImages=[]
 
         for (const key in req.body) {
             if (key.startsWith('ociNumber')) {
@@ -175,6 +177,9 @@ class ProjectsController {
             else if (key.startsWith('ociStatus')) {
                 arrayOciStatus.push(req.body[key])
             }
+            else if (key.startsWith('ociImage')) {
+                arrayOciImages.push(req.body[key])
+            }
         }
 
         let arrayOciProjects = []
@@ -185,6 +190,7 @@ class ProjectsController {
                     ociStatus: arrayOciStatus[i] == 'on' ? true : false,
                     creator: user,
                     timestamp: now,
+                    ociImage: arrayOciImages[i] || imageNotFound,
                     modificator: modificator,
                     modifiedOn: "",
                     visible: true
@@ -230,7 +236,11 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        const cliente = await this.clients.updateClientProjectQty(clientId, clienteSeleccionado, user)
+        const cliente = await this.clients.updateClientProjectQty(
+            clientId, 
+            clienteSeleccionado, 
+            user
+        )
 
         try {
             if (!proyectos) return res.status(404).json({ Msg: 'Proyecto no guardado' })
@@ -673,9 +683,11 @@ class ProjectsController {
                     email: ""
                 }
 
+        
         let arrayOciNumber=[],
             arrayOciDescription=[],
-            arrayOciStatus=[]
+            arrayOciStatus=[],
+            arrayOciImages=[]
 
         for (const key in req.body) {
             if (key.startsWith('ociNumber')) {
@@ -687,6 +699,9 @@ class ProjectsController {
             else if (key.startsWith('ociStatus')) {
                 arrayOciStatus.push(req.body[key] === 'on' ? true : false)
             }
+            else if (key.startsWith('ociImage')) {
+                arrayOciImages.push(req.body[key] === 'on' ? true : false)
+            }
         }
 
         let arrayOciAddedToProject = []
@@ -695,6 +710,7 @@ class ProjectsController {
                 ociNumber: parseInt(arrayOciNumber[i]),
                 ociDescription: arrayOciDescription[i] || "sinDatos",
                 ociStatus: arrayOciStatus[i] || true,
+                ociImage: arrayOciImages[i] || imageNotFound,
                 timestamp: now,
                 creator: user,
                 modificator: modificator,
@@ -742,26 +758,26 @@ class ProjectsController {
         const clientId = proyecto[0].client[0]._id
         const cliente = await this.clients.selectClientById(clientId)
         
-        const statusProject = req.body.statusProject
+        const statusProject = req.body.statusProjectForm
         const projectName = req.body.projectName
         const projectDescription = req.body.projectDescription
         const prioProject = req.body.prioProject
         const levelProject = req.body.levelProject
         const codeProject = req.body.codeProject
         const imageProject = req.body.imageProject
-
-
+        console.log('req.body-Controller: ', req.body)
+        
         let username = res.locals.username
         const userInfo = res.locals.userInfo
         const userId = userInfo.id
         const userCreator = await this.users.getUserById(userId)
         
         const userModificator = [{
-                    name: userCreator.name,
-                    lastName: userCreator.lastName,
-                    username: userCreator.username,
-                    email: userCreator.email
-                }]
+            name: userCreator.name,
+            lastName: userCreator.lastName,
+            username: userCreator.username,
+            email: userCreator.email
+        }]
         
         const cookie = req.session.cookie
         const time = cookie.expires
@@ -813,13 +829,12 @@ class ProjectsController {
         const clientId = proyecto[0].client[0]._id
         const cliente = await this.clients.selectClientById(clientId)
         
-        const statusOci = req.body.statusOci
+        const statusOci = req.body.statusOciForm
         const ociDescription = req.body.descriptionOci
         const ociNumber = req.body.numberOci
         const ociKNumber = req.body.ociKNumberHidden
         const ociImage = req.body.imageOci
-
-
+        
         let username = res.locals.username
         const userInfo = res.locals.userInfo
         const userId = userInfo.id
@@ -842,8 +857,8 @@ class ProjectsController {
             statusOci,
             ociDescription,
             ociNumber,
-            ociImage,
             ociKNumber,
+            ociImage,
             userModificator
         )
 
@@ -873,31 +888,60 @@ class ProjectsController {
         }
     }
 
-    // deleteProductById = async (req, res) => {
-    //     const { id } = req.params
+    deleteProjectById = async (req, res) => {
+        const id = req.params.id
+        const proyecto = await this.projects.selectProjectByProjectId(id)
+        
+        const clientId = proyecto[0].client[0]._id
+        const clienteSeleccionado = await this.clients.selectClientById(clientId)
+        
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        const userId = userInfo.id
+        const userCreator = await this.users.getUserById(userId)
+        
+        const userModificator = [{
+                    name: userCreator.name,
+                    lastName: userCreator.lastName,
+                    username: userCreator.username,
+                    email: userCreator.email
+                }]
+        
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+        
+        const proyectos = await this.projects.deleteProjectById(
+            id, 
+            proyecto, 
+            userModificator
+        )
+        
+        const cliente = await this.clients.reduceClientProjectQty(
+            clientId, 
+            clienteSeleccionado, 
+            userModificator
+        )
+        
+        // const proyectos = await this.projects.getProjectsByClientId(clientId)
+        
+        try {
+            if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+            res.render('clientProjectsDetails', {
+                username,
+                userInfo,
+                expires,
+                cliente,
+                proyectos
+            })
 
-    //     let username = res.locals.username
-    //     let userInfo = res.locals.userInfo
-
-    //     const cookie = req.session.cookie
-    //     const time = cookie.expires
-    //     const expires = new Date(time)
-
-    //     const usuarios = await this.users.getUserByUsername(username)
-    //     const userId = usuarios._id // User Id
-    //     let cart = await this.carts.getCartByUserId(userId)
-
-    //     try {
-    //         const productDeleted = await this.products.deleteProductById(req.params.id)
-    //         res.render('addNewProducts', { productDeleted, username, userInfo, cart, expires })
-    //     } catch (error) {
-    //         res.status(500).json({
-    //             status: false,
-    //             error: error
-    //         })
-    //     }
-    // }
-
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
 }
 
 module.exports = { ProjectsController }

@@ -216,6 +216,40 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    async reduceClientProjectQty(id, clienteSelected, user){
+        
+        if (clienteSelected) {
+            try {
+                const clientMongoDB = await Clientes.findById({_id: id})
+                
+                if(clientMongoDB) {
+                    const clientUpdated = await Clientes.findOneAndUpdate(
+                        { _id: id }, 
+                        {
+                            $set: {
+                                'project': parseInt(clientMongoDB.project - 1),
+                                modificator: user,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true })
+                    logger.info('Qty. proyectos de Cliente actualizado ', clientUpdated)
+                    return clientUpdated
+
+                } else {
+                    logger.info('Qty. proyectos de Cliente no actualizado ')
+                }
+                
+            } catch (error) {
+                logger.error("Error MongoDB reducing client project qty.: ",error)
+                return new Error (`No se pudo actualizar la cantidad de proyectos del Cliente!`)
+            }
+        } else {
+            logger.info('El Cliente no existe!')
+            return new Error (`No se pudo actualizar la cantidad de proyectos del Cliente!`)
+        }
+    }
+
     async deleteClientById(id) {
         const itemMongoDB = await Clientes.findById({_id: `${id}`})
         

@@ -121,18 +121,31 @@ class ProjectService {
     }
 
     // Update Oci by Project id
-    async updateOci(id, project, statusProject, userInfo) {
+    async updateOci(
+            id,
+            proyecto,
+            statusOci,
+            ociDescription,
+            ociNumber,
+            ociKNumber,
+            ociImage,
+            userInfo) {
+
         return this.proyectos.updateOci(
             id,
-            project,
-            statusProject,
+            proyecto,
+            statusOci,
+            ociDescription,
+            ociNumber,
+            ociKNumber,
+            ociImage,
             userInfo)
     }
 
-    // // remove one project from Client
-    // async deleteProjectFromClient(id) {
-    //     return this.proyectos.deleteItemFromCart()
-    // }
+    // remove one project by Id
+    async deleteProjectById(id, project, user) {
+        return this.proyectos.deleteProjectById(id, project, user)
+    }
 }
 
 module.exports = ProjectService

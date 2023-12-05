@@ -48,7 +48,7 @@ routerProyectos.post('/updateProject/:id', checkAuthentication, authProductMiddl
 routerProyectos.post('/updateOci/:id', checkAuthentication, authProductMiddleware, projects.updateOci)
 
 // -------------------  Eliminar Proyecto por Id (Visible = false) ------------------ 
-// routerProyectos.get('/delete/:id', checkAuthentication, authProductMiddleware, projects.deleteClientById)
+/routerProyectos.post('/deleteProject/:id', checkAuthentication, authProductMiddleware, projects.deleteProjectById)
 
 // -------------------  Eliminar todos los Proyectos (Status = Inactivo) ------------------ 
 // routerProyectos.get('/all/delete', checkAuthentication, authProductMiddleware, projects.deleteAllClients)

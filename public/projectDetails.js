@@ -33,7 +33,7 @@ btnAddNewRow.addEventListener('click', () => {
     const ociNumberValue = parseInt(document.getElementById('ociNumber').value)
 
     const originalDiv = (
-        `<div class="col-3">
+            `<div class="col-2">
                 <label for="ociNumber${i}" id="labelOciNumber${i}">Número de OCI</label>
                 <input type="number" name="ociNumber${i}" id="ociNumber${i}" class="form-control" min="0" max="9999"
                 placeholder="Número OCI" value="${ociNumberValue+i}">
@@ -43,7 +43,7 @@ btnAddNewRow.addEventListener('click', () => {
                 <input type="text" name="ociDescription${i}" id="ociDescription${i}" class="form-control"
                 placeholder="Descripción OCI">
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <label for="ociStatus${i}" id="labelOciStatus${i}">Status OCI</label><br>
                 <div class="d-inline-block me-1">Inactiva</div>
                 <div class="form-check form-switch d-inline-block mt-2">
@@ -51,9 +51,14 @@ btnAddNewRow.addEventListener('click', () => {
                     <label class="form-check-label" for="ociStatus${i}">Activa</label>
                 </div>
             </div>
-            <div class="col-3 my-auto">
+            <div class="col">
+                <label for="ociImage${i}" id="labelociImage${i}">Imagen OCI</label>
+                <input type="text" name="ociImage${i}" id="ociImage${i}" class="form-control"
+                placeholder="Imagen OCI">
+            </div>
+            <div class="col-1 my-auto">
                 <div class="d-flex">
-                    <button type="button" id="btnRemoveRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" id="btnRemoveRow${i}" title="Eliminar línea de OCI" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
                 </div>    
             </div>`
         )
@@ -453,9 +458,126 @@ function messageChangeOciStatus(statusOci, ociNumber, elementoId) {
         })
 }
 
+//---- Update OCI Data ----------------
+function messageUpdateOci(
+    projectId,
+    statusOci,
+    imageOci,
+    ociDescription,
+    ociNumber,
+    k
+) {
+    
+    let descriptionOci = ociDescription.slice(13)
+    let numberOci = parseInt(ociNumber)
+    let checked = 'checked'
+    statusOci=='true' ? checked : checked = ''
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+
+    var html = `<form id="formUpdateOci${k}" action="/api/proyectos/updateOci/${projectId}" method="post">
+                    <fieldset>
+                        <div class="row justify-content-evenly mb-3 mx-1 px-1">
+                            <div class="col-6">
+                                <label for="numberOci" class="form-label d-flex justify-content-start ms-1">Número OCI</label>
+                                <input type="number" name="numberOci" class="form-control"
+                                    placeholder="Número OCI" value="${numberOci}" required>
+                            </div>
+                            
+                            <div class="col-6" style="background-color: #ddd;">
+                                <label for="statusOci" class="form-label d-flex justify-content-start ms-1">Status OCI</label><br>
+                                <div>
+                                    <p class="d-inline-block me-1">Inactiva</p>
+                                    <div class="form-check form-switch d-inline-block mt-2">
+                                        <input id="statusOciForm" class="form-check-input" type="checkbox" role="switch"
+                                            name="statusOciForm" style="cursor: pointer;" ${checked}>
+                                        <label class="form-check-label" for="statusOci">Activa</label>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>    
+                        
+                        <div class="row mb-3 mx-1 px-1">
+                            <div class="col-10">
+                                <label for="descriptionOci" class="form-label d-flex justify-content-start ms-1">Descripción OCI</label>
+                                <input type="text" name="descriptionOci" class="form-control"
+                                    placeholder="Descripción OCI" value="${descriptionOci}" required>
+                            </div>                            
+                        </div> 
+
+                        <div class="row justify-content-evenly mb-3 mx-1 px-1">
+                            <div class="col-12">
+                                <label for="imageOci" class="form-label d-flex justify-content-start ms-1">URL Imagen OCI</label>
+                                <input type="text" name="imageOci" class="form-control mb-2"
+                                    placeholder="Imagen OCI url" value="${imageOci}" required>
+                                <div class="badge sm-badge bg-warning text-dark mt-2 ms-1">
+                                    <a href="${imageOci}" target="blank" class="alert-link">${imageOci}</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row justify-content-evenly mb-3 px-1 mx-auto">
+                            <div class="col-12 my-1 mx-auto px-1">
+                                <img src="${imageOci}" class="img-fluid rounded px-1"
+                                    alt="Imagen OCI" width="115px">
+                            </div>
+                        </div>
+                        <input type="hidden" name="ociKNumberHidden" id="ociKNumberHidden${k}" value="${k}">
+                    </fieldset>
+                </form>`
+
+
+    if(projectId && numberOci) {
+        Swal.fire({
+            title: `Actualizar OCI# ${numberOci}`,
+            position: 'center',
+            html: html,
+            width: 700,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Actualizar <i class="fa-regular fa-pen-to-square"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formUpdateOci${k}`).submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `La OCI# <b>${numberOci}</b>, se modificó con éxito!`
+                })
+            } else {
+                Swal.fire(
+                    'OCI no modificada!',
+                    `La OCI# <b>${numberOci}</b>, no se modificó!`,
+                    'warning'
+                )
+                return false
+            }
+        })
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `La OCI# ${numberOci} no se actualizó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
+    
+}
+
 const maxOciQuantity = parseInt(document.getElementsByName('ociQuantityHidden').length)
 var arrayBtnChangeStatusOci = []
-
+var arrayBtnUpdateOci = []
 for (let m=0; m<maxOciQuantity; m++) {
     for (let n=0; n<maxOciQuantity; n++) {
         var btnChangeStatusOci = document.getElementById(`${m}_${n}`)
@@ -463,18 +585,49 @@ for (let m=0; m<maxOciQuantity; m++) {
         if (btnChangeStatusOci) {
             arrayBtnChangeStatusOci.push(btnChangeStatusOci)
         }
+
+        var btnUpdateOci = document.getElementById(`btnUpdateOci${m}_${n}`)
+
+        if(btnUpdateOci) {
+            arrayBtnUpdateOci.push(btnUpdateOci)
+        }
     }
 }
 
 arrayBtnChangeStatusOci.forEach(function(elemento) {
-        elemento.addEventListener('click', (event) => {
-            event.preventDefault()
-            const statusOci = document.getElementById(`statusOciHidden${elemento.id}`).value
-            const ociNumber = document.getElementById(`ociNumberHidden${elemento.id}`).value
-            messageChangeOciStatus(statusOci, ociNumber, elemento.id)
-        })
+    elemento.addEventListener('click', (event) => {
+        event.preventDefault()
+        const statusOci = document.getElementById(`statusOciHidden${elemento.id}`).value
+        const ociNumber = document.getElementById(`ociNumberHidden${elemento.id}`).value
+        
+        messageChangeOciStatus(
+            statusOci, 
+            ociNumber, 
+            elemento.id
+        )
     })
+})
 
+arrayBtnUpdateOci.forEach(function(element) {
+    element.addEventListener('click', (event) => {
+        event.preventDefault()
+        const projectId = document.getElementById(`projectIdHidden${element.id.slice(12)}`).value
+        const statusOci = document.getElementById(`statusOciHidden${element.id.slice(12)}`).value
+        const imageOci = document.getElementById(`imageOci${element.id.slice(12)}`).src
+        const ociDescription = document.getElementById(`ociDescription${element.id.slice(12)}`).innerText
+        const ociNumber = document.getElementById(`ociNumberHidden${element.id.slice(12)}`).value
+        const ociKNumber = document.getElementById(`ociKNumberHidden${element.id.slice(12)}`).value
+    
+        messageUpdateOci(
+            projectId,
+            statusOci,
+            imageOci,
+            ociDescription,
+            ociNumber,
+            ociKNumber
+        )
+    })
+})
     
 
 // --------------- Adding New OCI to an existing Project ------------------------
@@ -484,41 +637,50 @@ function addNewOciToProject(i, projectName, lastOciNumber, projectIdHidden) {
 
         arrayBloque.push(`
             <div id="ociItemRow0" class="row my-1 mx-3">
-                <div class="col-3 my-1 align-self-middle">
+                <div class="col-2 my-1 align-self-middle">
                     <input type="number" name="ociNumber0" id="ociNumber0" class="form-control" min="0" max="9999"
                     placeholder="Número OCI" value="${lastOciNumber+1}" required>
                 </div>
-                <div class="col-4 my-1 align-self-middle">
+                <div class="col-3 my-1 align-self-middle">
                     <input type="text" name="ociDescription0" id="ociDescription0" class="form-control"
                     placeholder="Descripcion OCI" required>
                 </div>
-                <div class="col-3 mt-3 align-self-middle">
+                <div class="col-2 mt-3 align-self-middle">
                     <div class="form-check form-switch d-inline-block">
                         <input class="form-check-input" type="checkbox" name="ociStatus0" id="ociStatus0" aria-checked="true" style="cursor: pointer;" checked>
                         <label class="form-check-label" for="ociStatus">Activa</label>
                     </div>
-                <div class="col my-1 align-self-middle">
-                    
+                </div>    
+                <div class="col my-1">
+                    <input type="text" name="ociImage0" id="ociImage0" class="form-control"
+                    placeholder="Imagen OCI">
+                </div>    
+                <div class="col-1 my-1 align-self-middle">
                 </div>
             </div>
         `)
     
-
     const html = `
             <form id="formNewOciValues" action="/api/proyectos/addNewOciToProject/${projectIdHidden}" method="post" style="font-size: 10pt">
                 <fieldset id="ociNewItemRow">
                     <div class="row my-auto mx-3">
-                        <div class="col-3 my-auto align-self-middle">
+                        <div class="col-2 my-auto align-self-middle">
                             <label for="ociNumber"><strong>OCI#</strong></label>
                         </div>
-                        <div class="col-4 my-auto align-self-middle">
+                        <div class="col-3 my-auto align-self-middle">
                             <label for="ociDescription"><strong>OCI Description</strong></label>
                         </div>
-                        <div class="col-3 my-auto align-self-middle">
+                        <div class="col-2 my-auto align-self-middle">
                             <label for="ociStatus"><strong>OCI Status</strong></label>
                         </div>
                         <div class="col my-auto align-self-middle">
-                            <button type="button" id="btnAddNewOciRow0" class="btn btn-primary rounded-circle mx-1 my-auto"><i class="fa fa-plus-circle"></i></button>
+                            <label for="ociImage"><strong>Imagen OCI</strong></label>
+                        </div>
+                        <div class="col-1 my-auto align-self-middle">
+                            <button type="button" id="btnAddNewOciRow0" title="Agregar nueva línea de OCI"
+                                class="btn btn-primary rounded-circle mx-1 my-auto">
+                                    <i class="fa-solid fa-plus-circle"></i>
+                            </button>
                         </div>
                     </div>
                     <hr>
@@ -539,8 +701,8 @@ function addNewOciToProject(i, projectName, lastOciNumber, projectIdHidden) {
     Swal.fire({
         title: `Agregar Nueva OCI a proyecto ${projectName}`,
         html: html,
-        width: 850,
-        //background: "#aaaaaa",
+        width: 900,
+        background: "#efefef",
         allowOutsideClick: false,
         showCloseButton: true,
         showCancelButton: true,
@@ -574,102 +736,117 @@ function addNewOciToProject(i, projectName, lastOciNumber, projectIdHidden) {
     })
 
 
-    //-------------------------- Add New OCI Row Modal Form--------------------------------
-    const btnAddNewOciRow = document.getElementById("btnAddNewOciRow0")
+//-------------------------- Add New OCI Row Modal Form--------------------------------
+const btnAddNewOciRow = document.getElementById("btnAddNewOciRow0")
 
-    btnAddNewOciRow.addEventListener('click', () => {
-        const parentDiv = document.getElementById('ociNewItemRow')
-        let i = parseInt(document.getElementById('ociQuantityModal').value)
-        const ociNumberValue = parseInt(document.getElementById(`ociNumber${i-1}`).value)
+btnAddNewOciRow.addEventListener('click', () => {
+    const parentDiv = document.getElementById('ociNewItemRow')
+    let i = parseInt(document.getElementById('ociQuantityModal').value)
+    const ociNumberValue = parseInt(document.getElementById(`ociNumber${i-1}`).value)
 
-        const originalDiv = (
-            `   <div class="col-3 my-1 align-self-middle">
-                    <input type="number" name="ociNumber${i}" id="ociNumber${i}" class="form-control" min="0" max="9999"
-                    placeholder="Número OCI" value="${ociNumberValue+1}" required>
+    const originalDiv = (
+        `   <div class="col-2 my-1 align-self-middle">
+                <input type="number" name="ociNumber${i}" id="ociNumber${i}" class="form-control"
+                min="0" max="9999" placeholder="Número OCI" value="${ociNumberValue+1}" required>
+            </div>
+            <div class="col-3 my-1 align-self-middle">
+                <input type="text" name="ociDescription${i}" id="ociDescription${i}"
+                class="form-control" placeholder="Descripción OCI" required>
+            </div>
+            <div class="col-2 mt-1 align-self-middle">
+                <div class="form-check form-switch d-inline-block mt-2">
+                    <input class="form-check-input" type="checkbox" id="ociStatus${i}"
+                    aria-checked="true" name="ociStatus${i}" style="cursor: pointer;" checked>
+                    <label class="form-check-label" for="ociStatus${i}">Activa</label>
                 </div>
-                <div class="col-4 my-1 align-self-middle">
-                    <input type="text" name="ociDescription${i}" id="ociDescription${i}" class="form-control"
-                    placeholder="Descripción OCI" required>
-                </div>
-                <div class="col-3 mt-1 align-self-middle">
-                    <div class="form-check form-switch d-inline-block mt-2">
-                        <input class="form-check-input" type="checkbox" id="ociStatus${i}" aria-checked="true" name="ociStatus${i}" style="cursor: pointer;" checked>
-                        <label class="form-check-label" for="ociStatus${i}">Activa</label>
-                    </div>
-                </div>
-                <div class="col my-1 align-self-middle">
-                    <button type="button" name="btnRemoveNewOciRow" id="btnRemoveNewOciRow${i}" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            `
-        )
+            </div>
+            <div class="col my-1 my-1 align-self-middle">
+                <input type="text" name="ociImage" id="ociImage${i}" class="form-control"
+                name="ociImage${i}" placeholder="Imagen OCI">
+            </div>
+            <div class="col-1 my-1 align-self-middle">
+                <button type="button" name="btnRemoveNewOciRow" id="btnRemoveNewOciRow${i}"
+                    title="Eliminar línea de OCI" class="btn btn-danger rounded-circle m2 boton">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        `
+    )
 
-        if (i == 1) {
-            originalDiv
+    if (i == 1) {
+        originalDiv
+        btnAddNewOciRow.title = 'Agregar una línea de OCI'
 
-        } else if (i !== 1 && i < 4) { //cantidad maxima de OCI en conjunto a agregar 5
-            originalDiv
-            btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${i-1}`)
-            btnRemoveNewItem.style.display = 'none'
+    } else if (i !== 1 && i < 4) { //cantidad maxima de OCI en conjunto a agregar 5
+        originalDiv
+        btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${i-1}`)
+        btnRemoveNewItem.style.display = 'none'
+        btnAddNewOciRow.title = 'Agregar una línea de OCI'
+        btnRemoveNewItem.title= 'Eliminar línea de OCI'
+    } else {
+        btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${i-1}`)
+        btnRemoveNewItem.style.display = 'none'
+        btnAddNewOciRow.setAttribute('disabled', true)
+        btnRemoveNewItem.title = 'Eliminar línea de OCI'
+    }
 
-        } else {
-            btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${i-1}`)
-            btnRemoveNewItem.style.display = 'none'
-            btnAddNewOciRow.setAttribute('disabled', true)
-        }
+    const newDiv = document.createElement('div')
+    newDiv.setAttribute('class', "row my-1 mx-3")
+    newDiv.id = `ociItemRow${i}`
+    newDiv.innerHTML = originalDiv
+    parentDiv.appendChild(newDiv)
+    const ociQty = document.getElementById("ociQuantityModal")
+    ociQty.setAttribute('value', i + 1)
 
-        const newDiv = document.createElement('div')
-        newDiv.setAttribute('class', "row my-1 mx-3")
-        newDiv.id = `ociItemRow${i}`
-        newDiv.innerHTML = originalDiv
-        parentDiv.appendChild(newDiv)
-        const ociQty = document.getElementById("ociQuantityModal")
-        ociQty.setAttribute('value', i + 1)
-
-        const buttons = document.querySelectorAll('button[name="btnRemoveNewOciRow"]')
-        buttons.forEach((button) => {
-            button.addEventListener("click", removeNewOciRow)
-        })
+    const buttons = document.querySelectorAll('button[name="btnRemoveNewOciRow"]')
+    buttons.forEach((button) => {
+        button.addEventListener("click", removeNewOciRow)
     })
+})
 
 //-------------------------- Remove OCI Row from Modal Form ----------------------------------
-    function removeNewOciRow(e) {
+function removeNewOciRow(e) {
+    
+    let i = document.getElementById('ociQuantityModal').value
+    
+    if (e.target.id && i > 1) {
+        let btnRemoveRow = e.target.id
+        const numberId1 = parseInt(btnRemoveRow.slice(-1))
+        const numberId2 = parseInt(btnRemoveRow.slice(-2))
+        let numberIdToDelete
         
-        let i = document.getElementById('ociQuantityModal').value
+        numberId1 >= 0 && numberId2 ? numberIdToDelete = numberId2 : numberIdToDelete = numberId1;
         
-        if (e.target.id && i > 1) {
-            let btnRemoveRow = e.target.id
-            const numberId1 = parseInt(btnRemoveRow.slice(-1))
-            const numberId2 = parseInt(btnRemoveRow.slice(-2))
-            let numberIdToDelete
-            
-            numberId1 >= 0 && numberId2 ? numberIdToDelete = numberId2 : numberIdToDelete = numberId1;
-            
-            function checkString(string) {
-            return /^[0-9]*$/.test(string);
-            }
+        function checkString(string) {
+        return /^[0-9]*$/.test(string);
+        }
 
-            if (checkString(numberIdToDelete)) {
-                const rowToDelete = document.getElementById(`ociItemRow${numberIdToDelete}`)
-                rowToDelete.remove()
-                const ociQty = document.getElementById("ociQuantityModal")
-                ociQty.setAttribute('value', (i - 1))
+        if (checkString(numberIdToDelete)) {
+            const rowToDelete = document.getElementById(`ociItemRow${numberIdToDelete}`)
+            rowToDelete.remove()
+            const ociQty = document.getElementById("ociQuantityModal")
+            ociQty.setAttribute('value', (i - 1))
 
-                if (numberIdToDelete === 1) {
-                    btnAddNewOciRow.removeAttribute('disabled')
+            if (numberIdToDelete === 1) {
+                btnAddNewOciRow.removeAttribute('disabled')
+                btnAddNewOciRow.title = 'Agregar una línea de OCI'
 
-                } else if (numberIdToDelete !== 1 && numberIdToDelete < 4) {
-                    btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${numberIdToDelete - 1}`)
-                    btnRemoveNewItem.style.display = 'inline'
+            } else if (numberIdToDelete !== 1 && numberIdToDelete < 4) {
+                btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${numberIdToDelete - 1}`)
+                btnRemoveNewItem.style.display = 'inline'
+                btnRemoveNewItem.title = 'Eliminar línea de OCI'
+                btnAddNewOciRow.title = 'Agregar una línea de OCI'
 
-                } else {
-                    btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${numberIdToDelete - 1}`)
-                    btnRemoveNewItem.style.display = 'inline'
-                    btnAddNewOciRow.removeAttribute('disabled')
-                }
+            } else {
+                btnRemoveNewItem = document.getElementById(`btnRemoveNewOciRow${numberIdToDelete - 1}`)
+                btnRemoveNewItem.style.display = 'inline'
+                btnRemoveNewItem.title = 'Eliminar línea de OCI'
+                btnAddNewOciRow.removeAttribute('disabled')
             }
         }
     }
-    // --------------------------------------
+}
+// --------------------------------------
 }
 
 const arrayProjectList = []
@@ -679,10 +856,10 @@ for (let i = 0; i<projectQuantity; i++) {  //ver limite maximo de proyectos por 
     }
 }
 
-if(arrayProjectList !=[]) {
+if (arrayProjectList !=[]) {
     let allButtonsNewOci = document.querySelectorAll('button[name="btnAddNewOciToProject"]')
     
-    allButtonsNewOci.forEach(function(btn){
+    allButtonsNewOci.forEach(function(btn) {
 		btn.addEventListener("click", (event) => {
             event.preventDefault()
             let kValue = event.target.value
@@ -722,12 +899,12 @@ function messageUpdateProject(
     levelProject,
     k
     ) {
-        
+                
         let projectDescription = descriptionProject.slice(13)
         let projectPrio = parseInt(prioProject.slice(5))
         let checked = 'checked'
-        statusProject=='on' ? checked : checked = ''
-
+        statusProject=='true' ? checked : checked = ''
+        
         let projectLevel
         if (levelProject==='ganado') {
             projectLevel = `<option selected disabled value="ganado">Ganado</option>
@@ -757,18 +934,18 @@ function messageUpdateProject(
                     <fieldset>
                         <div class="row justify-content-evenly mb-2 mx-1 px-1">
                             <div class="col-6">
-                                <label for="projectName" class="form-label">Nombre Proyecto</label>
+                                <label for="projectName" class="form-label d-flex justify-content-start ms-1">Nombre Proyecto</label>
                                 <input type="text" name="projectName" class="form-control"
                                     placeholder="Nombre Proyecto" value="${projectName}" required>
                             </div>
                             
                             <div class="col-6" style="background-color: #ddd;">
-                                <label for="statusProject" class="form-label">Status Proyecto</label><br>
+                                <label for="statusProject" class="form-label d-flex justify-content-start ms-1">Status Proyecto</label><br>
                                 <div>
                                     <p class="d-inline-block me-1">Inactivo</p>
                                     <div class="form-check form-switch d-inline-block mt-2">
-                                        <input class="form-check-input" type="checkbox" role="switch"
-                                            name="statusProject" style="cursor: pointer;" ${checked}>
+                                        <input id="statusProjectForm" class="form-check-input" type="checkbox" role="switch"
+                                            name="statusProjectForm" style="cursor: pointer;" ${checked}>
                                         <label class="form-check-label" for="statusProject">Activo</label>
                                     </div>    
                                 </div>
@@ -777,13 +954,13 @@ function messageUpdateProject(
                         
                         <div class="row justify-content-evenly mb-2 mx-1 px-1">
                             <div class="col-8">
-                                <label for="projectDescription" class="form-label">Descripción Proyecto</label>
+                                <label for="projectDescription" class="form-label d-flex justify-content-start ms-1">Descripción Proyecto</label>
                                 <input type="text" name="projectDescription" class="form-control"
                                     placeholder="Descripción Proyecto" value="${projectDescription}" required>
                             </div>
                             
                             <div class="col-4">
-                                <label for="prioProject" class="form-label">Prioridad Proyecto</label>
+                                <label for="prioProject" class="form-label d-flex justify-content-start ms-1">Prioridad Proyecto</label>
                                 <input type="number" name="prioProject" class="form-control"
                                     placeholder="Prioridad Proyecto" value="${projectPrio}">
                             </div>
@@ -791,14 +968,14 @@ function messageUpdateProject(
 
                         <div class="row justify-content-between mb-2 mx-1 px-1">    
                             <div class="col-4">
-                                <label for="levelProject" class="form-label">Nivel</label>
+                                <label for="levelProject" class="form-label d-flex justify-content-start ms-1">Nivel</label>
                                 <select name="levelProject" class="form-select" required>
                                     ${projectLevel}
                                 </select>
                             </div>
                             
                             <div class="col-4">
-                                <label for="codeProject" class="form-label">Codigo Proyecto</label>
+                                <label for="codeProject" class="form-label d-flex justify-content-start ms-1">Codigo Proyecto</label>
                                 <input type="text" name="codeProject" class="form-control"
                                     placeholder="Codigo Proyecto" value="${codeProject}" required>
                             </div>
@@ -806,10 +983,10 @@ function messageUpdateProject(
                         
                         <div class="row justify-content-evenly mb-2 mx-1 px-1">
                             <div class="col-12">
-                                <label for="imageProject" class="form-label">URL Imagen Proyecto</label>
+                                <label for="imageProject" class="form-label d-flex justify-content-start ms-1">URL Imagen Proyecto</label>
                                 <input type="text" name="imageProject" class="form-control"
                                     placeholder="Imagen proyecto url" value="${imgProject}" required>
-                                <div class="badge sm-badge bg-warning text-dark mt-2 ms-1">
+                                <div class="badge sm-badge bg-warning text-dark mt-2 ms-1 p-2">
                                     <a href="${imgProject}" target="blank" class="alert-link">${imgProject}</a>
                                 </div>
                             </div>
@@ -864,32 +1041,29 @@ function messageUpdateProject(
             showConfirmButton: false,
         })
     }
-        
 }
-
-const projectQty = parseInt(document.getElementById('projectQuantity').innerText)
 
 var arrayBtnUpdateProject = []
 let l=0
-for (let k=0; k<projectQty; k++) {
+for (let k=0; k<projectQuantity; k++) {
     var btnUpdateProject = document.getElementById(`btnUpdateProject${k}_${l}`)
     if(btnUpdateProject) {
         arrayBtnUpdateProject.push(btnUpdateProject)
     }
-    
+
     arrayBtnUpdateProject[k].addEventListener('click', (event) => {
         event.preventDefault()
-        const projectId = document.getElementById(`projectIdHidden${k}_${l}`).value
-        const projectName = document.getElementById(`projectNameHidden${k}_${l}`).value
-        const statusProject = document.getElementById(`statusProjectHidden${k}_${l}`).value
+        const projectName = document.getElementById(`projectNameHidden${k}_${x}`).value
+        const levelProject = document.getElementById(`levelProjectHidden${k}_${x}`).value
+        const idProject = document.getElementById(`projectIdHidden${k}_${x}`).value
+        const statusProject = document.getElementById(`statusProjectHidden${k}_${x}`).value
         const imgProject = document.getElementById(`imageProject${k}`).src
         const descriptionProject = document.getElementById(`projectDescription${k}`).innerText
         const prioProject = document.getElementById(`prioProject${k}`).innerText
         const codeProject = document.getElementById(`codeProject${k}`).innerText
-        const levelProject = document.getElementById(`levelProjectHidden${k}_${l}`).value
-
+        
         messageUpdateProject(
-            projectId,
+            idProject,
             projectName,
             statusProject,
             imgProject,
@@ -902,32 +1076,8 @@ for (let k=0; k<projectQty; k++) {
     })
 }
 
-//---- Update OCI Data ----------------
-function messageUpdateOci(
-        projectId,
-        statusOci,
-        imageOci,
-        ociDescription,
-        ociNumber,
-        ociKNumber,
-        k
-    ) {
-        console.log(statusOci)
-        let descriptionOci = ociDescription.slice(13)
-        let numberOci = parseInt(ociNumber)
-        let checked = 'checked'
-        statusOci=='on' ? checked : checked = ''
-
-        console.log(
-            projectId,
-            statusOci,
-            imageOci,
-            ociDescription,
-            descriptionOci,
-            ociNumber,
-            ociKNumber,
-            k
-        )
+//---- Delete Project ----------------
+function messageDeleteProject(projectName, id, k) {
 
     const Toast = Swal.mixin({
         toast: true,
@@ -937,80 +1087,41 @@ function messageUpdateOci(
         timerProgressBar: false,
     })
 
-    var html = `<form id="formUpdateOci${k}" action="/api/proyectos/updateOci/${projectId}" method="post">
-                    <fieldset>
-                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
-                            <div class="col-6">
-                                <label for="numberOci" class="form-label">Número OCI</label>
-                                <input type="text" name="numberOci" class="form-control"
-                                    placeholder="Número OCI" value="${numberOci}" required>
-                            </div>
-                            
-                            <div class="col-6" style="background-color: #ddd;">
-                                <label for="statusOci" class="form-label">Status OCI</label><br>
-                                <div>
-                                    <p class="d-inline-block me-1">Inactiva</p>
-                                    <div class="form-check form-switch d-inline-block mt-2">
-                                        <input class="form-check-input" type="checkbox"
-                                            name="statusOci" style="cursor: pointer;" ${checked}>
-                                        <label class="form-check-label" for="statusOci">Activa</label>
-                                    </div>    
-                                </div>
-                            </div>
-                        </div>    
-                        
-                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
-                            <div class="col-8">
-                                <label for="descriptionOci" class="form-label">Descripción OCI</label>
-                                <input type="text" name=descriptionOci" class="form-control"
-                                    placeholder="Descripción OCI" value="${descriptionOci}" required>
-                            </div>                            
-                        </div> 
-
-                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
-                            <div class="col-12">
-                                <label for="imageOci" class="form-label">URL Imagen OCI</label>
-                                <input type="text" name="imageOci" class="form-control"
-                                    placeholder="Imagen OCI url" value="${imageOci}" required>
-                                <div class="badge sm-badge bg-warning text-dark mt-2 ms-1">
-                                    <a href="${imageOci}" target="blank" class="alert-link">${imageOci}</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row justify-content-evenly mb-2 px-1 mx-auto">
-                            <div class="col-12 my-1 mx-auto px-1">
-                                <img src="${imageOci}" class="img-fluid rounded px-1"
-                                    alt="Imagen OCI" width="115px">
-                            </div>
-                        </div>
-                        <input type="hidden" name="ociKNumberHidden" id="ociKNumberHidden${ociKNumber}" value="${ociKNumber}">
-                    </fieldset>
-                </form>`
+    const htmlForm = `
+            El proyecto <b>${projectName}</b> y su información interna
+            se eliminará completamente.<br>
+            Está seguro que desea continuar?
+            <form id="formDeleteProject${k}_0" action="/api/proyectos/deleteProject/${id}" method="post">
+                <fieldset>
+                    <input type="hidden" name="projectNameHidden" value="${projectName}">
+                    <input type="hidden" name="projectIdHidden" value="${id}">
+                </fieldset>
+            </form>
+                    `
     
-
-    if(projectId && numberOci) {
+    if(projectName) {
         Swal.fire({
-            title: `Actualizar OCI# ${numberOci}`,
+            title: 'Eliminar Proyecto!',
             position: 'center',
-            html: html,
-            width: 700,
-            icon: 'info',
+            html: htmlForm,
+            icon: 'question',
             showCancelButton: true,
             showConfirmButton: true,
-            confirmButtonText: 'Actualizar <i class="fa-regular fa-pen-to-square"></i>',
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: 'Eliminar <i class="fa-regular fa-trash-can"></i>',
             cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById(`formUpdateOci${k}`).submit()
+                document.getElementById(`formDeleteProject${k}_0`).submit()
                 Toast.fire({
                     icon: 'success',
-                    title: `La OCI# <b>${numberOci}</b>, se modificó con éxito!`
+                    title: `El proyecto <b>${projectName}</b>, se eliminó correctamente!`
                 })
             } else {
                 Swal.fire(
-                    'OCI no modificada!',
-                    `La OCI# <b>${numberOci}</b>, no se modificó!`,
+                    'Proyecto no eliminado!',
+                    `El proyecto <b>${projectName}</b>, no se eliminó!`,
                     'warning'
                 )
                 return false
@@ -1022,42 +1133,26 @@ function messageUpdateOci(
             title: 'Error',
             position: 'center',
             timer: 3500,
-            text: `La OCI# ${numberOci} no se actualizó correctamente!`,
+            text: `El proyecto no se eliminó correctamente!`,
             icon: 'error',
             showCancelButton: false,
             showConfirmButton: false,
         })
     }
-        
 }
 
-const ociQuantity = parseInt(document.getElementById('ociQuantityHidden0_0').value)
-console.log()
-var arrayBtnUpdateOci = []
-let m=0
-for (let k=0; k<ociQuantity; k++) {
-    var btnUpdateOci = document.getElementById(`btnUpdateOci${k}_${m}`)
-    if(btnUpdateOci) {
-        arrayBtnUpdateOci.push(btnUpdateProject)
+var arrayBtnDeleteProject = []
+let p=0
+for (let k=0; k<projectQuantity; k++) {
+    var btnDeleteProject = document.getElementById(`btnDeleteProject${k}_${p}`)
+    if(btnDeleteProject) {
+        arrayBtnDeleteProject.push(btnDeleteProject)
     }
     
-    arrayBtnUpdateOci[k].addEventListener('click', (event) => {
+    arrayBtnDeleteProject[k].addEventListener('click', (event) => {
         event.preventDefault()
-        const projectId = document.getElementById(`projectIdHidden${k}_${m}`).value
-        const statusOci = document.getElementById(`statusOciHidden${k}_${m}`).value
-        const imageOci = document.getElementById(`imageOci${k}_${m}`).src
-        const ociDescription = document.getElementById(`ociDescription${k}_${m}`).innerText
-        const ociNumber = document.getElementById(`ociNumberHidden${k}_${m}`).value
-        const ociKNumber = document.getElementById(`ociKNumberHidden${k}_${m}`).value
-        
-        messageUpdateOci(
-            projectId,
-            statusOci,
-            imageOci,
-            ociDescription,
-            ociNumber,
-            ociKNumber,
-            k
-        )
+        const projectName = document.getElementById(`projectNameHidden${k}_${p}`).value
+        const idProject = document.getElementById(`projectIdHidden${k}_${p}`).value
+        messageDeleteProject(projectName, idProject, k)
     })
 }

@@ -461,10 +461,10 @@ let ociProjectSchema = new Schema({
     ociStatus: {
         type: Boolean, default: true
     },
-    imageOci: { 
+    ociImage: { 
         type: String,
         maxlength: 1000,
-        value: 'https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png'
+        default: 'https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png'
     },
     creator: [creatorSchema],
     timestamp: {
