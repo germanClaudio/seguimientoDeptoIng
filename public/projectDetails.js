@@ -966,7 +966,7 @@ function messageUpdateProject(
                             </div>
                         </div> 
 
-                        <div class="row justify-content-between mb-2 mx-1 px-1">    
+                        <div class="row justify-content-between mb-4 mx-1 px-1">    
                             <div class="col-4">
                                 <label for="levelProject" class="form-label d-flex justify-content-start ms-1">Nivel</label>
                                 <select name="levelProject" class="form-select" required>
@@ -981,19 +981,19 @@ function messageUpdateProject(
                             </div>
                         </div>
                         
-                        <div class="row justify-content-evenly mb-2 mx-1 px-1">
-                            <div class="col-12">
-                                <label for="imageProject" class="form-label d-flex justify-content-start ms-1">URL Imagen Proyecto</label>
-                                <input type="text" name="imageProject" class="form-control"
-                                    placeholder="Imagen proyecto url" value="${imgProject}" required>
-                                <div class="badge sm-badge bg-warning text-dark mt-2 ms-1 p-2">
-                                    <a href="${imgProject}" target="blank" class="alert-link">${imgProject}</a>
-                                </div>
+                        <div class="row justify-content-evenly mb-3 mx-1 px-1">
+                            <div class="col-12 mb-2">
+                                <input type="text" id="file-input" name="imageProject" class="form-control"
+                                    placeholder="Imagen proyecto url" value="${imgProject}" accept="image/*" required>
+                                <div id="drop-area" class="mb-2 mx-auto">
+                                    Arrastra y suelta una imagen aquí
+                                </div>                                
                             </div>
                         </div>
                         
                         <div class="row justify-content-evenly mb-2 px-1 mx-auto">
                             <div class="col-12 my-1 mx-auto px-1">
+                                <label for="imageProject" class="form-label d-flex justify-content-start ms-1">Imagen actual del Proyecto</label>
                                 <img src="${imgProject}" class="img-fluid rounded px-1"
                                     alt="Imagen Proyecto" width="115px">
                             </div>
@@ -1001,6 +1001,9 @@ function messageUpdateProject(
                     </fieldset>
                 </form>`
     
+    // <div class="badge sm-badge bg-warning text-dark mt-2 ms-1 p-2">
+    //     <a href="${imgProject}" target="blank" class="alert-link">${imgProject}</a>
+    // </div>
 
     if(projectName) {
         Swal.fire({
@@ -1041,7 +1044,66 @@ function messageUpdateProject(
             showConfirmButton: false,
         })
     }
+
+    const dropArea = document.getElementById('drop-area')
+    const fileInput = document.getElementById('file-input')
+    // const formUpdateProject = document.getElementById(`formUpdateProject${k}`) 
+    
+    dropArea.style.width = "300px"
+    dropArea.style.height = "200px"
+    dropArea.style.border = "2px dashed #ccc"
+    dropArea.style.margin = "0 auto 0 50px"
+    dropArea.style.borderRadius = "5px"
+    dropArea.style.textAlign = "center"
+    dropArea.style.lineHeight = "200px"
+    dropArea.style.fontFamily = "Arial, sans-serif"
+
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.style.border = '2px dashed #77a'
+        dropArea.style.backgroundColor = '#7777aa10'
+      })
+  
+      dropArea.addEventListener('dragleave', () => {
+        dropArea.style.border = '2px dashed #ccc'
+        dropArea.style.backgroundColor = '#fff'
+      })
+
+      dropArea.addEventListener('drop', (e) => {
+        e.preventDefault()
+        dropArea.style.border = '3px dashed #2a2'
+        dropArea.style.backgroundColor = '#22aa2210'
+        const file = e.dataTransfer.files[0]
+        fileInput.files = e.dataTransfer.files
+        let pathToImage = '../../../src/images/'
+        fileInput.value = pathToImage + file.name
+        handleFileUpload(file)
+      })
+
+      dropArea.addEventListener('click', () => {
+        fileInput.click()
+      })
+
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0]
+        let pathToImage = '../../../src/images/'
+        fileInput.value = pathToImage + file.name
+        handleFileUpload(file)
+      })
+
+      function handleFileUpload(file) {
+        if (file) {
+          const reader = new FileReader()
+          reader.readAsDataURL(file)
+          reader.onload = () => {
+            dropArea.innerHTML = `<img src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+            
+            // formUpdateProject.style.display = 'block'
+          }
+        }
+      }
 }
+
 
 var arrayBtnUpdateProject = []
 let l=0

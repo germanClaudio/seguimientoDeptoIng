@@ -5,6 +5,8 @@ const UserService = require("../services/users.service.js")
 let now = require('../utils/formatDate.js')
 let imageNotFound = "https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png"
 
+const multer = require('multer')
+
 class ProjectsController {
     constructor() {
         this.projects = new ProyectosService()
@@ -767,6 +769,30 @@ class ProjectsController {
         const imageProject = req.body.imageProject
         console.log('req.body-Controller: ', req.body)
         
+        //---------------Storage Image in folder ../src/images/ ----------
+        const storage = multer.diskStorage({
+            destination: function(req, file, cb) {  //'../src/images/',
+                cb(null, '../src/images/' )
+            },                                      
+            filename: function(req, file, cb) {
+              cb(null, file.imageProject + path.extname(file.imageProject)) //originalname
+            }
+        })
+        console.log('storage: ', storage)
+        
+        const upload = multer({
+        storage: storage
+        }).single('image')
+
+        upload(req, res, (err) => {
+            if (err) {
+              res.status(500).send('Error al subir archivo');
+            // } else {
+            //   res.send('Archivo subido exitosamente');
+            }
+          })
+        //-------------------------
+
         let username = res.locals.username
         const userInfo = res.locals.userInfo
         const userId = userInfo.id
