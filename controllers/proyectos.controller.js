@@ -2,10 +2,12 @@ const ProyectosService = require("../services/projects.service.js")
 const ClientesService = require("../services/clients.service.js")
 const UserService = require("../services/users.service.js")
 
+const multer = require('multer')
+const path = require('path')
+
 let now = require('../utils/formatDate.js')
 let imageNotFound = "https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png"
 
-const multer = require('multer')
 
 class ProjectsController {
     constructor() {
@@ -760,39 +762,6 @@ class ProjectsController {
         const clientId = proyecto[0].client[0]._id
         const cliente = await this.clients.selectClientById(clientId)
         
-        const statusProject = req.body.statusProjectForm
-        const projectName = req.body.projectName
-        const projectDescription = req.body.projectDescription
-        const prioProject = req.body.prioProject
-        const levelProject = req.body.levelProject
-        const codeProject = req.body.codeProject
-        const imageProject = req.body.imageProject
-        console.log('req.body-Controller: ', req.body)
-        
-        //---------------Storage Image in folder ../src/images/ ----------
-        const storage = multer.diskStorage({
-            destination: function(req, file, cb) {  //'../src/images/',
-                cb(null, '../src/images/' )
-            },                                      
-            filename: function(req, file, cb) {
-              cb(null, file.imageProject + path.extname(file.imageProject)) //originalname
-            }
-        })
-        console.log('storage: ', storage)
-        
-        const upload = multer({
-        storage: storage
-        }).single('image')
-
-        upload(req, res, (err) => {
-            if (err) {
-              res.status(500).send('Error al subir archivo');
-            // } else {
-            //   res.send('Archivo subido exitosamente');
-            }
-          })
-        //-------------------------
-
         let username = res.locals.username
         const userInfo = res.locals.userInfo
         const userId = userInfo.id
@@ -809,6 +778,41 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
         
+        //------ Storage Image in folder ./src/images/upload/projectImages/ --------
+        const storage = multer.diskStorage({
+            destination: function(req, file, cb) {  
+                cb(null, './public/src/images/upload/projectImages/') //'./src/upload/projectImages/')
+            },                                      
+            filename: function(req, file, cb) {
+              cb(null, file.originalname ) //+ path.extname(file.originalname)) //originalname
+            }
+        })
+                
+        const upload = multer({
+            storage: storage
+        }).single('imageProject')
+
+        upload(req, res, (err) => {
+            const file = req.body.imageProject
+            var statusProject = req.body.statusProjectForm
+            var projectName = req.body.projectName
+            var projectDescription = req.body.projectDescription
+            var prioProject = req.body.prioProject
+            var levelProject = req.body.levelProject
+            var codeProject = req.body.codeProject
+            var imageProjectText = req.body.imageProjectFileName
+            var imageProject = req.body.imageProject
+            var reqBody = req.body
+            console.log('reqBody', reqBody)
+            
+            if (!file || err) {
+                const error = new Error('No se agregó ningún archivo')
+                error.httpStatusCode = 400
+                return error
+            }
+        })
+        //-------------------------
+        
         await this.projects.updateProject(
             id,
             proyecto,
@@ -818,7 +822,7 @@ class ProjectsController {
             prioProject,
             levelProject,
             codeProject,
-            imageProject,
+            imageProjectText,
             userModificator
         )
 

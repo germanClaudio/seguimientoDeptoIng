@@ -930,7 +930,7 @@ function messageUpdateProject(
         timerProgressBar: false,
     })
 
-    var html = `<form id="formUpdateProject${k}" action="/api/proyectos/updateProject/${projectId}" method="post">
+    var html = `<form id="formUpdateProject${k}" enctype="multipart/form-data" action="/api/proyectos/updateProject/${projectId}" method="post">
                     <fieldset>
                         <div class="row justify-content-evenly mb-2 mx-1 px-1">
                             <div class="col-6">
@@ -983,8 +983,13 @@ function messageUpdateProject(
                         
                         <div class="row justify-content-evenly mb-3 mx-1 px-1">
                             <div class="col-12 mb-2">
-                                <input type="text" id="file-input" name="imageProject" class="form-control"
-                                    placeholder="Imagen proyecto url" value="${imgProject}" accept="image/*" required>
+                            <label for="imageProject" class="form-label d-flex justify-content-start ms-1">Imagen del Proyecto</label>
+                                <input type="hidden" id="file-input-text" name="imageProjectFileName" class="form-control"
+                                    placeholder="Imagen proyecto url" value="${imgProject}" required>
+                                
+                                <input type="file" id="file-input" name="imageProject" class="form-control"
+                                    placeholder="Imagen proyecto url" value="" accept="image/*" style="display: none;">
+                            
                                 <div id="drop-area" class="mb-2 mx-auto">
                                     Arrastra y suelta una imagen aquí
                                 </div>                                
@@ -993,7 +998,7 @@ function messageUpdateProject(
                         
                         <div class="row justify-content-evenly mb-2 px-1 mx-auto">
                             <div class="col-12 my-1 mx-auto px-1">
-                                <label for="imageProject" class="form-label d-flex justify-content-start ms-1">Imagen actual del Proyecto</label>
+                                <label class="form-label d-flex justify-content-start ms-1">Imagen actual del Proyecto</label>
                                 <img src="${imgProject}" class="img-fluid rounded px-1"
                                     alt="Imagen Proyecto" width="115px">
                             </div>
@@ -1001,9 +1006,7 @@ function messageUpdateProject(
                     </fieldset>
                 </form>`
     
-    // <div class="badge sm-badge bg-warning text-dark mt-2 ms-1 p-2">
-    //     <a href="${imgProject}" target="blank" class="alert-link">${imgProject}</a>
-    // </div>
+    // enctype="multipart/form-data"
 
     if(projectName) {
         Swal.fire({
@@ -1047,6 +1050,7 @@ function messageUpdateProject(
 
     const dropArea = document.getElementById('drop-area')
     const fileInput = document.getElementById('file-input')
+    const fileImputText = document.getElementById('file-input-text')
     // const formUpdateProject = document.getElementById(`formUpdateProject${k}`) 
     
     dropArea.style.width = "300px"
@@ -1056,7 +1060,7 @@ function messageUpdateProject(
     dropArea.style.borderRadius = "5px"
     dropArea.style.textAlign = "center"
     dropArea.style.lineHeight = "200px"
-    dropArea.style.fontFamily = "Arial, sans-serif"
+    
 
     dropArea.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -1075,8 +1079,9 @@ function messageUpdateProject(
         dropArea.style.backgroundColor = '#22aa2210'
         const file = e.dataTransfer.files[0]
         fileInput.files = e.dataTransfer.files
-        let pathToImage = '../../../src/images/'
-        fileInput.value = pathToImage + file.name
+        let pathToImage = '../../../src/images/upload/projectImages/'
+        //fileInput.value = file.name
+        fileImputText.value = pathToImage + file.name
         handleFileUpload(file)
       })
 
@@ -1086,8 +1091,9 @@ function messageUpdateProject(
 
       fileInput.addEventListener('change', () => {
         const file = fileInput.files[0]
-        let pathToImage = '../../../src/images/'
-        fileInput.value = pathToImage + file.name
+        let pathToImage = '../../../src/images/upload/projectImages/'
+        //fileInput.value = file.name
+        fileImputText.value = pathToImage + file.name
         handleFileUpload(file)
       })
 
@@ -1097,8 +1103,7 @@ function messageUpdateProject(
           reader.readAsDataURL(file)
           reader.onload = () => {
             dropArea.innerHTML = `<img src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
-            
-            // formUpdateProject.style.display = 'block'
+            //formUpdateProject.style.display = 'block'
           }
         }
       }
