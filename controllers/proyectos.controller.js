@@ -781,7 +781,7 @@ class ProjectsController {
         //------ Storage Image in folder ./src/images/upload/projectImages/ --------
         const storage = multer.diskStorage({
             destination: function(req, file, cb) {  
-                cb(null, './public/src/images/upload/projectImages/') //'./src/upload/projectImages/')
+                cb(null, './public/src/images/upload/projectImages/') // Path de acceso a carpeta donde se guardan las Imagenes
             },                                      
             filename: function(req, file, cb) {
               cb(null, file.originalname ) //+ path.extname(file.originalname)) //originalname
@@ -792,39 +792,42 @@ class ProjectsController {
             storage: storage
         }).single('imageProject')
 
-        upload(req, res, (err) => {
-            const file = req.body.imageProject
-            var statusProject = req.body.statusProjectForm
-            var projectName = req.body.projectName
-            var projectDescription = req.body.projectDescription
-            var prioProject = req.body.prioProject
-            var levelProject = req.body.levelProject
-            var codeProject = req.body.codeProject
-            var imageProjectText = req.body.imageProjectFileName
-            var imageProject = req.body.imageProject
-            var reqBody = req.body
-            console.log('reqBody', reqBody)
-            
-            if (!file || err) {
+        upload(req, res, async (err) => {
+            const statusProject = req.body.statusProjectForm
+            const projectName = req.body.projectName
+            const projectDescription = req.body.projectDescription
+            const prioProject = req.body.prioProject
+            const levelProject = req.body.levelProject
+            const codeProject = req.body.codeProject
+            const imageProjectText = req.body.imageProjectFileName
+                        
+            if (err) {
                 const error = new Error('No se agregó ningún archivo')
                 error.httpStatusCode = 400
                 return error
             }
+
+            try{
+                await this.projects.updateProject(
+                    id,
+                    proyecto,
+                    statusProject,
+                    projectName,
+                    projectDescription,
+                    prioProject,
+                    levelProject,
+                    codeProject,
+                    imageProjectText,
+                    userModificator
+                )
+            } catch (error) {
+                res.status(500).json({
+                    status: false,
+                    error: error
+                })
+            }
         })
-        //-------------------------
-        
-        await this.projects.updateProject(
-            id,
-            proyecto,
-            statusProject,
-            projectName,
-            projectDescription,
-            prioProject,
-            levelProject,
-            codeProject,
-            imageProjectText,
-            userModificator
-        )
+        //------------------------------------
 
         await this.clients.updateClient(
             clientId, 

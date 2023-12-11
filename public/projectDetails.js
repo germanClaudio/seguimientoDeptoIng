@@ -903,7 +903,11 @@ function messageUpdateProject(
         let projectDescription = descriptionProject.slice(13)
         let projectPrio = parseInt(prioProject.slice(5))
         let checked = 'checked'
+        let bgColorStatus
         statusProject=='true' ? checked : checked = ''
+        statusProject=='true' ? bgColorStatus='background-color: #55dd5560;'
+                                : 
+                                bgColorStatus='background-color: #dd555560;'
         
         let projectLevel
         if (levelProject==='ganado') {
@@ -939,7 +943,7 @@ function messageUpdateProject(
                                     placeholder="Nombre Proyecto" value="${projectName}" required>
                             </div>
                             
-                            <div class="col-6" style="background-color: #ddd;">
+                            <div class="col-6" style="${bgColorStatus}">
                                 <label for="statusProject" class="form-label d-flex justify-content-start ms-1">Status Proyecto</label><br>
                                 <div>
                                     <p class="d-inline-block me-1">Inactivo</p>
@@ -981,18 +985,26 @@ function messageUpdateProject(
                             </div>
                         </div>
                         
-                        <div class="row justify-content-evenly mb-3 mx-1 px-1">
-                            <div class="col-12 mb-2">
-                            <label for="imageProject" class="form-label d-flex justify-content-start ms-1">Imagen del Proyecto</label>
-                                <input type="hidden" id="file-input-text" name="imageProjectFileName" class="form-control"
-                                    placeholder="Imagen proyecto url" value="${imgProject}" required>
+                        <div class="row justify-content-start align-items-center mb-1 mx-1 px-1">
+                            <div class="col mb-1">
+                                <label for="imageProject" class="form-label d-flex justify-content-start ms-1">Seleccione una imagen para el Proyecto</label>
                                 
-                                <input type="file" id="file-input" name="imageProject" class="form-control"
-                                    placeholder="Imagen proyecto url" value="" accept="image/*" style="display: none;">
+                                <input type="text" id="fileInputText" name="imageProjectFileName"
+                                    value="${imgProject}" style="display: none;" required>
+                                <input type="file" id="fileInput" name="imageProject"
+                                    value="" accept="image/*" style="display: none;" required>
                             
                                 <div id="drop-area" class="mb-2 mx-auto">
                                     Arrastra y suelta una imagen aquí
-                                </div>                                
+                                </div>
+                                <button title="Eliminar Imagen" class="btn btn-danger rounded-circle mx-auto"
+                                        id="removeImage" style="display: none;">
+                                        <i class="fa-solid fa-xmark"></i>
+                                </button>
+                                
+                                <div id="alert" class="alert alert-warning" role="alert" style="display: none;">
+                                    <strong class="me-2">Error!</strong> Solo puedes ingresar una imagen jpg, png, bmp o jpeg.
+                                </div>
                             </div>
                         </div>
                         
@@ -1005,9 +1017,8 @@ function messageUpdateProject(
                         </div>
                     </fieldset>
                 </form>`
+                
     
-    // enctype="multipart/form-data"
-
     if(projectName) {
         Swal.fire({
             title: `Actualizar Proyecto ${projectName}`,
@@ -1049,9 +1060,10 @@ function messageUpdateProject(
     }
 
     const dropArea = document.getElementById('drop-area')
-    const fileInput = document.getElementById('file-input')
-    const fileImputText = document.getElementById('file-input-text')
-    // const formUpdateProject = document.getElementById(`formUpdateProject${k}`) 
+    const fileInput = document.getElementById('fileInput')
+    const fileImputText = document.getElementById('fileInputText')
+    const removeImageButton = document.getElementById('removeImage')
+    const alert = document.getElementById('alert')
     
     dropArea.style.width = "300px"
     dropArea.style.height = "200px"
@@ -1061,52 +1073,93 @@ function messageUpdateProject(
     dropArea.style.textAlign = "center"
     dropArea.style.lineHeight = "200px"
     
-
     dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
+        e.preventDefault()
         dropArea.style.border = '2px dashed #77a'
         dropArea.style.backgroundColor = '#7777aa10'
-      })
+    })
   
-      dropArea.addEventListener('dragleave', () => {
+    dropArea.addEventListener('dragleave', (e) => {
+        e.preventDefault()
         dropArea.style.border = '2px dashed #ccc'
         dropArea.style.backgroundColor = '#fff'
-      })
+        removeImageButton.style.display = 'none'
+    })
 
-      dropArea.addEventListener('drop', (e) => {
+    function alertNotImage() {
+        alert.style.display = 'flex'
+        removeImageButton.style.display = 'none'
+        dropArea.style.border = "2px dashed #ccc"
+        dropArea.style.textAlign = "center"
+        dropArea.style.backgroundColor = '#fff'
+        dropArea.style.display = 'block'
+        dropArea.innerHTML = 'Arrastra y suelta una imagen aquí'
+    }
+
+    dropArea.addEventListener('drop', (e) => {
         e.preventDefault()
         dropArea.style.border = '3px dashed #2a2'
         dropArea.style.backgroundColor = '#22aa2210'
         const file = e.dataTransfer.files[0]
-        fileInput.files = e.dataTransfer.files
-        let pathToImage = '../../../src/images/upload/projectImages/'
-        //fileInput.value = file.name
-        fileImputText.value = pathToImage + file.name
-        handleFileUpload(file)
-      })
 
-      dropArea.addEventListener('click', () => {
+        if (file && file.type.startsWith('image/')) {
+            fileInput.files = e.dataTransfer.files
+            let pathToImage = '../../../src/images/upload/projectImages/'
+            fileImputText.value = pathToImage + file.name
+            removeImageButton.style.display = 'flex'
+            alert.style.display = 'none'
+            handleFileUpload(file)
+        } else {
+            alertNotImage()
+        }     
+    })
+
+    dropArea.addEventListener('click', () => {
         fileInput.click()
-      })
+    })
 
-      fileInput.addEventListener('change', () => {
+    fileInput.addEventListener('change', (e) => {
+        e.preventDefault()
         const file = fileInput.files[0]
-        let pathToImage = '../../../src/images/upload/projectImages/'
-        //fileInput.value = file.name
-        fileImputText.value = pathToImage + file.name
-        handleFileUpload(file)
-      })
+        
+        if (file && file.type.startsWith('image/')) { 
+            let pathToImage = '../../../src/images/upload/projectImages/'
+            fileImputText.value = pathToImage + file.name
+            removeImageButton.style.display = 'flex'
+            alert.style.display = 'none'
+            handleFileUpload(file)
+        } else {
+            alertNotImage()
+        }     
+    })
 
-      function handleFileUpload(file) {
-        if (file) {
-          const reader = new FileReader()
-          reader.readAsDataURL(file)
-          reader.onload = () => {
-            dropArea.innerHTML = `<img src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
-            //formUpdateProject.style.display = 'block'
-          }
+    function handleFileUpload(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+                dropArea.innerHTML = 
+                    `<img class="p-2" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+                dropArea.style.display = 'block'
+                alert.style.display = 'none'
+            }
+
+        } else {
+            alertNotImage()
         }
-      }
+    }
+
+    removeImageButton.addEventListener('click', ()=> {
+        // fileInput.value = ''
+        fileImputText.value = ''
+        dropArea.style.border = "2px dashed #ccc"
+        dropArea.style.textAlign = "center"
+        dropArea.style.backgroundColor = '#fff'
+        dropArea.style.display = 'block'
+        dropArea.innerHTML = 'Arrastra y suelta una imagen aquí'
+        removeImageButton.style.display = 'none'
+        alert.style.display = 'none'
+    })
 }
 
 

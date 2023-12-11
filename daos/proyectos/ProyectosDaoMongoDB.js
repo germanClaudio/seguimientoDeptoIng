@@ -602,14 +602,9 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
                 
                 let booleanStatus
-                if (statusProject == 'on') {
-                    booleanStatus = true
-                } else if (statusProject == null) {
-                    booleanStatus = itemMongoDB.project[0].statusProject
-                } else {
-                    booleanStatus = false
-                }
-                
+                statusProject == 'on' ? booleanStatus = true : booleanStatus = false
+                imageProject ? imageProject : itemMongoDB.project[0].imageProject
+
                 if (itemMongoDB) {
                     var updatedProject = await Proyectos.updateOne(
                         { _id: itemMongoDB._id },
