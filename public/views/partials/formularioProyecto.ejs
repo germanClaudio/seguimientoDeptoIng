@@ -1,7 +1,7 @@
 <div class="card mx-auto" style="width: 93vw;">
     <div class="card card-body d-flex justify-content-center">
-        <div class="form-group col-12 mx-auto my-2 w-100 border px-5 py-1 bg-dark bg-gradient text-white bg-opacity-75">
-            <form id="formNewProject" action="/api/proyectos" method="post">
+        <div class="form-group col-12 mx-auto my-2 w-100 border px-5 py-1 text-white bg-opacity-75" style="background-color: #666666;">
+            <form id="formNewProject" enctype="multipart/form-data" action="/api/proyectos" method="post">
                 <fieldset>
                     <h5 class="d-block mx-auto my-2 text-center">Nuevo Proyecto</h5>
                     <div class="row my-3">
@@ -54,11 +54,25 @@
                         </div>
                     </div>
 
-                    <div class="row my-3">
-                        <div class="col-10">
-                            <label for="imageProject">URL Imagen Proyecto</label>
-                            <input type="text" name="imageProject" id="imageProject" class="form-control"
-                                placeholder="Imagen proyecto url" required>
+                    <div class="row justify-content-start align-items-center mt-3">
+                        <div class="col">
+                            <label for="imageProject" class="d-flex justify-content-start ms-1">Seleccione una imagen para el Proyecto</label>
+                            <input type="text" id="fileInputTextProject" name="imageProject"
+                                style="display: none;" required>
+                            <input type="file" id="fileInputProject" name="imageProject"
+                                value="" accept="image/*" style="display: none;" required>
+                            <div id="drop-areaProject" class="mb-2 mx-auto">
+                                Arrastra y suelta una imagen aquí
+                            </div>
+                            <button title="Eliminar Imagen" class="btn btn-danger rounded-circle mx-auto"
+                                    id="removeImageProject" style="display: none;">
+                                    <i class="fa-solid fa-xmark"></i>
+                            </button>
+                            
+                            <div id="alertProject" class="alert alert-warning align-items-center w-50 mx-auto" role="alert"
+                                style="display: none; font-size: 0.85rem; height: 1.15rem;">
+                                <strong class="me-2">Error!</strong> Solo puedes ingresar una imagen jpg, png, bmp o jpeg.
+                            </div>
                         </div>
                     </div>
                     <hr>
@@ -84,8 +98,8 @@
                                                 </div>
                                                 <div class="col-3">
                                                     <label for="ociDescription" id="labelOciDescription">Descripción OCI</label>
-                                                    <input type="text" name="ociDescription" id="ociDescription" class="form-control"
-                                                    placeholder="Descripcion OCI">
+                                                    <textarea type="text" name="ociDescription" id="ociDescription" rows="3"
+                                                    maxlength="100" class="form-control" placeholder="Descripcion OCI"></textarea>
                                                 </div>
                                                 <div class="col-2">
                                                     <label for="ociStatus" id="labelOciStatus">Status OCI</label><br>
@@ -97,9 +111,24 @@
                                                     </div>    
                                                 </div>
                                                 <div class="col">
-                                                    <label for="ociImage" id="labelOciImage">Imagen OCI</label>
-                                                    <input type="text" name="ociImage" id="ociImage" class="form-control"
-                                                    placeholder="Imagen OCI">
+                                                    <label for="imageNewOci" id="labelOciImage">Seleccione una imagen para la OCI</label>
+                                                    <input type="text" id="fileInputNewOciText" name="imageOciFileName"
+                                                        value="" style="display: none;" required>
+                                                    <input type="file" id="fileInputNewOci" name="imageNewOci"
+                                                        value="" accept="image/*" style="display: none;" required>
+                                                
+                                                    <div id="drop-area-oci" class="mb-1 mx-auto">
+                                                        Arrastra y suelta una imagen aquí
+                                                    </div>
+                                                    <button title="Eliminar Imagen" class="btn btn-danger rounded-circle mx-auto"
+                                                            id="btnRemoveOciImage" name="btnRemoveOciImage" style="display: none;">
+                                                            <i class="fa-solid fa-xmark"></i>
+                                                    </button>
+                                                    
+                                                    <div id="alertOci" class="alert alert-warning align-items-center" role="alert"
+                                                        style="display: none; font-size: 0.85rem; height: 1.15rem;">
+                                                        <strong class="me-2">Error!</strong> Solo puedes ingresar una imagen jpg, png, bmp o jpeg.
+                                                    </div>
                                                 </div>
                                                 <div class="col-1 my-1 align-self-middle">
                                                 </div>

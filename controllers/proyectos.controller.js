@@ -143,126 +143,201 @@ class ProjectsController {
     }
 
     createNewProject = async (req, res) => {
-        const clientId = req.body.clientIdHidden
-        const clienteSeleccionado = await this.clients.selectClientById(clientId)
-
-        const userId = req.body.idHidden
-        const userCreator = await this.users.getUserById(userId)
         
-        const ociQuantity = parseInt(req.body.ociQuantity)
+        //------ Storage Project Image in folder projectImages/ --------
+        const storageImageProject = multer.diskStorage({
+            destination: function(req, file, cb) {  
+                cb(null, './public/src/images/upload/projectImages/') // Path de acceso a carpeta donde se guardan las Imagenes
+            },                                     
+            filename: function(req, file, cb) {
+                cb(null, file.originalname) //+ path.extname(file.originalname)) //originalname
+            }
+        })
+        
+        const storageImageOci = multer.diskStorage({
+            destination: function(req, file, cb) {  
+                cb(null, './public/src/images/upload/ociImages/') // Path de acceso a carpeta donde se guardan las Imagenes
+            },                                     
+            filename: function(req, file, cb) {
+                cb(null, file.originalname) //+ path.extname(file.originalname)) //originalname
+            }
+        })
 
-        const user = [{
-            name: userCreator.name,
-            lastName: userCreator.lastName,
-            username: userCreator.username,
-            email: userCreator.email
-        }]
+        const uploadImageOci = multer({
+            storage: storageImageOci,
+            storage: storageImageProject
+        }).any()
+        
+        uploadImageOci(req, res, async (err) => {
+            console.log('files: ', req.files)
 
-        const modificator = [{
-            name: "",
-            lastName: "",
-            username: "",
-            email: ""
-        }]
+            const clientId = req.body.clientIdHidden
+            const clienteSeleccionado = await this.clients.selectClientById(clientId)
 
-        //----------Update  13/11/2023 ------------------
-        let arrayOciNumber=[],
+            const ociQuantity = parseInt(req.body.ociQuantity)
+            
+            const userId = req.body.idHidden
+            const userCreator = await this.users.getUserById(userId)
+            
+            const user = [{
+                name: userCreator.name,
+                lastName: userCreator.lastName,
+                username: userCreator.username,
+                email: userCreator.email
+            }]
+
+            const modificator = [{
+                name: "",
+                lastName: "",
+                username: "",
+                email: ""
+            }]
+
+        // })
+        
+        // const upload = multer({
+        //     storage: storageImageProject
+        // }).single('imageProject')
+        
+
+        // upload(req, res, async (err) => {
+           
+
+            let arrayOciNumber=[],
             arrayOciDescription=[],
             arrayOciStatus=[],
             arrayOciImages=[]
 
-        for (const key in req.body) {
-            if (key.startsWith('ociNumber')) {
-                arrayOciNumber.push(req.body[key])
+            for (const key in req.body) {
+                if (key.startsWith('ociNumber')) {
+                    arrayOciNumber.push(req.body[key])
+                }
+                else if (key.startsWith('ociDescription')) {
+                    arrayOciDescription.push(req.body[key])
+                }
+                else if (key.startsWith('ociStatus')) {
+                    arrayOciStatus.push(req.body[key])
+                }
+                else if (key.startsWith('imageOciFileName')) {
+                    arrayOciImages.push(req.body[key])
+                }
             }
-            else if (key.startsWith('ociDescription')) {
-                arrayOciDescription.push(req.body[key])
-            }
-            else if (key.startsWith('ociStatus')) {
-                arrayOciStatus.push(req.body[key])
-            }
-            else if (key.startsWith('ociImage')) {
-                arrayOciImages.push(req.body[key])
-            }
-        }
 
-        let arrayOciProjects = []
-        for(let i=0; i<ociQuantity; i++) {
-            var ociProject = {
-                    ociNumber: arrayOciNumber[i],
-                    ociDescription: arrayOciDescription[i],
-                    ociStatus: arrayOciStatus[i] == 'on' ? true : false,
-                    creator: user,
-                    timestamp: now,
-                    ociImage: arrayOciImages[i] || imageNotFound,
-                    modificator: modificator,
-                    modifiedOn: "",
-                    visible: true
+            let arrayOciProjects = []
+            for(let i=0; i<ociQuantity; i++) {
+                var ociProject = {
+                        ociNumber: arrayOciNumber[i],
+                        ociDescription: arrayOciDescription[i],
+                        ociStatus: arrayOciStatus[i] == 'on' ? true : false,
+                        creator: user,
+                        timestamp: now,
+                        ociImage: arrayOciImages[i] || imageNotFound,
+                        modificator: modificator,
+                        modifiedOn: "",
+                        visible: true
+                }
+                arrayOciProjects.push(ociProject)
             }
             
-            arrayOciProjects.push(ociProject)
-        }
-        //----------End of Update 13/11/2023 -----------------
+            const project = {
+                projectName: req.body.projectName,
+                statusProject: req.body.statusProject == 'on' ? true : false,
+                levelProject: req.body.levelProject,
+                codeProject: req.body.codeProject,
+                projectDescription: req.body.projectDescription,
+                prioProject: req.body.prioProject,
+                imageProject: req.body.imageProject,
+                visible: true,
+                creator: user,
+                timestamp: now,
+                modificator: modificator,
+                modifiedOn: "",
+                oci: arrayOciProjects
+            }
 
-        const project = {
-            projectName: req.body.projectName,
-            statusProject: req.body.statusProject == 'on' ? true : false,
-            levelProject: req.body.levelProject,
-            codeProject: req.body.codeProject,
-            projectDescription: req.body.projectDescription,
-            prioProject: req.body.prioProject,
-            imageProject: req.body.imageProject,
-            visible: true,
-            creator: user,
-            timestamp: now,
-            modificator: modificator,
-            modifiedOn: "",
-            oci: arrayOciProjects
-        }
+            const newProject = {
+                creator: user,
+                client: clienteSeleccionado,
+                project: project,
+                timestamp: now,
+                modificator: modificator,
+                modifiedOn: "",
+                visible: true
+            }
+      
+            if (err) {
+                const error = new Error('No se agregó ningún archivo')
+                error.httpStatusCode = 400
+                return error
+            }
 
-        const newProject = {
-            creator: user,
-            client: clienteSeleccionado,
-            project: project,
-            timestamp: now,
-            modificator: modificator,
-            modifiedOn: "",
-            visible: true
-        }
+            try {
+                await this.projects.addProjectToClient(newProject)
+                const proyectos = await this.projects.getProjectsByClientId(clientId)
 
-        await this.projects.addProjectToClient(newProject)
-        const proyectos = await this.projects.getProjectsByClientId(clientId)
+                let username = res.locals.username
+                let userInfo = res.locals.userInfo
 
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
+                const cookie = req.session.cookie
+                const time = cookie.expires
+                const expires = new Date(time)
 
-        const cookie = req.session.cookie
-        const time = cookie.expires
-        const expires = new Date(time)
+                const cliente = await this.clients.updateClientProjectQty(
+                    clientId, 
+                    clienteSeleccionado, 
+                    user
+                )
 
-        const cliente = await this.clients.updateClientProjectQty(
-            clientId, 
-            clienteSeleccionado, 
-            user
-        )
+                if (!proyectos) return res.status(404).json({ Msg: 'Proyecto no guardado' })
+                res.render('clientProjectsDetails', {
+                    username,
+                    userInfo,
+                    expires,
+                    cliente,
+                    proyectos
+                })
 
-        try {
-            if (!proyectos) return res.status(404).json({ Msg: 'Proyecto no guardado' })
-            res.render('clientProjectsDetails', {
-                username,
-                userInfo,
-                expires,
-                cliente,
-                proyectos
-            })
+            } catch (error) {
+                res.status(500).json({
+                    status: false,
+                    error: error
+                })
+            }
+        })
+        //------------------------------------
+        
+        // const proyectos = await this.projects.getProjectsByClientId(clientId)
 
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                msg: 'controllerError - createNewProyects',
-                error: error
-            })
-        }
+        // let username = res.locals.username
+        // let userInfo = res.locals.userInfo
+
+        // const cookie = req.session.cookie
+        // const time = cookie.expires
+        // const expires = new Date(time)
+
+        // const cliente = await this.clients.updateClientProjectQty(
+        //     clientId, 
+        //     clienteSeleccionado, 
+        //     user
+        // )
+
+        // try {
+        //     if (!proyectos) return res.status(404).json({ Msg: 'Proyecto no guardado' })
+        //     res.render('clientProjectsDetails', {
+        //         username,
+        //         userInfo,
+        //         expires,
+        //         cliente,
+        //         proyectos
+        //     })
+
+        // } catch (error) {
+        //     res.status(500).json({
+        //         status: false,
+        //         msg: 'controllerError - createNewProyects',
+        //         error: error
+        //     })
+        // }
     }
 
     addOtToOciProject = async (req, res) => {
@@ -778,7 +853,7 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
         
-        //------ Storage Image in folder ./src/images/upload/projectImages/ --------
+        //------ Storage Project Image in folder projectImages/ --------
         const storage = multer.diskStorage({
             destination: function(req, file, cb) {  
                 cb(null, './public/src/images/upload/projectImages/') // Path de acceso a carpeta donde se guardan las Imagenes
@@ -862,12 +937,6 @@ class ProjectsController {
         const clientId = proyecto[0].client[0]._id
         const cliente = await this.clients.selectClientById(clientId)
         
-        const statusOci = req.body.statusOciForm
-        const ociDescription = req.body.descriptionOci
-        const ociNumber = req.body.numberOci
-        const ociKNumber = req.body.ociKNumberHidden
-        const ociImage = req.body.imageOci
-        
         let username = res.locals.username
         const userInfo = res.locals.userInfo
         const userId = userInfo.id
@@ -884,16 +953,52 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
         
-        await this.projects.updateOci(
-            id,
-            proyecto,
-            statusOci,
-            ociDescription,
-            ociNumber,
-            ociKNumber,
-            ociImage,
-            userModificator
-        )
+        //------ Storage OCI Image in folder ociImages/ --------
+        const storage = multer.diskStorage({
+            destination: function(req, file, cb) {  
+                cb(null, './public/src/images/upload/ociImages/') // Path de acceso a carpeta donde se guardan las Imagenes
+            },                                      
+            filename: function(req, file, cb) {
+              cb(null, file.originalname ) //+ path.extname(file.originalname)) //originalname
+            }
+        })
+                
+        const upload = multer({
+            storage: storage
+        }).single('imageOci')
+
+        upload(req, res, async (err) => {
+            const statusOci = req.body.statusOciForm
+            const ociDescription = req.body.descriptionOci
+            const ociNumber = req.body.numberOci
+            const ociKNumber = req.body.ociKNumberHidden
+            const ociImageText = req.body.imageOciFileName
+                        
+            if (err) {
+                const error = new Error('No se agregó ningún archivo')
+                error.httpStatusCode = 400
+                return error
+            }
+
+            try{
+                await this.projects.updateOci(
+                    id,
+                    proyecto,
+                    statusOci,
+                    ociDescription,
+                    ociNumber,
+                    ociKNumber,
+                    ociImageText,
+                    userModificator
+                )
+            } catch (error) {
+                res.status(500).json({
+                    status: false,
+                    error: error
+                })
+            }
+        })
+        //------------------------------------
 
         await this.clients.updateClient(
             clientId, 

@@ -25,11 +25,11 @@
                 <% if (parseInt(cliente.project) > 0 && cliente.status) { 
                     let ociCount=0 %>
                     <% for ( let m = 0;  proyectos.length > m; m++) {
-                        
+                        <!-- ver aca esta el problema 12/12/2023 17.37hs -->
                         if (proyectos[m].project[0].visible) { %>
                             <div class="accordion" id="accordionPanelsStayOpen<%=m %>">
                                 <% for ( let j = 0;  proyectos[m].project.length > j; j++) { %>
-
+                                    <% console.log('proyectos[m].project: ', proyectos[m]) %>
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="panelsStayOpen-headingOneCard">
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -56,6 +56,7 @@
                                                     <div class="row">
                                                         <!-- -------------- seccion Foto Proyecto ---------------------- -->
                                                         <div class="col-2 my-auto px-1">
+                                                            <% console.log('jjjj: ', j) %>
                                                             <img id="imageProject<%=j%>" src="<%= proyectos[m].project[j].imageProject %>"
                                                                     class="img-fluid rounded px-1" alt="Imagen Proyecto"
                                                                     width="175px">

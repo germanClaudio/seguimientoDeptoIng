@@ -656,16 +656,17 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         ociImage,
         userModificator
     ) {
-        
-        let numberOciK = parseInt(ociKNumber)
-        let numberOci = parseInt(ociNumber)
-        let booleanStatus
-        statusOci=='on' ? booleanStatus=true : booleanStatus=false
 
         if (project) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
-                //console.log('itemMongoDB.oci: ', itemMongoDB.project[0].oci)
+                
+                let numberOciK = parseInt(ociKNumber)
+                let numberOci = parseInt(ociNumber)
+                let booleanStatus
+                statusOci=='on' ? booleanStatus=true : booleanStatus=false
+                ociImage ? ociImage : itemMongoDB.project[0].oci[numberOciK].ociImage
+
                 if (itemMongoDB) {
                     
                     var updatedOci = await Proyectos.updateOne(

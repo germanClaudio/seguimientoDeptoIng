@@ -9,6 +9,25 @@ buttonOne.addEventListener('click', () => {
     :
         btnAddNewRow.setAttribute('disabled', true)
 })
+
+function extractNumbers(str) {
+    const numbers = str.match(/\d{1,2}/g); // Extract 1 or 2 digit numbers from the string
+    
+    if (numbers) {
+        if (numbers.length === 2) {
+            // If two numbers are found, check if both are numbers
+            if (!isNaN(parseInt(numbers[0])) && !isNaN(parseInt(numbers[1]))) {
+                return numbers; // Return both numbers as an array
+            }
+        } else if (numbers.length === 1) {
+            // If only one number is found, check if it's a number
+            if (!isNaN(parseInt(numbers[0]))) {
+                return numbers[0]; // Return the single number
+            }
+        }
+    }
+    return null // Return null if no valid numbers are found
+}
     
 //-------------------------- Add New OCI Row --------------------------------
 btnAddNewRow.addEventListener('click', () => {
@@ -40,8 +59,9 @@ btnAddNewRow.addEventListener('click', () => {
             </div>
             <div class="col-3">
                 <label for="ociDescription${i}" id="labelOciDescription${i}">Descripción OCI</label>
-                <input type="text" name="ociDescription${i}" id="ociDescription${i}" class="form-control"
-                placeholder="Descripción OCI">
+                <textarea type="text" name="ociDescription${i}" id="ociDescription${i}" rows="3"
+                    maxlength="100" class="form-control" placeholder="Descripción OCI">
+                </textarea>
             </div>
             <div class="col-2">
                 <label for="ociStatus${i}" id="labelOciStatus${i}">Status OCI</label><br>
@@ -52,13 +72,27 @@ btnAddNewRow.addEventListener('click', () => {
                 </div>
             </div>
             <div class="col">
-                <label for="ociImage${i}" id="labelociImage${i}">Imagen OCI</label>
-                <input type="text" name="ociImage${i}" id="ociImage${i}" class="form-control"
-                placeholder="Imagen OCI">
+                <label for="newOciImage${i}" id="labelNewOciImage${i}">Seleccione una imagen para la OCI</label>
+                <input type="text" id="fileInputNewOciText${i}" name="imageOciFileName${i}" 
+                    style="display: none;">
+                <input type="file" id="fileInputNewOci${i}" name="imageNewOci${i}" value=""
+                    accept="image/*" style="display: none;" required>
+                <div id="drop-area-oci${i}" class="mb-1 mx-auto">
+                    Arrastra y suelta una imagen aquí
+                </div>
+                <button title="Eliminar Imagen" class="btn btn-danger rounded-circle mx-auto"
+                        id="btnRemoveOciImage${i}" name="btnRemoveOciImage" style="display: none;">
+                        <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div id="alertOci${i}" class="alert alert-warning align-items-center" role="alert"
+                    style="display: none; font-size: 0.85rem; height: 1.15rem;">
+                    <strong class="me-2">Error!</strong> Solo puedes ingresar una imagen jpg, png, bmp o jpeg.
+                </div>
+
             </div>
             <div class="col-1 my-auto">
                 <div class="d-flex">
-                    <button type="button" id="btnRemoveRow${i}" title="Eliminar línea de OCI" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" id="btnRemoveRow${i}" name="btnRemoveRow" title="Eliminar línea de OCI" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
                 </div>    
             </div>`
         )
@@ -85,12 +119,156 @@ btnAddNewRow.addEventListener('click', () => {
     const ociQty = document.getElementById("ociQuantity")
     ociQty.setAttribute('value', i + 1)
 
-    const buttons = document.querySelectorAll('button')
+    const buttons = document.querySelectorAll('button[name="btnRemoveRow"]') // Buttons to delete Oci Rows
     buttons.forEach((button) => {
         button.addEventListener("click", removeRow)
     })
+ 
+    var arrayDropAreas = []
+    var arrayBtnRemoveOciImage = []
+    var arrayAlertOci = []
+    var arrayImageOciFileName = []
+    var arrayFileInputNewOci = []
+    const totalOciQty = parseInt(document.getElementById("ociQuantity").value)
+    
+    for (let m=0; m<totalOciQty; m++) {
+        var dropAreasOciFile = document.getElementById(`drop-area-oci${m}`)
+        var btnRemoveOciImageFile = document.getElementById(`btnRemoveOciImage${m}`)
+        var alertOciFile = document.getElementById(`alertOci${m}`)
+        var fileInputNewOciTextFile = document.getElementById(`fileInputNewOciText${m}`)
+        var fileInputNewOciFile = document.getElementById(`fileInputNewOci${m}`)
+        
+        if (dropAreasOciFile) {
+            arrayDropAreas.push(dropAreasOciFile)
+        }
+        if (btnRemoveOciImageFile) {
+            arrayBtnRemoveOciImage.push(btnRemoveOciImageFile)
+        }
+        if (alertOciFile) {
+            arrayAlertOci.push(alertOciFile)
+        }
+        if (fileInputNewOciTextFile) {
+            arrayImageOciFileName.push(fileInputNewOciTextFile)
+        }
+        if (fileInputNewOciFile) {
+            arrayFileInputNewOci.push(fileInputNewOciFile)
+        }
+    }
+
+    arrayDropAreas.forEach(function(elemento) {
+        elemento.style.width = "250px"
+        elemento.style.height = "160px"
+        elemento.style.border = "2px dashed #ccc"
+        elemento.style.margin = "0 auto 0 25px"
+        elemento.style.borderRadius = "5px"
+        elemento.style.textAlign = "center"
+        elemento.style.lineHeight = "150px"
+
+        elemento.addEventListener('dragover', (e) => {
+            e.preventDefault()
+            elemento.style.border = '2px dashed #77d'
+            elemento.style.backgroundColor = '#7777dd10'
+        })
+
+        elemento.addEventListener('dragleave', (e) => {
+            e.preventDefault()
+            const number = parseInt(extractNumbers(e.target.id)-1)
+            elemento.style.border = '2px dashed #ccc'
+            elemento.style.backgroundColor = '#fff'
+            arrayBtnRemoveOciImage[number].style.display = 'none'
+        })
+
+        function alertNotImageNewOci(number) {
+            arrayAlertOci[number].style.display = 'flex'
+            arrayBtnRemoveOciImage[number].style.display = 'none'
+            arrayImageOciFileName[number].value = ''
+            elemento.style.border = "2px dashed #ccc"
+            elemento.style.textAlign = "center"
+            elemento.style.backgroundColor = '#fff'
+            elemento.style.display = 'block'
+            elemento.innerHTML = 'Arrastra y suelta una imagen aquí'
+        }
+    
+        elemento.addEventListener('drop', (e) => {
+            e.preventDefault()
+            elemento.style.border = '3px dashed #2d2'
+            elemento.style.backgroundColor = '#22dd2210'
+            const file = e.dataTransfer.files[0]
+            const number = parseInt(extractNumbers(elemento.id)-1)
+            
+            if (file && file.type.startsWith('image/')) {
+                arrayFileInputNewOci[number].files = e.dataTransfer.files
+                let pathToImage = '../../../src/images/upload/ociImages/'
+                arrayImageOciFileName[number].value = pathToImage + file.name
+                arrayBtnRemoveOciImage[number].style.display = 'flex'
+                arrayAlertOci[number].style.display = 'none'
+                handleFileUploadNewOci(file, number)
+            } else {
+                alertNotImageNewOci(number)
+            }     
+        })
+
+        elemento.addEventListener('click', (e) => {
+            const number = parseInt(extractNumbers(elemento.id)-1)
+            arrayFileInputNewOci[number].click()
+        })
+
+    })
+
+    arrayFileInputNewOci.forEach(function(elemento) {
+            elemento.addEventListener('change', (e) => {
+                e.preventDefault()
+                const file = elemento.files[0]
+                const number = parseInt(extractNumbers(elemento.id)-1)
+
+                    if (file && file.type.startsWith('image/')) { 
+                        let pathToImage = '../../../src/images/upload/projectImages/'
+                        arrayImageOciFileName[number].value = pathToImage + file.name
+                        arrayBtnRemoveOciImage[number].style.display = 'flex'
+                        arrayAlertOci[number].style.display = 'none'
+                        handleFileUploadNewOci(file, number)
+                    } else {
+                        alertNotImageNewOci(number)
+                    }     
+        })
+    })
+    
+    function handleFileUploadNewOci(file, number) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+                arrayDropAreas[number].innerHTML = 
+                    `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+                arrayAlertOci[number].style.display = 'none'
+            }
+
+        } else {
+            alertNotImageNewOci(number)
+        }
+    }
+
+    function removeOciImage(number) {            
+        arrayImageOciFileName[number].value = ''
+        arrayDropAreas[number].style.border = "2px dashed #ccc"
+        arrayDropAreas[number].style.textAlign = "center"
+        arrayDropAreas[number].style.backgroundColor = '#fff'
+        arrayDropAreas[number].style.display = 'block'
+        arrayDropAreas[number].innerHTML = 'Arrastra y suelta una imagen aquí'
+        arrayBtnRemoveOciImage[number].style.display = 'none'
+        arrayAlertOci[number].style.display = 'none'
+    }
+
+    arrayBtnRemoveOciImage.forEach(function(elemento) {
+        elemento.addEventListener("click", (e) => {
+            const number = parseInt(extractNumbers(elemento.id)-1)
+            removeOciImage(number)
+        })
+        
+    })
 })
 
+    
 //-------------------------- Remove OCI Row ----------------------------------
 function removeRow(e) {
 
@@ -132,6 +310,210 @@ function removeRow(e) {
 }
 
 // --------------- Create New Project ------------------------
+// ----------- Project Image behavior ---------------
+    const dropAreaProject = document.getElementById('drop-areaProject')
+    const fileInputProject = document.getElementById('fileInputProject')
+    const fileImputTextProject = document.getElementById('fileInputTextProject')
+    const removeImageButtonProject = document.getElementById('removeImageProject')
+    const alertProject = document.getElementById('alertProject')
+
+    dropAreaProject.style.width = "300px"
+    dropAreaProject.style.height = "200px"
+    dropAreaProject.style.border = "2px dashed #ccc"
+    dropAreaProject.style.margin = "0 auto 0 50px"
+    dropAreaProject.style.borderRadius = "5px"
+    dropAreaProject.style.textAlign = "center"
+    dropAreaProject.style.lineHeight = "200px"
+
+    dropAreaProject.addEventListener('dragover', (e) => {
+        e.preventDefault()
+        dropAreaProject.style.border = '2px dashed #77d'
+        dropAreaProject.style.backgroundColor = '#7777dd10'
+    })
+  
+    dropAreaProject.addEventListener('dragleave', (e) => {
+        e.preventDefault()
+        dropAreaProject.style.border = '2px dashed #ccc'
+        dropAreaProject.style.backgroundColor = '#666666'
+        removeImageButtonProject.style.display = 'none'
+    })
+
+    function alertNotImageProject() {
+        alertProject.style.display = 'flex'
+        removeImageButtonProject.style.display = 'none'
+        dropAreaProject.style.border = "2px dashed #ccc"
+        dropAreaProject.style.textAlign = "center"
+        dropAreaProject.style.backgroundColor = '#666666'
+        dropAreaProject.style.display = 'block'
+        dropAreaProject.innerHTML = 'Arrastra y suelta una imagen aquí'
+    }
+
+    dropAreaProject.addEventListener('drop', (e) => {
+        e.preventDefault()
+        dropAreaProject.style.border = '3px dashed #2d2'
+        dropAreaProject.style.backgroundColor = '#22dd2210'
+        const file = e.dataTransfer.files[0]
+
+        if (file && file.type.startsWith('image/')) {
+            fileInputProject.files = e.dataTransfer.files
+            let pathToImage = '../../../src/images/upload/projectImages/'
+            fileImputTextProject.value = pathToImage + file.name
+            removeImageButtonProject.style.display = 'flex'
+            alertProject.style.display = 'none'
+            handleFileUploadProject(file)
+        } else {
+            alertNotImageProject()
+        }     
+    })
+
+    dropAreaProject.addEventListener('click', () => {
+        fileInputProject.click()
+    })
+
+    fileInputProject.addEventListener('change', (e) => {
+        e.preventDefault()
+        const file = fileInputProject.files[0]
+        
+        if (file && file.type.startsWith('image/')) { 
+            let pathToImage = '../../../src/images/upload/projectImages/'
+            fileImputTextProject.value = pathToImage + file.name
+            removeImageButtonProject.style.display = 'flex'
+            alertProject.style.display = 'none'
+            handleFileUploadProject(file)
+        } else {
+            alertNotImagProjecte()
+        }     
+    })
+
+    function handleFileUploadProject(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+                dropAreaProject.innerHTML = 
+                    `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+                alertProject.style.display = 'none'
+            }
+
+        } else {
+            alertNotImageProject()
+        }
+    }
+
+    removeImageButtonProject.addEventListener('click', ()=> {
+        fileImputTextProject.value = ''
+        dropAreaProject.style.border = "2px dashed #ccc"
+        dropAreaProject.style.textAlign = "center"
+        dropAreaProject.style.backgroundColor = '#666666'
+        dropAreaProject.style.display = 'block'
+        dropAreaProject.innerHTML = 'Arrastra y suelta una imagen aquí'
+        removeImageButtonProject.style.display = 'none'
+        alertProject.style.display = 'none'
+    })
+
+
+    // ----------- Oci Image behavior ---------------
+    const dropAreaOci = document.getElementById('drop-area-oci')
+    const fileInputNewOci = document.getElementById('fileInputNewOci')
+    const fileInputNewOciText = document.getElementById('fileInputNewOciText')
+    const btnRemoveOciImage = document.getElementById('btnRemoveOciImage')
+    const alertOci = document.getElementById('alertOci')
+
+    dropAreaOci.style.width = "250px"
+    dropAreaOci.style.height = "160px"
+    dropAreaOci.style.border = "2px dashed #ccc"
+    dropAreaOci.style.margin = "0 auto 0 25px"
+    dropAreaOci.style.borderRadius = "5px"
+    dropAreaOci.style.textAlign = "center"
+    dropAreaOci.style.lineHeight = "150px"
+
+    dropAreaOci.addEventListener('dragover', (e) => {
+        e.preventDefault()
+        dropAreaOci.style.border = '2px dashed #77d'
+        dropAreaOci.style.backgroundColor = '#7777dd10'
+    })
+  
+    dropAreaOci.addEventListener('dragleave', (e) => {
+        e.preventDefault()
+        dropAreaOci.style.border = '2px dashed #ccc'
+        dropAreaOci.style.backgroundColor = '#fff'
+        btnRemoveOciImage.style.display = 'none'
+    })
+
+    function alertNotImageNewOci() {
+        alertOci.style.display = 'flex'
+        btnRemoveOciImage.style.display = 'none'
+        fileInputNewOciText.value = ''
+        dropAreaOci.style.border = "2px dashed #ccc"
+        dropAreaOci.style.textAlign = "center"
+        dropAreaOci.style.backgroundColor = '#fff'
+        dropAreaOci.style.display = 'block'
+        dropAreaOci.innerHTML = 'Arrastra y suelta una imagen aquí'
+    }
+
+    dropAreaOci.addEventListener('drop', (e) => {
+        e.preventDefault()
+        dropAreaOci.style.border = '3px dashed #2d2'
+        dropAreaOci.style.backgroundColor = '#22dd2210'
+        const file = e.dataTransfer.files[0]
+
+        if (file && file.type.startsWith('image/')) {
+            fileInputNewOci.files = e.dataTransfer.files
+            let pathToImage = '../../../src/images/upload/projectImages/'
+            fileInputNewOciText.value = pathToImage + file.name
+            btnRemoveOciImage.style.display = 'flex'
+            alertOci.style.display = 'none'
+            handleFileUploadNewOci(file)
+        } else {
+            alertNotImageNewOci()
+        }     
+    })
+
+    dropAreaOci.addEventListener('click', () => {
+        fileInputNewOci.click()
+    })
+
+    fileInputNewOci.addEventListener('change', (e) => {
+        e.preventDefault()
+        const file = fileInputNewOci.files[0]
+        
+        if (file && file.type.startsWith('image/')) { 
+            let pathToImage = '../../../src/images/upload/projectImages/'
+            fileInputNewOciText.value = pathToImage + file.name
+            btnRemoveOciImage.style.display = 'flex'
+            alertOci.style.display = 'none'
+            handleFileUploadNewOci(file)
+        } else {
+            alertNotImageNewOci()
+        }     
+    })
+
+    function handleFileUploadNewOci(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+                dropAreaOci.innerHTML = 
+                    `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+                alertOci.style.display = 'none'
+            }
+
+        } else {
+            alertNotImageNewOci()
+        }
+    }
+
+    btnRemoveOciImage.addEventListener('click', ()=> {
+        fileInputNewOciText.value = ''
+        dropAreaOci.style.border = "2px dashed #ccc"
+        dropAreaOci.style.textAlign = "center"
+        dropAreaOci.style.backgroundColor = '#fff'
+        dropAreaOci.style.display = 'block'
+        dropAreaOci.innerHTML = 'Arrastra y suelta una imagen aquí'
+        btnRemoveOciImage.style.display = 'none'
+        alertOci.style.display = 'none'
+    })
+
 function messageNewProject(projectName, ociQuantity) {
 
     const Toast = Swal.mixin({
@@ -473,6 +855,11 @@ function messageUpdateOci(
     let checked = 'checked'
     statusOci=='true' ? checked : checked = ''
 
+    let bgColorStatus
+    statusOci=='true' ? bgColorStatus='background-color: #55dd5560;'
+                        : 
+                        bgColorStatus='background-color: #dd555560;'
+
     const Toast = Swal.mixin({
         toast: true,
         position: 'bottom',
@@ -481,7 +868,7 @@ function messageUpdateOci(
         timerProgressBar: false,
     })
 
-    var html = `<form id="formUpdateOci${k}" action="/api/proyectos/updateOci/${projectId}" method="post">
+    var html = `<form id="formUpdateOci${k}" enctype="multipart/form-data" action="/api/proyectos/updateOci/${projectId}" method="post">
                     <fieldset>
                         <div class="row justify-content-evenly mb-3 mx-1 px-1">
                             <div class="col-6">
@@ -490,8 +877,8 @@ function messageUpdateOci(
                                     placeholder="Número OCI" value="${numberOci}" required>
                             </div>
                             
-                            <div class="col-6" style="background-color: #ddd;">
-                                <label for="statusOci" class="form-label d-flex justify-content-start ms-1">Status OCI</label><br>
+                            <div class="col-6" style="${bgColorStatus}">
+                                <label for="statusOci" class="form-label d-flex justify-content-start ms-1">Status OCI</label>
                                 <div>
                                     <p class="d-inline-block me-1">Inactiva</p>
                                     <div class="form-check form-switch d-inline-block mt-2">
@@ -504,26 +891,39 @@ function messageUpdateOci(
                         </div>    
                         
                         <div class="row mb-3 mx-1 px-1">
-                            <div class="col-10">
+                            <div class="col">
                                 <label for="descriptionOci" class="form-label d-flex justify-content-start ms-1">Descripción OCI</label>
                                 <input type="text" name="descriptionOci" class="form-control"
                                     placeholder="Descripción OCI" value="${descriptionOci}" required>
                             </div>                            
                         </div> 
 
-                        <div class="row justify-content-evenly mb-3 mx-1 px-1">
-                            <div class="col-12">
-                                <label for="imageOci" class="form-label d-flex justify-content-start ms-1">URL Imagen OCI</label>
-                                <input type="text" name="imageOci" class="form-control mb-2"
-                                    placeholder="Imagen OCI url" value="${imageOci}" required>
-                                <div class="badge sm-badge bg-warning text-dark mt-2 ms-1">
-                                    <a href="${imageOci}" target="blank" class="alert-link">${imageOci}</a>
+                        <div class="row justify-content-start align-items-center mb-1 mx-1 px-1">
+                            <div class="col mb-1">
+                                <label for="imageOci" class="form-label d-flex justify-content-start ms-1">Seleccione una imagen para la OCI</label>
+                                    
+                                <input type="text" id="fileInputTextUpdate" name="imageOciFileName"
+                                    value="${imageOci}" style="display: none;" required>
+                                <input type="file" id="fileInputUpdate" name="imageOci"
+                                    value="" accept="image/*" style="display: none;" required>
+                            
+                                <div id="drop-areaUpdate" class="mb-2 mx-auto">
+                                    Arrastra y suelta una imagen aquí
+                                </div>
+                                <button title="Eliminar Imagen" class="btn btn-danger rounded-circle mx-auto"
+                                        id="removeImageUpdate" style="display: none;">
+                                        <i class="fa-solid fa-xmark"></i>
+                                </button>
+                                
+                                <div id="alertUpdate" class="alert alert-warning align-items-center" role="alert" style="display: none; font-size: 0.95rem; height: 1.15rem;"">
+                                    <strong class="me-2">Error!</strong> Solo puedes ingresar una imagen jpg, png, bmp o jpeg.
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="row justify-content-evenly mb-3 px-1 mx-auto">
+                        <div class="row justify-content-evenly mb-1 px-1 mx-auto">
                             <div class="col-12 my-1 mx-auto px-1">
+                            <label class="form-label d-flex justify-content-start ms-1">Imagen actual de la OCI# ${numberOci}</label>
                                 <img src="${imageOci}" class="img-fluid rounded px-1"
                                     alt="Imagen OCI" width="115px">
                             </div>
@@ -572,7 +972,107 @@ function messageUpdateOci(
             showConfirmButton: false,
         })
     }
+
+    const dropAreaUpdate = document.getElementById('drop-areaUpdate')
+    const fileInputUpdate = document.getElementById('fileInputUpdate')
+    const fileImputTextUpdate = document.getElementById('fileInputTextUpdate')
+    const removeImageButtonUpdate = document.getElementById('removeImageUpdate')
+    const alertUpdate = document.getElementById('alertUpdate')
+
+    dropAreaUpdate.style.width = "300px"
+    dropAreaUpdate.style.height = "200px"
+    dropAreaUpdate.style.border = "2px dashed #ccc"
+    dropAreaUpdate.style.margin = "0 auto 0 50px"
+    dropAreaUpdate.style.borderRadius = "5px"
+    dropAreaUpdate.style.textAlign = "center"
+    dropAreaUpdate.style.lineHeight = "200px"
+
+    dropAreaUpdate.addEventListener('dragover', (e) => {
+        e.preventDefault()
+        dropAreaUpdate.style.border = '2px dashed #77a'
+        dropAreaUpdate.style.backgroundColor = '#7777aa10'
+    })
+  
+    dropAreaUpdate.addEventListener('dragleave', (e) => {
+        e.preventDefault()
+        dropAreaUpdate.style.border = '2px dashed #ccc'
+        dropAreaUpdate.style.backgroundColor = '#fff'
+        removeImageButtonUpdate.style.display = 'none'
+    })
+
+    function alertNotImageUpdate() {
+        alertUpdate.style.display = 'flex'
+        removeImageButtonUpdate.style.display = 'none'
+        dropAreaUpdate.style.border = "2px dashed #ccc"
+        dropAreaUpdate.style.textAlign = "center"
+        dropAreaUpdate.style.backgroundColor = '#fff'
+        dropAreaUpdate.style.display = 'block'
+        dropAreaUpdate.innerHTML = 'Arrastra y suelta una imagen aquí'
+    }
     
+    dropAreaUpdate.addEventListener('drop', (e) => {
+        e.preventDefault()
+        dropAreaUpdate.style.border = '3px dashed #2a2'
+        dropAreaUpdate.style.backgroundColor = '#22aa2210'
+        const file = e.dataTransfer.files[0]
+
+        if (file && file.type.startsWith('image/')) {
+            fileInputUpdate.files = e.dataTransfer.files
+            let pathToImage = '../../../src/images/upload/ociImages/'
+            fileImputText.value = pathToImage + file.name
+            removeImageButtonUpdate.style.display = 'flex'
+            alertUpdate.style.display = 'none'
+            handleFileUploadUpdate(file)
+        } else {
+            alertNotImageUpdate()
+        }     
+    })
+
+    dropAreaUpdate.addEventListener('click', () => {
+        fileInputUpdate.click()
+    })
+
+    fileInputUpdate.addEventListener('change', (e) => {
+        e.preventDefault()
+        const file = fileInputUpdate.files[0]
+        
+        if (file && file.type.startsWith('image/')) { 
+            let pathToImage = '../../../src/images/upload/ociImages/'
+            fileImputTextUpdate.value = pathToImage + file.name
+            removeImageButtonUpdate.style.display = 'flex'
+            alertUpdate.style.display = 'none'
+            handleFileUploadUpdate(file)
+        } else {
+            alertNotImageUpdate()
+        }     
+    })
+
+    function handleFileUploadUpdate(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+                dropAreaUpdate.innerHTML = 
+                    `<img class="p-2" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+                dropAreaUpdate.style.display = 'block'
+                alertUpdate.style.display = 'none'
+            }
+
+        } else {
+            alertNotImageUpdate()
+        }
+    }
+
+    removeImageButtonUpdate.addEventListener('click', ()=> {
+        fileImputTextUpdate.value = ''
+        dropAreaUpdate.style.border = "2px dashed #ccc"
+        dropAreaUpdate.style.textAlign = "center"
+        dropAreaUpdate.style.backgroundColor = '#fff'
+        dropAreaUpdate.style.display = 'block'
+        dropAreaUpdate.innerHTML = 'Arrastra y suelta una imagen aquí'
+        removeImageButtonUpdate.style.display = 'none'
+        alertUpdate.style.display = 'none'
+    })
 }
 
 const maxOciQuantity = parseInt(document.getElementsByName('ociQuantityHidden').length)
@@ -661,7 +1161,7 @@ function addNewOciToProject(i, projectName, lastOciNumber, projectIdHidden) {
         `)
     
     const html = `
-            <form id="formNewOciValues" action="/api/proyectos/addNewOciToProject/${projectIdHidden}" method="post" style="font-size: 10pt">
+            <form id="formNewOciValues" enctype="multipart/form-data" action="/api/proyectos/addNewOciToProject/${projectIdHidden}" method="post" style="font-size: 10pt">
                 <fieldset id="ociNewItemRow">
                     <div class="row my-auto mx-3">
                         <div class="col-2 my-auto align-self-middle">
@@ -944,7 +1444,7 @@ function messageUpdateProject(
                             </div>
                             
                             <div class="col-6" style="${bgColorStatus}">
-                                <label for="statusProject" class="form-label d-flex justify-content-start ms-1">Status Proyecto</label><br>
+                                <label for="statusProject" class="form-label d-flex justify-content-start ms-1">Status Proyecto</label>
                                 <div>
                                     <p class="d-inline-block me-1">Inactivo</p>
                                     <div class="form-check form-switch d-inline-block mt-2">
@@ -1002,13 +1502,14 @@ function messageUpdateProject(
                                         <i class="fa-solid fa-xmark"></i>
                                 </button>
                                 
-                                <div id="alert" class="alert alert-warning" role="alert" style="display: none;">
+                                <div id="alert" class="alert alert-warning align-items-center" role="alert"
+                                    style="display: none; font-size: 0.95rem; height: 1.15rem;">
                                     <strong class="me-2">Error!</strong> Solo puedes ingresar una imagen jpg, png, bmp o jpeg.
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="row justify-content-evenly mb-2 px-1 mx-auto">
+                        <div class="row justify-content-evenly mb-1 px-1 mx-auto">
                             <div class="col-12 my-1 mx-auto px-1">
                                 <label class="form-label d-flex justify-content-start ms-1">Imagen actual del Proyecto</label>
                                 <img src="${imgProject}" class="img-fluid rounded px-1"
@@ -1150,7 +1651,6 @@ function messageUpdateProject(
     }
 
     removeImageButton.addEventListener('click', ()=> {
-        // fileInput.value = ''
         fileImputText.value = ''
         dropArea.style.border = "2px dashed #ccc"
         dropArea.style.textAlign = "center"
@@ -1170,7 +1670,7 @@ for (let k=0; k<projectQuantity; k++) {
     if(btnUpdateProject) {
         arrayBtnUpdateProject.push(btnUpdateProject)
     }
-
+    console.log('kkk: ',k)
     arrayBtnUpdateProject[k].addEventListener('click', (event) => {
         event.preventDefault()
         const projectName = document.getElementById(`projectNameHidden${k}_${x}`).value
