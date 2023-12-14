@@ -2,8 +2,11 @@ const ClientsService = require("../services/clients.service.js")
 const UserService = require("../services/users.service.js")
 const ProjectsService = require("../services/projects.service.js")
 
+const multer = require('multer')
+// const path = require('path')
+
 let now = require('../utils/formatDate.js')
-const fs = require('fs');
+let imageNotFound = "../../../src/images/upload/LogoClientImages/noImageFound.png"
 
 class ClientsController {
     constructor() {
@@ -138,108 +141,161 @@ class ClientsController {
     }
 
     createNewClient = async (req, res) => {
-        const userId = req.body.idHidden
+        //------ Storage Project Image in folder projectImages/ --------
+        const storage = multer.diskStorage({
+            destination: function(req, file, cb) {  
+                cb(null, './public/src/images/upload/LogoClientImages/') // Path de acceso a carpeta donde se guardan las Imagenes
+            },                                      
+            filename: function(req, file, cb) {
+              cb(null, file.originalname ) //+ path.extname(file.originalname)) //originalname
+            }
+        })
+                
+        const upload = multer({
+            storage: storage
+        }).single('imageLogoClient')
+
+        upload(req, res, async (err) => {
+            let username = res.locals.username
+            const userInfo = res.locals.userInfo
+            const userId = userInfo.id
+            const userCreator = await this.users.getUserById(userId)
+            
+            const user = [{
+                name: userCreator.name,
+                lastName: userCreator.lastName,
+                username: userCreator.username,
+                email: userCreator.email
+            }]
+
+            const modificator = [{
+                name: "",
+                lastName: "",
+                username: "",
+                email: ""
+            }]
+
+            const cookie = req.session.cookie
+            const time = cookie.expires
+            const expires = new Date(time)
+
+            const newCliente = {
+                creator: user,
+                name: req.body.name,
+                status: req.body.statusClient === 'on' ? Boolean(true) : Boolean(false) || Boolean(true),
+                code: req.body.code,
+                project: 0,
+                logo: req.body.imageTextLogoClient || imageNotFound,
+                timestamp: now,
+                modificator: modificator,
+                modifiedOn: '',
+                visible: true
+            }
+            
+            if (err) {
+                const error = new Error('No se agregó ningún archivo')
+                error.httpStatusCode = 400
+                return error
+            }
+
+            try {
+                const cliente = await this.clients.addClient(newCliente)
+
+                if (!cliente) return res.status(404).json({ Msg: 'Cliente no guardado' })
+                res.render('addNewClients', {
+                    cliente,
+                    username,
+                    userInfo,
+                    expires
+                })
+            } catch (error) {
+                res.status(500).json({
+                    status: false,
+                    msg: 'controllerError - createNewClient',
+                    error: error
+                })
+            }
+        })
+    }
+
+    updateClient = async (req, res) => {
+        const id = req.params.id
+        
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        const userId = userInfo.id
         const userCreator = await this.users.getUserById(userId)
         
-        const user = [{
+        const userModificator = [{
             name: userCreator.name,
             lastName: userCreator.lastName,
             username: userCreator.username,
             email: userCreator.email
         }]
 
-        const modificator = [{
-            name: "",
-            lastName: "",
-            username: "",
-            email: ""
-        }]
-
-        const newCliente = {
-            creator: user,
-            name: req.body.name,
-            status: Boolean(true),
-            code: req.body.code,
-            project: 0,
-            logo: req.body.inputFileUrl,
-            timestamp: now,
-            modificator: modificator,
-            modifiedOn: '',
-            visible: true
-        }
-
-        const cliente = await this.clients.addClient(newCliente)
-
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
-
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
-
-        try {
-            if (!cliente) return res.status(404).json({ Msg: 'Cliente no guardado' })
-            res.render('addNewClients', {
-                cliente,
-                username,
-                userInfo,
-                expires
-            })
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                msg: 'controllerError - createNewClient',
-                error: error
-            })
-        }
-    }
-
-    updateClient = async (req, res) => {
-        const id = req.params.id
-        const proyectosQty = await this.projects.getProjectsByClientId(id)
-        const creador = await this.clients.getClientById(id)
-
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
+       
+        //------ Storage Project Image in folder projectImages/ --------
+        const storage = multer.diskStorage({
+            destination: function(req, file, cb) {  
+                cb(null, './public/src/images/upload/LogoClientImages/') // Path de acceso a carpeta donde se guardan las Imagenes
+            },                                      
+            filename: function(req, file, cb) {
+              cb(null, file.originalname ) //+ path.extname(file.originalname)) //originalname
+            }
+        })
                 
-        const modificator = [{
-            name: userInfo.name,
-            lastName: userInfo.lastName,
-            username: userInfo.username,
-            email: userInfo.email
-        }]
+        const upload = multer({
+            storage: storage
+        }).single('imageLogoUpdate')
 
-        const updatedCliente = {
-            creator: creador.creator,
-            name: req.body.name,
-            status: req.body.status === 'true' ? Boolean(true): Boolean(false),
-            code: req.body.code,
-            project: proyectosQty.length,
-            logo: req.body.logo,
-            timestamp: creador.timestamp,
-            modificator: modificator,
-            modifiedOn: now
-        }
+        upload(req, res, async (err) => {
+                        
+            const updatedCliente = {
+                name: req.body.name,
+                status: req.body.statusClient === 'on' ? true : false,
+                code: req.body.code,
+                logo: req.body.imageTextLogoUpdate,
+                modificator: userModificator,
+                modifiedOn: now
+            }
+            
+            if (err) {
+                const error = new Error('No se agregó ningún archivo')
+                error.httpStatusCode = 400
+                return error
+            }
 
-        const cookie = req.session.cookie
-        const time = cookie.expires
-        const expires = new Date(time)
-
-        try {
-            const clientUpdated = this.clients.updateClient(id, updatedCliente, modificator)
-            res.render('addNewClients', {
-                clientUpdated,
-                username,
-                userInfo,
-                expires
-            })
-
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                error: error
-            })
-        }
+            try {
+                const cliente = await this.clients.getClientById(id)
+                
+                if (cliente) {
+                    const clientUpdated = this.clients.updateClient(
+                        id, 
+                        updatedCliente, 
+                        userModificator
+                    )
+                    res.render('addNewClients', {
+                        clientUpdated,
+                        username,
+                        userInfo,
+                        expires
+                    })
+                                    
+                } else {
+                    return res.status(404).json({ Msg: `Cliente no existe con este Id: ${id}`})
+                }  
+                
+    
+            } catch (error) {
+                res.status(500).json({
+                    status: false,
+                    error: error
+                })
+            }
+        })       
     }
 
     updateClientProjectsQty = async (req, res) => {
@@ -360,7 +416,7 @@ class ClientsController {
 
         try {
             // const cliente = 
-            await this.clients.reduceClientProjectsQty(
+            await this.clients.reduceClientProjectQty(
                 id, 
                 clientToUpdateProjectQty,
                 modifier

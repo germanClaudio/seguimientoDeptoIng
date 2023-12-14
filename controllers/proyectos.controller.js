@@ -3,10 +3,10 @@ const ClientesService = require("../services/clients.service.js")
 const UserService = require("../services/users.service.js")
 
 const multer = require('multer')
-const path = require('path')
+// const path = require('path')
 
 let now = require('../utils/formatDate.js')
-let imageNotFound = "https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png"
+let imageNotFound = "./public/src/images/upload/LogoClientImages/noImageFound.png"
 
 
 class ProjectsController {
@@ -145,7 +145,7 @@ class ProjectsController {
     createNewProject = async (req, res) => {
         
         //------ Storage Project Image in folder projectImages/ --------
-        const storageImageProject = multer.diskStorage({
+        const storage = multer.diskStorage({
             destination: function(req, file, cb) {  
                 cb(null, './public/src/images/upload/projectImages/') // Path de acceso a carpeta donde se guardan las Imagenes
             },                                     
@@ -154,23 +154,12 @@ class ProjectsController {
             }
         })
         
-        const storageImageOci = multer.diskStorage({
-            destination: function(req, file, cb) {  
-                cb(null, './public/src/images/upload/ociImages/') // Path de acceso a carpeta donde se guardan las Imagenes
-            },                                     
-            filename: function(req, file, cb) {
-                cb(null, file.originalname) //+ path.extname(file.originalname)) //originalname
-            }
-        })
-
         const uploadImageOci = multer({
-            storage: storageImageOci,
-            storage: storageImageProject
+            storage: storage
         }).any()
         
         uploadImageOci(req, res, async (err) => {
-            console.log('files: ', req.files)
-
+            // console.log('files: ', req.files)
             const clientId = req.body.clientIdHidden
             const clienteSeleccionado = await this.clients.selectClientById(clientId)
 
@@ -192,16 +181,6 @@ class ProjectsController {
                 username: "",
                 email: ""
             }]
-
-        // })
-        
-        // const upload = multer({
-        //     storage: storageImageProject
-        // }).single('imageProject')
-        
-
-        // upload(req, res, async (err) => {
-           
 
             let arrayOciNumber=[],
             arrayOciDescription=[],
@@ -246,7 +225,7 @@ class ProjectsController {
                 codeProject: req.body.codeProject,
                 projectDescription: req.body.projectDescription,
                 prioProject: req.body.prioProject,
-                imageProject: req.body.imageProject,
+                imageProject: req.body.imageProject || imageNotFound,
                 visible: true,
                 creator: user,
                 timestamp: now,
@@ -304,40 +283,6 @@ class ProjectsController {
                 })
             }
         })
-        //------------------------------------
-        
-        // const proyectos = await this.projects.getProjectsByClientId(clientId)
-
-        // let username = res.locals.username
-        // let userInfo = res.locals.userInfo
-
-        // const cookie = req.session.cookie
-        // const time = cookie.expires
-        // const expires = new Date(time)
-
-        // const cliente = await this.clients.updateClientProjectQty(
-        //     clientId, 
-        //     clienteSeleccionado, 
-        //     user
-        // )
-
-        // try {
-        //     if (!proyectos) return res.status(404).json({ Msg: 'Proyecto no guardado' })
-        //     res.render('clientProjectsDetails', {
-        //         username,
-        //         userInfo,
-        //         expires,
-        //         cliente,
-        //         proyectos
-        //     })
-
-        // } catch (error) {
-        //     res.status(500).json({
-        //         status: false,
-        //         msg: 'controllerError - createNewProyects',
-        //         error: error
-        //     })
-        // }
     }
 
     addOtToOciProject = async (req, res) => {
@@ -953,10 +898,10 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
         
-        //------ Storage OCI Image in folder ociImages/ --------
+        //------ Storage OCI Image in folder projectImages/ --------
         const storage = multer.diskStorage({
             destination: function(req, file, cb) {  
-                cb(null, './public/src/images/upload/ociImages/') // Path de acceso a carpeta donde se guardan las Imagenes
+                cb(null, './public/src/images/upload/projectImages/') // Path de acceso a carpeta donde se guardan las Imagenes
             },                                      
             filename: function(req, file, cb) {
               cb(null, file.originalname ) //+ path.extname(file.originalname)) //originalname

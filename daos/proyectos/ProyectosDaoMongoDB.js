@@ -633,7 +633,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                     }
                     
                 } else {
-                    return new Error(`Proyecto no existe con este id: ${id}!`)
+                    return new Error(`Proyecto no existe con este id: ${itemUpdated._id}`)
                 }
 
             } catch (error) {

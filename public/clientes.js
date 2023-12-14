@@ -1,63 +1,40 @@
 const socket = io.connect()
 
+function extractNumbers(str) {
+    const numbers = str.match(/\d{1,2}/g); // Extract 1 or 2 digit numbers from the string
+    
+    if (numbers) {
+        if (numbers.length === 2) {
+            // If two numbers are found, check if both are numbers
+            if (!isNaN(parseInt(numbers[0])) && !isNaN(parseInt(numbers[1]))) {
+                return numbers; // Return both numbers as an array
+            }
+        } else if (numbers.length === 1) {
+            // If only one number is found, check if it's a number
+            if (!isNaN(parseInt(numbers[0]))) {
+                return numbers[0]; // Return the single number
+            }
+        }
+    }
+    return null // Return null if no valid numbers are found
+}
+
+//-------------------------------------------
 const inputName = document.getElementById('name')
 function mostrarNombre() {
     const titleNewClient = document.getElementById('titleNewClient')
     titleNewClient.innerText = 'Nuevo Cliente: '+ inputName.value
-  }
-
-  if(inputName) {
-      inputName.addEventListener('keyup', () => {
-          mostrarNombre()    
-      })
-      
-      inputName.addEventListener('blur', () => {
-          mostrarNombre()    
-      })
-  }
-
-
-// Obtener el elemento de input file
-const inputFile = document.getElementById('inputFile')
-
-// Escuchar cambios en el input file
-if (inputFile) {
-    inputFile.addEventListener('change', function() {
-      
-        // Verificar si se seleccionó un archivo
-      if (this.files && this.files[0]) {
-          // Crear un objeto FileReader
-          const reader = new FileReader()
-          
-          // Cuando la lectura del archivo esté lista
-          reader.onload = function(e) {
-                
-            const imageURL = e.target.result // Obtener la URL de la imagen
-            const imagePreview = document.getElementById('imagePreview')
-            
-            // Mostrar la imagen en la vista previa
-            imagePreview.src = imageURL
-            imagePreview.style.display = 'block'
-            
-            // Escribir ruta + nombre de archivo
-            const urlImagen = inputFile.value
-            
-            // Obtener el nombre de la imagen
-            let nombreImagen = urlImagen.substring(urlImagen.lastIndexOf('\\') + 1);
-    
-            const fullPathImage = `../src/images/output/image_${nombreImagen}`
-            
-            const inputFileUrl = document.getElementById('inputFileUrl')
-            inputFileUrl.value = fullPathImage
-    
-            const urlImagenLink = document.getElementById('urlImagen')
-            urlImagenLink.innerText = 'URL: '+ fullPathImage
-    
-        }
-        reader.readAsDataURL(this.files[0])
-      }
-    })
 }
+
+    if(inputName) {
+        inputName.addEventListener('keyup', () => {
+            mostrarNombre()    
+        })
+        
+        inputName.addEventListener('blur', () => {
+            mostrarNombre()    
+        })
+    }
 
 //-------------------------------------
 
@@ -142,8 +119,8 @@ const renderClientAdmin = (arrClient) => {
                     <td class="text-center">
                         <div class="d-block align-items-center">
                             <a href="#" class="btn btn-secondary btn-sm me-1 disabled" data-toggle="tooltip" data-placement="top" title="To Be Done"><i class="fa fa-eye"></i></a>
-                            <a href="/api/clientes/${element._id}" class="btn btn-primary btn-sm mx-1"><i class="fa fa-pencil"></i></a>
-                            <a href="/api/clientes/delete/${element._id}" class="btn btn-danger btn-sm mx-1"><i class="fa fa-trash"></i></a>
+                            <a href="/api/clientes/${element._id}" class="btn btn-primary btn-sm mx-1" title="Ver proyectos cliente ${element.name}"><i class="fa-solid fa-diagram-project"></i></a>
+                            <a href="/api/clientes/delete/${element._id}" class="btn btn-danger btn-sm mx-1" title="Eliminar cliente ${element.name}"><i class="fa fa-trash"></i></a>
                         </div>
                     </td>
                 </tr>`)
@@ -211,3 +188,105 @@ const renderClientUser = (arrClient) => {
 
     document.getElementById('capClientList').innerHTML = htmlClientList
 }
+
+// --------------- Create New Client ------------------------
+// ----------- Logo Client Image behavior ---------------
+const dropAreaLogoClient = document.getElementById('drop-areaLogoClient')
+const fileInputLogoClient = document.getElementById('fileInputLogoClient')
+const fileImputTextLogoClient = document.getElementById('fileInputTextLogoClient')
+const removeImageButtonLogoClient = document.getElementById('removeImageLogoClient')
+const alertLogoClient = document.getElementById('alertLogoClient')
+
+dropAreaLogoClient.style.width = "300px"
+dropAreaLogoClient.style.height = "200px"
+dropAreaLogoClient.style.border = "2px dashed #ccc"
+dropAreaLogoClient.style.margin = "0 auto 0 50px"
+dropAreaLogoClient.style.borderRadius = "5px"
+dropAreaLogoClient.style.textAlign = "center"
+dropAreaLogoClient.style.lineHeight = "200px"
+
+dropAreaLogoClient.addEventListener('dragover', (e) => {
+    e.preventDefault()
+    dropAreaLogoClient.style.border = '2px dashed #77d'
+    dropAreaLogoClient.style.backgroundColor = '#7777dd10'
+})
+
+dropAreaLogoClient.addEventListener('dragleave', (e) => {
+    e.preventDefault()
+    dropAreaLogoClient.style.border = '2px dashed #ccc'
+    dropAreaLogoClient.style.backgroundColor = '#666666'
+    removeImageButtonLogoClient.style.display = 'none'
+})
+
+function alertNotImageLogoClient() {
+    alertLogoClient.style.display = 'flex'
+    removeImageButtonLogoClient.style.display = 'none'
+    dropAreaLogoClient.style.border = "2px dashed #ccc"
+    dropAreaLogoClient.style.textAlign = "center"
+    dropAreaLogoClient.style.backgroundColor = '#666666'
+    dropAreaLogoClient.style.display = 'block'
+    dropAreaLogoClient.innerHTML = 'Arrastra y suelta una imagen aquí'
+}
+
+dropAreaLogoClient.addEventListener('drop', (e) => {
+    e.preventDefault()
+    dropAreaLogoClient.style.border = '3px dashed #2d2'
+    dropAreaLogoClient.style.backgroundColor = '#22dd2210'
+    const file = e.dataTransfer.files[0]
+
+    if (file && file.type.startsWith('image/')) {
+        fileInputLogoClient.files = e.dataTransfer.files
+        let pathToImage = '../../../src/images/upload/LogoClientImages/'
+        fileImputTextLogoClient.value = pathToImage + file.name
+        removeImageButtonLogoClient.style.display = 'flex'
+        alertLogoClient.style.display = 'none'
+        handleFileUploadLogoClient(file)
+    } else {
+        alertNotImageLogoClient()
+    }     
+})
+
+dropAreaLogoClient.addEventListener('click', () => {
+    fileInputLogoClient.click()
+})
+
+fileInputLogoClient.addEventListener('change', (e) => {
+    e.preventDefault()
+    const file = fileInputLogoClient.files[0]
+    
+    if (file && file.type.startsWith('image/')) { 
+        let pathToImage = '../../../src/images/upload/LogoClientImages/'
+        fileImputTextLogoClient.value = pathToImage + file.name
+        removeImageButtonLogoClient.style.display = 'flex'
+        alertLogoClient.style.display = 'none'
+        handleFileUploadLogoClient(file)
+    } else {
+        alertNotImageLogoClient()
+    }     
+})
+
+function handleFileUploadLogoClient(file) {
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+            dropAreaLogoClient.innerHTML = 
+                `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+            alertLogoClient.style.display = 'none'
+        }
+
+    } else {
+        alertNotImageLogoClient()
+    }
+}
+
+removeImageButtonLogoClient.addEventListener('click', ()=> {
+    fileImputTextLogoClient.value = ''
+    dropAreaLogoClient.style.border = "2px dashed #ccc"
+    dropAreaLogoClient.style.textAlign = "center"
+    dropAreaLogoClient.style.backgroundColor = '#666666'
+    dropAreaLogoClient.style.display = 'block'
+    dropAreaLogoClient.innerHTML = 'Arrastra y suelta una imagen aquí'
+    removeImageButtonLogoClient.style.display = 'none'
+    alertLogoClient.style.display = 'none'
+})

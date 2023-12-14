@@ -25,11 +25,10 @@
                 <% if (parseInt(cliente.project) > 0 && cliente.status) { 
                     let ociCount=0 %>
                     <% for ( let m = 0;  proyectos.length > m; m++) {
-                        <!-- ver aca esta el problema 12/12/2023 17.37hs -->
+                        
                         if (proyectos[m].project[0].visible) { %>
                             <div class="accordion" id="accordionPanelsStayOpen<%=m %>">
-                                <% for ( let j = 0;  proyectos[m].project.length > j; j++) { %>
-                                    <% console.log('proyectos[m].project: ', proyectos[m]) %>
+                                <% for ( let j = 0;  proyectos[m].project.length > j; j++ ) { %>
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="panelsStayOpen-headingOneCard">
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -56,16 +55,15 @@
                                                     <div class="row">
                                                         <!-- -------------- seccion Foto Proyecto ---------------------- -->
                                                         <div class="col-2 my-auto px-1">
-                                                            <% console.log('jjjj: ', j) %>
-                                                            <img id="imageProject<%=j%>" src="<%= proyectos[m].project[j].imageProject %>"
+                                                            <img id="imageProject<%= m %>" src="<%= proyectos[m].project[j].imageProject %>"
                                                                     class="img-fluid rounded px-1" alt="Imagen Proyecto"
                                                                     width="175px">
                                                         </div>
                                                         <!-- -------------- seccion Proyecto ---------------------- -->
                                                         <div class="col-3 my-auto px-1">
-                                                            <ul id="projectDescription<%=j%>">Descripción: <%= proyectos[m].project[j].projectDescription %>
+                                                            <ul id="projectDescription<%=m%>">Descripción: <%= proyectos[m].project[j].projectDescription %>
                                                             </ul>
-                                                            <ul id="prioProject<%=j%>">Prio: <span class="badge bg-dark text-white mx-2"> <%= proyectos[m].project[j].prioProject %> </span>
+                                                            <ul id="prioProject<%=m%>">Prio: <span class="badge bg-dark text-white mx-2"> <%= proyectos[m].project[j].prioProject %> </span>
                                                             </ul>
                                                             <% if (proyectos[m].project[j].statusProject) {
                                                                 const status="Activo" %>
@@ -76,7 +74,7 @@
                                                                 <ul>Status: <span class="badge rounded-pill bg-danger text-white mx-2"> <%= status %> </span>
                                                                 </ul>
                                                             <% } %>
-                                                            <ul id="codeProject<%=j%>"><span class="badge bg-light text-dark mx-2"> <%= proyectos[m].project[j].codeProject %> </span>
+                                                            <ul id="codeProject<%=m%>"><span class="badge bg-light text-dark mx-2"> <%= proyectos[m].project[j].codeProject %> </span>
                                                             </ul>
                                                             
                                                             <div class="container px-1">

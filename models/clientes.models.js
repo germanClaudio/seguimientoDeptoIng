@@ -17,7 +17,7 @@ const ClientsSchema = new Schema({
     },
     logo: { 
         type: String,
-        maxlength: 900
+        maxlength: 1000
     },
     status:{
         type: Boolean,

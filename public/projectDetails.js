@@ -381,7 +381,7 @@ function removeRow(e) {
             alertProject.style.display = 'none'
             handleFileUploadProject(file)
         } else {
-            alertNotImagProjecte()
+            alertNotImageProject()
         }     
     })
 
@@ -1018,8 +1018,8 @@ function messageUpdateOci(
 
         if (file && file.type.startsWith('image/')) {
             fileInputUpdate.files = e.dataTransfer.files
-            let pathToImage = '../../../src/images/upload/ociImages/'
-            fileImputText.value = pathToImage + file.name
+            let pathToImage = '../../../src/images/upload/projectImages/'
+            fileImputTextUpdate.value = pathToImage + file.name
             removeImageButtonUpdate.style.display = 'flex'
             alertUpdate.style.display = 'none'
             handleFileUploadUpdate(file)
@@ -1037,7 +1037,7 @@ function messageUpdateOci(
         const file = fileInputUpdate.files[0]
         
         if (file && file.type.startsWith('image/')) { 
-            let pathToImage = '../../../src/images/upload/ociImages/'
+            let pathToImage = '../../../src/images/upload/projectImages/'
             fileImputTextUpdate.value = pathToImage + file.name
             removeImageButtonUpdate.style.display = 'flex'
             alertUpdate.style.display = 'none'
@@ -1670,17 +1670,17 @@ for (let k=0; k<projectQuantity; k++) {
     if(btnUpdateProject) {
         arrayBtnUpdateProject.push(btnUpdateProject)
     }
-    console.log('kkk: ',k)
+    
     arrayBtnUpdateProject[k].addEventListener('click', (event) => {
         event.preventDefault()
-        const projectName = document.getElementById(`projectNameHidden${k}_${x}`).value
-        const levelProject = document.getElementById(`levelProjectHidden${k}_${x}`).value
-        const idProject = document.getElementById(`projectIdHidden${k}_${x}`).value
-        const statusProject = document.getElementById(`statusProjectHidden${k}_${x}`).value
-        const imgProject = document.getElementById(`imageProject${k}`).src
+        const projectName = document.getElementById(`projectNameHidden${k}_${l}`).value
+        const levelProject = document.getElementById(`levelProjectHidden${k}_${l}`).value
+        const idProject = document.getElementById(`projectIdHidden${k}_${l}`).value
+        const statusProject = document.getElementById(`statusProjectHidden${k}_${l}`).value
         const descriptionProject = document.getElementById(`projectDescription${k}`).innerText
         const prioProject = document.getElementById(`prioProject${k}`).innerText
         const codeProject = document.getElementById(`codeProject${k}`).innerText
+        const imgProject = document.getElementById(`imageProject${k}`).src
         
         messageUpdateProject(
             idProject,

@@ -152,39 +152,55 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    async updateClient(id, client, user) {
-        const itemMongoDB = await Clientes.findById({_id: id})
-            if (itemMongoDB) {
-                try {
-                    const newValues = {
-                        name: client.name,
-                        code: client.code,
-                        logo: client.logo,
-                        status: client.status,
-                        project: client.project,
-                        creator: client.creator,
-                        timestamp: client.timestamp,
-                        modificator: user,
-                        modifiedOn: now
+    // Update Client Data by Client Id
+    async updateClient(id, client, userModificator) {
+        
+        if (client) {
+            try {
+                const itemMongoDB = await Clientes.findById({_id: id})
+                client.logo ? client.logo : itemMongoDB.logo
+                
+                if(itemMongoDB) {
+                    var updatedClient = await Clientes.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                name: client.name,
+                                status: client.status,
+                                logo: client.logo,
+                                code: client.code,
+                                modificator: userModificator,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
+                    
+                    if(updatedClient.acknowledged) {
+                        const itemUpdated = await Clientes.findById({ _id: id })
+                        return itemUpdated
+
+                    } else {
+                        return new Error(`No se actualizó el item: ${itemUpdated._id}`)
                     }
 
-                    const clientUpdated = await Clientes.findOneAndUpdate(
-                        { _id: id }, newValues , { new: true })
-                    logger.info('Cliente actualizado ', clientUpdated)
-                    return clientUpdated
-                
-                } catch (error) {
-                    logger.error("Error MongoDB updateClient: ",error)
-                    return new Error (`No se pudo actualizar el Cliente!`)
+                } else {
+                    return new Error(`Cliente no existe con este id: ${itemUpdated._id}`)
                 }
-            } else {
-                logger.info('El Cliente no existe! ', itemMongoDB)
+                                    
+            } catch (error) {
+                logger.error("Error MongoDB updateClient: ",error)
                 return new Error (`No se pudo actualizar el Cliente!`)
             }
+
+        } else {
+            logger.info('El Cliente no existe! ', itemMongoDB)
+            return new Error (`No se pudo actualizar el Cliente!`)
+        }
     }
 
     async updateClientProjectsQty(id, clienteSelected, user){
-        const clientMongoDB = await Clientes.findById({_id: id})
+        const clientMongoDB = await clientes.findById({_id: id})
         
         if (clientMongoDB) {
             try {
@@ -200,7 +216,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                     modifiedOn: now
                 }
 
-                const clientUpdated = await Clientes.findOneAndUpdate(
+                const clientUpdated = await clientes.findOneAndUpdate(
                     { _id: id }, newValues , { new: true })
                 logger.info('Qty. proyectos de Cliente actualizado ', clientUpdated)
                 
@@ -220,10 +236,10 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         
         if (clienteSelected) {
             try {
-                const clientMongoDB = await Clientes.findById({_id: id})
+                const clientMongoDB = await clientes.findById({_id: id})
                 
                 if(clientMongoDB) {
-                    const clientUpdated = await Clientes.findOneAndUpdate(
+                    const clientUpdated = await clientes.findOneAndUpdate(
                         { _id: id }, 
                         {
                             $set: {
@@ -251,7 +267,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
     }
 
     async deleteClientById(id) {
-        const itemMongoDB = await Clientes.findById({_id: `${id}`})
+        const itemMongoDB = await clientes.findById({_id: `${id}`})
         
         if(itemMongoDB) {
            let inactive = Boolean(false)
@@ -266,7 +282,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                     creator: itemMongoDB.creator,
                 }
                 
-                const client = await Clientes.findOneAndUpdate(
+                const client = await clientes.findOneAndUpdate(
                     { _id: id }, 
                     newValues, 
                     { new: true }
