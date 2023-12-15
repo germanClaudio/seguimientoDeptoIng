@@ -142,6 +142,11 @@ class ProjectService {
             userInfo)
     }
 
+    // remove one OCI from project by Id
+    async deleteOci(id, project, ociKNumber, user) {
+        return this.proyectos.deleteOci(id, project, ociKNumber, user)
+    }
+
     // remove one project by Id
     async deleteProjectById(id, project, user) {
         return this.proyectos.deleteProjectById(id, project, user)

@@ -108,7 +108,7 @@ const renderClientAdmin = (arrClient) => {
         return (`<tr>
                     <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
                     <td class="text-center">${element.name}</td>
-                    <td class="text-center"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></td>
+                    <td class="text-center"><a href="/api/clientes/select/${element._id}"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
                     <td class="text-center">${element.code}</td>
                     <td class="text-center"><span class="badge rounded-pill bg-${colorStatus}">${text}</span></td>
                     <td class="text-center"><span class="badge rounded-pill bg-${colorResult}">${result}</span></td>
@@ -118,7 +118,7 @@ const renderClientAdmin = (arrClient) => {
                     <td class="text-center">${element.modifiedOn}</td>
                     <td class="text-center">
                         <div class="d-block align-items-center">
-                            <a href="#" class="btn btn-secondary btn-sm me-1 disabled" data-toggle="tooltip" data-placement="top" title="To Be Done"><i class="fa fa-eye"></i></a>
+                            <a href="/api/clientes/select/${element._id}" class="btn btn-secondary btn-sm me-1" data-toggle="tooltip" data-placement="top" title="Ver cliente ${element.name}"><i class="fa fa-eye"></i></a>
                             <a href="/api/clientes/${element._id}" class="btn btn-primary btn-sm mx-1" title="Ver proyectos cliente ${element.name}"><i class="fa-solid fa-diagram-project"></i></a>
                             <a href="/api/clientes/delete/${element._id}" class="btn btn-danger btn-sm mx-1" title="Eliminar cliente ${element.name}"><i class="fa fa-trash"></i></a>
                         </div>
@@ -168,7 +168,7 @@ const renderClientUser = (arrClient) => {
         return (`<tr>
                     <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
                     <td class="text-center">${element.name}</td>
-                    <td class="text-center"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></td>
+                    <td class="text-center"><a href="/api/clientes/select/${element._id}"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
                     <td class="text-center">${element.code}</td>
                     <td class="text-center"><span class="badge rounded-pill bg-${colorStatus}">${text}</span></td>
                     <td class="text-center"><span class="badge rounded-pill bg-${colorResult}">${result}</span></td>
@@ -204,6 +204,7 @@ dropAreaLogoClient.style.margin = "0 auto 0 50px"
 dropAreaLogoClient.style.borderRadius = "5px"
 dropAreaLogoClient.style.textAlign = "center"
 dropAreaLogoClient.style.lineHeight = "200px"
+dropAreaLogoClient.style.cursor = "pointer"
 
 dropAreaLogoClient.addEventListener('dragover', (e) => {
     e.preventDefault()

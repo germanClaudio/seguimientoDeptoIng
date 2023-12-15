@@ -1,5 +1,3 @@
-const socket = io.connect();
-
 // --------------- Update Client ------------------------
 // ----------- Logo Client Image behavior ---------------
 const dropAreaLogoUpdate = document.getElementById('drop-areaLogoUpdate')
@@ -15,6 +13,7 @@ dropAreaLogoUpdate.style.margin = "0 auto 0 50px"
 dropAreaLogoUpdate.style.borderRadius = "5px"
 dropAreaLogoUpdate.style.textAlign = "center"
 dropAreaLogoUpdate.style.lineHeight = "200px"
+dropAreaLogoUpdate.style.cursor = "pointer"
 
 dropAreaLogoUpdate.addEventListener('dragover', (e) => {
     e.preventDefault()
@@ -28,6 +27,21 @@ dropAreaLogoUpdate.addEventListener('dragleave', (e) => {
     dropAreaLogoUpdate.style.backgroundColor = '#666666'
     removeImageButtonLogoUpdate.style.display = 'none'
 })
+
+function handleFileUploadLogoUpdate(file) {
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+            dropAreaLogoUpdate.innerHTML = 
+                `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+                alertLogoUpdate.style.display = 'none'
+        }
+
+    } else {
+        alertNotImageLogoUpdate()
+    }
+}
 
 function alertNotImageLogoUpdate() {
     alertLogoUpdate.style.display = 'flex'
@@ -76,22 +90,8 @@ fileInputLogoUpdate.addEventListener('change', (e) => {
     }     
 })
 
-function handleFileUploadLogoUpdate(file) {
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => {
-            dropAreaLogoUpdate.innerHTML = 
-                `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
-                alertLogoUpdate.style.display = 'none'
-        }
-
-    } else {
-        alertNotImageLogoUpdate()
-    }
-}
-
-removeImageButtonLogoUpdate.addEventListener('click', ()=> {
+removeImageButtonLogoUpdate.addEventListener('click', (e)=> {
+    e.preventDefault()
     fileImputTextLogoUpdate.value = ''
     dropAreaLogoUpdate.style.border = "2px dashed #ccc"
     dropAreaLogoUpdate.style.textAlign = "center"
@@ -100,6 +100,7 @@ removeImageButtonLogoUpdate.addEventListener('click', ()=> {
     dropAreaLogoUpdate.innerHTML = 'Arrastra y suelta una imagen aquí'
     removeImageButtonLogoUpdate.style.display = 'none'
     alertLogoUpdate.style.display = 'none'
+    e.stopPropagation()
 })
 
 function message(clientName) {
@@ -130,8 +131,8 @@ function message(clientName) {
       })
 }
 
-const btnUpdate = document.getElementById('btnUpdateClient')
-btnUpdate.addEventListener('click', (event)=>{
+const btnUpdateClient = document.getElementById('btnUpdateClient')
+btnUpdateClient.addEventListener('click', (event)=>{
     event.preventDefault()
     const clientName = document.getElementById('name').value
     message(clientName)

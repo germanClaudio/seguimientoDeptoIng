@@ -152,13 +152,12 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    // Update Client Data by Client Id
     async updateClient(id, client, userModificator) {
         
         if (client) {
             try {
                 const itemMongoDB = await Clientes.findById({_id: id})
-                client.logo ? client.logo : itemMongoDB.logo
+                client.logo != '' ? client.logo : itemMongoDB.logo
                 
                 if(itemMongoDB) {
                     var updatedClient = await Clientes.updateOne(

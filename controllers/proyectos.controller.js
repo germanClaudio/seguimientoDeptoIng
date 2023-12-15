@@ -6,7 +6,7 @@ const multer = require('multer')
 // const path = require('path')
 
 let now = require('../utils/formatDate.js')
-let imageNotFound = "./public/src/images/upload/LogoClientImages/noImageFound.png"
+let imageNotFound = "../../../src/images/upload/LogoClientImages/noImageFound.png"
 
 
 class ProjectsController {
@@ -142,8 +142,7 @@ class ProjectsController {
         }
     }
 
-    createNewProject = async (req, res) => {
-        
+    createNewProject = async (req, res) => {    
         //------ Storage Project Image in folder projectImages/ --------
         const storage = multer.diskStorage({
             destination: function(req, file, cb) {  
@@ -674,105 +673,120 @@ class ProjectsController {
     }
 
     addNewOciToProject = async (req, res) => {
-        const id = req.params.id
-        const proyecto = await this.projects.selectProjectByProjectId(id)
-        const projectId = proyecto[0]._id
+        //------ Storage OCI Image in folder projectImages/ --------
+        const storage = multer.diskStorage({
+            destination: function(req, file, cb) {  
+                cb(null, './public/src/images/upload/projectImages/') // Path de acceso a carpeta donde se guardan las Imagenes
+            },                                      
+            filename: function(req, file, cb) {
+              cb(null, file.originalname ) //+ path.extname(file.originalname)) //originalname
+            }
+        })
+                
+        const upload = multer({
+            storage: storage
+        }).any()
+
+        upload(req, res, async (err) => {
+            const id = req.params.id
+            const proyecto = await this.projects.selectProjectByProjectId(id)
+            const projectId = proyecto[0]._id
         
-        const clientId = proyecto[0].client[0]._id
-        const cliente = await this.clients.selectClientById(clientId)
-        
-        const ociQuantity = parseInt(req.body.ociQuantityModal)
-        
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
-        const userId = userInfo.id
+            const clientId = proyecto[0].client[0]._id
+            const cliente = await this.clients.selectClientById(clientId)
+            
+            const ociQuantity = parseInt(req.body.ociQuantityModal)
+            
+            let username = res.locals.username
+            let userInfo = res.locals.userInfo
+            const userId = userInfo.id
+            const userCreator = await this.users.getUserById(userId)
 
-        const cookie = req.session.cookie
-        const time = cookie.expires
-        const expires = new Date(time)
+            const cookie = req.session.cookie
+            const time = cookie.expires
+            const expires = new Date(time)
 
-        const userCreator = await this.users.getUserById(userId)
+            const user = {
+                name: userCreator.name,
+                lastName: userCreator.lastName,
+                username: userCreator.username,
+                email: userCreator.email
+            }
 
-        const user = {
-            name: userCreator.name,
-            lastName: userCreator.lastName,
-            username: userCreator.username,
-            email: userCreator.email
-        }
+            const modificator = {
+                        name: "",
+                        lastName: "",
+                        username: "",
+                        email: ""
+                    }
 
-        const modificator = {
-                    name: "",
-                    lastName: "",
-                    username: "",
-                    email: ""
+            let arrayOciNumber=[],
+                arrayOciDescription=[],
+                arrayOciStatus=[],
+                arrayOciImages=[]
+                    
+            for (const key in req.body) {
+                if (key.startsWith('ociNumber')) {
+                    arrayOciNumber.push(req.body[key])
                 }
-
+                else if (key.startsWith('ociDescription')) {
+                    arrayOciDescription.push(req.body[key])
+                }
+                else if (key.startsWith('ociStatus')) {
+                    arrayOciStatus.push(req.body[key] === 'on' ? true : false)
+                }
+                else if (key.startsWith('imageOciFileNameModal')) {
+                    const keyValue = req.body[key] === '' ?  imageNotFound : req.body[key]
+                    arrayOciImages.push(keyValue)
+                }
+            }
+            
+            let arrayOciAddedToProject = []
+            for (let i=0; i<ociQuantity; i++ ) {
+                var infoOciAddedToProject = {
+                    ociNumber: parseInt(arrayOciNumber[i]),
+                    ociDescription: arrayOciDescription[i] || "sinDatos",
+                    ociStatus: arrayOciStatus[i] || true,
+                    ociImage: arrayOciImages[i],
+                    timestamp: now,
+                    creator: user,
+                    modificator: modificator,
+                    modifiedOn: "",
+                }
+                arrayOciAddedToProject.push(infoOciAddedToProject)
+            } 
+            
+            try {
+                await this.clients.updateClient(
+                    clientId, 
+                    cliente, 
+                    user
+                    )
+                    
+                await this.projects.addNewOciToProject(
+                    projectId,
+                    ociQuantity,
+                    arrayOciAddedToProject
+                    )
         
-        let arrayOciNumber=[],
-            arrayOciDescription=[],
-            arrayOciStatus=[],
-            arrayOciImages=[]
-
-        for (const key in req.body) {
-            if (key.startsWith('ociNumber')) {
-                arrayOciNumber.push(req.body[key])
+                const proyectos = await this.projects.getProjectsByClientId(clientId)
+    
+                if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+                res.render('clientProjectsDetails', {
+                    username,
+                    userInfo,
+                    expires,
+                    cliente,
+                    proyectos
+                })
+    
+            } catch (error) {
+                res.status(500).json({
+                    status: false,
+                    error: error
+                })
             }
-            else if (key.startsWith('ociDescription')) {
-                arrayOciDescription.push(req.body[key])
-            }
-            else if (key.startsWith('ociStatus')) {
-                arrayOciStatus.push(req.body[key] === 'on' ? true : false)
-            }
-            else if (key.startsWith('ociImage')) {
-                arrayOciImages.push(req.body[key] === 'on' ? true : false)
-            }
-        }
-
-        let arrayOciAddedToProject = []
-        for (let i=0; i<ociQuantity; i++ ) {
-            var infoOciAddedToProject = {
-                ociNumber: parseInt(arrayOciNumber[i]),
-                ociDescription: arrayOciDescription[i] || "sinDatos",
-                ociStatus: arrayOciStatus[i] || true,
-                ociImage: arrayOciImages[i] || imageNotFound,
-                timestamp: now,
-                creator: user,
-                modificator: modificator,
-                modifiedOn: "",
-            }
-            arrayOciAddedToProject.push(infoOciAddedToProject)
-        }
-
-        await this.clients.updateClient(
-            clientId, 
-            cliente, 
-            user
-        )
-
-        await this.projects.addNewOciToProject(
-            projectId,
-            ociQuantity,
-            arrayOciAddedToProject
-        )
-
-        const proyectos = await this.projects.getProjectsByClientId(clientId)
-
-        try {
-            if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
-            res.render('clientProjectsDetails', {
-                username,
-                userInfo,
-                expires,
-                cliente,
-                proyectos
-            })
-
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                error: error
-            })
-        }
+        })
     }
 
     updateProject = async (req, res) => {
@@ -945,15 +959,15 @@ class ProjectsController {
         })
         //------------------------------------
 
-        await this.clients.updateClient(
-            clientId, 
-            cliente, 
-            userModificator
-        )
-
-        const proyectos = await this.projects.getProjectsByClientId(clientId)
-        
         try {
+            await this.clients.updateClient(
+                clientId, 
+                cliente, 
+                userModificator
+            )
+
+            const proyectos = await this.projects.getProjectsByClientId(clientId)
+        
             if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
             res.render('clientProjectsDetails', {
                 username,
@@ -961,6 +975,66 @@ class ProjectsController {
                 expires,
                 cliente,
                 proyectos
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
+    deleteOci = async (req, res) => {
+        const id = req.params.id
+        const proyecto = await this.projects.selectProjectByProjectId(id)
+        
+        const clientId = proyecto[0].client[0]._id
+        const clienteSeleccionado = await this.clients.selectClientById(clientId)
+        
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        const userId = userInfo.id
+        const userCreator = await this.users.getUserById(userId)
+        
+        const userModificator = [{
+                    name: userCreator.name,
+                    lastName: userCreator.lastName,
+                    username: userCreator.username,
+                    email: userCreator.email
+                }]
+        
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+
+        const ociKNumber = req.body.ociKNumberHidden
+        
+        try {
+            
+            await this.projects.deleteOci(
+                id, 
+                proyecto,
+                ociKNumber,
+                userModificator
+                )
+                console.log('proyectosController: ', proyectos)
+                
+            const cliente = await this.clients.updateClient(
+                clientId, 
+                clienteSeleccionado, 
+                userModificator
+            )
+
+            const proyectos = await this.projects.getProjectsByClientId(clientId)
+                
+            if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+                res.render('clientProjectsDetails', {
+                    username,
+                    userInfo,
+                    expires,
+                    cliente,
+                    proyectos
             })
 
         } catch (error) {
@@ -994,21 +1068,19 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
         
-        const proyectos = await this.projects.deleteProjectById(
-            id, 
-            proyecto, 
-            userModificator
-        )
-        
-        const cliente = await this.clients.reduceClientProjectQty(
-            clientId, 
-            clienteSeleccionado, 
-            userModificator
-        )
-        
-        // const proyectos = await this.projects.getProjectsByClientId(clientId)
-        
         try {
+            const proyectos = await this.projects.deleteProjectById(
+                id, 
+                proyecto, 
+                userModificator
+            )
+            
+            const cliente = await this.clients.reduceClientProjectQty(
+                clientId, 
+                clienteSeleccionado, 
+                userModificator
+            )
+                
             if (!proyectos) return res.status(404).json({ msg: 'Proyecto no encontrado' })
             res.render('clientProjectsDetails', {
                 username,

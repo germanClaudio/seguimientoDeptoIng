@@ -106,73 +106,94 @@
                                                         </div>
                                                         <!-- -------------- seccion OCI's ---------------------- -->
                                                         <div class="col my-auto border-start">
-                                                                <% for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) { %>
-                                                                    <div class="row align-items-center">
-                                                                        <!-- ----------- seccion Imagen de OCI's ------------ -->
-                                                                        <div class="col-3 my-auto px-1">
-                                                                            <img id="imageOci<%= ociCount %>_<%= k %>" src="<%= proyectos[m].project[j].oci[k].ociImage %>"
-                                                                                class="img-fluid rounded my-auto px-1" alt="Imagen OCI"
-                                                                                width="150px">
-                                                                        </div>
-                                                                        <!-- ----------- seccion Datos de OCI's ------------ -->
-                                                                        <div class="col my-auto px-1">
-                                                                            <ul>OCI #: <strong><%= proyectos[m].project[j].oci[k].ociNumber %></strong></ul>
-                                                                            <ul id="ociDescription<%= ociCount %>_<%= k %>">Descripción: <%= proyectos[m].project[j].oci[k].ociDescription %> </ul>
-                                                                        
-                                                                            <% if (proyectos[m].project[j].oci[k].ociStatus) {
-                                                                                const ociStatus="Activa" %>
-                                                                                <ul>Status OCI: <span class="badge rounded-pill bg-primary text-white"> <%= ociStatus %> </span> </ul>
-                                                                        
-                                                                            <% } else {
-                                                                                const ociStatus="Inactiva" %>
-                                                                                <ul>Status OCI: <span class="badge rounded-pill bg-danger text-white"> <%= ociStatus %> </span> </ul>
-                                                                            <% } %>
-                                                                                <div class="d-flex justify-content-center">
-                                                                                    <% if (proyectos[m].project[j].statusProject) { %>
+                                                            <% if (proyectos[m].project[j].oci.length > 0) {
 
-                                                                                        <div class="d-flex justify-content-center">
-                                                                                            <a type="button" title="Ver OCI#<%= proyectos[m].project[j].oci[k].ociNumber %>" href="/api/proyectos/selectProject/<%= proyectos[m].project[j].id %>" id="btnSeeOciDetails" class="btn btn-secondary rounded-circle me-2"><i class="fa-solid fa-eye"></i></a>
-                                                                                            <button type="button" title="Editar OCI#<%= proyectos[m].project[j].oci[k].ociNumber %>" id="btnUpdateOci<%= ociCount %>_<%= k %>" name="btnUpdateOci" class="btn btn-primary rounded-circle mx-2" value="<%= j%>"><i class="fa-solid fa-pencil"></i></button>
-                                                                                            <button type="button" title="Cambiar Estado OCI#<%= proyectos[m].project[j].oci[k].ociNumber %>" id="<%= ociCount %>_<%= k %>" class="btn btn-dark rounded-circle mx-2"><i class="fa-solid fa-power-off"></i></button>
-                                                                                            <button type="button" title="Eliminar OCI#<%= proyectos[m].project[j].oci[k].ociNumber %>" id="btnDeleteOci<%= ociCount %>_<%= k %>" class="btn btn-danger rounded-circle ms-2"><i class="fa-solid fa-trash"></i></button>
-                                                                                        </div>
-                                                                                        <form id="formChangeStatusOci<%= ociCount %>_<%= k %>" action="/api/proyectos/updateStatusOci/<%= proyectos[m].project[j].id %>" method="post">
-                                                                                            <fieldset>
-                                                                                                <input type="hidden" name="projectIdHidden" id="projectIdHidden<%= ociCount %>_<%= k %>" value="<%= proyectos[m].project[j].id %>">
-                                                                                                <input type="hidden" name="ociNumberHidden" id="ociNumberHidden<%= ociCount %>_<%= k %>" value="<%= proyectos[m].project[j].oci[k].ociNumber %>">
-                                                                                                <input type="hidden" name="ociKNumberHidden" id="ociKNumberHidden<%= ociCount %>_<%= k %>" value="<%= k %>">
-                                                                                                <input type="hidden" name="ociQuantityHidden" id="ociQuantityHidden<%= ociCount %>_<%= k %>" value="<%= proyectos[m].project[j].oci.length %>">
-                                                                                                <input type="hidden" name="statusOciHidden" id="statusOciHidden<%= ociCount %>_<%= k %>" value="<%= proyectos[m].project[j].oci[k].ociStatus %>">
-                                                                                            </fieldset>
-                                                                                        </form>
+                                                                for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) {
 
-                                                                                    <% } else { %>
-                                                                                        <a type="button" title="Ver OCI" href="/api/proyectos/selectProject/<%= proyectos[m].project[j].id %>" id="btnSeeOciDetails" class="btn btn-secondary rounded-circle mx-2"><i class="fa-solid fa-eye"></i></a>
-                                                                                    <% } %>    
+                                                                    if (proyectos[m].project[j].oci[k].visible) { %>
+                                                                        <div class="row align-items-center">
+                                                                            <!-- ----------- seccion Imagen de OCI's ------------ -->
+                                                                            <div class="col-3 my-auto px-1">
+                                                                                <img id="imageOci<%= ociCount %>_<%= k %>" src="<%= proyectos[m].project[j].oci[k].ociImage %>"
+                                                                                    class="img-fluid rounded my-auto px-1" alt="Imagen OCI"
+                                                                                    width="150px">
+                                                                            </div>
+                                                                            <!-- ----------- seccion Datos de OCI's ------------ -->
+                                                                            <div class="col my-auto px-1">
+                                                                                <ul>OCI #: <strong><%= proyectos[m].project[j].oci[k].ociNumber %></strong></ul>
+                                                                                <ul id="ociDescription<%= ociCount %>_<%= k %>">Descripción: <%= proyectos[m].project[j].oci[k].ociDescription %> </ul>
+                                                                            
+                                                                                <% if (proyectos[m].project[j].oci[k].ociStatus) {
+                                                                                    const ociStatus="Activa" %>
+                                                                                    <ul>Status OCI: <span class="badge rounded-pill bg-primary text-white"> <%= ociStatus %> </span> </ul>
+                                                                            
+                                                                                <% } else {
+                                                                                    const ociStatus="Inactiva" %>
+                                                                                    <ul>Status OCI: <span class="badge rounded-pill bg-danger text-white"> <%= ociStatus %> </span> </ul>
+                                                                                <% } %>
+                                                                                    <div class="d-flex justify-content-center">
+                                                                                        <% if (proyectos[m].project[j].statusProject) { %>
+
+                                                                                            <div class="d-flex justify-content-center">
+                                                                                                <a type="button" title="Ver OCI#<%= proyectos[m].project[j].oci[k].ociNumber %>" href="/api/proyectos/selectProject/<%= proyectos[m].project[j].id %>" id="btnSeeOciDetails" class="btn btn-secondary rounded-circle me-2"><i class="fa-solid fa-eye"></i></a>
+                                                                                                <button type="button" title="Editar OCI#<%= proyectos[m].project[j].oci[k].ociNumber %>" id="btnUpdateOci<%= ociCount %>_<%= k %>" name="btnUpdateOci" class="btn btn-primary rounded-circle mx-2" value="<%= j%>"><i class="fa-solid fa-pencil"></i></button>
+                                                                                                <button type="button" title="Cambiar Estado OCI#<%= proyectos[m].project[j].oci[k].ociNumber %>" id="<%= ociCount %>_<%= k %>" class="btn btn-dark rounded-circle mx-2"><i class="fa-solid fa-power-off"></i></button>
+                                                                                                <button type="button" title="Eliminar OCI#<%= proyectos[m].project[j].oci[k].ociNumber %>" id="btnDeleteOci<%= ociCount %>_<%= k %>" class="btn btn-danger rounded-circle ms-2"><i class="fa-solid fa-trash"></i></button>
+                                                                                            </div>
+                                                                                            <form id="formChangeStatusOci<%= ociCount %>_<%= k %>" action="/api/proyectos/updateStatusOci/<%= proyectos[m].project[j].id %>" method="post">
+                                                                                                <fieldset>
+                                                                                                    <input type="hidden" name="projectIdHidden" id="projectIdHidden<%= ociCount %>_<%= k %>" value="<%= proyectos[m].project[j].id %>">
+                                                                                                    <input type="hidden" name="ociNumberHidden" id="ociNumberHidden<%= ociCount %>_<%= k %>" value="<%= proyectos[m].project[j].oci[k].ociNumber %>">
+                                                                                                    <input type="hidden" name="ociKNumberHidden" id="ociKNumberHidden<%= ociCount %>_<%= k %>" value="<%= k %>">
+                                                                                                    <input type="hidden" name="ociQuantityHidden" id="ociQuantityHidden<%= ociCount %>_<%= k %>" value="<%= proyectos[m].project[j].oci.length %>">
+                                                                                                    <input type="hidden" name="statusOciHidden" id="statusOciHidden<%= ociCount %>_<%= k %>" value="<%= proyectos[m].project[j].oci[k].ociStatus %>">
+                                                                                                </fieldset>
+                                                                                            </form>
+
+                                                                                        <% } else { %>
+                                                                                            <a type="button" title="Ver OCI" href="/api/proyectos/selectProject/<%= proyectos[m].project[j].id %>" id="btnSeeOciDetails" class="btn btn-secondary rounded-circle mx-2"><i class="fa-solid fa-eye"></i></a>
+                                                                                        <% } %>    
+                                                                                    </div>
+                                                                            </div>
+                                                                        
+                                                                            <!-- -------------- seccion creador / modificador de OCI's --------- -->
+                                                                            <div class="col-3 my-auto px-1" style="font-size: 9pt">
+                                                                                <div class="container mb-4">
+                                                                                    <ul>OCI creada por: <%= proyectos[m].project[j].oci[k].creator[0].name %>, <%= proyectos[m].project[j].oci[k].creator[0].lastName %> </ul>
+                                                                                    <ul>Fecha: <%= proyectos[m].project[j].oci[k].timestamp %> </ul>
                                                                                 </div>
-                                                                        </div>
-                                                                    
-                                                                        <!-- -------------- seccion creador / modificador de OCI's --------- -->
-                                                                        <div class="col-3 my-auto px-1" style="font-size: 9pt">
-                                                                            <div class="container mb-4">
-                                                                                <ul>OCI creada por: <%= proyectos[m].project[j].oci[k].creator[0].name %>, <%= proyectos[m].project[j].oci[k].creator[0].lastName %> </ul>
-                                                                                <ul>Fecha: <%= proyectos[m].project[j].oci[k].timestamp %> </ul>
+                                                                                <div class="container mb-4">
+                                                                                        <% if (proyectos[m].project[j].oci[k].modificator[j]) { %>
+                                                                                            <ul>OCI modif. por: <%= proyectos[m].project[j].oci[k].modificator[j].name %>, <%= proyectos[m].project[j].oci[k].modificator[j].lastName %> </ul>
+                                                                                            <ul>Fecha modif.: <%= proyectos[m].project[j].oci[k].modifiedOn %> </ul>
+                                                                                        <% } else { %>
+                                                                                            <ul>OCI modifi. por: </ul>
+                                                                                            <ul>Fecha modif.: </ul>
+                                                                                        <% } %>
+                                                                                </div>
                                                                             </div>
-                                                                            <div class="container mb-4">
-                                                                                    <% if (proyectos[m].project[j].oci[k].modificator[j]) { %>
-                                                                                        <ul>OCI modif. por: <%= proyectos[m].project[j].oci[k].modificator[j].name %>, <%= proyectos[m].project[j].oci[k].modificator[j].lastName %> </ul>
-                                                                                        <ul>Fecha modif.: <%= proyectos[m].project[j].oci[k].modifiedOn %> </ul>
-                                                                                    <% } else { %>
-                                                                                        <ul>OCI modifi. por: </ul>
-                                                                                        <ul>Fecha modif.: </ul>
-                                                                                    <% } %>
-                                                                            </div>
+                                                                            <% if ( proyectos[m].project[j].oci.length > (k+1) ) { %>
+                                                                                <hr>
+                                                                            <% } %>
                                                                         </div>
-                                                                        <% if ( proyectos[m].project[j].oci.length > (k+1) ) { %>
-                                                                            <hr>
-                                                                        <% } %>
-                                                                    </div>       
-                                                                <% } %>    
+                                                                    <% }
+
+                                                                }
+
+                                                            } else { %>    
+                                                                <span class="badge rounded-pill bg-danger text-white"> No hay OCI cargadas </span>
+                                                                    <div class="container my-2 mw-100">
+                                                                        Puedes agregar OCI en el proyecto <strong><%= proyecto.name %></strong>, haciendo click en el siguiente botón
+                                                                        <button class="btn btn-success m-1 rounded-circle"
+                                                                            id="btnAddNewOciToProject<%=m%>"
+                                                                            style="--bs-btn-font-size: .75rem; color: var(--bs-white);"
+                                                                            type="button"
+                                                                            name="<%= proyecto.name %>"
+                                                                            title="Agregar Nueva OCI">
+                                                                            <i class="fa-regular fa-plus" aria-hidden="true"></i>
+                                                                        </button>                        
+                                                                    </div>
+                                                            <% } %>        
                                                         </div> 
                                                     </div>
                                                     <hr>

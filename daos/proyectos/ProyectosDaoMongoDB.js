@@ -519,55 +519,53 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
     }
 
     // Add new Oci to Project
-    async addNewOciToProject(idProjectTarget, ociQuantity, arrayOciAddedToProject) {
+    async addNewOciToProject(idProjectTarget, ociQty, arrayOciAddedToProject) {
+        const ociQuantity = parseInt(ociQty)
         
         if (idProjectTarget) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget })
-                
+                         
                 if (itemMongoDB) {
 
-                        let arrayQueryQuantity = []
-                        for (let i = 0; i < ociQuantity; i++) {
-                            
-                            let updateQuery = {
-                                    ociNumber: arrayOciAddedToProject[i].ociNumber,
-                                    ociDescription: arrayOciAddedToProject[i].ociDescription,
-                                    ociStatus: arrayOciAddedToProject[i].ociStatus,
-                                    creator: arrayOciAddedToProject[i].creator,
-                                    timestamp: now,
-                                    ociImage: arrayOciAddedToProject[i].ociImage,
-                                    modificator: arrayOciAddedToProject[i].modificator,
-                                    modifiedOn: '',
-                                    visible: true
-                            }
-                            arrayQueryQuantity.push(updateQuery)
-                        }    
-                        //console.log('updateQuery= ', arrayQueryQuantity)
-
-                        // Se agregan las estructuras al arbol de MongoDB ---
-                        for (let n=0; n<ociQuantity; n++) {
-
-                            var ociAddedToProyecto = await Proyectos.updateOne(
-                                { _id: itemMongoDB._id },
-                                {
-                                    $push: {
-                                        [`project.0.oci`]: arrayQueryQuantity[n]
-                                    }
-                                },
-                                { new: true }
-                            )
-                            logger.info('Oci agregada a Proyecto ', ociAddedToProyecto)
+                    let arrayQueryQuantity = []
+                    for (let i = 0; i < ociQuantity; i++) {                            
+                        let updateQuery = {
+                                ociNumber: arrayOciAddedToProject[i].ociNumber,
+                                ociDescription: arrayOciAddedToProject[i].ociDescription,
+                                ociStatus: arrayOciAddedToProject[i].ociStatus,
+                                creator: arrayOciAddedToProject[i].creator,
+                                timestamp: now,
+                                ociImage: arrayOciAddedToProject[i].ociImage,
+                                modificator: arrayOciAddedToProject[i].modificator,
+                                modifiedOn: '',
+                                visible: true
                         }
+                        arrayQueryQuantity.push(updateQuery)
+                    }    
 
-                        // Si se agrega correctamente las OCI => true ---
-                        if (ociAddedToProyecto.acknowledged) {
-                            const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
-                            return itemUpdated
+                    // Se agregan las estructuras al arbol de MongoDB ---
+                    for (let n=0; n<ociQuantity; n++) {
+                        var ociAddedToProyecto = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $push: {
+                                    [`project.0.oci`]: arrayQueryQuantity[n]
+                                }
+                            },
+                            { new: true }
+                        )
+                        logger.info('Oci agregada a Proyecto ', ociAddedToProyecto)
+                    }
 
-                        } else {
-                            return new Error(`No se actualizó el item: ${itemMongoDB._id}`)
-                        }
+                    // Si se agrega correctamente las OCI => true ---
+                    if (ociAddedToProyecto.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
+                        return itemUpdated
+
+                    } else {
+                        return new Error(`No se actualizó el item: ${itemMongoDB._id}`)
+                    }
 
                 } else {
                     logger.error(`No se encontró la OCI`)
@@ -702,6 +700,78 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
         } else {
             return new Error(`No se pudo modificar el status del Proyecto!`)
+        }
+    }
+
+    // Delete Oci
+    async deleteOci(
+            id, 
+            project, 
+            ociKNumber, 
+            userModificator
+        ) {
+        const ociNumberK = parseInt(ociKNumber)
+                
+        if (id && project) {
+            
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
+                
+                if (itemMongoDB) {
+                    
+                    if(itemMongoDB.project[0].oci[ociNumberK].visible) {
+                        var deleteOci = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $set: {
+                                    [`project.0.oci.${ociNumberK}.visible`]: Boolean(false),
+                                    [`project.0.oci.${ociNumberK}.modificator`]: userModificator,
+                                    [`project.0.oci.${ociNumberK}.modifiedOn`]: now,
+                                    [`project.0.modificator`]: userModificator,
+                                    [`project.0.modifiedOn`]: now,
+                                    modificator: userModificator,
+                                    modifiedOn: now
+                                }
+                            },
+                            { new: true }
+                        )
+
+                    } else {
+                        var deleteOci = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $set: {
+                                    [`project.0.oci.${ociNumberK}.visible`]: Boolean(true),
+                                    [`project.0.oci.${ociNumberK}.modificator`]: userModificator,
+                                    [`project.0.oci.${ociNumberK}.modifiedOn`]: now,
+                                    [`project.0.modificator`]: userModificator,
+                                    [`project.0.modifiedOn`]: now,
+                                    modificator: userModificator,
+                                    modifiedOn: now
+                                }
+                            },
+                            { new: true }
+                        )
+                    }
+
+                    if(deleteOci.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
+                        return itemUpdated
+
+                    } else {
+                        return new Error(`No se eliminó la OCI del proyecto`)
+                    }
+                    
+                } else {
+                    return new Error(`OCI no existe con este id: ${id}!`)
+                }
+
+            } catch (error) {
+                logger.error("Error MongoDB deletingOci from project: ", error)
+            }
+
+        } else {
+            return new Error(`No se pudo eliminar la OCI!`)
         }
     }
 
