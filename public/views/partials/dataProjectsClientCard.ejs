@@ -80,7 +80,7 @@
                                                             <div class="container px-1">
                                                                 <div class="d-flex justify-content-center my-4">
                                                                     <a type="button" title="Ver Proyecto" href="/api/proyectos/selectProject/<%= proyectos[m].project[j].id %>" id="btnSeeProyectDetails" class="btn btn-secondary rounded-circle me-2"><i class="fa-solid fa-eye"></i></a>
-                                                                    <button type="button" title="Agregar Nueva OCI" id="btnAddNewOciToProject<%= m %>" name="btnAddNewOciToProject" class="btn btn-success rounded-circle mx-2" value="<%= m%>"><i class="fa-solid fa-plus-circle"></i></button>
+                                                                    <button type="button" title="Agregar Nueva OCI" id="btnAddNewOciToProject<%= m %>" name="btnAddNewOciToProject" class="btn btn-success rounded-circle mx-2" value="<%= proyectos[m].project[j].id %>"><i class="fa-solid fa-plus-circle"></i></button>
                                                                     <button type="button" title="Editar proyecto <%= proyectos[m].project[j].projectDescription %>" id="btnUpdateProject<%= m %>_<%= j %>" name="btnUpdateProject" class="btn btn-primary rounded-circle ms-2" value="<%= proyectos[m].project[j].id %>"><i class="fa-solid fa-pencil"></i></button>
                                                                 </div>
                                                                 <div class="d-flex justify-content-center my-4">
@@ -95,6 +95,7 @@
                                                                     <input type="hidden" name="projectNameHidden" id="projectNameHidden<%= m %>_<%= j %>" value="<%= proyectos[m].project[j].projectName %>">
                                                                     <input type="hidden" name="projectIdHidden" id="projectIdHidden<%= m %>_<%= j %>" value="<%= proyectos[m].project[j].id %>">
                                                                     <input type="hidden" name="statusProjectHidden" id="statusProjectHidden<%= m %>_<%= j %>" value="<%= proyectos[m].project[j].statusProject %>">
+                                                                    <input type="hidden" id="totalOciQtyHidden" value="<%= proyectos[m].project[j].oci.length %>">
                                                                 </fieldset>
                                                             </form>
                                                             <input type="hidden" name="levelProjectHidden" id="levelProjectHidden<%= m %>_<%= j %>" value="<%= proyectos[m].project[j].levelProject %>">
@@ -107,9 +108,9 @@
                                                         <!-- -------------- seccion OCI's ---------------------- -->
                                                         <div class="col my-auto border-start">
                                                             <% if (proyectos[m].project[j].oci.length > 0) {
-
+                                                                let countOci=0
                                                                 for ( let k = 0; proyectos[m].project[j].oci.length > k; k++) {
-
+                                                                    
                                                                     if (proyectos[m].project[j].oci[k].visible) { %>
                                                                         <div class="row align-items-center">
                                                                             <!-- ----------- seccion Imagen de OCI's ------------ -->
@@ -176,21 +177,38 @@
                                                                                 <hr>
                                                                             <% } %>
                                                                         </div>
-                                                                    <% }
-
+                                                                    <% countOci++
+                                                                    }
+                                                                    
                                                                 }
+                                                                if (countOci === 0) { %>
+                                                                    <span class="badge rounded-pill bg-danger text-white"> No hay OCI cargadas </span>
+                                                                    <div class="container my-2 mw-100">
+                                                                        Puedes agregar nuevas OCI en el proyecto <strong><%= proyectos[m].project[j].projectName %></strong>,<br>haciendo click en el siguiente botón
+                                                                        <button class="btn btn-success m-1 rounded-circle"
+                                                                            id="btnAddNewOciSection<%=m%>"
+                                                                            style="--bs-btn-font-size: .95rem; color: var(--bs-white);"
+                                                                            type="button"
+                                                                            name="btnAddNewOciToProject"
+                                                                            title="Agregar Nueva OCI"
+                                                                            value="<%= proyectos[m].project[j].id %>">
+                                                                            <i class="fa-solid fa-plus-circle" aria-hidden="true"></i>
+                                                                        </button>                        
+                                                                    </div>
+                                                                <% }
 
                                                             } else { %>    
                                                                 <span class="badge rounded-pill bg-danger text-white"> No hay OCI cargadas </span>
                                                                     <div class="container my-2 mw-100">
-                                                                        Puedes agregar OCI en el proyecto <strong><%= proyecto.name %></strong>, haciendo click en el siguiente botón
+                                                                        Puedes agregar nuevas OCI en el proyecto <strong><%= proyectos[m].project[j].projectName %></strong>,<br>haciendo click en el siguiente botón
                                                                         <button class="btn btn-success m-1 rounded-circle"
-                                                                            id="btnAddNewOciToProject<%=m%>"
+                                                                            id="btnAddNewOciSection<%=m%>"
                                                                             style="--bs-btn-font-size: .75rem; color: var(--bs-white);"
                                                                             type="button"
-                                                                            name="<%= proyecto.name %>"
-                                                                            title="Agregar Nueva OCI">
-                                                                            <i class="fa-regular fa-plus" aria-hidden="true"></i>
+                                                                            name="btnAddNewOciToProject"
+                                                                            title="Agregar Nueva OCI"
+                                                                            value="<%= proyectos[m].project[j].id %>">
+                                                                            <i class="fa-solid fa-plus-circle" aria-hidden="true"></i>
                                                                         </button>                        
                                                                     </div>
                                                             <% } %>        
@@ -239,11 +257,11 @@
                                 aria-controls="collapseExample"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#collapseExample" aria-expanded="false"
-                                style="--bs-btn-font-size: .75rem; color: var(--bs-white);"
+                                style="--bs-btn-font-size: .95rem; color: var(--bs-white);"
                                 type="button"
                                 name="<%= cliente.name %>"
                                 title="Agregar Proyecto">
-                                <i class="fa-regular fa-plus" aria-hidden="true"></i>
+                                <i class="fa-solid fa-plus-circle" aria-hidden="true"></i>
                             </button>                        
                         </div>
 

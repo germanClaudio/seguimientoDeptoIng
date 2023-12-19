@@ -83,6 +83,16 @@ class ProjectService {
             userInfo)
     }
 
+    // Update Status OT by Ot Number
+    async updateStatusOt(id, project, statusOt, otKNumber, userInfo) {
+        return this.proyectos.updateStatusOt(
+            id,
+            project,
+            statusOt,
+            otKNumber,
+            userInfo)
+    }
+
     // add New Oci To Project
     async addNewOciToProject(id, project, ociKNumber, userInfo) {
         return this.proyectos.addNewOciToProject(

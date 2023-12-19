@@ -1159,10 +1159,16 @@ function messageDeleteOci(
     }
 }
 
-const maxOciQuantity = parseInt(document.getElementsByName('ociQuantityHidden').length)
+let maxOciQuantity
+document.getElementById('totalOciQtyHidden') ?
+    maxOciQuantity = parseInt(document.getElementById('totalOciQtyHidden').value)
+    :
+    maxOciQuantity=0
+
 var arrayBtnChangeStatusOci = []
 var arrayBtnUpdateOci = []
 var arrayBtnDeleteOci = []
+
 for (let m=0; m<maxOciQuantity; m++) {
     for (let n=0; n<maxOciQuantity; n++) {
         let btnChangeStatusOci = document.getElementById(`${m}_${n}`)
@@ -1228,7 +1234,7 @@ arrayBtnDeleteOci.forEach(function(element) {
         const ociKNumber = document.getElementById(`ociKNumberHidden${element.id.slice(12)}`).value
         const ociDescription = document.getElementById(`ociDescription${element.id.slice(12)}`).innerText
         const imageOci = document.getElementById(`imageOci${element.id.slice(12)}`).src
-
+        
         messageDeleteOci(
             projectId,
             ociNumber,
@@ -1241,7 +1247,7 @@ arrayBtnDeleteOci.forEach(function(element) {
     
 
 // --------------- Adding New OCI to an existing Project ------------------------
-function addNewOciToProject(i, projectName, lastOciNumber, projectIdHidden) {
+function addNewOciToProject(projectName, lastOciNumber, projectIdHidden) {
    
         var arrayBloque = []
         arrayBloque.push(`
@@ -1257,7 +1263,8 @@ function addNewOciToProject(i, projectName, lastOciNumber, projectIdHidden) {
                 </div>
                 <div class="col-2 mt-3 align-self-middle">
                     <div class="form-check form-switch d-inline-block">
-                        <input class="form-check-input" type="checkbox" name="ociStatus0" id="ociStatus0" aria-checked="true" style="cursor: pointer;" checked>
+                        <input class="form-check-input" type="checkbox" name="ociStatus0" id="ociStatus0"
+                            aria-checked="true" style="cursor: pointer;" checked>
                         <label class="form-check-label" for="ociStatus">Activa</label>
                     </div>
                 </div>    
@@ -1760,27 +1767,25 @@ if (arrayProjectList !=[]) {
     allButtonsNewOci.forEach(function(btn) {
 		btn.addEventListener("click", (event) => {
             event.preventDefault()
-            let kValue = event.target.value
-            const projectName = document.getElementById(`projectNameHidden${btn.value}_0`).value
+                        
+            const btnValue = extractNumbers(event.target.id)
+            const projectName = document.getElementById(`projectNameHidden${btnValue}_0`).value
+            const projectIdHidden = document.getElementById(`projectIdHidden${btnValue}_0`).value //arrayProjectId[0]
             
             let arrayLastOciNumber=[]
-            let arrayProjectId=[]
             for(let n=0; n<maxOciQuantity; n++) { 
-                if(document.getElementById(`ociNumberHidden${btn.value}_${n}`)) {
-                    arrayLastOciNumber.push(parseInt(document.getElementById(`ociNumberHidden${btn.value}_${n}`).value))
-                    arrayProjectId.push(document.getElementById(`projectIdHidden${btn.value}_${n}`).value)
+                if(document.getElementById(`ociNumberHidden${btnValue}_${n}`)) {
+                    arrayLastOciNumber.push(parseInt(document.getElementById(`ociNumberHidden${btnValue}_${n}`).value))
                 }
             }
 
             let lastOciIndex = parseInt(arrayLastOciNumber.length-1)
-            let projectIdHidden = arrayProjectId[0]
-            
             addNewOciToProject(
-                kValue, 
                 projectName, 
                 arrayLastOciNumber[lastOciIndex], 
                 projectIdHidden
             )
+
     	})
     })
 }

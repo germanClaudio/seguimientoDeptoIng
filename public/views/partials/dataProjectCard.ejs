@@ -116,11 +116,11 @@
                                                                 aria-controls="collapseExample"
                                                                 data-bs-toggle="collapse"
                                                                 data-bs-target="#collapseExample" aria-expanded="false"
-                                                                style="--bs-btn-font-size: .75rem; color: var(--bs-white);"
+                                                                style="--bs-btn-font-size: .95rem; color: var(--bs-white);"
                                                                 type="button"
                                                                 name="<%= proyecto[m].project[j].oci[k].ociNumber %>"
-                                                                title="Agregar OT">
-                                                                <i class="fa-regular fa-plus" aria-hidden="true"></i>
+                                                                title="Agregar nueva OT">
+                                                                <i class="fa-solid fa-plus-circle" aria-hidden="true"></i>
                                                             </button>
                                                             <hr class="border border-primary opacity-75">
                                                             <div class="row">
@@ -175,37 +175,45 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody class="table-group-divider">
-                                                                    <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length>n; n++) { %>
+                                                                    <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length > n; n++) { %>
                                                                         <tr style="height: 7vh;">
                                                                             <td class="text-center align-middle">
                                                                                 <% if ( userInfo.admin ) { %>
-                                                                                    <div class="btn-group my-2"
-                                                                                        role="group"
-                                                                                        aria-label="Basic outlined example">
-                                                                                        <button id="btnEdit"
+                                                                                    <div class="btn-group my-1" role="group" aria-label="Basic outlined example">
+                                                                                        <input class="form-check-input my-auto me-2" type="checkbox" value="" id="checkSelect<%=k%>_<%=n%>">
+                                                                                        <button id="btnEditOt<%=k%>_<%=n%>"
                                                                                             type="button"
-                                                                                            class="btn btn-light"
+                                                                                            class="btn btn-sm btn-light"
                                                                                             value="edit"
-                                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;">
-                                                                                            <i
-                                                                                                class="fa-solid fa-pen-to-square"></i>
+                                                                                            name="btnEditOt"
+                                                                                            title="Editar OT#<%= proyecto[m].project[j].oci[k].otProject[n].otNumber %>"
+                                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem;">
+                                                                                            <i class="fa-solid fa-pen-to-square"></i>
                                                                                         </button>
-                                                                                        <button id="btnDelete"
+                                                                                        <button id="btnStatusOt<%=k%>_<%=n%>"
                                                                                             type="button"
-                                                                                            class="btn btn-light"
+                                                                                            class="btn btn-sm btn-light"
+                                                                                            value="changeStatus"
+                                                                                            name="btnStatusOt"
+                                                                                            title="Cambiar status OT#<%= proyecto[m].project[j].oci[k].otProject[n].otNumber %>"
+                                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem;">
+                                                                                            <i class="fa-solid fa-power-off"></i>
+                                                                                        </button>
+                                                                                        <button id="btnDeleteOt<%=k%>_<%=n%>"
+                                                                                            type="button"
+                                                                                            class="btn btn-sm btn-light"
                                                                                             value="delete"
-                                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;">
-                                                                                            <i
-                                                                                                class="fa-solid fa-trash"></i>
+                                                                                            name="btnDeleteOt"
+                                                                                            title="Eliminar OT#<%= proyecto[m].project[j].oci[k].otProject[n].otNumber %>"
+                                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem;">
+                                                                                            <i class="fa-solid fa-trash"></i>
                                                                                         </button>
                                                                                     </div>
                                                                                 <% } else { %>
-                                                                                        <div class="btn-group my-2"
-                                                                                            role="group"
-                                                                                            aria-label="Basic outlined example">
+                                                                                        <div class="btn-group my-2" role="group" aria-label="Basic outlined example">
                                                                                             <button id="btnEdit"
                                                                                                 type="button"
-                                                                                                class="btn btn-light"
+                                                                                                class="btn btn-sm btn-light"
                                                                                                 value="edit"
                                                                                                 style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;"
                                                                                                 disabled>
@@ -213,7 +221,7 @@
                                                                                             </button>
                                                                                             <button id="btnDelete"
                                                                                                 type="button"
-                                                                                                class="btn btn-light"
+                                                                                                class="btn btn-sm btn-light"
                                                                                                 value="delete"
                                                                                                 style="--bs-btn-padding-y: .25rem; --bs-btn-font-size: .75rem;"
                                                                                                 disabled>
@@ -1954,17 +1962,18 @@
                                                                 <span class="badge rounded-pill bg-danger text-white">
                                                                     No hay datos de OT cargados para mostrar </span>
                                                             </div>
-                                                            Puedes comenzar a cargar datos de OT en esta OCI# <%= proyecto[m].project[j].oci[k].ociNumber %>, haciendo click en el siguiente botón
+                                                            Puedes comenzar a cargar datos de OT en esta OCI# <strong><%= proyecto[m].project[j].oci[k].ociNumber %></strong>,<br>
+                                                            haciendo click en el siguiente botón
                                                             <button class="btn btn-danger m-1 rounded-circle"
                                                                 id="btnAddOtFormSelected<%=k%>"
                                                                 aria-controls="collapseExample"
                                                                 data-bs-toggle="collapse"
                                                                 data-bs-target="#collapseExample" aria-expanded="false"
-                                                                style="--bs-btn-font-size: .75rem; color: var(--bs-white);"
+                                                                style="--bs-btn-font-size: .95rem; color: var(--bs-white);"
                                                                 type="button"
                                                                 name="<%= proyecto[m].project[j].oci[k].ociNumber %>"
                                                                 title="Agregar OT">
-                                                                <i class="fa-regular fa-plus" aria-hidden="true"></i>
+                                                                <i class="fa-solid fa-plus-circle" aria-hidden="true"></i>
                                                             </button>
                                                     <% } %>
 
@@ -1979,7 +1988,21 @@
                         <% } %>
 
                     <% } else { %>
-                            <span class="badge rounded-pill bg-danger text-white"> No hay datos cargados </span>
+                        <div class="container my-3">
+                            <span class="badge rounded-pill bg-danger text-white">No hay datos cargados para mostrar</span>
+                        </div>
+                        Puedes agregar proyectos en el cliente <strong><%= cliente.name %>,<br>haciendo click en el siguiente botón
+                            <button class="btn btn-success m-1 rounded-circle"
+                                id="btnAddOtFormSelected<%=k%>"
+                                aria-controls="collapseExample"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseExample" aria-expanded="false"
+                                style="--bs-btn-font-size: .95rem; color: var(--bs-white);"
+                                type="button"
+                                name="<%= proyecto[m].project[j].oci[k].ociNumber %>"
+                                title="Agregar Proyectos a cliente <%= cliente.name %>">
+                                <i class="fa-solid fa-plus-circle" aria-hidden="true"></i>
+                            </button>
                     <% } %>
             </div>
         </div>

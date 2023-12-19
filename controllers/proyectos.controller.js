@@ -688,6 +688,7 @@ class ProjectsController {
         }).any()
 
         upload(req, res, async (err) => {
+            
             const id = req.params.id
             const proyecto = await this.projects.selectProjectByProjectId(id)
             const projectId = proyecto[0]._id
@@ -986,6 +987,7 @@ class ProjectsController {
     }
 
     deleteOci = async (req, res) => {
+        
         const id = req.params.id
         const proyecto = await this.projects.selectProjectByProjectId(id)
         
@@ -1018,8 +1020,7 @@ class ProjectsController {
                 ociKNumber,
                 userModificator
                 )
-                console.log('proyectosController: ', proyectos)
-                
+                                
             const cliente = await this.clients.updateClient(
                 clientId, 
                 clienteSeleccionado, 
