@@ -672,6 +672,68 @@ class ProjectsController {
         }
     }
 
+    updateStatusOt = async (req, res) => {
+        const id = req.params.id
+        const mainProyecto = await this.projects.selectProjectsByMainProjectId(id)
+        
+        const clientId = mainProyecto[0].client[0]._id
+        const cliente = await this.clients.selectClientById(clientId)
+        
+        const statusOtHidden = req.body.statusOtHidden
+        const ociKNumberHidden = parseInt(req.body.ociKNumberHidden)
+        const otKNumberHidden = parseInt(req.body.otKNumberHidden)
+        
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        const userId = userInfo.id
+        const userCreator = await this.users.getUserById(userId)
+        
+        const userModificator = [{
+                    name: userCreator.name,
+                    lastName: userCreator.lastName,
+                    username: userCreator.username,
+                    email: userCreator.email
+                }]
+
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+        
+        await this.projects.updateStatusOt(
+            id, 
+            mainProyecto,
+            statusOtHidden,
+            ociKNumberHidden,
+            otKNumberHidden,
+            userModificator
+        )
+
+        await this.clients.updateClient(
+            clientId, 
+            cliente, 
+            userModificator
+        )
+
+        const proyecto = await this.projects.getProjectsByClientId(clientId)
+        
+        try {
+            if (!proyecto) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+            res.render('projectSelectedDetail', {
+                proyecto,
+                username,
+                userInfo,
+                expires,
+                cliente
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
     addNewOciToProject = async (req, res) => {
         //------ Storage OCI Image in folder projectImages/ --------
         const storage = multer.diskStorage({
@@ -1036,6 +1098,66 @@ class ProjectsController {
                     expires,
                     cliente,
                     proyectos
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
+    deleteOt = async (req, res) => {
+        const id = req.params.id
+        const mainProyecto = await this.projects.selectProjectsByMainProjectId(id)
+        
+        const clientId = mainProyecto[0].client[0]._id
+        const clienteSeleccionado = await this.clients.selectClientById(clientId)
+        
+        let username = res.locals.username
+        const userInfo = res.locals.userInfo
+        const userId = userInfo.id
+        const userCreator = await this.users.getUserById(userId)
+        
+        const userModificator = [{
+                    name: userCreator.name,
+                    lastName: userCreator.lastName,
+                    username: userCreator.username,
+                    email: userCreator.email
+                }]
+        
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+
+        const ociKNumber = req.body.ociKNumberHidden
+        const otKNumber = req.body.otKNumberHidden
+        
+        try {
+            await this.projects.deleteOt(
+                id, 
+                mainProyecto,
+                ociKNumber,
+                otKNumber,
+                userModificator
+                )
+             
+            const cliente = await this.clients.updateClient(
+                clientId, 
+                clienteSeleccionado, 
+                userModificator
+            )
+
+            const proyecto = await this.projects.getProjectsByClientId(clientId)
+
+            if (!proyecto) return res.status(404).json({ msg: 'Proyecto no encontrado' })
+                res.render('projectSelectedDetail', {
+                    username,
+                    userInfo,
+                    expires,
+                    cliente,
+                    proyecto
             })
 
         } catch (error) {

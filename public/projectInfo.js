@@ -391,9 +391,14 @@ for (let i = 0; i < radios.length; i++) {
 
 //-----------19/12-2023---------------
 //------- Change OT status ----------------
-function messageChangeOtStatus(statusOt, otNumber, elementoId) {
-   
-    const id = elementoId.slice(11)
+function messageChangeOtStatus(statusOt, otNumber, idProjectSelected, ociKNumber, otKNumber) {
+    console.log(
+        statusOt,
+        otNumber,
+        idProjectSelected,
+        ociKNumber,
+        otKNumber)
+
     const Toast = Swal.mixin({
         toast: true,
         position: 'bottom',
@@ -403,17 +408,17 @@ function messageChangeOtStatus(statusOt, otNumber, elementoId) {
     })
     
         Swal.fire({
-            title: `Cambio status de OT#<strong>${otNumber}</strong>`,
+            title: `Cambio status de OT#${otNumber}`,
             position: 'center',
             html: `El status de la OT#<strong>${otNumber}</strong> se modificará a
-                    <span class="badge rounded-pill bg-${ statusOt=='Activo' ? 'danger' : 'primary' } text-white">
-                    ${ statusOt=='Activo' ? 'Inactivo' : 'Activo' }
-                    </span> y ${ statusOt=='Activo' ? 'no' : '' } podrá ingresar o modificar datos en esta OT.
-                    <form id="formChangeStatusOt${id}" action="/api/proyectos/updateStatusOt/${otNumber}" method="post" style="display: none;">
+                    <span class="badge rounded-pill bg-${ statusOt==='Activo' ? 'danger' : 'primary' } text-white">
+                    ${ statusOt==='Activo' ? 'Inactivo' : 'Activo' }
+                    </span> y ${ statusOt==='Activo' ? 'no' : '' } podrá ingresar o modificar datos en esta OT.
+                    <form id="formChangeStatusOt${idProjectSelected}" action="/api/proyectos/updateStatusOt/${idProjectSelected}" method="post" style="display: none;">
                         <fieldset>
-                            <input type="hidden" name="projectIdHidden" id="projectIdHidden${id}" value="">
-                            <input type="hidden" name="otKNumberHidden" id="otKNumberHidden${id}" value="${id}">
-                            <input type="hidden" name="statusOtHidden" id="statusOtHidden${id}" value="${statusOt}">
+                            <input type="hidden" name="ociKNumberHidden" value="${ociKNumber}">
+                            <input type="hidden" name="otKNumberHidden" value="${otKNumber}">
+                            <input type="hidden" name="statusOtHidden" value="${statusOt}">
                         </fieldset>
                     </form>
                     `,
@@ -424,14 +429,14 @@ function messageChangeOtStatus(statusOt, otNumber, elementoId) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById(`formChangeStatusOt${id}`).submit()
+                document.getElementById(`formChangeStatusOt${idProjectSelected}`).submit()
                 Toast.fire({
                     icon: 'success',
                     title: `El status de la OT#<strong>${otNumber}</strong>, se modificó con éxito!`
                 })
             } else {
                 Swal.fire(
-                    'Status de OT no modificado!',
+                    `Status de OT#${otNumber} no modificado!`,
                     `El status de la OT#<strong>${otNumber}</strong>, no se modificó!`,
                     'warning'
                 )
@@ -441,331 +446,405 @@ function messageChangeOtStatus(statusOt, otNumber, elementoId) {
 }
 
 //---- Update OT Data ----------------
-// function messageUpdateOci(
-//     projectId,
-//     statusOci,
-//     imageOci,
-//     ociDescription,
-//     ociNumber,
-//     k
-// ) {
+function messageUpdateOt(
+    statusOt,
+    otNumber,
+    idProjectSelected,
+    ociKNumber,
+    otKNumber,
+    otDescription,
+    otDesign,
+    otSimulation,
+    otSupplier
+) {
     
-//     let descriptionOci = ociDescription.slice(13)
-//     let numberOci = parseInt(ociNumber)
-//     let checked = 'checked'
-//     statusOci=='true' ? checked : checked = ''
+    let numberKOci = parseInt(ociKNumber)
+    let numnerKOt = parseInt(otKNumber)
+    let numberOt = parseInt(otNumber)
+    let checked = 'checked'
+    statusOt=='Activo' ? checked : checked = ''
 
-//     let bgColorStatus
-//     statusOci=='true' ? bgColorStatus='background-color: #55dd5560;'
-//                         : 
-//                         bgColorStatus='background-color: #dd555560;'
+    let bgColorStatus
+    statusOt=='Activo' ? bgColorStatus='background-color: #55dd5560;'
+                        : 
+                        bgColorStatus='background-color: #dd555560;'
 
-//     const Toast = Swal.mixin({
-//         toast: true,
-//         position: 'bottom',
-//         showConfirmButton: false,
-//         timer: 4000,
-//         timerProgressBar: false,
-//     })
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
 
-//     var html = `<form id="formUpdateOci${k}" enctype="multipart/form-data" action="/api/proyectos/updateOci/${projectId}" method="post">
-//                     <fieldset>
-//                         <div class="row justify-content-evenly mb-3 mx-1 px-1">
-//                             <div class="col-6">
-//                                 <label for="numberOci" class="form-label d-flex justify-content-start ms-1">Número OCI</label>
-//                                 <input type="number" name="numberOci" class="form-control"
-//                                     placeholder="Número OCI" value="${numberOci}" required>
-//                             </div>
+    var html = `<form id="formUpdateOt${idProjectSelected}" action="/api/proyectos/updateOt/${idProjectSelected}" method="post">
+                    <fieldset>
+                        <div class="row justify-content-between mb-3 mx-1 px-1">
+                            <div class="col-4">
+                                <label for="numberOt" class="form-label d-flex justify-content-start ms-1">Número OT</label>
+                                <input type="number" name="numberOt" class="form-control"
+                                    placeholder="Número OT" value="${numberOt}" required>
+                            </div>
                             
-//                             <div class="col-6" style="${bgColorStatus}">
-//                                 <label for="statusOci" class="form-label d-flex justify-content-start ms-1">Status OCI</label>
-//                                 <div>
-//                                     <p class="d-inline-block me-1">Inactiva</p>
-//                                     <div class="form-check form-switch d-inline-block mt-2">
-//                                         <input id="statusOciForm" class="form-check-input" type="checkbox" role="switch"
-//                                             name="statusOciForm" style="cursor: pointer;" ${checked}>
-//                                         <label class="form-check-label" for="statusOci">Activa</label>
-//                                     </div>    
-//                                 </div>
-//                             </div>
-//                         </div>    
+                            <div class="col-5" style="${bgColorStatus}">
+                                <label for="statusOt" class="form-label d-flex justify-content-start ms-1">Status OT</label>
+                                <div>
+                                    <p class="d-inline-block me-1">Inactiva</p>
+                                    <div class="form-check form-switch d-inline-block mt-2">
+                                        <input id="statusOtForm" class="form-check-input" type="checkbox" role="switch"
+                                            name="statusOtForm" style="cursor: pointer;" ${checked}>
+                                        <label class="form-check-label" for="statusOt">Activa</label>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>    
                         
-//                         <div class="row mb-3 mx-1 px-1">
-//                             <div class="col">
-//                                 <label for="descriptionOci" class="form-label d-flex justify-content-start ms-1">Descripción OCI</label>
-//                                 <input type="text" name="descriptionOci" class="form-control"
-//                                     placeholder="Descripción OCI" value="${descriptionOci}" required>
-//                             </div>                            
-//                         </div> 
+                        <div class="row mb-3 mx-1 px-1">
+                            <div class="col">
+                                <label for="descriptionOt" class="form-label d-flex justify-content-start ms-1">Descripción OT</label>
+                                <input type="text" name="descriptionOt" class="form-control"
+                                    placeholder="Descripción OT" value="${otDescription}" required>
+                            </div>                            
+                        </div>
 
-//                         <div class="row justify-content-start align-items-center mb-1 mx-1 px-1">
-//                             <div class="col mb-1">
-//                                 <label for="imageOci" class="form-label d-flex justify-content-start ms-1">Seleccione una imagen para la OCI</label>
-                                    
-//                                 <input type="text" id="fileInputTextUpdate" name="imageOciFileName"
-//                                     value="${imageOci}" style="display: none;" required>
-//                                 <input type="file" id="fileInputUpdate" name="imageOci"
-//                                     value="" accept="image/*" style="display: none;" required>
+                        <div class="row justify-content-evenly mb-3 mx-1 px-1">
+                            <div class="col-4">
+                                <label for="designOt" class="form-label d-flex justify-content-start ms-1">Diseño seguido por
+                                    <button type="button" id="searchDesignUserModal" class="btn btn-light rounded-circle ms-1">
+                                        <i class="fa-solid fa-database"></i>
+                                    </button>
+                                </label>
+                                <input type="text" name="designOt" class="form-control"
+                                    placeholder="Diseño seguido por" value="${otDesign}" required>
+                            </div>
+                            <div class="col-4">
+                                <label for="simulationOt" class="form-label d-flex justify-content-start ms-1">Simulación seguida por
+                                    <button type="button" id="searchSimulationUserModal" class="btn btn-light rounded-circle ms-1">
+                                        <i class="fa-solid fa-database"></i>
+                                    </button>
+                                </label>
+                                <input type="text" name="simulationOt" class="form-control"
+                                    placeholder="Simulacion seguida por" value="${otSimulation}" required>
+                            </div>
+                            <div class="col-4">
+                                <label for="supplierOt" class="form-label d-flex justify-content-start ms-1">Proveedor externo</label>
+                                <input type="text" name="supplierOt" class="form-control"
+                                    placeholder="Descripción OT" value="${otSupplier}" required>
+                            </div>                      
+                        </div> 
+
+                            <input type="hidden" name="ociKNumberHidden" id="ociKNumberHidden${numberKOci}" value="${numberKOci}">
+                            <input type="hidden" name="otKNumberHidden" id="otKNumberHidden${numnerKOt}" value="${numnerKOt}">
+                    </fieldset>
+                </form>`
+
+    if(idProjectSelected && numberOt) {
+        Swal.fire({
+            title: `Actualizar OT# ${numberOt}`,
+            position: 'center',
+            html: html,
+            width: 700,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Actualizar <i class="fa-regular fa-pen-to-square"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formUpdateOt${idProjectSelected}`).submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `La OT# <b>${numberOt}</b>, se modificó con éxito!`
+                })
+            } else {
+                Swal.fire(
+                    'OT no modificada!',
+                    `La OT# <b>${numberOt}</b>, no se modificó!`,
+                    'warning'
+                )
+                return false
+            }
+        })
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `La OT# ${numberOt} no se actualizó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
+
+    //---------------------------------
+    //-----Btns Buscar en BBDD el Usuario Seguidor de Diseño --------------
+    const searchDesignUserModal = document.getElementById('searchDesignUserModal')
+    searchDesignUserModal.addEventListener('click', (event) => {
+    event.preventDefault()
+
+    function cargarUsuarioDiseno() {
+        fetch('../../../api/usuarios/searchUsers/simulacion')
+            .then(response => response.json())
+            .then(users => {
+            const arrayUsauriosDiseno = []
+            const arrayUsersAll = []
+
+            for(let i=0; i<users.usersAll.length; i++) {
+
+                if(users.usersAll[i].status && users.usersAll[i].permiso ==='diseno') {
+                    arrayUsauriosDiseno.push(`
+                                    <label>
+                                        <span id="${users.usersAll[i]._id}" class="badge rounded-pill bg-info text-dark my-2">
+                                            <input class="form-check-input mb-1" type="radio" name="radioUsuarios" value="${users.usersAll[i].name}, ${users.usersAll[i].lastName}" id="${i}">
+                                            ${users.usersAll[i].name} ${users.usersAll[i].lastName}
+                                        </span>
+                                    </label>`)
+
+                } else if (users.usersAll[i].status && users.usersAll[i].permiso !=='diseno') {
+                    arrayUsersAll.push(`
+                                <label>
+                                    <span id="${users.usersAll[i]._id}" class="badge rounded-pill bg-light text-dark my-2">
+                                        <input class="form-check-input mb-1" type="radio" name="radioUsuarios" value="${users.usersAll[i].name}, ${users.usersAll[i].lastName}" id="${i}">
+                                        ${users.usersAll[i].name} ${users.usersAll[i].lastName}
+                                    </span>
+                                </label>`)
+                }
+            }
+            
+            const html = `
+                    <hr>
+                        <label>Usuarios Diseño</label>
+                        <div name='container' class="container">
+                            ${arrayUsauriosDiseno.join(' ')}
+                        </div>
+                    <hr>
+                        <label>Usuarios</label>
+                        <div name='container' class="container">
+                            ${arrayUsersAll.join(' ')}
+                        </div>
+                    <hr>`
+
+                    Swal.fire({
+                        title: 'Usuarios',
+                        html: html,
+                        width: 450,
+                        background: "#eee",
+                        allowOutsideClick: false,
+                        showCloseButton: true,
+                        confirmButtonText: 'Seleccionar <i class="fa-regular fa-circle-check"></i>'    
+                    }).then((result) => {
+                        const radiosToSelect = document.getElementsByName('radioUsuarios')
+
+                        for(let i=0; i<radiosToSelect.length; i++) {
+                            const radioSelected = document.getElementById(i)
                             
-//                                 <div id="drop-areaUpdate" class="mb-2 mx-auto">
-//                                     Arrastra y suelta una imagen aquí
-//                                 </div>
-//                                 <button title="Eliminar Imagen" class="btn btn-danger rounded-circle mx-auto"
-//                                         id="removeImageUpdate" style="display: none;">
-//                                         <i class="fa-solid fa-xmark"></i>
-//                                 </button>
-                                
-//                                 <div id="alertUpdate" class="alert alert-warning align-items-center" role="alert" style="display: none; font-size: 0.95rem; height: 1.15rem;"">
-//                                     <strong class="me-2">Error!</strong> Solo puedes ingresar una imagen jpg, png, bmp o jpeg.
-//                                 </div>
-//                             </div>
-//                         </div>
+                            if (radioSelected.checked) {
+                                var usuariosSeleccionado = radioSelected.value
+                            }
+                        }
                         
-//                         <div class="row justify-content-evenly mb-1 px-1 mx-auto">
-//                             <div class="col-12 my-1 mx-auto px-1">
-//                             <label class="form-label d-flex justify-content-start ms-1">Imagen actual de la OCI# ${numberOci}</label>
-//                                 <img src="${imageOci}" class="img-fluid rounded px-1"
-//                                     alt="Imagen OCI" width="115px">
-//                             </div>
-//                         </div>
-//                         <input type="hidden" name="ociKNumberHidden" id="ociKNumberHidden${k}" value="${k}">
-//                     </fieldset>
-//                 </form>`
+                        if (result.isConfirmed) {
+                            const inputUserSelected = document.getElementById('internoDiseno')
+                            inputUserSelected.value = usuariosSeleccionado
+                        
+                        } else {
+                            Swal.fire(
+                                'Usuario no seleccionado!',
+                                `No ha seleccionado ningún usuario!`,
+                                'warning'
+                            )
+                            return false
+                        }
+                    })
+        })
+        .catch(error => {
+        console.error('Error:', error)
+        })
+        }
+        cargarUsuarioDiseno()
+    })
 
+    //-----Btns Buscar en BBDD el Usuario Seguidor de Simulacion --------------
+    const searchSimulationUserModal = document.getElementById('searchSimulationUserModal')
+    searchSimulationUserModal.addEventListener('click', (event) => {
+    event.preventDefault()
 
-//     if(projectId && numberOci) {
-//         Swal.fire({
-//             title: `Actualizar OCI# ${numberOci}`,
-//             position: 'center',
-//             html: html,
-//             width: 700,
-//             icon: 'info',
-//             showCancelButton: true,
-//             showConfirmButton: true,
-//             confirmButtonText: 'Actualizar <i class="fa-regular fa-pen-to-square"></i>',
-//             cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
-//         }).then((result) => {
-//             if (result.isConfirmed) {
-//                 document.getElementById(`formUpdateOci${k}`).submit()
-//                 Toast.fire({
-//                     icon: 'success',
-//                     title: `La OCI# <b>${numberOci}</b>, se modificó con éxito!`
-//                 })
-//             } else {
-//                 Swal.fire(
-//                     'OCI no modificada!',
-//                     `La OCI# <b>${numberOci}</b>, no se modificó!`,
-//                     'warning'
-//                 )
-//                 return false
-//             }
-//         })
+    function cargarUsuarioSimulacion() {
+        fetch('../../../api/usuarios/searchUsers/all')
+            .then(response => response.json())
+            .then(users => {
+            const arrayUsauriosSimulacion = []
+            const arrayUsersAll = []
 
-//     } else {
-//         Swal.fire({
-//             title: 'Error',
-//             position: 'center',
-//             timer: 3500,
-//             text: `La OCI# ${numberOci} no se actualizó correctamente!`,
-//             icon: 'error',
-//             showCancelButton: false,
-//             showConfirmButton: false,
-//         })
-//     }
+            for(let i=0; i<users.usersAll.length; i++) {
 
-//     const dropAreaUpdate = document.getElementById('drop-areaUpdate')
-//     const fileInputUpdate = document.getElementById('fileInputUpdate')
-//     const fileImputTextUpdate = document.getElementById('fileInputTextUpdate')
-//     const removeImageButtonUpdate = document.getElementById('removeImageUpdate')
-//     const alertUpdate = document.getElementById('alertUpdate')
+                if(users.usersAll[i].status && users.usersAll[i].permiso ==='simulacion') {
+                    arrayUsauriosSimulacion.push(`
+                                    <label>
+                                        <span id="${users.usersAll[i]._id}" class="badge rounded-pill bg-warning text-dark my-2">
+                                            <input class="form-check-input mb-1" type="radio" name="radioUsuarios" value="${users.usersAll[i].name}, ${users.usersAll[i].lastName}" id="${i}">
+                                            ${users.usersAll[i].name} ${users.usersAll[i].lastName}
+                                        </span>
+                                    </label>`)
 
-//     dropAreaUpdate.style.width = "300px"
-//     dropAreaUpdate.style.height = "200px"
-//     dropAreaUpdate.style.border = "2px dashed #ccc"
-//     dropAreaUpdate.style.margin = "0 auto 0 50px"
-//     dropAreaUpdate.style.borderRadius = "5px"
-//     dropAreaUpdate.style.textAlign = "center"
-//     dropAreaUpdate.style.lineHeight = "200px"
-//     dropAreaUpdate.style.cursor = "pointer"
+                } else if (users.usersAll[i].status && users.usersAll[i].permiso !=='simulacion') {
+                    arrayUsersAll.push(`
+                                <label>
+                                    <span id="${users.usersAll[i]._id}" class="badge rounded-pill bg-light text-dark my-2">
+                                        <input class="form-check-input mb-1" type="radio" name="radioUsuarios" value="${users.usersAll[i].name}, ${users.usersAll[i].lastName}" id="${i}">
+                                        ${users.usersAll[i].name} ${users.usersAll[i].lastName}
+                                    </span>
+                                </label>`)
+                }
+            }
+            
+            const html = `
+                    <hr>
+                        <label>Usuarios Simulación</label>
+                        <div name='container' class="container">
+                            ${arrayUsauriosSimulacion.join(' ')}
+                        </div>
+                    <hr>
+                        <label>Usuarios</label>
+                        <div name='container' class="container">
+                            ${arrayUsersAll.join(' ')}
+                        </div>
+                    <hr>`
 
-//     dropAreaUpdate.addEventListener('dragover', (e) => {
-//         e.preventDefault()
-//         dropAreaUpdate.style.border = '2px dashed #77a'
-//         dropAreaUpdate.style.backgroundColor = '#7777aa10'
-//     })
-  
-//     dropAreaUpdate.addEventListener('dragleave', (e) => {
-//         e.preventDefault()
-//         dropAreaUpdate.style.border = '2px dashed #ccc'
-//         dropAreaUpdate.style.backgroundColor = '#fff'
-//         removeImageButtonUpdate.style.display = 'none'
-//     })
+                    Swal.fire({
+                        title: 'Usuarios',
+                        html: html,
+                        width: 450,
+                        background: "#eee",
+                        allowOutsideClick: false,
+                        showCloseButton: true,
+                        confirmButtonText: 'Seleccionar <i class="fa-regular fa-circle-check"></i>'    
+                    }).then((result) => {
+                        const radiosToSelect = document.getElementsByName('radioUsuarios')
 
-//     function alertNotImageUpdate() {
-//         alertUpdate.style.display = 'flex'
-//         removeImageButtonUpdate.style.display = 'none'
-//         dropAreaUpdate.style.border = "2px dashed #ccc"
-//         dropAreaUpdate.style.textAlign = "center"
-//         dropAreaUpdate.style.backgroundColor = '#fff'
-//         dropAreaUpdate.style.display = 'block'
-//         dropAreaUpdate.innerHTML = 'Arrastra y suelta una imagen aquí'
-//     }
-    
-//     dropAreaUpdate.addEventListener('drop', (e) => {
-//         e.preventDefault()
-//         dropAreaUpdate.style.border = '3px dashed #2a2'
-//         dropAreaUpdate.style.backgroundColor = '#22aa2210'
-//         const file = e.dataTransfer.files[0]
-
-//         if (file && file.type.startsWith('image/')) {
-//             fileInputUpdate.files = e.dataTransfer.files
-//             let pathToImage = '../../../src/images/upload/projectImages/'
-//             fileImputTextUpdate.value = pathToImage + file.name
-//             removeImageButtonUpdate.style.display = 'flex'
-//             alertUpdate.style.display = 'none'
-//             handleFileUploadUpdate(file)
-//         } else {
-//             alertNotImageUpdate()
-//         }     
-//     })
-
-//     dropAreaUpdate.addEventListener('click', () => {
-//         fileInputUpdate.click()
-//     })
-
-//     fileInputUpdate.addEventListener('change', (e) => {
-//         e.preventDefault()
-//         const file = fileInputUpdate.files[0]
-        
-//         if (file && file.type.startsWith('image/')) { 
-//             let pathToImage = '../../../src/images/upload/projectImages/'
-//             fileImputTextUpdate.value = pathToImage + file.name
-//             removeImageButtonUpdate.style.display = 'flex'
-//             alertUpdate.style.display = 'none'
-//             handleFileUploadUpdate(file)
-//         } else {
-//             alertNotImageUpdate()
-//         }     
-//     })
-
-//     function handleFileUploadUpdate(file) {
-//         if (file && file.type.startsWith('image/')) {
-//             const reader = new FileReader()
-//             reader.readAsDataURL(file)
-//             reader.onload = () => {
-//                 dropAreaUpdate.innerHTML = 
-//                     `<img class="p-2" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
-//                 dropAreaUpdate.style.display = 'block'
-//                 alertUpdate.style.display = 'none'
-//             }
-
-//         } else {
-//             alertNotImageUpdate()
-//         }
-//     }
-
-//     removeImageButtonUpdate.addEventListener('click', ()=> {
-//         fileImputTextUpdate.value = ''
-//         dropAreaUpdate.style.border = "2px dashed #ccc"
-//         dropAreaUpdate.style.textAlign = "center"
-//         dropAreaUpdate.style.backgroundColor = '#fff'
-//         dropAreaUpdate.style.display = 'block'
-//         dropAreaUpdate.innerHTML = 'Arrastra y suelta una imagen aquí'
-//         removeImageButtonUpdate.style.display = 'none'
-//         alertUpdate.style.display = 'none'
-//     })
-// }
+                        for(let i=0; i<radiosToSelect.length; i++) {
+                            const radioSelected = document.getElementById(i)
+                            
+                            if (radioSelected.checked) {
+                                var usuariosSeleccionado = radioSelected.value
+                            }
+                        }
+                        
+                        if (result.isConfirmed) {
+                            const inputUserSelected = document.getElementById('internoSimulacion')
+                            inputUserSelected.value = usuariosSeleccionado
+                        
+                        } else {
+                            Swal.fire(
+                                'Usuario no seleccionado!',
+                                `No ha seleccionado ningún usuario!`,
+                                'warning'
+                            )
+                            return false
+                        }
+                    })
+        })
+        .catch(error => {
+        console.error('Error:', error)
+        })
+        }
+        cargarUsuarioSimulacion()
+    })
+    //--------------------------------
+}
 
 //---- Delete OT ----------------
-// function messageDeleteOci(
-//     projectId,
-//     ociNumber,
-//     ociKNumber,
-//     ociDescription,
-//     imageOci
-//     ) {
+function messageDeleteOt(
+    statusOt,
+    otNumber,
+    idProjectSelected,
+    ociKNumber,
+    otKNumber,
+    otDescription
+    ) {
         
-//     const descriptionOci = ociDescription.slice(13)
+    const descriptionOt = otDescription.slice(13)
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+
+    const htmlForm = `
+        <div class="container m-auto">
+            La OT#<strong>${otNumber}</strong>, Descripcion: "${descriptionOt}",
+            Status: <span class="badge rounded-pill bg-${ statusOt==='Activo' ? 'primary' : 'danger' } text-white">
+                        ${ statusOt==='Activo' ? 'Activo' : 'Inactivo' }
+                    </span>
+            y su toda su información interna se eliminará completamente.
+            <br>
+            <hr>
+            Está seguro que desea continuar?
+            <form id="formDeleteOt${idProjectSelected}" action="/api/proyectos/deleteOt/${idProjectSelected}" method="post">
+                <fieldset>
+                    <input type="hidden" name="ociKNumberHidden" value="${ociKNumber}">
+                    <input type="hidden" name="otKNumberHidden" value="${otKNumber}">
+                </fieldset>
+            </form>
+        </div>    
+                    `
     
-//     const Toast = Swal.mixin({
-//         toast: true,
-//         position: 'bottom',
-//         showConfirmButton: false,
-//         timer: 4000,
-//         timerProgressBar: false,
-//     })
+    if(idProjectSelected && otNumber) {
+        Swal.fire({
+            title: `Eliminar OT# ${otNumber}`,
+            position: 'center',
+            html: htmlForm,
+            icon: 'question',
+            width: 650,
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: 'Eliminar <i class="fa-regular fa-trash-can"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formDeleteOt${idProjectSelected}`).submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `La OT#<strong>${otNumber}</strong>, se eliminó correctamente!`
+                })
+            } else {
+                Swal.fire(
+                    `OT# ${otNumber}`,
+                    `La OT#<b>${otNumber}</b>, no se eliminó!`,
+                    'warning'
+                )
+                return false
+            }
+        })
 
-//     const htmlForm = `
-//         <div class="container m-auto">
-//             La OCI#<strong>${ociNumber}</strong> - Descripcion: "${descriptionOci}"
-//             y su toda su información interna se eliminará completamente.
-//             <br>
-//             <div id="imagePreview" class="p-1 my-1 mx-auto w-50">
-//                 <img class="p-1 m-1" src="${imageOci}" style="max-width: 75%; max-height: 75%;">
-//             </div>
-            
-//             Está seguro que desea continuar?
-//             <form id="formDeleteOci${projectId}" action="/api/proyectos/deleteOci/${projectId}" method="post">
-//                 <fieldset>
-//                     <input type="hidden" name="ociKNumberHidden" value="${ociKNumber}">
-//                 </fieldset>
-//             </form>
-//         </div>    
-//                     `
-    
-//     if(projectId && ociNumber) {
-//         Swal.fire({
-//             title: `Eliminar OCI# ${ociNumber}`,
-//             position: 'center',
-//             html: htmlForm,
-//             icon: 'question',
-//             width: 650,
-//             showCancelButton: true,
-//             showConfirmButton: true,
-//             confirmButtonColor: "#d33",
-//             cancelButtonColor: "#3085d6",
-//             confirmButtonText: 'Eliminar <i class="fa-regular fa-trash-can"></i>',
-//             cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
-//         }).then((result) => {
-//             if (result.isConfirmed) {
-//                 document.getElementById(`formDeleteOci${projectId}`).submit()
-//                 Toast.fire({
-//                     icon: 'success',
-//                     title: `La OCI#<strong>${ociNumber}</strong>, se eliminó correctamente!`
-//                 })
-//             } else {
-//                 Swal.fire(
-//                     `OCI# ${ociNumber}`,
-//                     `La OCI#<b>${ociNumber}</b>, no se eliminó!`,
-//                     'warning'
-//                 )
-//                 return false
-//             }
-//         })
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `La OT#<strong>${otNumber}</strong>, no se eliminó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
+}
 
-//     } else {
-//         Swal.fire({
-//             title: 'Error',
-//             position: 'center',
-//             timer: 3500,
-//             text: `La OCI#<strong>${ociNumber}</strong>, no se eliminó correctamente!`,
-//             icon: 'error',
-//             showCancelButton: false,
-//             showConfirmButton: false,
-//         })
-//     }
-// }
-
+let checkSelect = document.querySelectorAll('input[name="checkSelect"]')
 let maxOtQuantity
-document.getElementById('otQuantity') ?
-    maxOtQuantity = parseInt(document.getElementById('otQuantity').value)
-    :
-    maxOtQuantity=0
-console.log('maxOtQuantity: ',maxOtQuantity)
+checkSelect ? maxOtQuantity = parseInt(checkSelect.length) : maxOtQuantity=0
+let ociTotalQty = parseInt(document.getElementById('ociTotalQty').innerText)
 
 var arrayBtnChangeStatusOt = [], arrayBtnUpdateOt = [], arrayBtnDeleteOt = []
 
-for (let m=0; m<maxOtQuantity; m++) {
+for (let m=0; m<ociTotalQty; m++) {
     for (let n=0; n<maxOtQuantity; n++) {
         let btnChangeStatusOt = document.getElementById(`btnStatusOt${m}_${n}`)
         if (btnChangeStatusOt) {
@@ -773,7 +852,8 @@ for (let m=0; m<maxOtQuantity; m++) {
         }
 
         let btnUpdateOt = document.getElementById(`btnUpdateOt${m}_${n}`)
-        if(btnUpdateOt) {
+        
+        if (btnUpdateOt) {
             arrayBtnUpdateOt.push(btnUpdateOt)
         }
 
@@ -797,14 +877,21 @@ function cleanString(cadena) {
 arrayBtnChangeStatusOt.forEach(function(elemento) {
     elemento.addEventListener('click', (event) => {
         event.preventDefault()
-        const idOtSelected = (event.target.id).slice(11)
-        const statusOt = document.getElementById(`lastOtStatus${idOtSelected}`).textContent
-        const otNumber = document.getElementById(`lastOtNumber${idOtSelected}`).textContent
-                
+        const idOtOci = (event.target.id).slice(11)
+        const arrayOciOtSelected = (event.target.id).slice(11).split('_')
+        
+        const statusOt = document.getElementById(`lastOtStatus${idOtOci}`).textContent
+        const otNumber = parseInt(document.getElementById(`lastOtNumber${idOtOci}`).textContent)
+        const idProjectSelected = document.getElementById('projectIdHidden').value
+        const ociKNumber = parseInt(arrayOciOtSelected[0])
+        const otKNumber = parseInt(arrayOciOtSelected[1])
+        
         messageChangeOtStatus(
             cleanString(statusOt),
-            cleanString(otNumber),
-            elemento.id
+            otNumber,
+            idProjectSelected,
+            ociKNumber,
+            otKNumber
         )
     })
 })
@@ -812,18 +899,29 @@ arrayBtnChangeStatusOt.forEach(function(elemento) {
 arrayBtnUpdateOt.forEach(function(element) {
     element.addEventListener('click', (event) => {
         event.preventDefault()
-        const projectId = document.getElementById(`projectIdHidden${element.id.slice(12)}`).value
-        const statusOt = document.getElementById(`statusOtHidden${element.id.slice(12)}`).value
-        const otDescription = document.getElementById(`otDescription${element.id.slice(12)}`).innerText
-        const otNumber = document.getElementById(`otNumberHidden${element.id.slice(12)}`).value
-        const otKNumber = document.getElementById(`otKNumberHidden${element.id.slice(12)}`).value
-    
+        const idOtOci = (event.target.id).slice(11)
+        const arrayOciOtSelected = (event.target.id).slice(11).split('_')
+        
+        const statusOt = document.getElementById(`lastOtStatus${idOtOci}`).textContent
+        const otNumber = parseInt(document.getElementById(`lastOtNumber${idOtOci}`).textContent)
+        const idProjectSelected = document.getElementById('projectIdHidden').value
+        const ociKNumber = parseInt(arrayOciOtSelected[0])
+        const otKNumber = parseInt(arrayOciOtSelected[1])       
+        const otDescription = document.getElementById(`lastOpDescription${idOtOci}`).textContent
+        const otDesign =  document.getElementById(`otDesign${idOtOci}`).textContent
+        const otSimulation =  document.getElementById(`otSimulation${idOtOci}`).textContent
+        const otSupplier =  document.getElementById(`otSupplier${idOtOci}`).textContent
+        
         messageUpdateOt(
-            projectId,
-            statusOt,
-            otDescription,
+            cleanString(statusOt),
             otNumber,
-            otKNumber
+            idProjectSelected,
+            ociKNumber,
+            otKNumber,
+            cleanString(otDescription),
+            cleanString(otDesign),
+            cleanString(otSimulation),
+            cleanString(otSupplier)
         )
     })
 })
@@ -831,14 +929,21 @@ arrayBtnUpdateOt.forEach(function(element) {
 arrayBtnDeleteOt.forEach(function(element) {
     element.addEventListener('click', (event) => {
         event.preventDefault()
-        const projectId = document.getElementById(`projectIdHidden${element.id.slice(12)}`).value
-        const otNumber = document.getElementById(`otNumberHidden${element.id.slice(12)}`).value
-        const otKNumber = document.getElementById(`otKNumberHidden${element.id.slice(12)}`).value
-        const otDescription = document.getElementById(`otDescription${element.id.slice(12)}`).innerText
+        const idOtOci = (event.target.id).slice(11)
+        const arrayOciOtSelected = (event.target.id).slice(11).split('_')
         
-        messageDeleteOci(
-            projectId,
+        const statusOt = document.getElementById(`lastOtStatus${idOtOci}`).textContent
+        const otNumber = parseInt(document.getElementById(`lastOtNumber${idOtOci}`).textContent)
+        const idProjectSelected = document.getElementById('projectIdHidden').value
+        const ociKNumber = parseInt(arrayOciOtSelected[0])
+        const otKNumber = parseInt(arrayOciOtSelected[1])       
+        const otDescription = document.getElementById(`lastOpDescription${idOtOci}`).textContent
+        
+        messageDeleteOt(
+            cleanString(statusOt),
             otNumber,
+            idProjectSelected,
+            ociKNumber,
             otKNumber,
             otDescription
         )

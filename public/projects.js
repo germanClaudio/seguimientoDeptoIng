@@ -70,19 +70,36 @@ const renderProjectsForAdmin = (arrayProjects) => {
         let grey = 'secondary'
         let yellow = 'warning'
         let white = 'white'
+        let colorResult = grey
+        let colorLevel
         // let black = 'dark'
         // let blue = 'primary'
         // let result = 'S/P'
-        let colorResult = grey
-        let colorLevel
-    
-        
-            
+                
         // ----------- Loops de Array OCI ----------------
         let ociArr = []
         function loopOcis() {
+            
+            function countOt() {
+                const ociLength = element.project[0].oci.length
+                let count = 0
+                for (let q=0; q<ociLength; q++) {
+                    if (element.project[0].oci[q].visible) {
+                        count++
+                    }
+                }
+                return count
+            }
+            console.log('countOt: ', countOt())
+            
             for (let i=0; i < element.project[0].oci.length; i++) {
-                ociArr.push(element.project[0].oci[i].ociNumber)
+                if (element.project[0].oci[i].visible) {
+                    if (element.project[0].oci[i].ociStatus) {
+                        ociArr.push(element.project[0].oci[i].ociNumber)
+                    } else {
+                        ociArr.push(element.project[0].oci[i].ociNumber + ' ' + '<i class="fa-solid fa-circle-info" title="OCI Inactiva" style="color: #ff0000;"></i>')
+                    }
+                }
             }
             return ociArr.join('<hr>')
         }
@@ -92,60 +109,76 @@ const renderProjectsForAdmin = (arrayProjects) => {
             let otArr = []
             if (element.project[0].oci[j].otProject.length > 0 ) {
                 for (let i=0; i < element.project[0].oci[j].otProject.length; i++) {
-                    otArr.push(element.project[0].oci[j].otProject[i].otNumber)
+                    if (element.project[0].oci[j].otProject[i].visible) {
+                        if (element.project[0].oci[j].otProject[i].otStatus) {
+                            otArr.push(element.project[0].oci[j].otProject[i].otNumber)
+                        } else {
+                            otArr.push(element.project[0].oci[j].otProject[i].otNumber + ' ' + '<i class="fa-solid fa-circle-info" title="OT Inactiva" style="color: #ff0000;"></i>')
+                        }
+                    }
                 }
                 return otArr.join('<br>')
             } else {
-                return ('<span class="badge rounded-pill bg-secondary text-light">S/D</span>')
+                return ('<span class="badge rounded-pill bg-secondary text-light mb-2">S/D</span><br>')
             }
         }
 
         let arrOtArr = []
         function loopArrayOt() {
             for (let j=0; j < element.project[0].oci.length; j++) {
-                arrOtArr.push(loopOt(j))
+                if (element.project[0].oci[j].visible) {
+                    arrOtArr.push(loopOt(j))
+                }
             }
             return arrOtArr.join('<hr>')
-        }    
+        }
 
         // ----------- Loops de Array OPs ----------------
         function loopOp(j) {
             let opArr = []
             if (element.project[0].oci[j].otProject.length > 0 ) {
                 for (let i=0; i < element.project[0].oci[j].otProject.length; i++) {
-                    opArr.push(element.project[0].oci[j].otProject[i].opNumber)
+                    if (element.project[0].oci[j].otProject[i].visible) {
+                        opArr.push(element.project[0].oci[j].otProject[i].opNumber)
+                    }
                 }
                 return opArr.join('<br>')
             } else {
-                return ('<span class="badge rounded-pill bg-secondary text-light">S/D</span>')
+                return ('<span class="badge rounded-pill bg-secondary text-light mb-2">S/D</span><br>')
             }
         }
 
         let arrOpArr = []
         function loopArrayOp() {
             for (let j=0; j < element.project[0].oci.length; j++) {
-                arrOpArr.push(loopOp(j))
+                if (element.project[0].oci[j].visible) {
+                    arrOpArr.push(loopOp(j))
+                }
             }
             return arrOpArr.join('<hr>')
-        }    
+        }
 
         // ----------- Loops de Array Descriptions ----------------
         function loopDescription(j) {
             let DescriptionArr = []
             if (element.project[0].oci[j].otProject.length > 0 ) {
                 for (let i=0; i < element.project[0].oci[j].otProject.length; i++) {
-                    DescriptionArr.push(element.project[0].oci[j].otProject[i].opDescription)
+                    if (element.project[0].oci[j].otProject[i].visible) {
+                        DescriptionArr.push(element.project[0].oci[j].otProject[i].opDescription)
+                    }
                 }
                 return DescriptionArr.join('<br>')
             } else {
-                return ('<span class="badge rounded-pill bg-secondary text-light">S/D</span>')
+                return ('<span class="badge rounded-pill bg-secondary text-light mb-2">S/D</span><br>')
             }
         }
 
         let arrDescriptionArr = []
         function loopArrayDescription() {
             for (let j=0; j < element.project[0].oci.length; j++) {
-                arrDescriptionArr.push(loopDescription(j))
+                if (element.project[0].oci[j].visible) {
+                    arrDescriptionArr.push(loopDescription(j))
+                }
             }
             return arrDescriptionArr.join('<hr>')
         }    
@@ -166,18 +199,18 @@ const renderProjectsForAdmin = (arrayProjects) => {
         }
     
         if(element.project[0].visible){
-            return (`<tr>
+            return (`<tr style="border-bottom: 2px solid #dedede";>
                         <td class="text-center">${element.project[0].codeProject}</td>
                         <td class="text-center" data-column="nombre">${element.project[0].projectName}</td>
-                        <td class="text-center" data-column="oci">${loopOcis()}</td>
                         <td class="text-center"><img class="img-fluid rounded m-2" alt="Imagen Proyecto" src='${element.project[0].imageProject}' width="100px" height="80px"></td>
                         <td class="text-center" data-column="cliente"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.client[0].logo}' width="70px" height="55px"></td>
                         <td class="text-center" data-column="prio"><span class="badge rounded-pill bg-dark">${element.project[0].prioProject}</span></td>
                         <td class="text-center" data-column="nivel"><span class="badge rounded-pill bg-${colorResult} text-${colorLevel}">${text}</span></td>
                         <td class="text-center">${element.project[0].projectDescription}</td>
-                        <td class="text-center" data-column="ot">${loopArrayOt()}</td>
-                        <td class="text-center">${loopArrayOp()}</td>
-                        <td class="text-center">${loopArrayDescription()}</td>
+                        <td class="text-center align-middle" data-column="oci">${loopOcis()}</td>
+                        <td class="text-center align-middle" data-column="ot"><br>${loopArrayOt()}<br></td>
+                        <td class="text-center align-middle"><br>${loopArrayOp()}<br></td>
+                        <td class="text-center align-middle"><br>${loopArrayDescription()}<br></td>
                         <td class="text-center" data-column="fecha">${element.timestamp}</td>
                         <td class="text-center">
                             <div class="d-block align-items-center">

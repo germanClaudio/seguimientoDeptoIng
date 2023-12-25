@@ -58,19 +58,19 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
     async getProjectsByClientId(id) {
         if (id) {
             try {
-                const projects = await Proyectos.find({
+                const project = await Proyectos.find({
                     'client.0._id': id
                 })
 
-                return projects
+                return project
 
             } catch (error) {
                 logger.error("Error MongoDB getProjectsByClientId: ", error)
             }
         } else {
             try {
-                const projects = await Proyectos.find()
-                return projects
+                const project = await Proyectos.find()
+                return project
             } catch (error) {
                 logger.error("Error MongoDB getOneClientById: ", error)
             }
@@ -470,17 +470,13 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
     // Update Status Oci by Project Id
     async updateStatusOci(id, project, statusOci, ociKNumber, userModificator) {
-        //console.log('Project...', project)
-        //console.log('userInfo...', userModificator)
-        //console.log('statusOci...', typeof statusOci)
-        //console.log('ociKNumber...', ociKNumber)
         let booleanStatus
         statusOci=='true' ? booleanStatus=true : booleanStatus=false
         
         if (project) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
-                // console.log('itemMongoDB...', itemMongoDB)
+                
                 if (itemMongoDB) {
                     const ociNumberK = parseInt(ociKNumber) || 0
 
@@ -495,11 +491,59 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                         },
                         { new: true }
                     )
-                    //console.log('Status OCI modificado: ', updatedProject)
+                    
+                    if(updatedProject.acknowledged) {
+                        const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
+                       
+                        return itemUpdated
+                    } else {
+                        return new Error(`No se actualizó el item: ${itemUpdated._id}`)
+                    }
+                    
+                } else {
+                    return new Error(`Proyecto no existe con este id: ${id}!`)
+                }
+
+            } catch (error) {
+                logger.error("Error MongoDB updatingProject: ", error)
+            }
+
+        } else {
+            return new Error(`No se pudo modificar el status del Proyecto!`)
+        }
+    }
+
+    // Update Status Ot by Project Id
+    async updateStatusOt(id, project, statusOt, ociKNumber, otKNumber, userModificator) {
+        let booleanStatus
+        statusOt==='Activo' ? booleanStatus=true : booleanStatus=false
+        
+        if (id && project) {
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
+                
+                if (itemMongoDB) {
+                    const ociNumberK = parseInt(ociKNumber)
+                    const otNumberK = parseInt(otKNumber)
+
+                    var updatedProject = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                [`project.0.oci.${ociNumberK}.otProject.${otNumberK}.otStatus`]: !booleanStatus,
+                                [`project.0.oci.${ociNumberK}.modificator`]: userModificator,
+                                [`project.0.oci.${ociNumberK}.modifiedOn`]: now, 
+                                [`project.0.oci.${ociNumberK}.otProject.${otNumberK}.modificator`]: userModificator,
+                                [`project.0.oci.${ociNumberK}.otProject.${otNumberK}.modifiedOn`]: now
+                            }
+                        },
+                        { new: true }
+                    )
+                    console.log('Status OCI modificado: ', updatedProject)
 
                     if(updatedProject.acknowledged) {
                         const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
-                        // console.log('itemUpdated...', itemUpdated)
+                        console.log('itemUpdated...', itemUpdated.project[0].oci[ociNumberK])
                         return itemUpdated
                     } else {
                         return new Error(`No se actualizó el item: ${itemUpdated._id}`)
@@ -624,7 +668,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                     
                     if(updatedProject.acknowledged) {
                         const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
-                        //console.log('itemUpdated...', itemUpdated)
+                        
                         return itemUpdated
                     } else {
                         return new Error(`No se actualizó el item: ${itemUpdated._id}`)
@@ -774,6 +818,84 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
             return new Error(`No se pudo eliminar la OCI!`)
         }
     }
+
+    // Delete Ot from Oci
+    async deleteOt(
+        id, 
+        project, 
+        ociKNumber,
+        otKNumber,
+        userModificator
+    ) {
+    const ociNumberK = parseInt(ociKNumber)
+    const otNumberK = parseInt(otKNumber)
+            
+    if (id && project) {
+        
+        try {
+            const itemMongoDB = await Proyectos.findById({ _id: project[0]._id })
+            
+            if (itemMongoDB) {
+                
+                if(itemMongoDB.project[0].oci[ociNumberK].otProject[otNumberK].visible) {
+                    var deleteOt = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                [`project.0.oci.${ociNumberK}.otProject.${otNumberK}.visible`]: Boolean(false),
+                                [`project.0.oci.${ociNumberK}.otProject.${otNumberK}.modificator`]: userModificator,
+                                [`project.0.oci.${ociNumberK}.otProject.${otNumberK}.modifiedOn`]: now,
+                                [`project.0.oci.${ociNumberK}.modificator`]: userModificator,
+                                [`project.0.oci.${ociNumberK}.modifiedOn`]: now,
+                                [`project.0.modificator`]: userModificator,
+                                [`project.0.modifiedOn`]: now,
+                                modificator: userModificator,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
+
+                } else {
+                    var deleteOt = await Proyectos.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                [`project.0.oci.${ociNumberK}.otProject.${otNumberK}.visible`]: Boolean(true),
+                                [`project.0.oci.${ociNumberK}.otProject.${otNumberK}.modificator`]: userModificator,
+                                [`project.0.oci.${ociNumberK}.otProject.${otNumberK}.modifiedOn`]: now,
+                                [`project.0.oci.${ociNumberK}.modificator`]: userModificator,
+                                [`project.0.oci.${ociNumberK}.modifiedOn`]: now,
+                                [`project.0.modificator`]: userModificator,
+                                [`project.0.modifiedOn`]: now,
+                                modificator: userModificator,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
+                }
+
+                if(deleteOt.acknowledged) {
+                    const itemUpdated = await Proyectos.findById({ _id: project[0]._id })
+                    return itemUpdated
+
+                } else {
+                    return new Error(`No se eliminó la OT del proyecto`)
+                }
+                
+            } else {
+                return new Error(`OT no existe con este id: ${id}!`)
+            }
+
+        } catch (error) {
+            logger.error("Error MongoDB deletingOt from Oci: ", error)
+        }
+
+    } else {
+        return new Error(`No se pudo eliminar la OT!`)
+    }
+}
 
     // Delete Project by Project Id
     async deleteProjectById(id, project, userModificator) {

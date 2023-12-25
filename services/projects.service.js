@@ -84,11 +84,12 @@ class ProjectService {
     }
 
     // Update Status OT by Ot Number
-    async updateStatusOt(id, project, statusOt, otKNumber, userInfo) {
+    async updateStatusOt(id, project, statusOt, ociKNumber, otKNumber, userInfo) {
         return this.proyectos.updateStatusOt(
             id,
             project,
             statusOt,
+            ociKNumber,
             otKNumber,
             userInfo)
     }
@@ -155,6 +156,23 @@ class ProjectService {
     // remove one OCI from project by Id
     async deleteOci(id, project, ociKNumber, user) {
         return this.proyectos.deleteOci(id, project, ociKNumber, user)
+    }
+
+    // remove one OT from OCI by Id
+    async deleteOt(
+        id, 
+        project, 
+        ociKNumber, 
+        otKNumber, 
+        userInfo
+        ) {
+        return this.proyectos.deleteOt(
+            id, 
+            project, 
+            ociKNumber, 
+            otKNumber, 
+            userInfo
+            )
     }
 
     // remove one project by Id

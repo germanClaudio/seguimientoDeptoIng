@@ -38,8 +38,8 @@ routerProyectos.post('/updateLevelProject/:id', checkAuthentication, authProduct
 // -------------------  Actualizar Estado de OCI por Id Proyecto ------------------ 
 routerProyectos.post('/updateStatusOci/:id', checkAuthentication, authProductMiddleware, projects.updateStatusOci)
 
-// -------------------  Actualizar Estado de OT por Numero de OT ------------------ 
-routerProyectos.post('/updateStatusOt/:otNumber', checkAuthentication, authProductMiddleware, projects.updateStatusOt)
+// -------------------  Actualizar Estado de OT por Id Proyecto ------------------ 
+routerProyectos.post('/updateStatusOt/:id', checkAuthentication, authProductMiddleware, projects.updateStatusOt)
 
 // -------------------  Agregar Nueva OCI a Proyecto por Id Proyecto ------------------ 
 routerProyectos.post('/addNewOciToProject/:id', checkAuthentication, authProductMiddleware, projects.addNewOciToProject)
@@ -52,6 +52,9 @@ routerProyectos.post('/updateOci/:id', checkAuthentication, authProductMiddlewar
 
 // -------------------  Eliminar OCI por Id de Proyecto ------------------ 
 routerProyectos.post('/deleteOci/:id', checkAuthentication, authProductMiddleware, projects.deleteOci)
+
+// -------------------  Eliminar OT por Id de Proyecto ------------------ 
+routerProyectos.post('/deleteOt/:id', checkAuthentication, authProductMiddleware, projects.deleteOt)
 
 // -------------------  Eliminar Proyecto por Id (Visible = false) ------------------ 
 routerProyectos.post('/deleteProject/:id', checkAuthentication, authProductMiddleware, projects.deleteProjectById)
