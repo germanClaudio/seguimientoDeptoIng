@@ -376,6 +376,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    
 
     // Update Status Project by Project Id
     async updateStatusProject(id, project, statusProject, userModificator) {

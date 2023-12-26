@@ -1,28 +1,38 @@
 <header>
     <nav class="navbar fixed-top navbar-dark bg-dark text-white">
         <div class="container-fluid px-2 my-1">
-            <a class="navbar-brand mx-2" href="/api/auth/index">
+            <a class="navbar-brand mx-2" role="button" href="#offcanvasExample" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasWithBothOptions"
+                aria-controls="offcanvasWithBothOptions">
                 <img src='../../../src/images/logo01-bco.png' width="168" height="30"
                     class="d-inline-block align-text-top"></a>
             <div class="me-auto d-block" id="navbarTogglerDemo02">
                 <ul class="navbar-nav my-auto list-group list-group-horizontal">
                     <li class="nav-item mx-4 active">
-                        <a class="nav-link" aria-current="page" href="/api/auth/index"><i class="fa-solid fa-home"
-                                aria-hidden="true"></i> Home</a>
+                        <a class="nav-link" aria-current="page" href="/api/auth/index">
+                            <i class="fa-solid fa-home" aria-hidden="true"></i>
+                            Home
+                        </a>
                     </li>
                     <li class="nav-item mx-4">
                         <a class="nav-link" href="/api/clientes"><i class="fa-regular fa-handshake" aria-hidden="true"></i>
-                            Clientes</a>
+                            Clientes
+                        </a>
                     </li>
                     <li class="nav-item mx-4">
-                        <a class="nav-link" href="/api/proyectos"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> Proyectos</a>
+                        <a class="nav-link" href="/api/proyectos"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i>
+                            Proyectos
+                        </a>
                     </li>
                     <li class="nav-item mx-4">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-cog fa-spin fa-fw" aria-hidden="true"></i> OCI's</a>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-cog fa-spin fa-fw" aria-hidden="true"></i>
+                            OCI's
+                        </a>
                     </li>
                     <li class="nav-item mx-4">
                         <a class="nav-link" href="/api/webchat"><i class="fa-solid fa-comments" aria-hidden="true"></i>
-                            WebChat</a>
+                            WebChat
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -36,8 +46,11 @@
                 </div>
 
                 <a class="btn btn-light me-5 my-auto" style="width: 155px;" type="submit" href="/api/auth/logout"><i
-                        class="fa-solid fa-sign-out"></i> LogOut</a>
+                    class="fa-solid fa-sign-out"></i>
+                    LogOut
+                </a>
             </div>
         </div>
     </nav>
+    <%- include('../partials/sidebar'); %>
 </header>

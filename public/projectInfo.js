@@ -514,7 +514,7 @@ function messageUpdateOt(
                                         <i class="fa-solid fa-database"></i>
                                     </button>
                                 </label>
-                                <input type="text" name="designOt" class="form-control"
+                                <input type="text" id="designOt" name="designOt" class="form-control"
                                     placeholder="Diseño seguido por" value="${otDesign}" required>
                             </div>
                             <div class="col-4">
@@ -523,12 +523,12 @@ function messageUpdateOt(
                                         <i class="fa-solid fa-database"></i>
                                     </button>
                                 </label>
-                                <input type="text" name="simulationOt" class="form-control"
+                                <input type="text" id="simulationOt" name="simulationOt" class="form-control"
                                     placeholder="Simulacion seguida por" value="${otSimulation}" required>
                             </div>
                             <div class="col-4">
                                 <label for="supplierOt" class="form-label d-flex justify-content-start ms-1">Proveedor externo</label>
-                                <input type="text" name="supplierOt" class="form-control"
+                                <input type="text" id="supplierOt" name="supplierOt" class="form-control"
                                     placeholder="Descripción OT" value="${otSupplier}" required>
                             </div>                      
                         </div> 
@@ -543,7 +543,7 @@ function messageUpdateOt(
             title: `Actualizar OT# ${numberOt}`,
             position: 'center',
             html: html,
-            width: 700,
+            width: 800,
             icon: 'info',
             showCancelButton: true,
             showConfirmButton: true,
@@ -556,6 +556,7 @@ function messageUpdateOt(
                     icon: 'success',
                     title: `La OT# <b>${numberOt}</b>, se modificó con éxito!`
                 })
+
             } else {
                 Swal.fire(
                     'OT no modificada!',
@@ -578,7 +579,7 @@ function messageUpdateOt(
         })
     }
 
-    //---------------------------------
+    // //---------------------------------
     //-----Btns Buscar en BBDD el Usuario Seguidor de Diseño --------------
     const searchDesignUserModal = document.getElementById('searchDesignUserModal')
     searchDesignUserModal.addEventListener('click', (event) => {
@@ -633,8 +634,11 @@ function messageUpdateOt(
                         background: "#eee",
                         allowOutsideClick: false,
                         showCloseButton: true,
+                        showCancelButton: true,
+                        cancelButtonText: 'Volver <i class="fa-solid fa-back"></i>',
                         confirmButtonText: 'Seleccionar <i class="fa-regular fa-circle-check"></i>'    
-                    }).then((result) => {
+                    
+                    }).then((secondResult) => {
                         const radiosToSelect = document.getElementsByName('radioUsuarios')
 
                         for(let i=0; i<radiosToSelect.length; i++) {
@@ -645,11 +649,16 @@ function messageUpdateOt(
                             }
                         }
                         
-                        if (result.isConfirmed) {
-                            const inputUserSelected = document.getElementById('internoDiseno')
-                            inputUserSelected.value = usuariosSeleccionado
-                        
-                        } else {
+                        if (secondResult.isConfirmed) {
+                            //const inputUserSelected = document.getElementById('designOt')
+                            //inputUserSelected.value = usuariosSeleccionado
+                            
+                        } else if (secondResult.dismiss === Swal.DismissReason.cancel) {
+                            event.preventDefault()
+                            return messageUpdateOt()
+                        }
+
+                        else {
                             Swal.fire(
                                 'Usuario no seleccionado!',
                                 `No ha seleccionado ningún usuario!`,
@@ -898,7 +907,7 @@ arrayBtnChangeStatusOt.forEach(function(elemento) {
 
 arrayBtnUpdateOt.forEach(function(element) {
     element.addEventListener('click', (event) => {
-        event.preventDefault()
+        // event.preventDefault()
         const idOtOci = (event.target.id).slice(11)
         const arrayOciOtSelected = (event.target.id).slice(11).split('_')
         
