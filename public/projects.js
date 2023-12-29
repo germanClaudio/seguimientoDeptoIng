@@ -90,7 +90,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
                 }
                 return count
             }
-            console.log('countOt: ', countOt())
+            //console.log('countOt: ', countOt())
             
             for (let i=0; i < element.project[0].oci.length; i++) {
                 if (element.project[0].oci[i].visible) {

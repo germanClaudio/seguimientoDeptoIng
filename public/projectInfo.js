@@ -851,27 +851,47 @@ let maxOtQuantity
 checkSelect ? maxOtQuantity = parseInt(checkSelect.length) : maxOtQuantity=0
 let ociTotalQty = parseInt(document.getElementById('ociTotalQty').innerText)
 
-var arrayBtnChangeStatusOt = [], arrayBtnUpdateOt = [], arrayBtnDeleteOt = []
+var arrayBtnChangeStatusOt = [],
+    arrayBtnUpdateOt = [],
+    arrayBtnDeleteOt = [],
+    // arrayCheckSelect = [],
+    // arrayRowSelected = [],
+    arrayBtnCheckSelectionAll = []
 
-for (let m=0; m<ociTotalQty; m++) {
-    for (let n=0; n<maxOtQuantity; n++) {
-        let btnChangeStatusOt = document.getElementById(`btnStatusOt${m}_${n}`)
-        if (btnChangeStatusOt) {
-            arrayBtnChangeStatusOt.push(btnChangeStatusOt)
+    for (let m=0; m<ociTotalQty; m++) {
+        let btnCheckSelectionAll = document.getElementById(`btnCheckSelectionAll${m}`)
+        if (btnCheckSelectionAll) {
+            arrayBtnCheckSelectionAll.push(btnCheckSelectionAll)
         }
 
-        let btnUpdateOt = document.getElementById(`btnUpdateOt${m}_${n}`)
-        
-        if (btnUpdateOt) {
-            arrayBtnUpdateOt.push(btnUpdateOt)
-        }
+        for (let n=0; n<maxOtQuantity; n++) {
+            let btnChangeStatusOt = document.getElementById(`btnStatusOt${m}_${n}`)
+            if (btnChangeStatusOt) {
+                arrayBtnChangeStatusOt.push(btnChangeStatusOt)
+            }
 
-        let btnDeleteOt = document.getElementById(`btnDeleteOt${m}_${n}`)
-        if(btnDeleteOt) {
-            arrayBtnDeleteOt.push(btnDeleteOt)
+            let btnUpdateOt = document.getElementById(`btnUpdateOt${m}_${n}`)
+            
+            if (btnUpdateOt) {
+                arrayBtnUpdateOt.push(btnUpdateOt)
+            }
+
+            let btnDeleteOt = document.getElementById(`btnDeleteOt${m}_${n}`)
+            if(btnDeleteOt) {
+                arrayBtnDeleteOt.push(btnDeleteOt)
+            }
+
+            // let checkSelect = document.getElementById(`checkSelect${m}_${n}`)
+            // if (checkSelect) {
+            //     arrayCheckSelect.push(checkSelect)
+            // }
+
+            // let rowSelected = document.getElementById(`rowSelected${m}_${n}`)
+            // if (rowSelected) {
+            //     arrayRowSelected.push(rowSelected)
+            // }
         }
     }
-}
 
 function cleanString(cadena) {
     // Eliminar espacios en blanco al principio y al final
@@ -907,7 +927,7 @@ arrayBtnChangeStatusOt.forEach(function(elemento) {
 
 arrayBtnUpdateOt.forEach(function(element) {
     element.addEventListener('click', (event) => {
-        // event.preventDefault()
+        event.preventDefault()
         const idOtOci = (event.target.id).slice(11)
         const arrayOciOtSelected = (event.target.id).slice(11).split('_')
         
@@ -958,6 +978,75 @@ arrayBtnDeleteOt.forEach(function(element) {
         )
     })
 })
+
+// arrayRowSelected.forEach(function(element) {
+//     element-addEventListener('change', (event) => {
+//         event.preventDefault()
+//         const idOtOci = (event.target.id).slice(10)
+//         const arrayOciOtSelected = (event.target.id).slice(10).split('_')
+
+
+//     })
+// })
+
+arrayBtnCheckSelectionAll.forEach(function(element) {
+    element.addEventListener('click', (event) => {
+        event.preventDefault()
+        const idOci = parseInt((element.id).slice(20))
+        let btnCheckSelectionAll = document.getElementById(event.target.id)
+        let btnCheckSelecMasive = document.getElementById(`btnCheckSelecMasive${idOci}`)
+
+        var arrayCheckSelect = [],
+            arrayRowSelected = []
+        for (let n=0; n<100; n++) { //Seleccion multiple hasta 100 OT
+            var rowSelectedAll = document.getElementsByName(`rowSelected${idOci}_${n}`)
+            var checkSelectAll = document.getElementsByName(`checkSelect${idOci}_${n}`)
+            
+            if (rowSelectedAll.length>0) {
+                arrayRowSelected.push(rowSelectedAll)
+            }
+            if (checkSelectAll.length>0) {
+                arrayCheckSelect.push(checkSelectAll)
+            }
+        }
+        
+        for (let p=0; p<arrayRowSelected.length; p++) {
+            for (let q=0; q<12; q++) {
+                if (arrayRowSelected[p][q] && arrayRowSelected[p][q].style.cssText == "height: 7vh;") {
+                    arrayRowSelected[p][q].setAttribute('style', "height: 7vh; background-color: #c4f0fd;")
+                    
+                    btnCheckSelectionAll.style.backgroundColor = '#dc3545'
+                    btnCheckSelectionAll.innerHTML = 'Deseleccionar todos <i class="fa-solid fa-xmark"></i>'
+                    btnCheckSelectionAll.title = 'Deseleccionar todas las OT'
+
+                    btnCheckSelecMasive.innerHTML = `<i class="fa-solid fa-list-check"></i> Mod. multiple (${arrayRowSelected.length})`
+                    btnCheckSelecMasive.disabled = false
+                    btnCheckSelecMasive.style.backgroundColor = '#6f42c1'
+
+                } else { 
+                    arrayRowSelected[p][q].setAttribute('style', "height: 7vh;")
+                    btnCheckSelectionAll.style.backgroundColor = '#0d6efd'
+                    btnCheckSelectionAll.innerHTML = 'Seleccionar todos <i class="fa-solid fa-check-double"></i>'
+                    btnCheckSelectionAll.title = 'Seleccionar todas las OT'
+
+                    btnCheckSelecMasive.innerHTML = `<i class="fa-solid fa-list-check"></i> Mod. multiple (0)`
+                    btnCheckSelecMasive.disabled = true
+                    btnCheckSelecMasive.style.backgroundColor = '#adb5bd'
+                }
+            }
+        }         
+        
+        for (let p=0; p<arrayCheckSelect.length; p++) {
+                if (arrayCheckSelect[p][0] && arrayCheckSelect[p][0].checked === false) {
+                    arrayCheckSelect[p][0].checked = true
+                } else {
+                    arrayCheckSelect[p][0].checked = false
+                }
+           
+        }     
+    })
+})
+
 //-----------19/12-2023---------------
 
 //-----Btns Buscar en BBDD el Usuario Seguidor de Diseño --------------
@@ -2453,3 +2542,4 @@ if(arrTables !=[]) {
     	})
     })
 }
+
