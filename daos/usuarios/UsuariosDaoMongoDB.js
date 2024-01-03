@@ -100,14 +100,13 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
         }
     }
     
-    async createNewUser(usuario) {
-        console.log('usuariosDaoMongoDB: ',usuario)
-        if (usuario) {
-            let username = usuario.username || "";
-            let password = usuario.password || "";
-            username = username.replace(/[!@#$%^&*]/g, "")
-
-            const users = await Usuarios.findOne({username: `${usuario.username}`})
+    async createNewUser(newUser) {
+        console.log('usuariosDaoMongoDB: ',newUser)
+        if (newUser) {
+            let username = newUser.username || "";
+            let password = newUser.password || "";
+            
+            const users = await Usuarios.findOne({username: `${newUser.username}`})
             
             if (users) {
                 return false
@@ -125,33 +124,28 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                     }
                     password = createHash(password)
 
-                    const creator = [{
-                        creatorName: usuario.userNameHidden,
-                        creatorLastName: usuario.userLastNameHidden,
-                        creatorId: usuario.userIdHidden,
-                    }]
-                    const modificator = []
-                    const modified = ""
-        
-                    const nuevoUsuario = { 
-                        name: usuario.name,
-                        lastName: usuario.lastName,
-                        email: usuario.email,
-                        username: username,
-                        avatar: usuario.avatar,
+                    const nuevoUsuario = {
+                        name: newUser.name,
+                        lastName: newUser.lastName,
+                        email: newUser.email,
+                        username: newUser.username,
+                        avatar: newUser.avatar,
+
                         password: password,
-                        status: true,
-                        admin: false,
-                        permiso: usuario.permiso,
-                        timestamp: now,
-                        creator: creator,
-                        modificator: modificator,
-                        modifiedOn: modified
+                        permiso: newUser.permiso,
+                        status: newUser.status,
+                        admin: newUser.admin,
+                        
+                        creator: newUser.creator,
+                        timestamp: newUser.timestamp,
+                        modificator: newUser.modificator,
+                        modifiedOn: newUser.modified,
+                        visible: newUser.visible
                     }             
 
-                    const newUser = new Usuarios(nuevoUsuario)
-                    await newUser.save()
-                    logger.info('User created: ' + newUser)
+                    const newUserCreated = new Usuarios(nuevoUsuario)
+                    await newUserCreated.save()
+                    logger.info('User created: ' + newUserCreated.username)
                     
                     //////////////////// phone text message //////////////////////
                     const accountSid = process.env.TWILIO_ACCOUNTSID;
@@ -163,7 +157,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                     ;(async () => {
                         try {
                             const message = await client.messages.create({
-                                body: `El usuario ${newUser.name} ${newUser.lastName}, se registro exitosamente!`,
+                                body: `El usuario ${nuevoUsuario.name} ${nuevoUsuario.lastName}, se registro exitosamente!`,
                                 from: fromPhone, 
                                 to: toPhone
                             })
@@ -193,8 +187,8 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                     const mailOptions = {
                         from: 'Servidor NodeJS - @Gmail - Prodismo - German Montalbetti (C)2023',
                         to: TEST_EMAIL,
-                        subject: 'Mail nuevo Registro Usuario desde NodeJS - @Gmail - Prodismo - German Montalbetti (C)2023',
-                        html: `<h3 style="color: green;">El usuario ${newUser.name} ${newUser.lastName}, se registro exitosamente en la base de datos!</h3>`,
+                        subject: 'Mail nuevo Registro Usuario desde NodeJS - @Gmail - Prodismo - German Montalbetti (C)2024',
+                        html: `<h3 style="color: green;">El usuario ${nuevoUsuario.name} ${nuevoUsuario.lastName}, se registro exitosamente en la base de datos!</h3>`,
                         attachments: [
                             {
                                 path: `${nuevoUsuario.avatar}`
@@ -210,7 +204,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                             logger.error(err)
                         }
                     })()
-                    return newUser
+                    return newUserCreated
                 } catch (error) {
                     logger.error(error)
                     return new Error (`No se pudo crear el Usuario! Error Try-catch`)
@@ -221,117 +215,117 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
         }
     }
 
-    async registerNewUser(usuario) {
-        if (usuario) {
-            let username = usuario.username || "";
-            let password = usuario.password || "";
-            username = username.replace(/[!@#$%^&*]/g, "")
+    // async registerNewUser(usuario) {
+    //     if (usuario) {
+    //         let username = usuario.username || "";
+    //         let password = usuario.password || "";
+    //         username = username.replace(/[!@#$%^&*]/g, "")
 
-            const users = await Usuarios.findOne({username: `${usuario.username}`})
+    //         const users = await Usuarios.findOne({username: `${usuario.username}`})
            
-            if(users) {
-                return false
-            }
+    //         if(users) {
+    //             return false
+    //         }
 
-            if (!username || !password ) {
-                process.exit(1)
-            } else {
-                try {
-                    function createHash(password) {
-                        return bCrypt.hashSync(
-                                  password,
-                                  bCrypt.genSaltSync(10),
-                                  null);
-                    }
-                    password = createHash(password)
+    //         if (!username || !password ) {
+    //             process.exit(1)
+    //         } else {
+    //             try {
+    //                 function createHash(password) {
+    //                     return bCrypt.hashSync(
+    //                               password,
+    //                               bCrypt.genSaltSync(10),
+    //                               null);
+    //                 }
+    //                 password = createHash(password)
         
-                    const nuevoUsuario = { 
-                        name: usuario.name,
-                        lastName: usuario.lastName,
-                        email: usuario.email,
-                        username: username,
-                        avatar: usuario.avatar,
-                        password: password,
-                        status: true,
-                        admin: false,
-                        permiso: usuario.permiso,
-                        timestamp: now,
-                    }             
+    //                 const nuevoUsuario = { 
+    //                     name: usuario.name,
+    //                     lastName: usuario.lastName,
+    //                     email: usuario.email,
+    //                     username: username,
+    //                     avatar: usuario.avatar,
+    //                     password: password,
+    //                     status: true,
+    //                     admin: false,
+    //                     permiso: usuario.permiso,
+    //                     timestamp: now,
+    //                 }             
 
-                    const newUser = new Usuarios(nuevoUsuario)
-                    await newUser.save()
-                    logger.info('User Registrated: ' + newUser)
+    //                 const newUser = new Usuarios(nuevoUsuario)
+    //                 await newUser.save()
+    //                 logger.info('User Registrated: ' + newUser)
                     
-                    // //////////////////// phone text message //////////////////////
-                    const accountSid = process.env.TWILIO_ACCOUNTSID;
-                    const authToken = process.env.TWILIO_AUTH_TOKEN;
-                    const fromPhone = process.env.PHONE_SENDER;
-                    const toPhone = process.env.PHONE_RECEIVER;
-                    const client = require("twilio")(accountSid, authToken);
+    //                 // //////////////////// phone text message //////////////////////
+    //                 const accountSid = process.env.TWILIO_ACCOUNTSID;
+    //                 const authToken = process.env.TWILIO_AUTH_TOKEN;
+    //                 const fromPhone = process.env.PHONE_SENDER;
+    //                 const toPhone = process.env.PHONE_RECEIVER;
+    //                 const client = require("twilio")(accountSid, authToken);
                     
-                    ;(async () => {
-                        try {
-                            const message = await client.messages.create({
-                                body: `El usuario ${newUser.name} ${newUser.lastName}, se registro exitosamente!`,
-                                from: fromPhone, 
-                                to: toPhone
-                            })
-                            logger.info(message)
-                        } catch (error) {
-                            logger.error(error)
-                        }
-                    })()
+    //                 ;(async () => {
+    //                     try {
+    //                         const message = await client.messages.create({
+    //                             body: `El usuario ${newUser.name} ${newUser.lastName}, se registro exitosamente!`,
+    //                             from: fromPhone, 
+    //                             to: toPhone
+    //                         })
+    //                         logger.info(message)
+    //                     } catch (error) {
+    //                         logger.error(error)
+    //                     }
+    //                 })()
                     
-                    //////////////////// gmail to Administrator //////////////////////
-                    const { createTransport } = require('nodemailer')
-                    const TEST_EMAIL = process.env.TEST_EMAIL
-                    const PASS_EMAIL = process.env.PASS_EMAIL
+    //                 //////////////////// gmail to Administrator //////////////////////
+    //                 const { createTransport } = require('nodemailer')
+    //                 const TEST_EMAIL = process.env.TEST_EMAIL
+    //                 const PASS_EMAIL = process.env.PASS_EMAIL
                     
-                    const transporter = createTransport({
-                        service: 'gmail',
-                        port: 587,
-                        auth: {
-                            user: TEST_EMAIL,
-                            pass: PASS_EMAIL
-                        },
-                        tls: {
-                            rejectUnauthorized: false
-                        }
-                    })
+    //                 const transporter = createTransport({
+    //                     service: 'gmail',
+    //                     port: 587,
+    //                     auth: {
+    //                         user: TEST_EMAIL,
+    //                         pass: PASS_EMAIL
+    //                     },
+    //                     tls: {
+    //                         rejectUnauthorized: false
+    //                     }
+    //                 })
                     
-                    const mailOptions = {
-                        from: 'Servidor NodeJS - @Gmail - Prodismo - German Montalbetti (C)2023',
-                        to: TEST_EMAIL,
-                        subject: 'Mail nuevo Registro Usuario desde NodeJS - @Gmail - Prodismo - German Montalbetti (C)2023',
-                        html: `<h3 style="color: green;">El usuario ${newUser.name} ${newUser.lastName}, se registro exitosamente en la base de datos!</h3>`,
-                        attachments: [
-                            {
-                                path: `${nuevoUsuario.avatar}`
-                            }
-                        ]
-                    }
+    //                 const mailOptions = {
+    //                     from: 'Servidor NodeJS - @Gmail - Prodismo - German Montalbetti (C)2023',
+    //                     to: TEST_EMAIL,
+    //                     subject: 'Mail nuevo Registro Usuario desde NodeJS - @Gmail - Prodismo - German Montalbetti (C)2023',
+    //                     html: `<h3 style="color: green;">El usuario ${newUser.name} ${newUser.lastName}, se registro exitosamente en la base de datos!</h3>`,
+    //                     attachments: [
+    //                         {
+    //                             path: `${nuevoUsuario.avatar}`
+    //                         }
+    //                     ]
+    //                 }
                     
-                    ;(async () => {
-                        try {
-                            const info = await transporter.sendMail(mailOptions)
-                            logger.info(info)
-                        } catch (err) {
-                            logger.error(err)
-                        }
-                    })()
+    //                 ;(async () => {
+    //                     try {
+    //                         const info = await transporter.sendMail(mailOptions)
+    //                         logger.info(info)
+    //                     } catch (err) {
+    //                         logger.error(err)
+    //                     }
+    //                 })()
 
-                    return newUser
+    //                 return newUser
 
-                } catch (error) {
-                    logger.error(error)
-                    return new Error (`No se pudo crear el Usuario!`)
-                }
-            }   
-        } else {
-            return new Error (`No se pudo crear el Usuario!`)
-        }
+    //             } catch (error) {
+    //                 logger.error(error)
+    //                 return new Error (`No se pudo crear el Usuario!`)
+    //             }
+    //         }   
+    //     } else {
+    //         return new Error (`No se pudo crear el Usuario!`)
+    //     }
 
-    }
+    // }
 
     async updateUser(userToUpdate, userModificator) {
         const userMongoDB = await Usuarios.findById( { _id: `${userToUpdate.id}` } )

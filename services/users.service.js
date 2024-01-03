@@ -36,8 +36,8 @@ class UserService {
     }
 
     // Register new user
-    async addNewUser(user) {
-        return await this.usuarios.createNewUser(user)
+    async addNewUser(newUser) {
+        return await this.usuarios.createNewUser(newUser)
     }
     
     // update one user

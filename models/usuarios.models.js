@@ -26,7 +26,7 @@ const userSchema = new Schema({
     },
     avatar: { 
         type: String,
-        maxlength: 750
+        maxlength: 1000
     },
     password: {
         type: String,
@@ -59,7 +59,11 @@ const userSchema = new Schema({
     modifiedOn: {
         type: String,
         default: now,
-    }  
+    },
+    visible: {
+        type: Boolean,
+        default: true
+    }
 })
 
 module.exports = model('Usuarios', userSchema)

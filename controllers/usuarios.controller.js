@@ -2,6 +2,12 @@ const UserService = require("../services/users.service.js")
 const bCrypt = require('bcrypt')
 const { generateToken } = require('../utils/generateToken')
 
+const multer = require('multer')
+// const path = require('path')
+
+let now = require('../utils/formatDate.js')
+let imageNotFound = "../../../src/images/upload/LogoClientImages/noImageFound.png"
+
 class UsersController {  
     constructor(){
         this.users = new UserService()
@@ -109,43 +115,105 @@ class UsersController {
     }
 
     createNewUser = async (req, res) => {
+        //------ Storage User Avatar Image in folder AvatarUsersImages/ --------
+        const storage = multer.diskStorage({
+            destination: function(req, file, cb) {  
+                cb(null, './public/src/images/upload/AvatarUsersImages/') // Path de acceso a carpeta donde se guardan las Imagenes
+            },                                     
+            filename: function(req, file, cb) {
+                cb(null, file.originalname) //+ path.extname(file.originalname)) //originalname
+            }
+        })
         
-        const body = req.body
-        const usuario = await this.users.addNewUser(body)
-        
-        let username = res.locals.username
-        let userInfo = res.locals.userInfo
+        const upload = multer({
+            storage: storage
+        }).single('imageAvatarUser')
 
-        const cookie = req.session.cookie
-        const time = cookie.expires
-        const expires = new Date(time)
 
-        const usuarioLog = await this.users.getUserByUsername(username)        
+        upload(req, res, async (err) => {
+            let username = res.locals.username
+            let userInfo = res.locals.userInfo
+            let userManager = await this.users.getUserByUsername(username)
+            const userId = userManager._id
+            const userCreator = await this.users.getUserById(userId)
+            
+            const user = [{
+                name: userCreator.name,
+                lastName: userCreator.lastName,
+                username: userCreator.username,
+                email: userCreator.email
+            }]
 
-        try {
-            if(!usuarioLog) {
-                res.render('addNewUser', {
-                    usuario,
-                    username,
-                    userInfo,
-                    expires
+            const modificator = [{
+                name: "",
+                lastName: "",
+                username: "",
+                email: ""
+            }]
+
+            const cookie = req.session.cookie
+            const time = cookie.expires
+            const expires = new Date(time)
+
+            if(req.body.password != req.body.confirmPassword) {
+                const error = new Error('Los password no coinciden, no se agregó el usuario')
+                error.httpStatusCode = 400
+                return error
+            }
+
+            const usernameInput = req.body.username.replace(/[!@#$%^&*]/g, "")
+
+            const newUser = {
+                name: req.body.name,
+                lastName: req.body.lastName,
+                email: req.body.email,
+                username: usernameInput,
+                avatar: req.body.imageTextAvatarUser || imageNotFound,
+                password: req.body.password,
+                permiso: req.body.permiso,
+                status: req.body.statusClient === 'on' ? Boolean(true) : Boolean(false) || Boolean(true),
+                admin: req.body.admin === 'on' ? Boolean(true) : Boolean(false),
+                creator: user,
+                timestamp: now,
+                modificator: modificator,
+                modifiedOn: '',
+                visible: true
+            }
+
+            if (err) {
+                const error = new Error('No se agregó ningún archivo')
+                error.httpStatusCode = 400
+                return error
+            }
+
+            try {
+                const usuario = await this.users.addNewUser(newUser)
+                const usuarioLog = await this.users.getUserByUsername(username)
+                
+                if(!usuarioLog) return res.status(404).json({ Msg: 'Usuario no guardado' })
+                    res.render('addNewUser', {
+                        usuario,
+                        username,
+                        userInfo,
+                        expires
+                    })
+                
+                // else {
+                //     res.render('userDetails', {
+                //         usuario,
+                //         username,
+                //         userInfo,
+                //         expires
+                //     })
+                // } 
+
+            } catch (error) {
+                res.status(500).json({
+                    status: false,
+                    error: error
                 })
             }
-            else {
-                res.render('userDetails', {
-                    usuario,
-                    username,
-                    userInfo,
-                    expires
-                })
-            } 
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                msg: 'controllerError - createNewUser',
-                error: error
-            })
-        }
+        })
     }
 
     updateUser = async (req, res) => {

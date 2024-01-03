@@ -141,7 +141,7 @@ class ClientsController {
     }
 
     createNewClient = async (req, res) => {
-        //------ Storage Project Image in folder projectImages/ --------
+        //------ Storage Client Logo Image in folder projectImages/ --------
         const storage = multer.diskStorage({
             destination: function(req, file, cb) {  
                 cb(null, './public/src/images/upload/LogoClientImages/') // Path de acceso a carpeta donde se guardan las Imagenes

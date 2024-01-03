@@ -47,44 +47,148 @@ btnUpdate.addEventListener('click', (event)=>{
 })
 
 
-// --------------------- update ---------------------------------------- 
-socket.on('updateUsuario', async (arrUser) => {
-    renderUpdatedUser (await arrUser)
+// ----------- Avatar User Image behavior ---------------
+const dropAreaAvatarUser = document.getElementById('drop-areaAvatarUser')
+const fileInputAvatarUser = document.getElementById('fileInputAvatarUser')
+const fileImputTextAvatarUser = document.getElementById('fileInputTextAvatarUser')
+const removeImageButtonAvatarUser = document.getElementById('removeImageAvatarUser')
+const alertAvatarUser = document.getElementById('alertAvatarUser')
+
+dropAreaAvatarUser.style.width = "300px"
+dropAreaAvatarUser.style.height = "200px"
+dropAreaAvatarUser.style.border = "2px dashed #ccc"
+dropAreaAvatarUser.style.margin = "0 auto 0 50px"
+dropAreaAvatarUser.style.borderRadius = "5px"
+dropAreaAvatarUser.style.textAlign = "center"
+dropAreaAvatarUser.style.lineHeight = "200px"
+dropAreaAvatarUser.style.cursor = "pointer"
+
+dropAreaAvatarUser.addEventListener('dragover', (e) => {
+    e.preventDefault()
+    dropAreaAvatarUser.style.border = '2px dashed #77d'
+    dropAreaAvatarUser.style.backgroundColor = '#7777dd10'
 })
 
-const updateUsuario = () => {
-    const _id = document.getElementById('id').value
-    const name = document.getElementById('name').value
-    const lastName = document.getElementById('lastName').value
-    const email = document.getElementById('email').value
-    const username = document.getElementById('username').value
-    const avatar = document.getElementById('picture').value
-    const status = document.getElementById('status').checked
-    status ? status = true : status = false
-    const admin = document.getElementById('admin').checked
-    admin ? admin = true : admin = false
-    const permiso = document.getElementById('permiso').value
-    //const timestamp = ""
-    const modificatorName = document.getElementById('userNameHidden').value
-    const modificatorLastName = document.getElementById('userLastNameHidden').value
-    //const creator = []
-    const modificator = [modificatorName, modificatorLastName]
-    const modifiedOn = formatDate(new Date())
+dropAreaAvatarUser.addEventListener('dragleave', (e) => {
+    e.preventDefault()
+    dropAreaAvatarUser.style.border = '2px dashed #ccc'
+    dropAreaAvatarUser.style.backgroundColor = '#838383'
+    removeImageButtonAvatarUser.style.display = 'none'
+})
 
-    socket.emit('updateUsuario', {
-        _id,
-        name,
-        lastName,
-        email,
-        username,
-        avatar,
-        status,
-        admin,
-        permiso,
-        // timestamp,
-        // creator,
-        modificator,
-        modifiedOn
-    })
-    return false
+function alertNotImageAvatarUser() {
+    alertAvatarUser.style.display = 'flex'
+    removeImageButtonAvatarUser.style.display = 'none'
+    dropAreaAvatarUser.style.border = "2px dashed #ccc"
+    dropAreaAvatarUser.style.textAlign = "center"
+    dropAreaAvatarUser.style.backgroundColor = '#838383'
+    dropAreaAvatarUser.style.display = 'block'
+    dropAreaAvatarUser.innerHTML = 'Arrastra y suelta una imagen aquí'
 }
+
+dropAreaAvatarUser.addEventListener('drop', (e) => {
+    e.preventDefault()
+    dropAreaAvatarUser.style.border = '3px dashed #2d2'
+    dropAreaAvatarUser.style.backgroundColor = '#22dd2210'
+    const file = e.dataTransfer.files[0]
+
+    if (file && file.type.startsWith('image/')) {
+        fileInputAvatarUser.files = e.dataTransfer.files
+        let pathToImage = '../../../src/images/upload/AvatarUsersImages/'
+        fileImputTextAvatarUser.value = pathToImage + file.name
+        removeImageButtonAvatarUser.style.display = 'flex'
+        alertAvatarUser.style.display = 'none'
+        handleFileUploadAvatarUser(file)
+    } else {
+        alertNotImageAvatarUser()
+    }     
+})
+
+dropAreaAvatarUser.addEventListener('click', () => {
+    fileInputAvatarUser.click()
+})
+
+fileInputAvatarUser.addEventListener('change', (e) => {
+    e.preventDefault()
+    const file = fileInputAvatarUser.files[0]
+    
+    if (file && file.type.startsWith('image/')) { 
+        let pathToImage = '../../../src/images/upload/AvatarUsersImages/'
+        fileImputTextAvatarUser.value = pathToImage + file.name
+        removeImageButtonAvatarUser.style.display = 'flex'
+        alertAvatarUser.style.display = 'none'
+        handleFileUploadAvatarUser(file)
+    } else {
+        alertNotImageAvatarUser()
+    }     
+})
+
+function handleFileUploadAvatarUser(file) {
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+            dropAreaAvatarUser.innerHTML = 
+                `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+            alertAvatarUser.style.display = 'none'
+        }
+
+    } else {
+        alertNotImageAvatarUser()
+    }
+}
+
+removeImageButtonAvatarUser.addEventListener('click', (event)=> {
+    event.preventDefault()
+    fileImputTextAvatarUser.value = ''
+    dropAreaAvatarUser.style.border = "2px dashed #ccc"
+    dropAreaAvatarUser.style.textAlign = "center"
+    dropAreaAvatarUser.style.backgroundColor = '#838383'
+    dropAreaAvatarUser.style.display = 'block'
+    dropAreaAvatarUser.innerHTML = 'Arrastra y suelta una imagen aquí'
+    removeImageButtonAvatarUser.style.display = 'none'
+    alertAvatarUser.style.display = 'none'
+})
+
+
+// --------------------- update ---------------------------------------- 
+// socket.on('updateUsuario', async (arrUser) => {
+//     renderUpdatedUser (await arrUser)
+// })
+
+// const updateUsuario = () => {
+//     const _id = document.getElementById('id').value
+//     const name = document.getElementById('name').value
+//     const lastName = document.getElementById('lastName').value
+//     const email = document.getElementById('email').value
+//     const username = document.getElementById('username').value
+//     const avatar = document.getElementById('picture').value
+//     const status = document.getElementById('status').checked
+//     status ? status = true : status = false
+//     const admin = document.getElementById('admin').checked
+//     admin ? admin = true : admin = false
+//     const permiso = document.getElementById('permiso').value
+//     //const timestamp = ""
+//     const modificatorName = document.getElementById('userNameHidden').value
+//     const modificatorLastName = document.getElementById('userLastNameHidden').value
+//     //const creator = []
+//     const modificator = [modificatorName, modificatorLastName]
+//     const modifiedOn = formatDate(new Date())
+
+//     socket.emit('updateUsuario', {
+//         _id,
+//         name,
+//         lastName,
+//         email,
+//         username,
+//         avatar,
+//         status,
+//         admin,
+//         permiso,
+//         // timestamp,
+//         // creator,
+//         modificator,
+//         modifiedOn
+//     })
+//     return false
+// }
