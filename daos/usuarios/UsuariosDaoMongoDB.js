@@ -4,7 +4,11 @@ const Usuarios = require('../../models/usuarios.models.js')
 const logger = require('../../utils/winston.js')
 const now = require('../../utils/formatDate.js')
 
-const bCrypt = require('bcrypt');
+const bCrypt = require('bcrypt')
+
+const fs = require('fs')
+const util = require('util')
+
 
 class UsuariosDaoMongoDB extends ContainerMongoDB {
     constructor(cnxStr) {
@@ -139,13 +143,17 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                         creator: newUser.creator,
                         timestamp: newUser.timestamp,
                         modificator: newUser.modificator,
-                        modifiedOn: newUser.modified,
+                        modifiedOn: '',
                         visible: newUser.visible
                     }             
 
                     const newUserCreated = new Usuarios(nuevoUsuario)
                     await newUserCreated.save()
-                    logger.info('User created: ' + newUserCreated.username)
+                    //logger.info('User created: ' + newUserCreated.username)
+
+                    let avatarUserString = nuevoUsuario.avatar
+                    let sectionString = avatarUserString.split('/')
+                    let avatarFileName = sectionString[sectionString.length - 1]
                     
                     //////////////////// phone text message //////////////////////
                     const accountSid = process.env.TWILIO_ACCOUNTSID;
@@ -183,15 +191,29 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                             rejectUnauthorized: false
                         }
                     })
+
+                    const readFile = util.promisify(fs.readFile)
+                    const imagePath = './public/src/images/logo01-negro.png'
+                    const image = await readFile(imagePath)
+                    const base64Image = image.toString('base64')
+
+                    const html = `<h5 style="color: #000000;">El usuario ${nuevoUsuario.name} ${nuevoUsuario.lastName}, se registro exitosamente en la base de datos!</h5>
+                                    <p>Este mensaje fue enviado automaticamente por la App Web Seguimiento Ingeneiría por un nuevo registro.</p>
+                                    <p>Si Usted no autorizó este registro, ingrese a la App y elimine el usuario.</p>
+                                    <br>
+                                    <p>Muchas gracias por utilizar nuestros servicios.</p>
+                                    <p>--------------------------------------------------</p>
+                                    <p>El Equipo de Seguimiento Ingeneiría - Prodismo IT</p>
+                                    <img src="data:image/jpeg;base64,${base64Image}" alt="Logo Prodismo" width="168" height="30">`
                     
                     const mailOptions = {
-                        from: 'Servidor NodeJS - @Gmail - Prodismo - German Montalbetti (C)2023',
+                        from: 'Servidor NodeJS - Prodismo IT - G. Montalbetti (C)2024',
                         to: TEST_EMAIL,
-                        subject: 'Mail nuevo Registro Usuario desde NodeJS - @Gmail - Prodismo - German Montalbetti (C)2024',
-                        html: `<h3 style="color: green;">El usuario ${nuevoUsuario.name} ${nuevoUsuario.lastName}, se registro exitosamente en la base de datos!</h3>`,
+                        subject: 'Nuevo Registro Seguimiento Ingenieria - Prodismo - by G. Montalbetti (C)2024',
+                        html: html,
                         attachments: [
                             {
-                                path: `${nuevoUsuario.avatar}`
+                                path: `./public/src/images/upload/AvatarUsersImages/${avatarFileName}`
                             }
                         ]
                     }
@@ -327,88 +349,99 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
 
     // }
 
-    async updateUser(userToUpdate, userModificator) {
-        const userMongoDB = await Usuarios.findById( { _id: `${userToUpdate.id}` } )
-        const userMongoDBModificator = await Usuarios.findById( { _id: `${userModificator.id}`} )
-        //console.log('UserToModify: ', userToUpdate)        
-        //console.log('UserModificator: ', userMongoDBModificator)
-        
-        if (userMongoDB && userMongoDBModificator) {
-            try {
-                let adminValue
-                let statusValue
-                userToUpdate.admin === 'on' ? adminValue = true : adminValue = false
-                userToUpdate.status === 'on' ? statusValue = true : statusValue = false
+    async updateUser(id, updatedUser, userModificator) {
+        // console.log('id:',id,' - updatedUser: ', updatedUser)
+        if (updatedUser && userModificator) {
 
-                //console.log('adminValue: ', adminValue, ' - statusValue: ', statusValue)
+            try {
+                const userMongoDB = await Usuarios.findById( { _id: id } ) //`${id}`
+            
+                updatedUser.avatar != '' ? updatedUser.avatar : userMongoDB.avatar
+                updatedUser.name != '' ? updatedUser.name : userMongoDB.name
+                updatedUser.lastName != '' ? updatedUser.lastName : userMongoDB.lastName
+                updatedUser.email != '' ? updatedUser.email : userMongoDB.email
+                updatedUser.username != '' ? updatedUser.username : userMongoDB.username
                 
-                let modificatorArr = [{
-                    modificatorName: userMongoDBModificator.name,
-                    modificatorLastName: userMongoDBModificator.lastName,
-                    modificatorId: userMongoDBModificator._id,
-                }]
-               
-                 const newValues = {
-                    name: userToUpdate.name,
-                    lastName: userToUpdate.lastName,
-                    email: userToUpdate.email,
-                    username: userToUpdate.username,
-                    avatar: userToUpdate.avatar,
-                    password: userToUpdate.password,
-                    admin: adminValue,
-                    status: statusValue,
-                    permiso: userToUpdate.permiso,
-                    modificator: modificatorArr,
-                    modifiedOn: now,
-                    timestamp: userToUpdate.timestamp,
-                    creator: userToUpdate.creator,
+                if(userMongoDB) {
+                    var updatedFinalUser = await Usuarios.updateOne(
+                        { _id: userMongoDB._id  },
+                        {
+                            $set: {
+                                name: updatedUser.name,
+                                lastName: updatedUser.lastName,
+                                email: updatedUser.email,
+                                username: updatedUser.username,
+                                avatar: updatedUser.avatar,
+                                admin: updatedUser.admin,
+                                status: updatedUser.status,
+                                permiso: updatedUser.permiso,
+                                modificator: userModificator,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
+                        console.log('updatedFinalUser:', updatedFinalUser)
+                    if(updatedFinalUser.acknowledged) {
+                        const itemUpdated = await Usuarios.findById({ _id: id })
+                        return itemUpdated
+
+                    } else {
+                        return new Error(`No se actualizó el item: ${itemUpdated._id}`)
+                    }
+
+                } else {
+                    return new Error(`No existe el item Usuario con este id: ${itemUpdated._id} `)
                 }
 
-                const userUpdated = await Usuarios.findOneAndUpdate(
-                    { _id: userToUpdate.id },
-                    newValues,
-                    { new: true })
-                    //console.log('UserNewData----: ', userUpdated)
-                
-                return userUpdated
-               
             } catch (error) {
                 logger.error("Error MongoDB updateUser: ", error)
                 return new Error (`No se pudo actualizar el Usuario!`)
             }
+
         } else {
-            logger.info('El Ususario no existe! ', userMongoDB)
+            logger.info('El Ususario no existe! ', updatedUser)
             return new Error (`No se pudo actualizar el Usuario!`)
         }
     }
 
-    async deleteUserById(id) {
+    async deleteUserById(id, userModificator) {
+        
         if(id){
-            const userMongoDB = await Usuarios.findById({_id: `${id}`})
+            try {
+                const userMongoDB = await Usuarios.findById({_id: id })
             
-            if(userMongoDB) {
-                try {
-                    const newValues = {
-                        name: userMongoDB.name,
-                        lastName: userMongoDB.lastName,
-                        email: userMongoDB.email,
-                        username: userMongoDB.username,
-                        password: userMongoDB.password,
-                        admin: userMongoDB.admin,
-                        active: false,
-                        permiso: userMongoDB.permiso,
-                        timestamp: now,
-                    }
-                    const user = await Usuarios.findOneAndUpdate(
-                        { _id: id }, newValues , { new: true })
-                    return user
+                if(userMongoDB) {
+                    let inactive = Boolean(false)
+                    var userDeleted = await Usuarios.updateOne(
+                        { _id: id }, 
+                        {
+                            $set: {
+                                visible: inactive,
+                                status: inactive,
+                                modificator: userModificator,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
 
-                } catch (error) {
-                    logger.error("Error MongoDB deleteUser: ",error)
+                    if(userDeleted.acknowledged) {
+                        const itemUpdated = await Clientes.findById({ _id: id })
+                        return itemUpdated
+
+                    } else {
+                        return new Error(`No se eliminó el item: ${userMongoDB._id}`)
+                    }
+                    
+                } else {
+                    return new Error (`El Usuario no existe con ese Id: ${id}!`)
                 }
-            } else {
-                return new Error (`El Usuario no existe con ese Id: ${id}!`)
+
+            } catch (error) {
+                logger.error("Error MongoDB deleteUser: ",error)
             }
+            
         } else {
             return new Error (`El Usuario no existe con ese ID${id}!`)
         }    

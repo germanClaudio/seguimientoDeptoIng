@@ -131,6 +131,7 @@ class UsersController {
 
 
         upload(req, res, async (err) => {
+            // console.log('files: ', req.files)
             let username = res.locals.username
             let userInfo = res.locals.userInfo
             let userManager = await this.users.getUserByUsername(username)
@@ -171,7 +172,7 @@ class UsersController {
                 avatar: req.body.imageTextAvatarUser || imageNotFound,
                 password: req.body.password,
                 permiso: req.body.permiso,
-                status: req.body.statusClient === 'on' ? Boolean(true) : Boolean(false) || Boolean(true),
+                status: req.body.status === 'on' ? Boolean(true) : Boolean(false) || Boolean(true),
                 admin: req.body.admin === 'on' ? Boolean(true) : Boolean(false),
                 creator: user,
                 timestamp: now,
@@ -179,7 +180,7 @@ class UsersController {
                 modifiedOn: '',
                 visible: true
             }
-
+            console.log('newUser: ', newUser)
             if (err) {
                 const error = new Error('No se agregó ningún archivo')
                 error.httpStatusCode = 400
@@ -197,16 +198,7 @@ class UsersController {
                         userInfo,
                         expires
                     })
-                
-                // else {
-                //     res.render('userDetails', {
-                //         usuario,
-                //         username,
-                //         userInfo,
-                //         expires
-                //     })
-                // } 
-
+        
             } catch (error) {
                 res.status(500).json({
                     status: false,
@@ -217,31 +209,82 @@ class UsersController {
     }
 
     updateUser = async (req, res) => {
+        const id = req.params.id
+
         let username = res.locals.username
         let userInfo = res.locals.userInfo
-        const userToUpdate = req.body
-        // console.log('datos de usuario a modificar: ', userToUpdate)
+        const userId = userInfo.id
+        const userToModify = await this.users.getUserById(id)
+        const userLogged = await this.users.getUserById(userId)
+
+        const userModificator = [{
+            name: userInfo.name,
+            lastName: userInfo.lastName,
+            username: userInfo.username,
+            email: userInfo.email
+        }]
+
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
-
-        const usuarioModificador = await this.users.getUserById(userToUpdate.userIdHidden)
+        
+        if(userToModify && userLogged) {
+            //------ Storage Avatar Image in folder AvatarUsersImages/ --------
+            const storage = multer.diskStorage({
+                destination: function(req, file, cb) {  
+                    cb(null, './public/src/images/upload/AvatarUsersImages/') // Path de acceso a carpeta donde se guardan las Imagenes
+                },                                      
+                filename: function(req, file, cb) {
+                cb(null, file.originalname ) //+ path.extname(file.originalname)) //originalname
+                }
+            })
+                    
+            const upload = multer({
+                storage: storage
+            }).single('imageAvatarUser')
+            
+            upload(req, res, async (err) => {
                 
-        try {
-            const userUpdated = await this.users.updateUser(userToUpdate, usuarioModificador)
-            const usuario = await this.users.getUserById(userToUpdate.id)
-            res.render('userDetails', {
-                usuario,
-                userUpdated,
-                username,
-                userInfo,
-                expires
+                const updatedUser = {
+                    name: req.body.name,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    username: req.body.username,
+                    avatar: req.body.imageTextAvatarUser || imageNotFound,
+                    permiso: req.body.permisoHidden,
+                    status: req.body.status === 'on' ? Boolean(true) : Boolean(false),
+                    admin: req.body.admin === 'on' ? Boolean(true) : Boolean(false),
+                    modificator: userModificator,
+                    modifiedOn: now
+                }
+                
+                if (err) {
+                    const error = new Error('No se agregó ningún archivo')
+                    error.httpStatusCode = 400
+                    return error
+                }
+                            
+                try {
+                    const usuario = await this.users.updateUser(id, updatedUser, userModificator)
+
+                    if(!usuario) return res.status(404).json({ Msg: 'Usuario no guardado' })
+                        res.render('addNewUser', {
+                            usuario,
+                            username,
+                            userInfo,
+                            expires
+                        })
+
+                } catch (error) {
+                    res.status(500).json({
+                        status: false,
+                        error: error
+                    })
+                }
             })
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                error: error
-            })
+
+        } else {
+            return res.status(404).json({ Msg: 'Usuario no existe' })
         }
     }
 
@@ -268,17 +311,23 @@ class UsersController {
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
+        const userModificator = [{
+            name: userInfo.name,
+            lastName: userInfo.lastName,
+            username: userInfo.username,
+            email: userInfo.email
+        }]
+
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
 
-        const usuarioLog = await this.users.getUserByUsername(username)
-        //const userId = usuarioLog._id // User Id
-
         try {
-            const userDeleted = await this.users.deleteUserById(id)
+            const usuario = await this.users.deleteUserById(id, userModificator)
+
+            if(!usuario) return res.status(404).json({ Msg: 'Usuario no eliminado' })
             res.render('addNewUser', {
-                usuarios,
+                usuario,
                 username,
                 userInfo,
                 expires

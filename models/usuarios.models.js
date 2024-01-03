@@ -1,10 +1,7 @@
-const { Schema, model, mongoose } = require('mongoose')
+const { Schema, model } = require('mongoose')
 const now = require('../utils/formatDate.js')
 
 const userSchema = new Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-    },
     name: {
         type: String,
         maxlength: 100

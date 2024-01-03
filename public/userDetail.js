@@ -10,7 +10,7 @@ function formatDate(date) {
     return day + "-" + month + "-" + year + "_" + hours + "." + min + "." + sec
 }
 
-function message(name, lastName) {
+function message(name, lastName, username) {
     Swal.fire({
     title: 'Esta seguro?',
     text: `El usuario ${name} ${lastName} será modificado!`,
@@ -18,18 +18,20 @@ function message(name, lastName) {
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, modificalo!'
+    confirmButtonText: 'Si, modificalo! <i class="fa-solid fa-user-pen"></i>',
+    cancelButtonText: 'Cancelar <i class="fa-solid fa-user-shield"></i>'
+
   }).then((result) => {
     if (result.isConfirmed) {
         document.getElementById("formUpdateUser").submit()
       Swal.fire(
-        'Modificado!',
+        `${username} modificado!`,
         `El usuario ${name} ${lastName} ha sido modificado exitosamente.`,
         'success'
       )
     } else {
         Swal.fire(
-            'No modificado!',
+            `${username} no modificado!`,
             `El usuario ${name} ${lastName} no ha sido modificado.`,
             'info'
           )
@@ -43,7 +45,10 @@ btnUpdate.addEventListener('click', (event)=>{
     event.preventDefault()
     const name = document.getElementById('name').value
     const lastName = document.getElementById('lastName').value
-    message(name, lastName)
+    const username = document.getElementById('username').value
+    if (name && lastName && username) {
+        message(name, lastName, username)
+    }
 })
 
 
@@ -148,6 +153,17 @@ removeImageButtonAvatarUser.addEventListener('click', (event)=> {
     dropAreaAvatarUser.innerHTML = 'Arrastra y suelta una imagen aquí'
     removeImageButtonAvatarUser.style.display = 'none'
     alertAvatarUser.style.display = 'none'
+})
+
+const permisoHidden = document.getElementById('permisoHidden')
+const permiso = document.getElementById('permiso')
+
+document.addEventListener('DOMContentLoaded', ()=> {
+    permisoHidden.value = permiso.value
+})
+
+permiso.addEventListener('change', ()=>{
+    permisoHidden.value = permiso.value
 })
 
 

@@ -113,6 +113,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.getElementById("newUserForm")
     form.reset()
+    document.getElementById('messagePass').innerHTML = ""
+    document.getElementById('messageConfirmPass').innerHTML = ""
+
+    document.getElementById('btnAddNewUser').disabled = true
+    document.getElementById('btnAddNewUser').style.opacity = (0.4)
+    document.getElementById('confirmPassword').disabled = true
 
     let inputPassword = document.getElementById('password')
     inputPassword.addEventListener("input", validarCamposPassword)
@@ -132,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         if (valorPassword !== "" || valorPassword !== null) {
             if (valorPassword.length < 6) {
-                document.getElementById('messagePass').style.color = '#ff1111'
+                document.getElementById('messagePass').style.color = '#4c0c0c'
                 document.getElementById('messagePass').innerHTML
 				= '☒ El password debe ser mínimo 6 caracteres y van: '+ caracteres
                 document.getElementById('btnAddNewUser').disabled = true
@@ -159,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (valorPassword !== "" || valorConfirmPass !== "" || valorPassword !== null || valorConfirmPass !== null) {
             if (valorPassword !== valorConfirmPass) {
                 
-                document.getElementById('messageConfirmPass').style.color = '#ff1111'
+                document.getElementById('messageConfirmPass').style.color = '#4c0c0c'
                 document.getElementById('messageConfirmPass').innerHTML
                 = '☒ Los password debe coincidir!'
                 document.getElementById('btnAddNewUser').disabled = true
@@ -282,8 +288,7 @@ function handleFileUploadAvatarUser(file) {
     }
 }
 
-removeImageButtonAvatarUser.addEventListener('click', (event)=> {
-    event.preventDefault()
+function removeImageAvatar() {
     fileImputTextAvatarUser.value = ''
     dropAreaAvatarUser.style.border = "2px dashed #ccc"
     dropAreaAvatarUser.style.textAlign = "center"
@@ -292,4 +297,68 @@ removeImageButtonAvatarUser.addEventListener('click', (event)=> {
     dropAreaAvatarUser.innerHTML = 'Arrastra y suelta una imagen aquí'
     removeImageButtonAvatarUser.style.display = 'none'
     alertAvatarUser.style.display = 'none'
+}
+
+removeImageButtonAvatarUser.addEventListener('click', (event)=> {
+    event.preventDefault()
+    removeImageAvatar()
+})
+
+
+function messageNewUser(name, lastName, username) {
+    Swal.fire({
+        title: `Nuevo Usuario <b>${username}</b>`,
+        text: `El usuario ${name} ${lastName} será registrado!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Registrarlo! <i class="fa-solid fa-user-plus"></i>',
+        cancelButtonText: 'Cancelar <i class="fa-solid fa-user-xmark"></i>'
+
+      }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById("newUserForm").submit()
+          Swal.fire(
+            'Creado!',
+            `El usuario ${name} ${lastName}, ha sido registrado exitosamente.`,
+            'success'
+          )
+        } else {
+            Swal.fire(
+                'No registrado!',
+                `El usuario ${name} ${lastName}, no ha sido registrado`,
+                'info'
+              )
+            return false
+        }
+      })
+}
+
+
+const btnAddNewUser = document.getElementById('btnAddNewUser')
+
+btnAddNewUser.addEventListener('click', (event) => {
+    event.preventDefault()
+    const name = document.getElementById('name').value
+    const lastName = document.getElementById('lastName').value
+    const username = document.getElementById('username').value
+    const email = document.getElementById('email').value
+    const password = document.getElementById('password').value
+    const confirmPassword = document.getElementById('confirmPassword').value
+
+    if (name && lastName && username && email && password && confirmPassword) {
+        messageNewUser(name, lastName, username)
+    }
+})
+
+const btnResetFormNewUser = document.getElementById('btnResetFormNewUser')
+
+btnResetFormNewUser.addEventListener('click', () => {
+    document.getElementById('messagePass').innerHTML = ""
+    document.getElementById('messageConfirmPass').innerHTML = ""
+    btnAddNewUser.disabled = true
+    btnAddNewUser.style.opacity = (0.4)
+    document.getElementById('confirmPassword').disabled = true
+    removeImageAvatar()
 })

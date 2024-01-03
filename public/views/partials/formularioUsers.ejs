@@ -1,6 +1,6 @@
 <div class="form-group col-6 mx-auto my-2 w-75 border rounded p-3 text-white bg-opacity-75" style="background-color: #838383;">
     <h3 class="mx-auto my-2 text-center">Agregar Nuevo Usuario</h3>
-    <form action="/api/usuarios/newUser" method="post" id="newUserForm">
+    <form action="/api/usuarios/newUser" enctype="multipart/form-data" method="post" id="newUserForm">
         <fieldset>
             <div class="row my-2 mx-auto">
                 <div class="col-3">
@@ -92,9 +92,9 @@
             </div>    
             <br>  
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary mx-auto" id="btnAddNewUser">Guardar Usuario
+                <button type="button" class="btn btn-primary mx-auto" id="btnAddNewUser">Guardar Usuario
                     <i class="fa-solid fa-user-plus"></i></button>
-                <button type="reset" class="btn btn-danger mx-auto">Reset
+                <button type="reset" id="btnResetFormNewUser" class="btn btn-danger mx-auto">Reset
                     <i class="fa-solid fa-rotate-left"></i></button>
             </div>
         </fieldset>

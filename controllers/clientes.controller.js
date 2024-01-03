@@ -237,7 +237,7 @@ class ClientsController {
         const time = cookie.expires
         const expires = new Date(time)
        
-        //------ Storage Project Image in folder projectImages/ --------
+        //------ Storage Logo Image in folder projectImages/ --------
         const storage = multer.diskStorage({
             destination: function(req, file, cb) {  
                 cb(null, './public/src/images/upload/LogoClientImages/') // Path de acceso a carpeta donde se guardan las Imagenes

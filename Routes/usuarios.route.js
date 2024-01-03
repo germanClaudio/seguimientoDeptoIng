@@ -19,7 +19,7 @@ routerUsers.get('/:id', checkAuthentication, authUserMiddleware, users.getUserBy
 routerUsers.post('/newUser', checkAuthentication, authUserMiddleware, users.createNewUser)
 
 //---------------- Update a User  -----------------------
-routerUsers.post('/update/:username', checkAuthentication, authUserMiddleware, users.updateUser)
+routerUsers.post('/update/:id', checkAuthentication, authUserMiddleware, users.updateUser)
 
 //---------------- Delete a User  -----------------------
 routerUsers.get('/delete/:id', checkAuthentication, authUserMiddleware, users.deleteUserById)
