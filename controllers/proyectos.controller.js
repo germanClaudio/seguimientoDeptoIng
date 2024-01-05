@@ -260,7 +260,7 @@ class ProjectsController {
                 const time = cookie.expires
                 const expires = new Date(time)
 
-                const cliente = await this.clients.updateClientProjectQty(
+                const cliente = await this.clients.updateClientProjectsQty(
                     clientId, 
                     clienteSeleccionado, 
                     user

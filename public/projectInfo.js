@@ -394,16 +394,15 @@ for (let i = 0; i < radios.length; i++) {
 }
 
 
-//-----------19/12-2023---------------
 //------- Change OT status ----------------
-function messageChangeOtStatus(statusOt, otNumber, idProjectSelected, ociKNumber, otKNumber) {
-    console.log(
-        statusOt,
-        otNumber,
-        idProjectSelected,
-        ociKNumber,
-        otKNumber)
-
+function messageChangeOtStatus(
+    statusOt, 
+    otNumber, 
+    idProjectSelected, 
+    ociKNumber, 
+    otKNumber
+) {
+    
     const Toast = Swal.mixin({
         toast: true,
         position: 'bottom',
@@ -584,7 +583,7 @@ function messageUpdateOt(
         })
     }
 
-    // //---------------------------------
+    // //--------------------------------- to be done
     //-----Btns Buscar en BBDD el Usuario Seguidor de Diseño --------------
     const searchDesignUserModal = document.getElementById('searchDesignUserModal')
     searchDesignUserModal.addEventListener('click', (event) => {
@@ -766,7 +765,7 @@ function messageUpdateOt(
         }
         cargarUsuarioSimulacion()
     })
-    //--------------------------------
+    //-------------------------------- to be done
 }
 
 //---- Delete OT ----------------
@@ -860,12 +859,18 @@ var arrayBtnChangeStatusOt = [],
     arrayBtnUpdateOt = [],
     arrayBtnDeleteOt = [],
     arrayCheckBoxSelect = [],
-    arrayBtnCheckSelectionAll = []
+    arrayBtnCheckSelectionAll = [],
+    arrayBtnCheckSelecMasive = []
 
     for (let m=0; m<ociTotalQty; m++) {
         let btnCheckSelectionAll = document.getElementById(`btnCheckSelectionAll${m}`)
         if (btnCheckSelectionAll) {
             arrayBtnCheckSelectionAll.push(btnCheckSelectionAll)
+        }
+
+        let btnCheckSelecMasive = document.getElementById(`btnCheckSelecMasive${m}`)
+        if (btnCheckSelecMasive) {
+            arrayBtnCheckSelecMasive.push(btnCheckSelecMasive)
         }
 
         for (let n=0; n<maxOtQuantity; n++) {
@@ -888,11 +893,6 @@ var arrayBtnChangeStatusOt = [],
             if (checkBoxSelect) {
                 arrayCheckBoxSelect.push(checkBoxSelect)
             }
-            
-            // let rowSelected = document.getElementById(`rowSelected${m}_${n}`)
-            // if (rowSelected) {
-            //     arrayRowSelected.push(rowSelected)
-            // }
         }
     }
     
@@ -987,17 +987,22 @@ arrayCheckBoxSelect.forEach(function(element) {
         event.preventDefault()
         const idOtOci = (event.target.id).slice(11)
         let rowSelectCheck = Array.from(document.getElementsByName(`rowSelected${idOtOci}`))
+        let idOci = extractNumbers(element.id)[0]
         
+
         for (let q=0; q<12; q++) {
             if (rowSelectCheck[q] && rowSelectCheck[q].style.cssText == "height: 7vh;") {
                 rowSelectCheck[q].setAttribute('style', "height: 7vh; background-color: #c4f0fd;")
+                
+                arrayBtnCheckSelecMasive[idOci].innerHTML = `<i class="fa-solid fa-list-check"></i> Mod. multiple (${count})`
+                arrayBtnCheckSelecMasive[idOci].disabled = 'false'
             } else {
                 rowSelectCheck[q].setAttribute('style', "height: 7vh;")
+                arrayBtnCheckSelecMasive[idOci].innerHTML = `<i class="fa-solid fa-list-check"></i> Mod. multiple (${count})`
             }
         }
     })
 })
-
 
 
 arrayBtnCheckSelectionAll.forEach(function(element) {
@@ -1049,7 +1054,6 @@ arrayBtnCheckSelectionAll.forEach(function(element) {
     })
 })
 
-//-----------19/12-2023---------------
 
 //-----Btns Buscar en BBDD el Usuario Seguidor de Diseño --------------
 const searchDesignUser = document.getElementById('searchDesignUser')

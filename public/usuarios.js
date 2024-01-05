@@ -6,44 +6,44 @@ socket.on('usersAll', (arrUsers) => {
     renderUser(arrUsers)
 })
 
-const addNewUser = () => {
-    const name = document.getElementById('name').value
-    const lastName = document.getElementById('lastName').value
-    const email = document.getElementById('email').value
-    const username = document.getElementById('username').value
-    const avatar = document.getElementById('avatar').value
-    const password = document.getElementById('password').value
-    const status = true
-    const admin = false
+// const addNewUser = () => {
+//     const name = document.getElementById('name').value
+//     const lastName = document.getElementById('lastName').value
+//     const email = document.getElementById('email').value
+//     const username = document.getElementById('username').value
+//     const avatar = document.getElementById('avatar').value
+//     const password = document.getElementById('password').value
+//     const status = true
+//     const admin = false
     
-    const selectedElement = document.getElementById("permiso")
-    const selectedValue = selectedElement.value
+//     const selectedElement = document.getElementById("permiso")
+//     const selectedValue = selectedElement.value
     
 
-    const timestamp = new Date().toLocaleString('en-GB')
-    const creatorName = document.getElementById('userNameHidden').value
-    const creatorLastName = document.getElementById('userLastNameHidden').value
-    const creator = [creatorName, creatorLastName]
-    const modificator = []
-    const modifiedOn = ""
+//     const timestamp = new Date().toLocaleString('en-GB')
+//     const creatorName = document.getElementById('userNameHidden').value
+//     const creatorLastName = document.getElementById('userLastNameHidden').value
+//     const creator = [creatorName, creatorLastName]
+//     const modificator = []
+//     const modifiedOn = ""
 
-    socket.emit('newUsuario', {
-        name,
-        lastName,
-        email,
-        username,
-        avatar,
-        password,
-        status,
-        admin,
-        selectedValue,
-        timestamp,
-        creator,
-        modificator,
-        modifiedOn
-    })
-    return false
-}
+//     socket.emit('newUsuario', {
+//         name,
+//         lastName,
+//         email,
+//         username,
+//         avatar,
+//         password,
+//         status,
+//         admin,
+//         selectedValue,
+//         timestamp,
+//         creator,
+//         modificator,
+//         modifiedOn
+//     })
+//     return false
+// }
 
 const renderUser = (arrUsers) => {
     const arrayUser = arrUsers
@@ -80,33 +80,113 @@ const renderUser = (arrUsers) => {
                 showPermiso = 'Sin permisos asociados'
             }
 
-        return (`<tr>
-                    <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
-                    <td class="text-center">${element.name}</td>
-                    <td class="text-center">${element.lastName}</td>
-                    <td class="text-center">${element.email}</td>
-                    <td class="text-center">${element.username}</td>
-                    <td class="text-center"><img class="img-fluid rounded py-2" alt="Avatar" src='${element.avatar}' width="90px" height="70px"></td>
-                    <td class="text-center"><span class="badge rounded-pill bg-${optionStatus}"> ${showStatus} </span></td>
-                    <td class="text-center"><span class="badge rounded-pill bg-${optionAdmin}"> ${showAdmin} </span></td>
-                    <td class="text-center"><span class="badge text-bg-${optionPermiso}"> ${showPermiso} </span></td>
-                    <td class="text-center">
-                        <div class="d-block align-items-center text-center">
-                            <a href="/api/usuarios/${element._id}" class="btn btn-primary btn-sm me-1"><i class="fa-solid fa-user-pen"></i></a>
-                            <a href="/api/usuarios/delete/${element._id}" class="btn btn-danger btn-sm mx-1"><i class="fa-solid fa-user-xmark"></i></a>
-                        </div>
-                    </td>
-                </tr>`)
+            if(element.visible) {
+                return (`<tr>
+                            <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
+                            <td class="text-center" id="name_${element._id}">${element.name}</td>
+                            <td class="text-center" id="lastName_${element._id}">${element.lastName}</td>
+                            <td class="text-center" id="email_${element._id}">${element.email}</td>
+                            <td class="text-center" id="username_${element._id}">${element.username}</td>
+                            <td class="text-center"><img class="img-fluid rounded-3 py-2" alt="Avatar" src='${element.avatar}' width="90px" height="70px"></td>
+                            <td class="text-center"><span class="badge rounded-pill bg-${optionStatus}"> ${showStatus} </span></td>
+                            <td class="text-center"><span class="badge rounded-pill bg-${optionAdmin}"> ${showAdmin} </span></td>
+                            <td class="text-center"><span class="badge text-bg-${optionPermiso}"> ${showPermiso} </span></td>
+                            <td class="text-center">
+                                <div class="d-block align-items-center text-center">
+                                    <a href="/api/usuarios/${element._id}" class="btn btn-primary btn-sm me-1"><i class="fa-solid fa-user-pen"></i></a>
+                                    <button id="${element._id}" name="btnDeleteUser" type="button" class="btn btn-danger btn-sm ms-1" title="Eliminar Usuario ${element.username}"><i class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>`)
+            }
     }).join(" ");
 
     document.getElementById('mostrarUsuarios').innerHTML = html
 
+    const usersActiveQty = []
+    for(let u=0; u<arrayUser.length; u++) {
+        if (arrayUser[u].visible) {
+            usersActiveQty.push(u)
+        }
+    }
+
     const htmlUserList = 
-        ( `<caption id="capProdList">Cantidad Total de Usuarios ${arrayUser.length}</caption>`)
+        ( `<caption id="capUserList">Cantidad de Usuarios: ${parseInt(usersActiveQty.length)}</caption><br>
+           <caption id="capDeleteUserList">Cantidad de Usuarios Eliminados: ${parseInt(arrayUser.length - usersActiveQty.length)}</caption>`)
 
     document.getElementById('capUserList').innerHTML = htmlUserList
-}
 
+    // ---- mensaje confirmacion eliminar Usuario
+    function messageDeleteUser(id, name, lastName, username) {
+
+        const htmlForm = `
+                El usuario ${name} ${lastName}, se eliminará completamente.<br>
+                Está seguro que desea continuar?<br>
+                <form id="formDeleteUser" action="/api/usuarios/delete/${id}" method="get">
+                    <fieldset>
+                    </fieldset>
+                </form>
+                        `
+    
+        Swal.fire({
+            title: `Eliminar Usuario <b>${username}</b>?`,
+            position: 'center',
+            html: htmlForm,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Eliminarlo! <i class="fa-regular fa-trash-can"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-user-shield"></i>'
+    
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("formDeleteUser").submit()
+                Swal.fire(
+                    'Eliminado!',
+                    `El usuario ${name} ${lastName}, ha sido eliminado exitosamente.`,
+                    'success'
+                )
+            } else {
+                Swal.fire(
+                    'No eliminado!',
+                    `El usuario ${name} ${lastName}, no ha sido eliminado`,
+                    'info'
+                    )
+                return false
+            }
+        })
+    }
+
+    const nodeList = document.querySelectorAll('button[name="btnDeleteUser"]')
+    
+    nodeList.forEach(elemento => {
+        elemento.addEventListener('click', (event) => {
+            const idUser = event.target.id
+            const name = document.getElementById(`name_${idUser}`).innerText
+            const lastName = document.getElementById(`lastName_${idUser}`).innerText
+            const username = document.getElementById(`username_${idUser}`).innerText
+
+            const userInfoId = document.getElementById(`userBanner_${idUser}`)
+            
+            if (userInfoId) {
+                Swal.fire({
+                    title: `Atención!`,
+                    position: 'center',
+                    text: 'Usted no puede eliminase a si mismo',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Salir <i class="fa-solid fa-user-shield"></i>'
+                })
+
+            } else if (idUser && name && lastName && username) {
+                messageDeleteUser(idUser, name, lastName, username)
+            }
+        })
+    })
+}
 
 /*------------------ Evento cantidad de caracteres Password & Confirmar Password -----------------------*/
 document.addEventListener('DOMContentLoaded', function () {

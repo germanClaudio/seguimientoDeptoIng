@@ -157,7 +157,8 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         if (client) {
             try {
                 const itemMongoDB = await Clientes.findById({_id: id})
-                client.logo != '' ? client.logo : itemMongoDB.logo
+                let logoCliente = ''
+                client.logo === '' ? logoCliente = itemMongoDB.logo : logoCliente = client.logo  
                 
                 if(itemMongoDB) {
                     var updatedClient = await Clientes.updateOne(
@@ -166,7 +167,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
                             $set: {
                                 name: client.name,
                                 status: client.status,
-                                logo: client.logo,
+                                logo: logoCliente,
                                 code: client.code,
                                 modificator: userModificator,
                                 modifiedOn: now
@@ -198,102 +199,114 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    async updateClientProjectsQty(id, clienteSelected, user){
-        const clientMongoDB = await clientes.findById({_id: id})
-        
-        if (clientMongoDB) {
+    async updateClientProjectsQty(id, clienteSelected, userModificator) {
+        if (id && clienteSelected) {
             try {
-                 const newValues = {
-                    name: clienteSelected.name,
-                    code: clienteSelected.code,
-                    logo: clienteSelected.logo,
-                    status: clienteSelected.status,
-                    project: clienteSelected.project + 1,
-                    creator: clienteSelected.creator,
-                    timestamp: clienteSelected.timestamp,
-                    modificator: user,
-                    modifiedOn: now
+                const itemMongoDB = await Clientes.findById({_id: id})
+            
+                if (itemMongoDB) {
+                    var updatedClientProjectsQty = await Clientes.updateOne(
+                        { _id: itemMongoDB._id },
+                        {
+                            $set: {
+                                project: parseInt(itemMongoDB.project + 1),
+                                modificator: userModificator,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
+                    
+                    if(updatedClientProjectsQty.acknowledged) {
+                        const itemUpdated = await Clientes.findById({ _id: id })
+                        return itemUpdated
+                    }
+                    
+                } else {
+                    logger.info('El Cliente no existe! ', itemMongoDB)
+                    return new Error (`No se pudo actualizar el Cliente!`)
                 }
 
-                const clientUpdated = await clientes.findOneAndUpdate(
-                    { _id: id }, newValues , { new: true })
-                logger.info('Qty. proyectos de Cliente actualizado ', clientUpdated)
-                
-                return clientUpdated
-               
             } catch (error) {
                 logger.error("Error MongoDB updateClient: ",error)
                 return new Error (`No se pudo actualizar el Cliente!`)
-            }
-        } else {
-            logger.info('El Cliente no existe! ', itemMongoDB)
-            return new Error (`No se pudo actualizar el Cliente!`)
+            }    
         }
     }
 
     async reduceClientProjectQty(id, clienteSelected, user){
-        
-        if (clienteSelected) {
+        if (id && clienteSelected) {
             try {
-                const clientMongoDB = await clientes.findById({_id: id})
+                const itemMongoDB = await Clientes.findById({_id: id})
                 
-                if(clientMongoDB) {
-                    const clientUpdated = await clientes.findOneAndUpdate(
+                if(itemMongoDB) {
+                    var updatedClientProjectsQty = await Clientes.updateOne(
                         { _id: id }, 
                         {
                             $set: {
-                                'project': parseInt(clientMongoDB.project - 1),
+                                project: parseInt(itemMongoDB.project - 1),
                                 modificator: user,
                                 modifiedOn: now
                             }
                         },
                         { new: true })
-                    logger.info('Qty. proyectos de Cliente actualizado ', clientUpdated)
-                    return clientUpdated
+
+                    if(updatedClientProjectsQty.acknowledged) {
+                        const itemUpdated = await Clientes.findById({ _id: id })
+                        return itemUpdated
+                    }
 
                 } else {
                     logger.info('Qty. proyectos de Cliente no actualizado ')
+                    return new Error (`No se pudo actualizar el Cliente!`)
                 }
                 
             } catch (error) {
                 logger.error("Error MongoDB reducing client project qty.: ",error)
                 return new Error (`No se pudo actualizar la cantidad de proyectos del Cliente!`)
             }
+
         } else {
             logger.info('El Cliente no existe!')
             return new Error (`No se pudo actualizar la cantidad de proyectos del Cliente!`)
         }
     }
 
-    async deleteClientById(id) {
-        const itemMongoDB = await clientes.findById({_id: `${id}`})
-        
-        if(itemMongoDB) {
-           let inactive = Boolean(false)
+    async deleteClientById(id, modificator) {
+        if(id) {
             try {
-                const newValues = {
-                    name: itemMongoDB.name,
-                    logo: itemMongoDB.logo,
-                    code: itemMongoDB.code,
-                    timestamp: now,
-                    project: itemMongoDB.project,
-                    status: inactive,
-                    creator: itemMongoDB.creator,
-                }
+                const itemMongoDB = await Clientes.findById({_id: `${id}`})
                 
-                const client = await clientes.findOneAndUpdate(
-                    { _id: id }, 
-                    newValues, 
-                    { new: true }
-                )
-                    return client
+                if(itemMongoDB) {
+                    let inactive = Boolean(false)
+                    var clientDeleted = await Clientes.updateOne(
+                        { _id: id }, 
+                        {
+                            $set: {
+                                visible: inactive,
+                                status: inactive,
+                                modificator: modificator,
+                                modifiedOn: now
+                            }
+                        },
+                        { new: true }
+                    )
 
+                    if(clientDeleted.acknowledged) {
+                        const itemUpdated = await Clientes.findById({ _id: id })
+                        return itemUpdated
+
+                    } else {
+                        return new Error(`No se eliminó el item: ${userMongoDB._id}`)
+                    }
+
+                } else {
+                    logger.info('El Cliente no existe! ', itemMongoDB)
+                }
             } catch (error) {
                 logger.error("Error MongoDB deleteClient: ",error)
             }
 
-        } else {
-            logger.info('El Cliente no existe! ', itemMongoDB)
         }
     }
 

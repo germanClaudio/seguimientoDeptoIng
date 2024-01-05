@@ -303,8 +303,7 @@ class ClientsController {
         const proyectos = await this.projects.getProjectsByClientId(id)
         
         const clientToUpdateProjectQty = await this.clients.getClientById(id)
-        const creador = await this.clients.getClientById(id)
-
+        
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
@@ -315,24 +314,13 @@ class ClientsController {
             email: userInfo.email
         }]
 
-        const updatedClienteProjectsQty = {
-            creator: creador.creator,
-            name: clientToUpdateProjectQty.name,
-            status: Boolean(true),
-            code: clientToUpdateProjectQty.code,
-            project: proyectos.length,
-            logo: clientToUpdateProjectQty.logo,
-            timestamp: creador.timestamp,
-            modificator: modifier,
-            modifiedOn: now
-        }
-
         const cookie = req.session.cookie
         const time = cookie.expires
         const expires = new Date(time)
 
         try {
-            const cliente = await this.clients.updateClient(id, updatedClienteProjectsQty)
+            const cliente = await this.clients.updateClientProjectsQty(id, clientToUpdateProjectQty, modifier)
+            if (!cliente) return res.status(404).json({ Msg: 'Cantidad de proyectos de Cliente no actualizada' })
             res.render('clientProjectsDetails', {
                 cliente,
                 username,
@@ -354,7 +342,7 @@ class ClientsController {
         let username = res.locals.username
         let userInfo = res.locals.userInfo
 
-        const modifier = [{
+        const modificator = [{
             name: userInfo.name,
             lastName: userInfo.lastName,
             username: userInfo.username,
@@ -366,9 +354,11 @@ class ClientsController {
         const expires = new Date(time)
 
         try {
-            const clientDeleted = await this.clients.deleteClientById(clientId)
+            const cliente = await this.clients.deleteClientById(clientId, modificator)
+            
+            if (!cliente) return res.status(404).json({ Msg: 'Cliente no eliminado' })
             res.render('addNewClients', {
-                clientDeleted,
+                cliente,
                 username,
                 userInfo,
                 expires
@@ -383,12 +373,11 @@ class ClientsController {
 
     reduceClientProjectQty = async (req, res) => {
         const id = req.params.id
-        // const proyectos = await this.projects.getProjectsByClientId(id)
+        const proyectos = await this.projects.getProjectsByClientId(id)
         
         const clientToUpdateProjectQty = await this.clients.getClientById(id)
-        // const creador = await this.clients.getClientById(id)
-
-        // let username = res.locals.username
+        
+        let username = res.locals.username
         let userInfo = res.locals.userInfo
 
         const modifier = [{
@@ -398,36 +387,20 @@ class ClientsController {
             email: userInfo.email
         }]
 
-        // const updatedClienteProjectsQty = {
-        //     creator: creador.creator,
-        //     name: clientToUpdateProjectQty.name,
-        //     status: Boolean(true),
-        //     code: clientToUpdateProjectQty.code,
-        //     project: proyectos.length,
-        //     logo: clientToUpdateProjectQty.logo,
-        //     timestamp: creador.timestamp,
-        //     modificator: modifier,
-        //     modifiedOn: now
-        // }
-
-        // const cookie = req.session.cookie
-        // const time = cookie.expires
-        //const expires = new Date(time)
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
 
         try {
-            // const cliente = 
-            await this.clients.reduceClientProjectQty(
-                id, 
-                clientToUpdateProjectQty,
-                modifier
-            )
-            // res.render('clientProjectsDetails', {
-            //     cliente,
-            //     username,
-            //     userInfo,
-            //     expires,
-            //     proyectos
-            // })
+            const cliente = await this.clients.reduceClientProjectQty(id, clientToUpdateProjectQty, modifier)
+            if (!cliente) return res.status(404).json({ Msg: 'Cantidad de proyectos de Cliente no actualizada' })
+                res.render('clientProjectsDetails', {
+                    cliente,
+                    username,
+                    userInfo,
+                    expires,
+                    proyectos
+                })
 
         } catch (error) {
             res.status(500).json({

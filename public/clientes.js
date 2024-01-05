@@ -105,33 +105,126 @@ const renderClientAdmin = (arrClient) => {
             text = "Inactivo"
         }
         
+        if(element.visible) {
         return (`<tr>
                     <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
-                    <td class="text-center">${element.name}</td>
-                    <td class="text-center"><a href="/api/clientes/select/${element._id}"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
+                    <td class="text-center" id="name_${element._id}">${element.name}</td>
+                    <td class="text-center"><a href="/api/clientes/select/${element._id}"><img id="logo_${element._id}" class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
                     <td class="text-center">${element.code}</td>
                     <td class="text-center"><span class="badge rounded-pill bg-${colorStatus}">${text}</span></td>
-                    <td class="text-center"><span class="badge rounded-pill bg-${colorResult}">${result}</span></td>
+                    <td class="text-center"><span id="projectQty_${element._id}" class="badge rounded-pill bg-${colorResult}">${result}</span></td>
                     <td class="text-center">${loopUserId()}</td>
                     <td class="text-center">${element.timestamp}</td>
                     <td class="text-center">${loopModifId()}</td>
                     <td class="text-center">${element.modifiedOn}</td>
                     <td class="text-center">
                         <div class="d-block align-items-center">
-                            <a href="/api/clientes/select/${element._id}" class="btn btn-secondary btn-sm me-1" data-toggle="tooltip" data-placement="top" title="Ver cliente ${element.name}"><i class="fa fa-eye"></i></a>
+                            <a href="/api/clientes/select/${element._id}" class="btn btn-secondary btn-sm me-1" data-toggle="tooltip" data-placement="top" title="Editar cliente ${element.name}"><i class="fa-regular fa-pen-to-square"></i></a>
                             <a href="/api/clientes/${element._id}" class="btn btn-primary btn-sm mx-1" title="Ver proyectos cliente ${element.name}"><i class="fa-solid fa-diagram-project"></i></a>
-                            <a href="/api/clientes/delete/${element._id}" class="btn btn-danger btn-sm mx-1" title="Eliminar cliente ${element.name}"><i class="fa fa-trash"></i></a>
+                            <button id="${element._id}" name="btnDeleteClient" type="button" class="btn btn-danger btn-sm ms-1" title="Eliminar Cliente ${element.name}"><i class="fa-regular fa-trash-can"></i></button>
                         </div>
                     </td>
                 </tr>`)
+        }
     }).join(" ");
 
     document.getElementById('mostrarClientes').innerHTML = html
 
+    const clientsActiveQty = []
+    for(let c=0; c<arrClient.length; c++) {
+        if (arrayClient[c].visible) {
+            clientsActiveQty.push(c)
+        }
+    }
+
     const htmlClientList = 
-        ( `<caption id="capClientList">Cantidad Total de Clientes ${arrayClient.length}</caption>`)
+        ( `<caption id="capClientList">Cantidad de Clientes: ${parseInt(clientsActiveQty.length)}</caption><br>
+           <caption id="capClientDeletedList">Cantidad de Clientes Eliminados: ${parseInt(arrayClient.length - clientsActiveQty.length)}</caption>`)
 
     document.getElementById('capClientList').innerHTML = htmlClientList
+
+    // ---- mensaje confirmacion eliminar Cliente
+    function messageDeleteClient(id, name, logo, ) {
+
+        const htmlForm = `
+                El cliente ${name}, se eliminará completamente.<br>
+                <img class="img-fluid rounded-2 m-2" alt="Logo Cliente" src='${logo}' width="90px" height="75px"><br>
+                Está seguro que desea continuar?<br>
+                <form id="formDeleteClient" action="/api/clientes/delete/${id}" method="get">
+                    <fieldset>
+                    </fieldset>
+                </form>
+                        `
+    
+        Swal.fire({
+            title: `Eliminar Cliente <b>${name}</b>?`,
+            position: 'center',
+            html: htmlForm,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Eliminarlo! <i class="fa-regular fa-trash-can"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-user-shield"></i>'
+    
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("formDeleteClient").submit()
+                Swal.fire(
+                    'Eliminado!',
+                    `El cliente ${name}, ha sido eliminado exitosamente.`,
+                    'success'
+                )
+            } else {
+                Swal.fire(
+                    'No eliminado!',
+                    `El cliente ${name}, no ha sido eliminado`,
+                    'info'
+                    )
+                return false
+            }
+        })
+    }
+
+    const nodeList = document.querySelectorAll('button[name="btnDeleteClient"]')
+    
+    nodeList.forEach(elemento => {
+        elemento.addEventListener('click', (event) => {
+            const idClient = event.target.id
+            const name = document.getElementById(`name_${idClient}`).innerText
+            const logo = document.getElementById(`logo_${idClient}`).src
+
+            const projectQty = parseInt(document.getElementById(`projectQty_${idClient}`).innerText)
+
+            if (!isNaN(projectQty)) {
+                let plText = ''
+                projectQty==1 ? 
+                plText = `El cliente ${name}<br>
+                            <img class="img-fluid rounded-2 m-2" alt="Logo Cliente" src='${logo}' width="90px" height="75px"><br>
+                            posee ${projectQty} proyecto asociado.<br>
+                            No es posible eliminarlo.`
+                :
+                plText = `El cliente ${name}<br>
+                            <img class="img-fluid rounded-2 m-2" alt="Logo Cliente" src='${logo}' width="90px" height="75px"><br>
+                            posee ${projectQty} proyectos asociados.<br>
+                            No es posible eliminarlo.`
+
+                Swal.fire({
+                    title: `Atención!`,
+                    position: 'center',
+                    html: plText,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Salir <i class="fa-solid fa-user-shield"></i>'
+                })
+
+            } else if (idClient && name && logo) {
+                messageDeleteClient(idClient, name, logo, projectQty)
+            }
+        })
+    })
 }
 
 //----------------------- Render User -------------------------------
@@ -165,26 +258,36 @@ const renderClientUser = (arrClient) => {
             text = "Inactivo"
         }
 
-        return (`<tr>
-                    <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
-                    <td class="text-center">${element.name}</td>
-                    <td class="text-center"><a href="/api/clientes/select/${element._id}"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
-                    <td class="text-center">${element.code}</td>
-                    <td class="text-center"><span class="badge rounded-pill bg-${colorStatus}">${text}</span></td>
-                    <td class="text-center"><span class="badge rounded-pill bg-${colorResult}">${result}</span></td>
-                    <td class="text-center">${element.creator}</td>
-                    <td class="text-center">${element.timestamp}</td>
-                    <td class="text-center">
-                        <a href="#" class="btn btn-secondary btn-sm me-1disabled" data-toggle="tooltip" data-placement="top" title="To Be Done"><i class="fa-solid fa-eye"></i></a>
-                        <i class="fa-solid fa-info-circle fa-2x ms-1" data-toggle="tooltip" data-placement="top" title="Solo Admin puede modificar esto" aria-hidden="true"></i>
-                    </td>
-                </tr>`)
+        if(element.visible) {
+            return (`<tr>
+                        <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
+                        <td class="text-center">${element.name}</td>
+                        <td class="text-center"><a href="/api/clientes/select/${element._id}"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
+                        <td class="text-center">${element.code}</td>
+                        <td class="text-center"><span class="badge rounded-pill bg-${colorStatus}">${text}</span></td>
+                        <td class="text-center"><span class="badge rounded-pill bg-${colorResult}">${result}</span></td>
+                        <td class="text-center">${element.creator}</td>
+                        <td class="text-center">${element.timestamp}</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-secondary btn-sm me-1 disabled" data-toggle="tooltip" data-placement="top" title="Ver datos Cliente ${element.name}"><i class="fa-solid fa-eye"></i></a>
+                            <i class="fa-solid fa-info-circle fa-2x ms-1" data-toggle="tooltip" data-placement="top" title="Solo Admin puede modificar esto" aria-hidden="true"></i>
+                        </td>
+                    </tr>`)
+        }
     }).join(" ");
 
     document.getElementById('mostrarClientes').innerHTML = html
 
+    const clientsActiveQty = []
+    for(let c=0; c<arrClient.length; c++) {
+        if (arrayClient[c].visible) {
+            clientsActiveQty.push(c)
+        }
+    }
+
     const htmlClientList = 
-        ( `<caption id="capClientList">Cantidad Total de Clientes ${arrayClient.length}</caption>`)
+        ( `<caption id="capClientList">Cantidad de Clientes: ${parseInt(clientsActiveQty.length)}</caption><br>
+           <caption id="capClientDeletedList">Cantidad de Clientes Eliminados: ${parseInt(arrayClient.length - clientsActiveQty.length)}</caption>`)
 
     document.getElementById('capClientList').innerHTML = htmlClientList
 }

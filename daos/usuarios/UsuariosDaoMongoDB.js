@@ -381,7 +381,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                         },
                         { new: true }
                     )
-                        console.log('updatedFinalUser:', updatedFinalUser)
+
                     if(updatedFinalUser.acknowledged) {
                         const itemUpdated = await Usuarios.findById({ _id: id })
                         return itemUpdated
@@ -427,7 +427,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                     )
 
                     if(userDeleted.acknowledged) {
-                        const itemUpdated = await Clientes.findById({ _id: id })
+                        const itemUpdated = await Usuarios.findById({ _id: id })
                         return itemUpdated
 
                     } else {
@@ -441,7 +441,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
             } catch (error) {
                 logger.error("Error MongoDB deleteUser: ",error)
             }
-            
+
         } else {
             return new Error (`El Usuario no existe con ese ID${id}!`)
         }    

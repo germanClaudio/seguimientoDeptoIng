@@ -377,8 +377,7 @@ class UsersController {
                 }
                 else if (usuario && userInfo.status ) {
                     const access_token = generateToken(usuario)
-                    //const cart = await this.carts.getCartByUserId(userInfo._id)
-                   
+                                       
                     req.session.admin = true
                     req.session.username = userInfo.username    
                     return res.render('index', {
