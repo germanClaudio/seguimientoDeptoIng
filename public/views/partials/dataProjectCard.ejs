@@ -54,8 +54,14 @@
                 <br>
                 <p class="card-text">
                     Cantidad de OCI's
+                        <% let ociTotalCount = 0 
+                            for ( let k=0; proyecto[0].project[0].oci.length> k; k++) {
+                                if (proyecto[0].project[0].oci[k].visible) {
+                                    ociTotalCount++
+                                }
+                            } %>
                     <span id="ociTotalQty" class="badge rounded-pill bg-primary text-white mx-auto">
-                        <%= proyecto[0].project[0].oci.length %>
+                        <%= ociTotalCount %>
                     </span>
                 </p>
         </div>
@@ -144,7 +150,7 @@
                                                                             name="btnHiddeTableGeneral"
                                                                             type="button" class="btn btn-primary"
                                                                             title="Ocultar General"
-                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #ccc; border: none">
+                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #115; border: none">
                                                                             <i class="fa-solid fa-eye-slash"></i>
                                                                         </button>
 
@@ -155,7 +161,7 @@
                                                                             name="btnHiddeTableSeguimiento"
                                                                             type="button" class="btn btn-secondary"
                                                                             title="Ocultar Int/Ext"
-                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #bbc; border: none">
+                                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #115; border: none">
                                                                             <i class="fa-solid fa-eye-slash"></i>
                                                                         </button>
 

@@ -7,11 +7,6 @@ for (let i = 0; i<25; i++) { //ver limite maximo de OCI por Proyecto
     }
 }
 
-// for (let i = 0; i<25; i++) {
-//     var table = new DataTable(`#tablaGeneral${i}`);
-// }
-// console.log(table)
-
 function hiddeTableGeneral(k) {
     const tablaGeneral = document.getElementById(`tablaGeneral${k}`)
     const tablaSeguimiento = document.getElementById(`tablaSeguimiento${k}`)
@@ -186,13 +181,13 @@ btnAddNewRow.addEventListener('click', () => {
     }
 
     let otNumberValue = parseInt(document.getElementById('otNumber').value)
-    const opNumberValue = parseInt(document.getElementById('opNumber').value)
+    let opNumberValue = parseInt(document.getElementById('opNumber').value)
     const internoDisenoValue = document.getElementById('internoDiseno').value
     const internoSimulacion = document.getElementById('internoSimulacion').value
     const externoDiseno = document.getElementById('externoDiseno').value
 
     const originalDiv = (
-        `<div class="col-1">
+            `<div class="col-1">
                 <label for="otNumber${i}" id="labelOtNumber${i}">OT#</label>
                 <input type="number" name="otNumber${i}" id="otNumber${i}" class="form-control mt-3" min="0" max="9999"
                 placeholder="Número OT" value="${otNumberValue + i}">
@@ -216,16 +211,16 @@ btnAddNewRow.addEventListener('click', () => {
             </div>
             <div class="col-2">
                 <label for="internoDiseno${i}" id="labelInternoDiseno${i}">Diseño seguido por</label>
-                <input type="text" name="internoDiseno${i}" id="internoDiseno${i}" class="form-control"
+                <input type="text" name="internoDiseno${i}" id="internoDiseno${i}" class="form-control mt-3"
                 placeholder="Diseño" value="${internoDisenoValue}">    
             </div>
             <div class="col-2">
                 <label for="internoSimulacion${i}" id="labelInternoSimulacion${i}">Simulación seguida por</label>
-                <input type="text" name="internoSimulacion${i}" id="internoSimulacion${i}" class="form-control"
+                <input type="text" name="internoSimulacion${i}" id="internoSimulacion${i}" class="form-control mt-3"
                 placeholder="Simulación" value="${internoSimulacion}">    
             </div>
             <div class="col-2">
-            <label for="externoDiseno${i}" id="labelExternoDiseno${i}">Proveedor externo</label>
+                <label for="externoDiseno${i}" id="labelExternoDiseno${i}">Proveedor externo</label>
                 <input type="text" name="externoDiseno${i}" id="externoDiseno${i}" class="form-control mt-3"
                 placeholder="Proveedor" value="${externoDiseno}">    
             </div>
@@ -236,7 +231,7 @@ btnAddNewRow.addEventListener('click', () => {
             </div>`
     )
 
-    if (i == 1) {
+    if (i === 1) {
         originalDiv
 
     } else if (i !== 1 && i < 10) { //cantidad maxima de OT en conjunto a agregar 10
@@ -253,7 +248,14 @@ btnAddNewRow.addEventListener('click', () => {
     const newDiv = document.createElement('div')
     newDiv.setAttribute('class', "row my-3")
     newDiv.id = `otItemRow${i}`
-    newDiv.innerHTML = originalDiv
+
+    if(i === 1) {
+        newDiv.innerHTML = `<hr class="my-3">` + originalDiv + `<hr class="my-3">`
+    } else if(i === 10) {
+        newDiv.innerHTML = originalDiv
+    } else {
+        newDiv.innerHTML = originalDiv + `<hr class="my-3">`
+    }
     parentDiv.appendChild(newDiv)
     const otQty = document.getElementById("otQuantity")
     otQty.value = i+1
@@ -547,7 +549,7 @@ function messageUpdateOt(
             title: `Actualizar OT# ${numberOt}`,
             position: 'center',
             html: html,
-            width: 800,
+            width: 950,
             icon: 'info',
             showCancelButton: true,
             showConfirmButton: true,
@@ -850,6 +852,131 @@ function messageDeleteOt(
     }
 }
 
+//---- Update Masive OT Data ----------------
+function messageUpdateMasiveOt(arrayRowsSelected) {
+    
+    let numberKOci = parseInt(ociKNumber)
+    let numnerKOt = parseInt(otKNumber)
+    let numberOt = parseInt(otNumber)
+    let checked = 'checked'
+    statusOt=='Activo' ? checked : checked = ''
+
+    let bgColorStatus
+    statusOt=='Activo' ? bgColorStatus='background-color: #55dd5560;'
+                        : 
+                         bgColorStatus='background-color: #dd555560;'
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })
+
+    var html = `<form id="formUpdateMasiveOt${idProjectSelected}" action="/api/proyectos/updateMasiveOt/${idProjectSelected}" method="post">
+                    <fieldset>
+                        <div class="row justify-content-between mb-3 mx-1 px-1">
+                            <div class="col-4">
+                                <label for="numberOt" class="form-label d-flex justify-content-start ms-1">Número OT</label>
+                                <input type="number" name="numberOt" class="form-control"
+                                    placeholder="Número OT" value="${numberOt}" required>
+                            </div>
+                            
+                            <div class="col-5" style="${bgColorStatus}">
+                                <label for="statusOt" class="form-label d-flex justify-content-start ms-1">Status OT</label>
+                                <div>
+                                    <p class="d-inline-block me-1">Inactiva</p>
+                                    <div class="form-check form-switch d-inline-block mt-2">
+                                        <input id="statusOtForm" class="form-check-input" type="checkbox" role="switch"
+                                            name="statusOtForm" style="cursor: pointer;" ${checked}>
+                                        <label class="form-check-label" for="statusOt">Activa</label>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>    
+                        
+                        <div class="row mb-3 mx-1 px-1">
+                            <div class="col">
+                                <label for="descriptionOt" class="form-label d-flex justify-content-start ms-1">Descripción OT</label>
+                                <input type="text" name="descriptionOt" class="form-control"
+                                    placeholder="Descripción OT" value="${otDescription}" required>
+                            </div>                            
+                        </div>
+
+                        <div class="row justify-content-evenly mb-3 mx-1 px-1">
+                            <div class="col-4">
+                                <label for="designOt" class="form-label d-flex justify-content-start ms-1">Diseño seguido por
+                                    <button type="button" id="searchDesignUserModal" class="btn btn-light rounded-circle ms-1">
+                                        <i class="fa-solid fa-database"></i>
+                                    </button>
+                                </label>
+                                <input type="text" id="designOt" name="designOt" class="form-control"
+                                    placeholder="Diseño seguido por" value="${otDesign}" required>
+                            </div>
+                            <div class="col-4">
+                                <label for="simulationOt" class="form-label d-flex justify-content-start ms-1">Simulación seguida por
+                                    <button type="button" id="searchSimulationUserModal" class="btn btn-light rounded-circle ms-1">
+                                        <i class="fa-solid fa-database"></i>
+                                    </button>
+                                </label>
+                                <input type="text" id="simulationOt" name="simulationOt" class="form-control"
+                                    placeholder="Simulacion seguida por" value="${otSimulation}" required>
+                            </div>
+                            <div class="col-4">
+                                <label for="supplierOt" class="form-label d-flex justify-content-start ms-1">Proveedor externo</label>
+                                <input type="text" id="supplierOt" name="supplierOt" class="form-control"
+                                    placeholder="Descripción OT" value="${otSupplier}" required>
+                            </div>                      
+                        </div> 
+
+                            <input type="hidden" name="ociKNumberHidden" id="ociKNumberHidden${numberKOci}" value="${numberKOci}">
+                            <input type="hidden" name="otKNumberHidden" id="otKNumberHidden${numnerKOt}" value="${numnerKOt}">
+                    </fieldset>
+                </form>`
+
+    if(idProjectSelected && numberOt) {
+        Swal.fire({
+            title: `Actualizar OT# ${numberOt}`,
+            position: 'center',
+            html: html,
+            width: 950,
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Actualizar <i class="fa-regular fa-pen-to-square"></i>',
+            cancelButtonText: 'Cancelar <i class="fa-solid fa-ban"></i>'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`formUpdateOt${idProjectSelected}`).submit()
+                Toast.fire({
+                    icon: 'success',
+                    title: `La OT# <b>${numberOt}</b>, se modificó con éxito!`
+                })
+
+            } else {
+                Swal.fire(
+                    'OT no modificada!',
+                    `La OT# <b>${numberOt}</b>, no se modificó!`,
+                    'warning'
+                )
+                return false
+            }
+        })
+
+    } else {
+        Swal.fire({
+            title: 'Error',
+            position: 'center',
+            timer: 3500,
+            text: `La OT# ${numberOt} no se actualizó correctamente!`,
+            icon: 'error',
+            showCancelButton: false,
+            showConfirmButton: false,
+        })
+    }
+}
+
 let checkSelect = document.querySelectorAll('input[name="checkSelect"]')
 let maxOtQuantity
 checkSelect ? maxOtQuantity = parseInt(checkSelect.length) : maxOtQuantity=0
@@ -870,6 +997,7 @@ var arrayBtnChangeStatusOt = [],
 
         let btnCheckSelecMasive = document.getElementById(`btnCheckSelecMasive${m}`)
         if (btnCheckSelecMasive) {
+            btnCheckSelecMasive.setAttribute('disabled', true)
             arrayBtnCheckSelecMasive.push(btnCheckSelecMasive)
         }
 
@@ -905,6 +1033,65 @@ function cleanString(cadena) {
     let cadenaSinEspaciosEnd = cadenaSinEtiquetas.trim()
     return cadenaSinEspaciosEnd
   }
+
+function updateBtnCheckSelecMasive(idOci) {     
+    let btnMasive = document.getElementById(`btnCheckSelecMasive${idOci}`)
+    let btnSelectAll = document.getElementById(`btnCheckSelectionAll${idOci}`)
+    const cantidadSeleccionados = parseInt(document.querySelectorAll(`#tablaGeneral${idOci} input[name="checkSelect"]:checked`).length)
+    const cantidadTotalXTabla = parseInt(document.querySelectorAll(`#tablaGeneral${idOci} input[name="checkSelect"]:not(:disabled)`).length)
+    
+    if (cantidadSeleccionados > 0) {
+        if (cantidadSeleccionados === cantidadTotalXTabla) {
+            btnSelectAll.innerHTML = 'Des-Seleccionar todos <i class="fa-solid fa-xmark" aria-hidden="true"></i>'
+            btnSelectAll.title = 'Des-Seleccionar todas las OT'
+            btnSelectAll.classList.remove("btn-primary")
+            btnSelectAll.classList.add("btn-danger")
+
+        }
+        btnMasive.innerHTML = `<i class="fa-solid fa-list-check"></i> Mod. multiple (${cantidadSeleccionados}/${cantidadTotalXTabla})`
+        btnMasive.disabled = false
+    
+    } else {
+        btnMasive.innerHTML = `<i class="fa-solid fa-list-check"></i> Mod. multiple (0)`
+        btnMasive.disabled = true
+    }
+}  
+
+arrayBtnCheckSelecMasive.forEach(function(elemento) {
+    elemento.addEventListener('click', (event) => {
+        event.preventDefault()
+        const idOci = elemento.id.slice(19)
+        var arrayRowsSelected = []
+        for (let z=0; z<99; z++) {
+            let selected = document.getElementById(`checkSelect${idOci}_${z}`)
+
+            if (selected && selected.checked) {
+                const statusOt = cleanString(document.getElementById(`lastOtStatus${idOci}_${z}`).textContent)
+                const otNumber = parseInt(document.getElementById(`lastOtNumber${idOci}_${z}`).textContent)
+                const otDescription = document.getElementById(`lastOpDescription${idOci}_${z}`).textContent
+                const otDesign =  document.getElementById(`otDesign${idOci}_${z}`).textContent
+                const otSimulation =  document.getElementById(`otSimulation${idOci}_${z}`).textContent
+                const otSupplier =  document.getElementById(`otSupplier${idOci}_${z}`).textContent
+                const idProjectSelected = document.getElementById('projectIdHidden').value
+                
+                arrayRowsSelected.push({
+                    selected, 
+                    statusOt, 
+                    otNumber, 
+                    otDescription, 
+                    otDesign, 
+                    otSimulation, 
+                    otSupplier, 
+                    idProjectSelected
+                })
+            }
+        }
+                
+        messageUpdateMasiveOt(arrayRowsSelected)
+        
+    })
+})
+
 
 arrayBtnChangeStatusOt.forEach(function(elemento) {
     elemento.addEventListener('click', (event) => {
@@ -983,28 +1170,32 @@ arrayBtnDeleteOt.forEach(function(element) {
 })
 
 arrayCheckBoxSelect.forEach(function(element) {
+    element.checked = ''
     element.addEventListener('change', (event) => {
         event.preventDefault()
         const idOtOci = (event.target.id).slice(11)
-        let rowSelectCheck = Array.from(document.getElementsByName(`rowSelected${idOtOci}`))
+        if (document.getElementsByName(`rowSelected${idOtOci}`)) {
+            var rowSelectCheck = Array.from(document.getElementsByName(`rowSelected${idOtOci}`))
+        }
+
         let idOci = extractNumbers(element.id)[0]
+        //let idOt = extractNumbers(element.id)[1]
         
+        updateBtnCheckSelecMasive(idOci)
 
         for (let q=0; q<12; q++) {
             if (rowSelectCheck[q] && rowSelectCheck[q].style.cssText == "height: 7vh;") {
                 rowSelectCheck[q].setAttribute('style', "height: 7vh; background-color: #c4f0fd;")
                 
-                arrayBtnCheckSelecMasive[idOci].innerHTML = `<i class="fa-solid fa-list-check"></i> Mod. multiple (${count})`
-                arrayBtnCheckSelecMasive[idOci].disabled = 'false'
             } else {
                 rowSelectCheck[q].setAttribute('style', "height: 7vh;")
-                arrayBtnCheckSelecMasive[idOci].innerHTML = `<i class="fa-solid fa-list-check"></i> Mod. multiple (${count})`
             }
         }
     })
 })
 
-
+let seleccionados = false
+let seleccionarFilas = false
 arrayBtnCheckSelectionAll.forEach(function(element) {
     element.addEventListener('click', (event) => {
         event.preventDefault()
@@ -1018,22 +1209,28 @@ arrayBtnCheckSelectionAll.forEach(function(element) {
                 arrQueryRows.push(rowsSelectCheck)
             }
         }
-        
-        arrQueryRows.forEach(nodeList =>{
-            Array.from(nodeList).forEach(element => {
-                console.log(element.style.cssText)
-                element.style.cssText == "height: 7vh;" ?
-                    element.style = "height: 7vh; background-color: #c4f0fd;" 
-                    :
-                    element.style = "height: 7vh;"
+
+        // funcion selecciona todas las filas
+        function seleccionarTodasFilas() {
+            arrQueryRows.forEach(nodeList => {
+                Array.from(nodeList).forEach(element => {
+                    !seleccionarFilas ? element.style = "height: 7vh; background-color: rgb(196, 240, 253);" : element.style = "height: 7vh;"                    
+               })
             })
-        }) 
-                        
-        checkboxes.forEach(function(checkbox) {
-            if (!checkbox.disabled) {
-                checkbox.checked = !checkbox.checked
-            }
-        })
+            seleccionarFilas = !seleccionarFilas
+        }
+        seleccionarTodasFilas()
+        
+        // funcion selecciona todos los checkbox
+        function seleccionarTodos() {
+            checkboxes.forEach(function(checkbox) {
+                if (!checkbox.disabled) {
+                    !seleccionados ? checkbox.checked = true : checkbox.checked = false
+                }
+            })
+            seleccionados = !seleccionados
+        }
+        seleccionarTodos()
 
         element.classList[1] == 'btn-primary' ? 
             (element.classList.remove("btn-primary"),
@@ -1043,16 +1240,20 @@ arrayBtnCheckSelectionAll.forEach(function(element) {
             element.classList.add("btn-primary"))
 
         element.title == 'Seleccionar todas las OT' ?
-            element.title = 'Deseleccionar todas las OT' 
+            element.title = 'Des-Seleccionar todas las OT'
             :
             element.title = 'Seleccionar todas las OT'
 
-        element.innerHTML == 'Deseleccionar todos <i class="fa-solid fa-xmark" aria-hidden="true"></i>' ?
+        element.innerHTML == 'Des-Seleccionar todos <i class="fa-solid fa-xmark" aria-hidden="true"></i>' ?
             element.innerHTML = 'Seleccionar todos <i class="fa-solid fa-check-double" aria-hidden="true"></i>' 
             :
-            element.innerHTML = 'Deseleccionar todos <i class="fa-solid fa-xmark" aria-hidden="true"></i>'
+            element.innerHTML = 'Des-Seleccionar todos <i class="fa-solid fa-xmark" aria-hidden="true"></i>'
+
+        updateBtnCheckSelecMasive(idOci)
     })
 })
+
+
 
 
 //-----Btns Buscar en BBDD el Usuario Seguidor de Diseño --------------

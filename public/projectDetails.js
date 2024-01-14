@@ -1101,7 +1101,7 @@ function messageDeleteOci(
     const htmlForm = `
         <div class="container m-auto">
             La OCI#<strong>${ociNumber}</strong> - Descripcion: "${descriptionOci}"
-            y su toda su información interna se eliminará completamente.
+            y toda su información interna, se eliminará completamente.
             <br>
             <div id="imagePreview" class="p-1 my-1 mx-auto w-50">
                 <img class="p-1 m-1" src="${imageOci}" style="max-width: 75%; max-height: 75%;">
@@ -2180,3 +2180,27 @@ for (let k=0; k<projectQuantity; k++) {
         messageDeleteProject(projectName, idProject, k)
     })
 }
+
+//---------- ToolTip btn-spot OT -----------
+let btnOtNumberSpot = Array.from(document.querySelectorAll('button[name="otNumberSpot"]'))
+
+btnOtNumberSpot.forEach(function(btnSpot) {
+    btnSpot.addEventListener("mouseover", (event) => {
+        let btnSpotOtNumber = document.getElementById(`${btnSpot.id}`)
+        
+        tippy(btnSpotOtNumber, {
+            content: `OT: ${btnSpotOtNumber.id}<br>
+                      Op: ${btnSpotOtNumber.getAttribute("valueop")}<br>
+                      Descripcion: ${btnSpotOtNumber.getAttribute("valuedes")}<br>
+                      Diseño: ${btnSpotOtNumber.getAttribute("valuedesig")}<br>
+                      Simulacion: ${btnSpotOtNumber.getAttribute("valuesim")}<br>
+                      Proveedor: ${btnSpotOtNumber.getAttribute("valuesup")}`,
+            allowHTML: true,
+            arrow: true,
+            animation: 'scale',
+            theme: 'material',
+            // followCursor: true,
+            interactive: true,
+        })
+    })
+})

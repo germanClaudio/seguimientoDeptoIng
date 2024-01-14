@@ -714,7 +714,7 @@ class ProjectsController {
             userModificator
         )
 
-        const proyecto = await this.projects.getProjectsByClientId(clientId)
+        const proyecto = await this.projects.selectProjectsByMainProjectId(id)
         
         try {
             if (!proyecto) return res.status(404).json({ msg: 'Proyecto no encontrado' })
@@ -1149,7 +1149,7 @@ class ProjectsController {
                 userModificator
             )
 
-            const proyecto = await this.projects.getProjectsByClientId(clientId)
+            const proyecto = await this.projects.selectProjectsByMainProjectId(id)
 
             if (!proyecto) return res.status(404).json({ msg: 'Proyecto no encontrado' })
                 res.render('projectSelectedDetail', {
