@@ -12,7 +12,6 @@ class UsersController {
     constructor(){
         this.users = new UserService()
       }
-
        
     getAllUsers = async (req, res) => {
         const usuarios = await this.users.getAllUsers()
@@ -340,7 +339,6 @@ class UsersController {
         }
     }
 
-
     login = async (req, res) => {
         const { username, password, sessionStarted } = req.body
         let visits = req.session.visits
@@ -411,9 +409,8 @@ class UsersController {
                 error: error
             })
         }
-     }
+    }
 
-    // -------------- registra un nuevo usuario ------------------------------
     registerNewUser = async (req, res) => { 
         
         const yaExiste = await this.users.getUserByUsername(req.body.username) 
@@ -442,6 +439,185 @@ class UsersController {
                 msg: 'controllerError - RegisterNewUser',
                 error: error
             })
+        }
+    }
+
+    userLogout = async (req, res) => {
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+        
+        try {
+            const usuario = await this.users.userLogout(userInfo._id, username)
+            
+            if(!usuario) return res.status(404).json({ Msg: 'Usuario no deslogueado' })
+                req.session.destroy(err => {
+                    if(err) return res.send(err)
+                    try {
+                        return res.render('logout', { username, userInfo })
+                    } catch(err) {
+                        return res.json(err)
+                    }
+                })
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }    
+    }
+
+    authBloq = async (req, res) => {
+        let username = req.query.username || ""
+        const password = req.query.password || ""
+    
+        username = username.replace(/[!@#$%^&*]/g, "")
+    
+        try {
+            const usuario = await this.users.userLogout(password, username)
+            
+            if(!usuario) return res.status(404).json({ Msg: 'Usuario no deslogueado' })
+
+            if (!username || !password || !users[username]) {
+                process.exit(1)
+            }
+
+            const { salt, hash } = users[username]
+            const encryptHash = crypto.pbkdf2Sync(password, salt, 10000, 512, "sha512")
+        
+            if (crypto.timingSafeEqual(hash, encryptHash)) {
+                res.sendStatus(200)
+            } else {
+                process.exit(1)
+            }
+            
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+    }
+
+    authNoBloq = async (req, res) => {
+        let username = req.query.username || ""
+        const password = req.query.password || ""
+    
+        username = username.replace(/[!@#$%^&*]/g, "")
+    
+        try {
+            const usuario = await this.users.userLogout(password, username)
+            
+            if(!usuario) return res.status(404).json({ Msg: 'Usuario no deslogueado' })
+
+            if (!username || !password || !users[username]) {
+                process.exit(1)
+            }
+
+            crypto.pbkdf2(password, users[username].salt, 10000, 512, 'sha512', (err, hash) => {
+                if (users[username].hash.toString() === hash.toString()) {
+                  res.sendStatus(200);
+                } else {
+                  process.exit(1)
+                }
+            })
+            
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                error: error
+            })
+        }
+
+    }
+
+    index = async (req, res) => {
+   
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+    
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+        
+        try {
+            const visits = req.session.visits
+            const user = await this.users.getUserByUsername(username)
+            
+            const { flag, fail } = true
+    
+            if (!user) {
+                return res.render('register', {
+                    flag,
+                    fail
+                })
+            } else if ( user.status ) {
+                const access_token = generateToken(user)
+                const fail = false
+                req.session.admin = true
+                req.session.username = userInfo.username
+                return res.render('index', {
+                    userInfo,
+                    username,
+                    visits,
+                    flag,
+                    fail,
+                    expires
+                })
+            } else {
+                return res.render('notAuthorizated', {
+                    userInfo,
+                    username,
+                    visits,
+                    flag,
+                    expires
+                })
+            }
+             
+        } catch (error) {
+            res.status(500).send(error)
+        }
+    }
+
+    clientes = async (req, res) => {
+    
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+    
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+        
+        try {
+            const visits = req.session.visits
+            const user = await this.users.getUserByUsername(username)
+            
+            const { flag, fail } = true
+            
+            if (!user) {
+                return res.render('register', {
+                    flag,
+                    fail
+                })
+            } else if ( user.status ) {
+                const access_token = generateToken(user)
+                req.session.admin = true
+                req.session.username = userInfo.username
+                return res.render('clientes', {
+                    userInfo,
+                    username,
+                    expires
+                })
+            } else {
+                return res.render('notAuthorizated', {
+                    userInfo,
+                    username,
+                    visits,
+                    flag
+                })
+            }
+            
+        } catch (error) {
+            res.status(500).send(error)
         }
     }
 }

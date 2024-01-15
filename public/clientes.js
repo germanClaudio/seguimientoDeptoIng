@@ -35,7 +35,6 @@ function mostrarNombre() {
             mostrarNombre()    
         })
     }
-
 //-------------------------------------
 
 //  ---------------- Clients list ----------------
@@ -151,10 +150,7 @@ const renderClientAdmin = (arrClient) => {
                 <img class="img-fluid rounded-2 m-2" alt="Logo Cliente" src='${logo}' width="90px" height="75px"><br>
                 Está seguro que desea continuar?<br>
                 <form id="formDeleteClient" action="/api/clientes/delete/${id}" method="get">
-                    <fieldset>
-                    </fieldset>
-                </form>
-                        `
+                </form>`
     
         Swal.fire({
             title: `Eliminar Cliente <b>${name}</b>?`,
@@ -375,7 +371,7 @@ function handleFileUploadLogoClient(file) {
         reader.readAsDataURL(file)
         reader.onload = () => {
             dropAreaLogoClient.innerHTML = 
-                `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
+                `<img class="rounded p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
             alertLogoClient.style.display = 'none'
         }
 

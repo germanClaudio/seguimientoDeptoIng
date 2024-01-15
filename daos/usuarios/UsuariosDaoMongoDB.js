@@ -447,6 +447,36 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
         }    
     }
 
+    async userLogout(id, user) {
+        if (id, user) {
+            try {
+                return {id, user}
+            } catch (error) {
+                return error
+            }
+        }
+    }
+
+    async authBloq(password, user) {
+        if (password, user) {
+            try {
+                return {user}
+            } catch (error) {
+                return error
+            }
+        }
+    }
+
+    async authNoBloq(password, user) {
+        if (password, user) {
+            try {
+                return {user}
+            } catch (error) {
+                return error
+            }
+        }
+    }
+
     async disconnet() {
         await this.disconnection
         console.log('Disconnected from MongoDB Server')

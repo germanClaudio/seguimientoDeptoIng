@@ -10,19 +10,25 @@
 
     <%- include('../partials/userBanner'); %>
     <br>
-    <div class="d-block mx-auto my-4 pb-3 text-center">
-        <h2 class="d-block mx-auto my-2 text-center">Lista de Clientes</h2>
+    <div class="collapse" id="collapseExample">
+        <%- include('../partials/formularioCliente'); %>
     </div>
-    <div class="d-block mx-auto my-3 text-center">
-        <a class="btn btn-primary my-2 mx-5" href="/api/auth/index"><i class="fa-solid fa-home" aria-hidden="true"></i> Regresar al Home </a>
+    <div class="d-block mx-auto mt-4 pb-1 text-center">
+        <button class="btn btn-primary my-2 me-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+        aria-expanded="false" aria-controls="collapseExample">Nuevo Cliente <i class="fa-solid fa-plus"
+            aria-hidden="true"></i>
+        </button>
+        <a class="btn btn-secondary my-2 mx-4" href="/api/auth/index"><i class="fa-solid fa-home"
+                aria-hidden="true"></i> Regresar al Home </a>
         <% if( userInfo.admin ){ %>
-        <a class="btn btn-danger my-2 mx-5 disabled" href="/api/clientes/all/delete"><i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar Todos </a>
+            <a class="btn btn-danger my-2 ms-4 disabled" href="/api/clientes/all/delete"><i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar Todos </a>
         <% } %>
+            <h2 class="d-block mx-auto my-3 text-center">Lista de Clientes</h2>
     </div>
-        <br>
-        <div class="d-block mx-auto mb-3 text-center w-100 px-5">
+    <br>
+    <div class="d-block mx-auto mb-3 text-center w-100 px-5">
         <%- include('../partials/dataClientTable'); %>
-        </div>
+    </div>
     <div class="d-block mx-auto my-4 pb-5 text-center">
         <a class="btn btn-primary my-2" href="/api/auth/index"><i class="fa-solid fa-chevron-circle-left" aria-hidden="true"></i> Regresar al Home </a>
     </div>

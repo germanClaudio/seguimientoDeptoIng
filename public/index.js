@@ -68,10 +68,10 @@ const renderClient = (arrClient) => {
         colorStatus = red
         text = "Inactivo"
     }
-
+// 
             return (`<div class="col m-3">
                         <div class="card h-100" style="width: 18rem;">
-                            <img src="${element.logo}" class="card-img-top m-1 px-5 pt-1" alt="Picture not Founded" height="215px" >
+                            <img src="${element.logo}" class="card-img-top rounded-5 mx-auto px-5 pt-2" alt="Logo Cliente" max-height="210px" >
                             <div class="card-body">
                                 <h6 class="card-title"><strong>${element.name}</strong></h6>
                                 <p class="card-text">Codigo: ${element.code}<br>

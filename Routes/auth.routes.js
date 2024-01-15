@@ -26,103 +26,15 @@ authRouter.get('/login', (req, res) => { // lleva la vista del formulario de log
     res.render('login', { flag, fail })
 })
 
-
 authRouter.post('/login', sessionPostLogin, countVisits, users.login)
 
 //----------------------------------------------------------------
-authRouter.get('/clientes', checkAuthentication, authUserMiddleware, async (req, res) => {
-    
-    let username = res.locals.username
-    let userInfo = res.locals.userInfo
+authRouter.get('/clientes', checkAuthentication, authUserMiddleware, users.clientes)
 
-    const cookie = req.session.cookie
-    const time = cookie.expires
-    const expires = new Date(time)
-    
-    try {
-        const visits = req.session.visits
-        const user = await server.getUserByUsername(username)
-        
-        const { flag, fail } = true
-        
-        if (!user) {
-            return res.render('register', {
-                flag,
-                fail
-            })
-        } else if ( user.status ) {
-            const access_token = generateToken(user)
-            req.session.admin = true
-            req.session.username = userInfo.username
-            return res.render('clientes', {
-                userInfo,
-                username,
-                expires
-            })
-        } else {
-            return res.render('notAuthorizated', {
-                userInfo,
-                username,
-                visits,
-                flag
-            })
-        }
-        
-    } catch (error) {
-        res.status(500).send(error)
-    }
-})
 
-authRouter.get('/index', checkAuthentication, authUserMiddleware ,async (req, res) => {
-   
-    let username = res.locals.username
-    let userInfo = res.locals.userInfo
+authRouter.get('/index', checkAuthentication, authUserMiddleware, users.index)
 
-    const cookie = req.session.cookie
-    const time = cookie.expires
-    const expires = new Date(time)
-    
-    try {
-        const visits = req.session.visits
-        const user = await server.getUserByUsername(username)
-        
-        const { flag, fail } = true
-
-        if (!user) {
-            return res.render('register', {
-                flag,
-                fail
-            })
-        } else if ( user.status ) {
-            const access_token = generateToken(user)
-            const fail = false
-            req.session.admin = true
-            req.session.username = userInfo.username
-            return res.render('index', {
-                userInfo,
-                username,
-                visits,
-                flag,
-                fail,
-                expires
-            })
-        } else {
-            return res.render('notAuthorizated', {
-                userInfo,
-                username,
-                visits,
-                flag,
-                expires
-            })
-        }
-         
-    } catch (error) {
-        res.status(500).send(error)
-    }
-})
-
-//_________________________________ github _____________________________________ //
-
+//_________________________________ github _______________________________ //
 authRouter.get('/github', passport.authenticate('github', {scope: ['user:email']}))
 
 authRouter.get('/githubcallback', checkAuthentication, authUserMiddleware, passport.authenticate('github', {
@@ -158,10 +70,9 @@ authRouter.get('/githubcallback', checkAuthentication, authUserMiddleware, passp
             if (username == null) {
                 res.redirect('/api/login')
             }
-        });
+})
 
-//_________________________________ register _____________________________ //
-
+//_________________________________ register ____________________________ //
 authRouter.get('/register', (req, res) => {   // devuelve la vista de registro
     const flag = false
     const fail = false
@@ -171,21 +82,7 @@ authRouter.get('/register', (req, res) => {   // devuelve la vista de registro
 authRouter.post('/register', users.registerNewUser)
 
 //____________________________ logout __________________________________ //
-
-authRouter.get('/logout', checkAuthentication, authUserMiddleware, async (req, res) => { // cierra la sesion
-    
-    let username = res.locals.username
-    let userInfo = res.locals.userInfo
-
-    req.session.destroy(err => {
-        if(err) return res.send(err)
-        try {
-            return res.render('logout', { username, userInfo })
-        } catch(err) {
-            return res.json(err)
-        }
-    })
-})
+authRouter.post('/logout', checkAuthentication, authUserMiddleware, users.userLogout)
 
 module.exports = { 
     authRouter 

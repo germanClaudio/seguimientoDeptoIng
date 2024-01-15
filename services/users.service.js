@@ -9,6 +9,16 @@ class UserService {
     async login() {
         return await this.usuarios.login(username, password)
     }
+
+    // return index page
+    async index() {
+        return await this.usuarios.index()
+    }
+
+    // return client page
+    async clientes() {
+        return await this.usuarios.clientes()
+    }
     
     // return all users from DB
     async getAllUsers() {
@@ -53,6 +63,21 @@ class UserService {
     // delete one user by Id
     async deleteUserById(id, user) {
         return await this.usuarios.deleteUserById(id, user)
+    }
+
+    // User logout
+    async userLogout(id, user) {
+        return await this.usuarios.userLogout(id, user)
+    }
+
+    // authBloq
+    async authBloq(id, user) {
+        return await this.usuarios.authBloq(id, user)
+    }
+
+    // authBloq
+    async authNoBloq(id, user) {
+        return await this.usuarios.authNoBloq(id, user)
     }
 }
 

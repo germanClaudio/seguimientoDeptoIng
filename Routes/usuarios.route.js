@@ -27,46 +27,10 @@ routerUsers.get('/delete/:id', checkAuthentication, authUserMiddleware, users.de
 //---------------- Search a User sort by permission -----------------------
 routerUsers.get('/searchUsers/:all', checkAuthentication, authUserMiddleware, users.searchUsers)
 
-//routerUsers.get('/username/:username', users.getUserByUsername)
+//---------------- Not authorizate session --------------
+routerUsers.get("/auth-bloq", users.authBloq)
 
-//routerUsers.post('/register', checkAuthentication, authUserMiddleware, users.createNewUser)
-
-
-routerUsers.get("/auth-bloq", (req, res) => {
-    let username = req.query.username || "";
-    const password = req.query.password || "";
-  
-    username = username.replace(/[!@#$%^&*]/g, "");
-  
-    if (!username || !password || !users[username]) {
-      process.exit(1)
-    }
-  
-    const { salt, hash } = users[username];
-    const encryptHash = crypto.pbkdf2Sync(password, salt, 10000, 512, "sha512");
-  
-    if (crypto.timingSafeEqual(hash, encryptHash)) {
-      res.sendStatus(200);
-    } else {
-      process.exit(1)
-    }
-})
-
-routerUsers.get("/auth-nobloq", (req, res) => {
-    let username = req.query.username || "";
-    const password = req.query.password || "";
-    username = username.replace(/[!@#$%^&*]/g, "");
-  
-    if (!username || !password || !users[username]) {
-      process.exit(1)
-    }
-    crypto.pbkdf2(password, users[username].salt, 10000, 512, 'sha512', (err, hash) => {
-      if (users[username].hash.toString() === hash.toString()) {
-        res.sendStatus(200);
-      } else {
-        process.exit(1)
-      }
-    });
-});
+//---------------- Authorizate session --------------
+routerUsers.get("/auth-nobloq", users.authNoBloq)
 
 module.exports = routerUsers
