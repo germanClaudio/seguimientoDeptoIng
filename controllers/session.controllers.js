@@ -19,17 +19,18 @@ const sessionLogout = (req, res) => {
 
 const sessionPostLogin = (req, res, next) => {
     const { username, password } = req.body
+        
     if (!username || !password) {
-      return res.send('<h1>login failed</h1>')
+        return res.send('Login FAILED')
     }
     res.locals.username = username
     res.locals.admin = true
-    
+        
     next()
-   }
+}
 
 module.exports = { 
-    sessionGet ,
+    sessionGet,
     sessionLogout,
     sessionPostLogin
-}
+} 

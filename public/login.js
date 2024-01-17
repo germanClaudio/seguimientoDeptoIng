@@ -4,46 +4,58 @@ const showPasswordBtn = document.getElementById('show-password-btn')
 showPasswordBtn.addEventListener('click', () => {
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password'
     passwordInput.setAttribute('type', type)
-    showPasswordBtn.innerHTML = type === 'password' ? '<i class="fa fa-eye" aria-hidden="true"></i>' : '<i class="fa fa-eye-slash" aria-hidden="true"></i>'
+    showPasswordBtn.innerHTML = type === 'password' ? '<i class="fa-solid fa-eye"></i>'
+														: 
+													  '<i class="fa-solid fa-eye-slash"></i>'
 })
 
-function welcomeMessage(uName, passWord) {
+function inputMissing() {
+	const Toast = Swal.mixin({
+		toast: true,
+		position: 'top-end',
+		showConfirmButton: false,
+		timer: 4000,
+		timerProgressBar: false
+	})
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-      showConfirmButton: false,
-      timer: 4000,
-      timerProgressBar: false,
-      // didOpen: (toast) => {
-        //   toast.addEventListener('mouseenter', Swal.stopTimer)
-        //   toast.addEventListener('mouseleave', Swal.resumeTimer)
-        // }
-      })
-      
-  if(uName !="" && passWord !="") {
-    Toast.fire({
-      icon: 'success',
-      title: `Bienvenido ${uName}`
-    })
-  } else {
-    Toast.fire({
-      icon: 'error',
-      title: `Error en formulario Login!`
-    })
-    return false
-  }
+	Toast.fire({
+		icon: 'error',
+		title: `Error en formulario Login!`
+	})
+	return false
 }
 
-const btnUpdate = document.getElementById('btnFormLogin')
-btnUpdate.addEventListener('click', (event)=> {
-    //event.preventDefault()
-    const uName = document.getElementById('username').value
+const btnFormLogin = document.getElementById('btnFormLogin')
+btnFormLogin.addEventListener('click', ()=> {
+    const uName = (document.getElementById('username').value).trim()
     const passWord = document.getElementById('password').value
-    if(uName) {
-        welcomeMessage(uName, passWord)
-    }
+	
+    if (uName && passWord == "") {
+		document.getElementById('warningPassword').innerHTML = '¡El password no puede ser vacío!'
+		document.getElementById('password').focus()
+		inputMissing()
+	} else if (uName == "" && passWord) {
+		document.getElementById('warningUser').innerHTML = '¡El Usuario no puede ser vacío!'
+		document.getElementById('username').focus()
+		inputMissing()
+	} else if (uName == "" && passWord == '') {
+		inputMissing()
+	} else {
+		document.getElementById('warningUser').innerHTML = ''
+		document.getElementById('warningPassword').innerHTML = ''
+		const loginForm = document.getElementById('loginForm')
+		loginForm.submit()
+	}
 })
 
-document.getElementById('username').value = ""
-document.getElementById('password').value = ""
+const inputUsername = document.getElementById('username')
+inputUsername.addEventListener('change', ()=> {
+	document.getElementById('warningUser').innerHTML = ''
+})
+
+passwordInput.addEventListener('change', ()=> {
+	document.getElementById('warningPassword').innerHTML = ''
+})
+
+inputUsername.value = ""
+passwordInput.value = ""

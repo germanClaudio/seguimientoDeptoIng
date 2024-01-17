@@ -45,7 +45,7 @@ const initServer = () => {
     app.set('views', __dirname + '/public/views/pages') 
 
     //////////////  middleware  ///////////////////////
-    
+    app.set('trust proxy', 1) // trust first proxy ---- 16-1-2024
     app.use(session({
         secret: process.env.SECRET_KEY_SESSION,    
         store: MongoStore.create({
@@ -55,9 +55,11 @@ const initServer = () => {
         httpOnly: true,
         cookie: {
             maxAge: options.sessionTime.expirateTime,
+            sameSite: "lax",  // none, lax, strict 
+            secure: false //true     
         },
         resave: false, 
-        saveUninitialized: false
+        saveUninitialized: false,        
     }))
 
     initPassport()

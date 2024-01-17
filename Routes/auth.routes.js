@@ -5,7 +5,6 @@ const passport = require('passport')
 const { countVisits } = require('../middlewares/countVisits/countVisits.middleware')
 const { checkAuthentication } = require('../middlewares/chekAuthentication')
 const { authUserMiddleware } = require('../middlewares/authUser.middleware.js')
-
 const { sessionPostLogin } = require('../controllers/session.controllers.js')
 
 const { generateToken } = require('../utils/generateToken')
@@ -36,6 +35,7 @@ authRouter.get('/index', checkAuthentication, authUserMiddleware, users.index)
 
 //_________________________________ github _______________________________ //
 authRouter.get('/github', passport.authenticate('github', {scope: ['user:email']}))
+
 
 authRouter.get('/githubcallback', checkAuthentication, authUserMiddleware, passport.authenticate('github', {
 

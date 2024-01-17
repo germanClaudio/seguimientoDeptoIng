@@ -353,14 +353,18 @@ class UsersController {
         }
 
         let boolean = false
-        try {
+        
             const user = await this.users.getUserByUsername(username)
 
-                function isValidPassword(user, password) {
-                    const bCrypto = bCrypt.compareSync(password, user.password)
+            function isValidPassword(user, password) {
+                if(user) {
+                const bCrypto = bCrypt.compareSync(password, user.password)
                     return bCrypto
+                } else {
+                    return false
                 }
-            
+            }
+
             boolean = isValidPassword(user, password)
             
             if (boolean) {
@@ -368,7 +372,7 @@ class UsersController {
                 const userInfo = await this.users.getUserByUsername(username)
                 
                 if (!usuario) {
-                    return res.render('register', {
+                    return res.render('login', {
                         flag: false,
                         fail: false
                     }) 
@@ -377,13 +381,16 @@ class UsersController {
                     const access_token = generateToken(usuario)
                                        
                     req.session.admin = true
-                    req.session.username = userInfo.username    
-                    return res.render('index', {
-                        userInfo,
-                        username,
-                        visits,
-                        expires
-                    })
+                    req.session.username = userInfo.username
+                    
+                    setTimeout(() => {
+                        return res.render('index', {
+                            userInfo,
+                            username,
+                            visits,
+                            expires
+                        })
+                    }, 2000)
                 }
                 else {
                     return res.render('notAuthorizated', {
@@ -397,18 +404,13 @@ class UsersController {
             } else {
                 const flag = true
                 const fail = true
-                return res.render('login', {
-                    flag,
-                    fail
-                })
+                setTimeout(() => {
+                    return res.render('login', {
+                        flag,
+                        fail
+                    })
+                }, 2000)
             }
-    
-        } catch (error) {
-            res.status(500).json({
-                status: false,
-                error: error
-            })
-        }
     }
 
     registerNewUser = async (req, res) => { 

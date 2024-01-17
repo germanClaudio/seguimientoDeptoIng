@@ -350,7 +350,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
     // }
 
     async updateUser(id, updatedUser, userModificator) {
-        // console.log('id:',id,' - updatedUser: ', updatedUser)
+        
         if (updatedUser && userModificator) {
 
             try {

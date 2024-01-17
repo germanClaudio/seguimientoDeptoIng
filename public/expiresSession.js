@@ -26,7 +26,6 @@ setInterval(updateCountdown, 1000)
 
 // logout message function ------------
 function confirmLogout({userName, avatarUser}) {
-
     const nameUser = userName[0]
     const rol = userName[1]
     let spanToShow = ''
