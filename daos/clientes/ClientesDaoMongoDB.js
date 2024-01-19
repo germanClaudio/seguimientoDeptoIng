@@ -44,8 +44,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    async getClientById(id) {
-        
+    async getClientById(id) {   
         if(id){
             
             try {
@@ -310,7 +309,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    // async getClientByNameOrCode(client) {
+    // async getClientBySearching(client) {
     //     if(client) {
     //         try {
     //             const nameClient = await Clientes.findOne({ name: `${client}`}).exec();
@@ -328,6 +327,32 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
     //         return new Error (`No se pudo concretar la busqueda en la DB!`)
     //     }
     // }
+
+    async getClientBySearching(query) {
+        console.log('query----', query)
+        if(query) {
+            try {
+                const resultados = await Clientes.find({
+                    name : { $regex: `${query}`, $options: 'i' }
+                    // $or: [
+                        // { 'name': { $regex: `${query}`, $options: 'i' } }, 
+                        // { 'code': { $regex: `${query}`, $options: 'i' } }
+                    // ]
+                })
+                console.log('resultados-dao: ', resultados)
+    
+                if(resultados) {
+                    return resultados
+                } else {
+                    return false
+                }
+            } catch (error) {
+                logger.error("Error MongoDB getClientBySearching: ",error)
+            }
+        } else {
+            return new Error (`No se pudo concretar la busqueda en la DB!`)
+        }
+    }
 
     async disconnet() {
         await this.disconnection

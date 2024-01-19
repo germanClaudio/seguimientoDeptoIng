@@ -1,0 +1,13 @@
+<div class="col-md-6 mx-auto my-2 w-25 border rounded p-3 text-white bg-opacity-75" style="background-color: #3a3a87;">
+    <!-- <form class="row align-items-center" id="searchForm" action="/api/clientes/buscar/cliente" method="GET"> -->
+        <form class="row align-items-center" id="searchForm" onsubmit="return searchClient(this)">
+        <div class="col-md-9">
+            <input class="form-control" type="text" id="query" name="query" placeholder="Buscar clientes" required minlength="3">
+        </div>
+        <div class="col-md">
+            <button class="btn rounded-circle bg-white mx-auto text-dark" type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </form>
+</div>

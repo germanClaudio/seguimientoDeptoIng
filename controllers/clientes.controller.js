@@ -336,6 +336,40 @@ class ClientsController {
         }
     }
 
+    // getClientBySearching = async (req, res) => {
+    //     let username = res.locals.username
+    //     let userInfo = res.locals.userInfo
+        
+    //     const cookie = req.session.cookie
+    //     const time = cookie.expires
+    //     const expires = new Date(time)
+        
+    //     try {
+    //         const { query } = req.query
+    //         const clientes = await this.clients.getAllClients()
+            
+    //         // Validar que query tenga al menos 3 caracteres
+    //         if (query.length < 3) {
+    //             return res.status(400).json({ error: 'La consulta debe tener al menos 3 caracteres.' });
+    //         }
+
+    //         const resultados = await this.clients.getClientBySearching(query)
+    //         console.log('resultados:', resultados)
+    //         if (resultados.error) return res.status(400).json({ msg: 'No hay clientes cargados' })
+    //         res.render('indexSearch', {
+    //             // resultados,
+    //             clientes,
+    //             username,
+    //             userInfo,
+    //             expires
+    //         })
+
+    //     } catch (error) {
+    //         console.error('Error al buscar clientes:', error)
+    //         res.status(500).json({ error: 'Error interno del servidor.' })
+    //     }
+    // }
+
     deleteClientById = async (req, res) => {
         const clientId = req.params.id
 

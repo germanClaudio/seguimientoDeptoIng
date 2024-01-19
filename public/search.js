@@ -1,19 +1,19 @@
-// -------------- Show Searched Products ----------------
-socket.on('searchProductsAll', async (arrProd) => {
-    renderSearchedProduct (await arrProd)
+// -------------- Show Searched Clients ----------------
+socket.on('searchClientsAll', async (arrClientSearch) => {
+    console.log('searchClientsAll---', arrClientSearch)
+    renderSearchedClients (await arrClientSearch)
 })
 
-const searchProduct = () => {
-    const name = document.getElementById('nameSearch').value
-    // const code = document.getElementById('code').value
-
-    socket.emit('searchProductoAll', {
-        name,
+const searchClient = () => {
+    const query = document.getElementById('query').value
+    
+    socket.emit('searchClienteAll', {
+        query
     })
     return false
 }
 
-const renderSearchedProduct = (arrProd) => {
+const renderSearchedClients = (arrClientSeach) => {
     const noStock = 'No Stock'
     const lastAvailable = 'Last Availables'
     let stock = ''
@@ -21,34 +21,40 @@ const renderSearchedProduct = (arrProd) => {
     const green = 'success'
     const grey = 'secondary'
 
-    if(arrProd.length === 0) {
-        const htmlSearchProductNull = 
+    if(arrClientSeach.length === 0) {
+        const htmlSearchClientNull = 
         (`<div class="container">
             <div class="row row-cols-3 row-cols-md-2 g-4 justify-content-evenly">
-            <div class="col mx-auto">
-            <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-            <div class="col-md-4">
-                <img src="https://www.shutterstock.com/image-vector/dead-emoji-face-flat-style-260nw-1655058412.jpg" width="75px" height="75px" class="img-fluid rounded-start" alt="Product not found">
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                <h5 class="card-title">Product Not Found</h5>
-                <p class="card-text">Sorry, we couldn't find the product.</p>
-                <p class="card-text"><small class="text-muted">Try again with a different Name or Code</small></p>
+                <div class="col mx-auto">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="https://www.shutterstock.com/image-vector/dead-emoji-face-flat-style-260nw-1655058412.jpg"
+                                    width="75px" height="75px" class="img-fluid rounded-start"
+                                    alt="Cliente no encontrado">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Cliente no encontrado</h5>
+                                    <p class="card-text">Lo siento, no pudimos encontrar el cliente</p>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            Pruebe nuevamente con un nombre o código diferente
+                                            </small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            </div>
-            </div>
-            </div>
             </div>
         </div>`
         )
         
-        document.getElementById('showProductSearch').innerHTML = htmlSearchProductNull
+        document.getElementById('showClientSearch').innerHTML = htmlSearchClientNull
     
     } else {
-        const htmlSearchProduct = arrProd.map((element) => {
+        const htmlSearchClient = arrClientSeach.map((element) => {
             if(element.stock >= 3 && element.stock < 6) {
                 stock = lastAvailable
                 disabled = ''
@@ -110,6 +116,6 @@ const renderSearchedProduct = (arrProd) => {
                 )
             }
         }).join(" ");
-                document.getElementById('showProductSearch').innerHTML = htmlSearchProduct
+                document.getElementById('showClientSearch').innerHTML = htmlSearchClient
     }
 }

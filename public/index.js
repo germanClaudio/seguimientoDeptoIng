@@ -30,8 +30,7 @@ const addClient = () => {
             status: Boolean(true),
             timestamp: formatDate(new Date())
         }
-        console.log('addCliente index.... ',newCliente)
-
+        
     socket.emit('newCliente', newCliente
     )
     return false
@@ -68,24 +67,24 @@ const renderClient = (arrClient) => {
         colorStatus = red
         text = "Inactivo"
     }
-// 
-            return (`<div class="col m-3">
-                        <div class="card h-100" style="width: 18rem;">
-                            <img src="${element.logo}" class="card-img-top rounded-5 mx-auto px-5 pt-2" alt="Logo Cliente" max-height="210px" >
-                            <div class="card-body">
-                                <h6 class="card-title"><strong>${element.name}</strong></h6>
-                                <p class="card-text">Codigo: ${element.code}<br>
-                                                     <span class="badge rounded-pill bg-${colorStatus}">${text}</span><br>
-                                                     Proyectos: <span class="badge rounded-pill bg-${colorResult}">${result}</span>
-                                </p>
-                                <div class="card-footer">
-                                <a class="btn btn-info mx-auto w-75 my-1 small ${disabled}" type="submit" href="/api/clientes/projects/${element._id}"><i class="fa fa-cogs"></i> Proyectos</a>        
-                                    <a class="btn btn-dark mx-auto w-75 my-1 small" type="submit" href="/api/clientes/select/${element._id}"><i class="fa fa-info-circle"></i> Ver Cliente</a>
-                                </div>
-                            </div>
+ 
+    return (`<div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card m-3" style="width: 15rem;">
+                    <img src="${element.logo}" class="card-img-top rounded-5 mx-auto px-5 pt-2" alt="Logo Cliente" style=max-height="105px" >
+                    <div class="card-body">
+                        <h6 class="card-title"><strong>${element.name}</strong></h6>
+                        <p class="card-text">Codigo: ${element.code}<br>
+                                                <span class="badge rounded-pill bg-${colorStatus}">${text}</span><br>
+                                                Proyectos: <span class="badge rounded-pill bg-${colorResult}">${result}</span>
+                        </p>
+                        <div class="card-footer">
+                            <a class="btn btn-info mx-auto w-75 my-1 small ${disabled}" type="submit" href="/api/clientes/projects/${element._id}"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>        
+                            <a class="btn btn-dark mx-auto w-75 my-1 small" type="submit" href="/api/clientes/select/${element._id}"><i class="fa-solid fa-info-circle"></i> Ver Cliente</a>
                         </div>
-                    </div>`
-                    )
+                    </div>
+                </div>
+            </div>`
+            )
     }).join(" ");
         
     document.getElementById('mostrarClientes').innerHTML = html

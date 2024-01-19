@@ -39,14 +39,18 @@ const initSocket = (io) => {
             io.sockets.emit('clientsAll', await containerClient.getAllClients())
         })
 
-        socket.on('searchClienteAll', async (name) => {
-          io.sockets.emit('searchClientsAll', await containerClient.searchClientsAll(name))
+        // socket.on('searchClienteAll', async (name) => {
+        //   io.sockets.emit('searchClientsAll', await containerClient.searchClientsAll(name))
+        // })
+
+        socket.on('searchClienteAll', async (query) => {
+            io.sockets.emit('searchClientsAll', await containerClient.getClientBySearching(query))
         })
 
         // --------------------------  Projects --------------------------------
         socket.emit('projectsAll',
-                await containerProject.getAllProjects(),
-                await containerUser.getAllUsers()            
+            await containerProject.getAllProjects(),
+            await containerUser.getAllUsers()            
         )
         
         // socket.on('newProducto', async (producto) => {
