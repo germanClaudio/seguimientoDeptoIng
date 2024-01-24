@@ -1,9 +1,32 @@
-<div class="col-md-6 mx-auto my-2 w-25 border rounded p-3 text-white bg-opacity-75" style="background-color: #3a3a87;">
-    <!-- <form class="row align-items-center" id="searchForm" action="/api/clientes/buscar/cliente" method="GET"> -->
-        <form class="row align-items-center" id="searchForm" onsubmit="return searchClient(this)">
-        <div class="col-md-9">
-            <input class="form-control" type="text" id="query" name="query" placeholder="Buscar clientes" required minlength="3">
+<div class="shadow-lg col-md-6 mx-auto my-2 w-50 border rounded p-3 text-white bg-opacity-75" style="background-color: #3a3a87;">
+    <form class="row align-items-center" id="searchForm" onsubmit="return searchClient(this)">
+        <div class="col-md-5">
+            <input class="form-control" type="text" id="query" name="query" placeholder="Buscar clientes">
         </div>
+
+        <div class="col-md-2 ms-4">
+            <select class="form-select form-select small" aria-label=".form-select" name="status" id="status" style="font-size: 13px;">
+                <option selected value="todos">Todos</option>
+                <option value="activos">Activos</option>
+                <option value="inactivos">Inactivos</option>
+            </select>
+        </div>
+
+        <div class="col-md-3 ms-4" style="font-size: 13px;">
+            <div class="form-check d-flex align-items-start">
+                <input class="form-check-input" type="radio" name="projects" id="allProjects"  value="all" checked>
+                <label class="form-check-label ms-2" for="allProjects">Todos</label>
+            </div>
+            <div class="form-check d-flex align-items-start">
+                <input class="form-check-input" type="radio" name="projects" id="withProjects" value="with" >
+                <label class="form-check-label ms-2" for="withProjects">Con proyectos</label>
+            </div>
+            <div class="form-check d-flex align-items-start">
+                <input class="form-check-input" type="radio" name="projects" id="withoutProjects" value="without" >
+                <label class="form-check-label ms-2" for="withoutProjects">Sin proyectos</label>
+            </div>
+        </div>
+        
         <div class="col-md">
             <button class="btn rounded-circle bg-white mx-auto text-dark" type="submit">
                 <i class="fa-solid fa-magnifying-glass"></i>

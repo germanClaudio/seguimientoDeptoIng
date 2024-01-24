@@ -80,16 +80,16 @@ const renderProjectsForAdmin = (arrayProjects) => {
         let ociArr = []
         function loopOcis() {
             
-            function countOt() {
-                const ociLength = element.project[0].oci.length
-                let count = 0
-                for (let q=0; q<ociLength; q++) {
-                    if (element.project[0].oci[q].visible) {
-                        count++
-                    }
-                }
-                return count
-            }
+            // function countOt() {
+            //     const ociLength = element.project[0].oci.length
+            //     let count = 0
+            //     for (let q=0; q<ociLength; q++) {
+            //         if (element.project[0].oci[q].visible) {
+            //             count++
+            //         }
+            //     }
+            //     return count
+            // }
             //console.log('countOt: ', countOt())
             
             for (let i=0; i < element.project[0].oci.length; i++) {
@@ -107,7 +107,9 @@ const renderProjectsForAdmin = (arrayProjects) => {
         // ----------- Loops de Array OTs ----------------
         function loopOt(j) {
             let otArr = []
+            let contOtForOci = 0
             if (element.project[0].oci[j].otProject.length > 0 ) {
+
                 for (let i=0; i < element.project[0].oci[j].otProject.length; i++) {
                     if (element.project[0].oci[j].otProject[i].visible) {
                         if (element.project[0].oci[j].otProject[i].otStatus) {
@@ -115,6 +117,8 @@ const renderProjectsForAdmin = (arrayProjects) => {
                         } else {
                             otArr.push(element.project[0].oci[j].otProject[i].otNumber + ' ' + '<i class="fa-solid fa-circle-info" title="OT Inactiva" style="color: #ff0000;"></i>')
                         }
+                        contOtForOci++
+                        console.log('contOtForOci=', contOtForOci)
                     }
                 }
                 return otArr.join('<br>')
@@ -122,6 +126,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
                 return ('<span class="badge rounded-pill bg-secondary text-light mb-2">S/D</span><br>')
             }
         }
+        
 
         let arrOtArr = []
         function loopArrayOt() {

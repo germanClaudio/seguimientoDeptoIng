@@ -329,28 +329,243 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
     // }
 
     async getClientBySearching(query) {
-        console.log('query----', query)
-        if(query) {
-            try {
-                const resultados = await Clientes.find({
-                    name : { $regex: `${query}`, $options: 'i' }
-                    // $or: [
-                        // { 'name': { $regex: `${query}`, $options: 'i' } }, 
-                        // { 'code': { $regex: `${query}`, $options: 'i' } }
-                    // ]
-                })
-                console.log('resultados-dao: ', resultados)
-    
-                if(resultados) {
-                    return resultados
+        var filter
+
+        if (query.query === '') {
+            if (query.status === 'todos') {
+                if (query.proyectos === 'all') {
+                    filter = 'nullAllAll'
+                } else if (query.proyectos === 'with') {
+                    filter = 'nullAllWith'
                 } else {
-                    return false
+                    filter = 'nullAllWithout'
                 }
-            } catch (error) {
-                logger.error("Error MongoDB getClientBySearching: ",error)
+
+            } else if (query.status === 'activos') {
+                if (query.proyectos === 'all') {
+                    filter = 'nullActiveAll'
+                } else if (query.proyectos === 'with') {
+                    filter = 'nullActiveWith'
+                } else {
+                    filter = 'nullActiveWithout'
+                }
+
+            } else if (query.status === 'inactivos') {
+                if (query.proyectos === 'all') {
+                    filter = 'nullInactiveAll'
+                } else if (query.proyectos === 'with') {
+                    filter = 'nullInactiveWith'
+                } else {
+                    filter = 'nullInactiveWithout'
+                }
             }
+
         } else {
-            return new Error (`No se pudo concretar la busqueda en la DB!`)
+            if (query.status === 'todos') {
+                if (query.proyectos === 'all') {
+                    filter = 'notNullAllAll'
+                } else if (query.proyectos === 'with') {
+                    filter = 'notNullAllWith'
+                } else {
+                    filter = 'notNullAllWithout'
+                }
+
+            } else if (query.status === 'activos') {
+                if (query.proyectos === 'all') {
+                    filter = 'notNullActiveAll'
+                } else if (query.proyectos === 'with') {
+                    filter = 'notNullActiveWith'
+                } else {
+                    filter = 'notNullActiveWithout'
+                }
+
+            } else if (query.status === 'inactivos') {
+                if (query.proyectos === 'all') {
+                    filter = 'notNullInactiveAll'
+                } else if (query.proyectos === 'with') {
+                    filter = 'notNullInactiveWith'
+                } else {
+                    filter = 'notNullInactiveWithout'
+                }
+            }
+        }
+        
+        try {
+            switch (filter) {
+                case 'nullAllAll': {
+                    var resultados = []
+                break; 
+                }
+                case 'nullAllWith': {
+                    var resultados = await Clientes.find({
+                        'project': { $gt: 0 } // Proyectos mayores que 0
+                    })
+                break;    
+                }
+                case 'nullAllWithout': {
+                    var resultados = await Clientes.find({
+                        'project': { $eq: 0 }
+                    })
+                break;    
+                }
+                case 'nullActiveAll': {
+                    var resultados = await Clientes.find({
+                        'status': true,
+                    })
+                    break;
+                }
+                case 'nullActiveWith': {
+                    var resultados = await Clientes.find({
+                        'status': true,
+                        'project': { $gt: 0 }
+                    })
+                    break;
+                }
+                case 'nullActiveWithout': {
+                    var resultados = await Clientes.find({
+                        'status': true,
+                        'project': { $eq: 0 } 
+                        
+                    })
+                    break;
+                }
+                case 'nullInactiveAll': {
+                    var resultados = await Clientes.find({
+                        'status': false
+                    })
+                    break;
+                }
+                case 'nullInactiveWith': {
+                    var resultados = await Clientes.find({
+                        'status': false,
+                        'projects': { $gt: 0 }
+                    })
+                    break;
+                }
+                case 'nullInactiveWithout': {
+                    var resultados = await Clientes.find({
+                        'status': false,
+                        'projects': { $eq: 0 }
+                    })
+                    break;
+                }
+                //--------------- input w/text ----------
+                case 'notNullAllAll': {
+                    var resultados = await Clientes.find({
+                        $or: [
+                            { 'name': { $regex: `${query.query}`, $options: 'i' } }, 
+                            { 'code': { $regex: `${query.query}`, $options: 'i' } }
+                        ]
+                    })
+                    break;
+                }
+                case 'notNullAllWith': {
+                    var resultados = await Clientes.find({
+                        $or: [
+                            { 'name': { $regex: `${query.query}`, $options: 'i' } }, 
+                            { 'code': { $regex: `${query.query}`, $options: 'i' } }
+                        ],
+                        $and: [
+                            { 'project': { $gt: 0 } }
+                        ]
+                    })
+                    break;
+                }
+                case 'notNullAllWithout': {
+                    var resultados = await Clientes.find({
+                        $or: [
+                            { 'name': { $regex: `${query.query}`, $options: 'i' } }, 
+                            { 'code': { $regex: `${query.query}`, $options: 'i' } }
+                        ],
+                        $and: [
+                            { 'project': { $eq: 0 } }
+                        ]
+                    })
+                    break;
+                }
+                case 'notNullActiveAll': {
+                    var resultados = await Clientes.find({
+                        $or: [
+                            { 'name': { $regex: `${query.query}`, $options: 'i' } }, 
+                            { 'code': { $regex: `${query.query}`, $options: 'i' } }
+                        ],
+                        $and: [
+                            { 'status': true }
+                        ]
+                    })
+                    break;
+                }
+                case 'notNullActiveWith': {
+                    var resultados = await Clientes.find({
+                        $or: [
+                            { 'name': { $regex: `${query.query}`, $options: 'i' } }, 
+                            { 'code': { $regex: `${query.query}`, $options: 'i' } }
+                        ],
+                        $and: [
+                            { 'status': true },
+                            { 'project': { $gt: 0 } }
+                        ]
+                    })
+                    break;
+                }
+                case 'notNullActiveWithout': {
+                    var resultados = await Clientes.find({
+                        $or: [
+                            { 'name': { $regex: `${query.query}`, $options: 'i' } }, 
+                            { 'code': { $regex: `${query.query}`, $options: 'i' } }
+                        ],
+                        $and: [
+                            { 'status': true },
+                            { 'project': { $eq: 0 } }
+                        ]
+                    })
+                    break;
+                }
+                case 'notNullInactiveAll': {
+                    var resultados = await Clientes.find({
+                        $or: [
+                            { 'name': { $regex: `${query.query}`, $options: 'i' } }, 
+                            { 'code': { $regex: `${query.query}`, $options: 'i' } }
+                        ]
+                    })
+                    break;
+                }
+                case 'notNullInactiveWith': {
+                    var resultados = await Clientes.find({
+                        $or: [
+                            { 'name': { $regex: `${query.query}`, $options: 'i' } }, 
+                            { 'code': { $regex: `${query.query}`, $options: 'i' } }
+                        ],
+                        $and: [
+                            { 'status': false },
+                            { 'project': { $gt: 0 } }
+                        ]
+                    })
+                    break;
+                }
+                case 'notNullInactiveWithout': {
+                    var resultados = await Clientes.find({
+                        $or: [
+                            { 'name': { $regex: `${query.query}`, $options: 'i' } }, 
+                            { 'code': { $regex: `${query.query}`, $options: 'i' } }
+                        ],
+                        $and: [
+                            { 'status': false },
+                            { 'project': { $eq: 0 } }
+                        ]
+                    })
+                    break;
+                }
+            }
+                
+            if(resultados) {
+                return resultados
+            } else {
+                return false
+            }
+
+        } catch (error) {
+            logger.error("Error MongoDB getClientBySearching: ",error)
         }
     }
 

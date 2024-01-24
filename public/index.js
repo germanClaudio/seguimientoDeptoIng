@@ -69,7 +69,7 @@ const renderClient = (arrClient) => {
     }
  
     return (`<div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="card m-3" style="width: 15rem;">
+                <div class="shadow-lg card m-3" style="width: 15rem;">
                     <img src="${element.logo}" class="card-img-top rounded-5 mx-auto px-5 pt-2" alt="Logo Cliente" style=max-height="105px" >
                     <div class="card-body">
                         <h6 class="card-title"><strong>${element.name}</strong></h6>
