@@ -1717,7 +1717,7 @@ function addDatoToR14(i) {
                         </div>
                     </div>
                     <hr>
-                        ${arrayBloque}
+                        ${arrayBloque.join("<br>")}
                     <hr>
                     <input type="hidden" name="projectIdHidden" value="${projectNumberId}">
                     <input type="hidden" name="clientIdHidden" value="${clientId.value}">
