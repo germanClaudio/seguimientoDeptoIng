@@ -18,9 +18,6 @@ socket.on('clientsAll', async (arrClients) => {
 const addClient = () => {
         const newCliente = {
             creator: {
-                // userId: document.getElementById('idHidden').value,
-                // userName: document.getElementById('usernameHidden').value,
-                // userLastName: document.getElementById('lastNameHidden').value,
                 uname: document.getElementById('unameHidden').value
             },
             name: document.getElementById('name').value,
@@ -78,8 +75,14 @@ const renderClient = (arrClient) => {
                                                 Proyectos: <span class="badge rounded-pill bg-${colorResult}">${result}</span>
                         </p>
                         <div class="card-footer">
-                            <a class="btn btn-info mx-auto w-75 my-1 small ${disabled}" type="submit" href="/api/clientes/projects/${element._id}"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>        
-                            <a class="btn btn-dark mx-auto w-75 my-1 small" type="submit" href="/api/clientes/select/${element._id}"><i class="fa-solid fa-info-circle"></i> Ver Cliente</a>
+                            <a class="btn mx-auto text-light w-75 my-1 small ${disabled}" type="submit" href="/api/clientes/projects/${element._id}" style="background-color: #1d1d1d;">
+                                <i class="fa-solid fa-diagram-project"></i>
+                                    Proyectos
+                            </a>        
+                            <a class="btn mx-auto text-light w-75 my-1 small" type="submit" href="/api/clientes/select/${element._id}" style="background-color: #272787;">
+                                <i class="fa-solid fa-info-circle"></i>
+                                    Ver Cliente
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -88,62 +91,4 @@ const renderClient = (arrClient) => {
     }).join(" ");
         
     document.getElementById('mostrarClientes').innerHTML = html
-}
-
-// --------------------- update Client ----------------------------------- 
-socket.on('updateCliente', async (arrClient) => {
-    renderUpdatedClient (await arrClient)
-})
-
-const updateClient = () => {
-    const _id = document.getElementById('id').value
-    const name = document.getElementById('name').value
-    const logo = document.getElementById('logo').value
-    const code = document.getElementById('code').value
-    const project = document.getElementById('project').value
-    const status = Boolean(document.getElementById('status').value)
-    const timestamp = formatDate(new Date())
-    const creator = document.getElementById('creator').value
-
-    socket.emit('updateCliente', {
-        _id,
-        name,
-        logo,
-        code,
-        status,
-        project,
-        creator,
-        timestamp
-    })
-    return false
-}    
-
-const renderUpdatedClient = (arrClient) => {
-    const html2 = arrClient.map((element) => {
-    
-        return (`<div class="d-block mx-auto my-3 w-75 text-center alert alert-success h5"
-        role="alert">Cliente ${element.name} actualizado exitosamente!</div>`
-                )
-
-        // return (
-        //     // <!-- Modal -->
-        //         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        //             <div class="modal-dialog">
-        //                 <div class="modal-content">
-        //                 <div class="modal-header">
-        //                     <h5 class="modal-title" id="staticBackdropLabel">Actualizacion de Cliente</h5>
-        //                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        //                 </div>
-        //                 <div class="modal-body">Cliente ${element.name} actualizado exitosamente!</div>
-        //                 <div class="modal-footer">
-        //                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        //                 </div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        // )
-
-    }).join(" ");
-
-    document.getElementById('updateCliente').innerHTML = html2
 }

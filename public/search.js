@@ -26,27 +26,23 @@ const renderSearchedClients = (arrClientSeach) => {
     
     if(arrClientSeach.length === 0) {
         const htmlSearchClientNull = 
-        (`<div class="container">
-            <div class="row row-cols-3 row-cols-md-2 g-4 justify-content-evenly">
-                <div class="col mx-auto">
-                    <div class="shadow-lg card mx-auto" style="max-width: 540px;">
-                        <div class="row g-0">
-                            <div class="col-md-4 my-auto px-1">
-                                <img src="https://www.shutterstock.com/image-vector/dead-emoji-face-flat-style-260nw-1655058412.jpg"
-                                    max-width="170vw" class="img-fluid rounded"
-                                    alt="Cliente no encontrado">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Cliente no encontrado</h5>
-                                    <p class="card-text">Lo siento, no pudimos encontrar el cliente</p>
-                                    <p class="card-text">
-                                        <small class="text-muted">
-                                            Pruebe nuevamente con un nombre o código diferente
-                                        </small>
-                                    </p>
-                                </div>
-                            </div>
+        (`<div class="col mx-auto">
+            <div class="shadow-lg card mx-auto" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4 my-auto px-1">
+                        <img src="https://www.shutterstock.com/image-vector/dead-emoji-face-flat-style-260nw-1655058412.jpg"
+                            max-width="170vw" class="img-fluid rounded p-1"
+                            alt="Cliente no encontrado">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Cliente no encontrado</h5>
+                            <p class="card-text">Lo siento, no pudimos encontrar el cliente</p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Pruebe nuevamente con un nombre o código diferente
+                                </small>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -64,7 +60,6 @@ const renderSearchedClients = (arrClientSeach) => {
             let red = 'danger'
             let text = "Activo"
             let grey = 'secondary'
-            let black = 'dark'
             let blue = 'primary'
             let result = 'S/P'
             colorResult = grey
@@ -88,32 +83,38 @@ const renderSearchedClients = (arrClientSeach) => {
                 text = "Inactivo"
             }
     
-            return (`<div class="container">
-                <div class="row row-cols-3 row-cols-md-2 g-4 justify-content-evenly">
-                    <div class="col mx-auto">
-                        <div class="shadow-lg card mx-auto" style="max-width: 540px;">
-                            <div class="row g-0">
-                                <div class="col-md-4 my-auto px-1">
-                                    <img src="${element.logo}"
-                                        max-width="160vw" class="img-fluid rounded"
-                                        alt="Logo Cliente">
+            return (`
+                <div class="col mx-auto">
+                    <div class="card mx-auto shadow-lg" style="max-width: 540px;">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 text-center">
+                                <img src="${element.logo}"
+                                    max-width="160vw" class="img-fluid rounded p-3 mx-auto"
+                                    alt="Logo Cliente">
+                            </div>
+                            <div class="col-md-8 border-start">
+                                <div class="card-body">
+                                    <h5 class="card-title"><strong>${element.name}</strong></h5>
+                                    <p class="card-text">Codigo: ${element.code}<br></p>
+                                    <span class="badge rounded-pill bg-${colorStatus}">${text}</span><br>
+                                        Proyectos: <span class="badge rounded-pill bg-${colorResult}">${result}
+                                    </span>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><strong>${element.name}</strong></h5>
-                                        <p class="card-text">Codigo: ${element.code}<br></p>
-                                        <span class="badge rounded-pill bg-${colorStatus}">${text}</span><br>
-                                            Proyectos: <span class="badge rounded-pill bg-${colorResult}">${result}
-                                        </span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="row">
-                                            <div class="col">
-                                                <a class="btn btn-info m-auto small ${disabled}" type="submit" href="/api/clientes/projects/${element._id}"><i class="fa-solid fa-diagram-project"></i> Proyectos</a>        
-                                            </div>
-                                            <div class="col">
-                                                <a class="btn btn-dark m-auto small" type="submit" href="/api/clientes/select/${element._id}"><i class="fa-solid fa-info-circle"></i> Ver Cliente</a>
-                                            </div>
+                                <div class="card-footer px-2">
+                                    <div class="row">
+                                        <div class="col m-auto">
+                                            <a class="btn text-light small ${disabled}" type="submit" href="/api/clientes/projects/${element._id}"
+                                                style="background-color: #1d1d1d; font-size: .85rem; width: 8em;">
+                                                    <i class="fa-solid fa-diagram-project my-auto"></i>
+                                                        Proyectos
+                                            </a>        
+                                        </div>
+                                        <div class="col m-auto">
+                                            <a class="btn text-light small" type="submit" href="/api/clientes/select/${element._id}"
+                                                style="background-color: #272787; font-size: .85rem; width: 8em;">
+                                                    <i class="fa-solid fa-info-circle"></i>
+                                                        Cliente
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -122,7 +123,7 @@ const renderSearchedClients = (arrClientSeach) => {
                     </div>
                 </div>`
             )
-        }).join("<br>");
+        }).join(" ");
 
         document.getElementById('showClientSearch').innerHTML = htmlSearchClient
     }

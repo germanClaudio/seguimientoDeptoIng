@@ -1,33 +1,33 @@
-<div class="form-group col-12 mx-auto my-2 w-75 border px-5 py-1 text-white bg-opacity-75" style="background-color: #666666;">
+<div class="form-group col-12 mx-auto mt-2 mb-5 w-75 border px-5 py-1 text-white bg-opacity-75" style="background-color: #666666;">
     <form id="formUpdateClient" enctype="multipart/form-data" action="/api/clientes/update/<%=cliente._id%>" method="post">
         <fieldset>
             <div class="row justify-content-start align-items-center mt-2">
                 <div class="col-3 mx-auto my-2">
                     <label for="idDisable">Id#</label>
-                    <input type="text" name="idDisable" id="idDisable" class="form-control-plaintext text-white" value="<%=cliente._id%>"
-                        disabled>
+                    <input type="text" name="idDisable" id="idDisable" class="form-control-plaintext text-white"
+                        value="<%=cliente._id%>" disabled>
                 </div>
                                 
-                <div class="col-2 mx-auto my-1">
+                <div class="col mx-auto my-1">
                     <label for="idCreator">Creado por</label>
-                    <input type="text" name="idCreator" id="idCreator" class="form-control-plaintext text-white small" value="<%=cliente.creator[0].name%> <%=cliente.creator[0].lastName%>"
-                        disabled>
+                    <input type="text" name="idCreator" id="idCreator" class="form-control-plaintext text-white small"
+                        value="<%=cliente.creator[0].name%> <%=cliente.creator[0].lastName%>" disabled>
                 </div>
                 
-                <div class="col-2 mx-auto my-1">
+                <div class="col mx-auto my-1">
                     <label for="timestampDisable">Fecha creación</label>
-                    <input type="text" name="timestampDisable" id="timestampDisable" class="form-control-plaintext text-white small" value="<%=cliente.timestamp%>"
-                        disabled>
+                    <input type="text" name="timestampDisable" id="timestampDisable" class="form-control-plaintext text-white small"
+                        value="<%=cliente.timestamp%>" disabled>
                 </div>
                 
-                <div class="col-2 mx-auto my-1">
+                <div class="col mx-auto my-1">
                     <label for="modificatorDisable">Modificado por</label>
-                    <% if(cliente.modificator[0].name !== "") { %>
-                        <input type="text" name="modificatorDisable" id="modificatorDisable" class="form-control-plaintext text-white small" value=""
-                        disabled>
-                    <% } else { %>
+                    <% if (cliente.modificator[0].name !== "") { %>
                         <input type="text" name="modificatorDisable" id="modificatorDisable" class="form-control-plaintext text-white small"
                             value="<%=cliente.modificator[0].name%> <%=cliente.modificator[0].lastName%>" disabled>
+                    <% } else { %>
+                        <input type="text" name="modificatorDisable" id="modificatorDisable" class="form-control-plaintext text-white small"
+                            value="" disabled>
                     <% } %>        
                 </div>
                 
@@ -114,12 +114,19 @@
                     <div class="container-fluid my-1 p-1 text-center">
                         <img src="<%=cliente.logo%>" class="img-thumbnail rounded mx-auto" alt="Logo Cliente" width="200px" height="200px">
                     </div>
-                    
+                <% if( userInfo.admin ) { %>        
                     <div class="d-flex justify-content-center my-2">
-                        <button id="btnUpdateClient" class="btn btn-success me-3 my-2">Actualizar Cliente <i class="fa-solid fa-save"></i></button>
-                        <a class="btn btn-primary mx-3 my-2" href="/api/clientes"> Volver <i class="fa-solid fa-arrow-left"></i></a>
+                        <button id="btnUpdateClient" class="btn btn-success me-3 my-2">Actualizar <i class="fa-solid fa-save"></i></button>
+                        <a class="btn btn-primary mx-3 my-2" href="/api/clientes">Volver <i class="fa-solid fa-arrow-left"></i></a>
                         <a class="btn btn-danger ms-3 my-2" href="/api/clientes/delete/<%=cliente._id%>">Eliminar <i class="fa-solid fa-trash"></i></a>
                     </div>
+                <% } else { %>
+                    <div class="d-flex justify-content-center my-2">
+                        <button id="btnUpdateClient" class="btn btn-success me-3 my-2">Actualizar <i class="fa-solid fa-save"></i></button>
+                        <a class="btn btn-primary mx-3 my-2" href="/api/clientes">Volver <i class="fa-solid fa-arrow-left"></i></a>
+                        <a class="btn btn-danger ms-3 my-2 disabled" href="/api/clientes/delete/<%=cliente._id%>">Eliminar <i class="fa-solid fa-trash"></i></a>
+                    </div>
+                <% } %>
                 </div>
             </div>
         </fieldset>

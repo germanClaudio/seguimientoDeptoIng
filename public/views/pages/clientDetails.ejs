@@ -9,9 +9,13 @@
     <header>
         <%- include('../partials/header'); %>
     </header>
-    <%- include('../partials/userBanner'); %>
+        <%- include('../partials/userBanner'); %>
     <div class="container text-center">
-        <h4 class="mx-auto my-2">Actualizar o Eliminar Cliente <strong><%=cliente.name %></strong></h4>
+        <% if( userInfo.admin ) { %>  
+        <h4 class="mx-auto my-3">Actualizar o Eliminar Cliente <strong><%=cliente.name %></strong></h4>
+        <% } else { %>
+            <h4 class="mx-auto my-3">Actualizar Cliente <strong><%=cliente.name %></strong></h4>
+        <% } %>    
     </div>
     <div id="updateCliente"> 
     </div>

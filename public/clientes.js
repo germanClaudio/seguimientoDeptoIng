@@ -237,6 +237,28 @@ const renderClientUser = (arrClient) => {
         let result = 'S/P'
         let colorResult = grey
         let idChain = element._id.substring(19)
+
+        let userArr = []
+        function loopUserId() {
+            for (let i=0; i < element.creator.length; i++) {
+                userArr.push(
+                    element.creator[i].name,
+                    element.creator[i].lastName
+                )
+            }
+            return userArr.join('<br>')
+        }
+
+        let modifArr = []
+        function loopModifId() {
+            for (let i=0; i < element.modificator.length; i++) {
+                modifArr.push(
+                    element.modificator[i].name,
+                    element.modificator[i].lastName
+                )
+            }
+            return modifArr.join('<br>')
+        }
         
         if ( element.status === true && element.project > 0) {
             colorStatus = green
@@ -256,17 +278,23 @@ const renderClientUser = (arrClient) => {
 
         if(element.visible) {
             return (`<tr>
+
                         <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
-                        <td class="text-center">${element.name}</td>
-                        <td class="text-center"><a href="/api/clientes/select/${element._id}"><img class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
+                        <td class="text-center" id="name_${element._id}">${element.name}</td>
+                        <td class="text-center"><a href="/api/clientes/select/${element._id}"><img id="logo_${element._id}" class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
                         <td class="text-center">${element.code}</td>
                         <td class="text-center"><span class="badge rounded-pill bg-${colorStatus}">${text}</span></td>
-                        <td class="text-center"><span class="badge rounded-pill bg-${colorResult}">${result}</span></td>
-                        <td class="text-center">${element.creator}</td>
+                        <td class="text-center"><span id="projectQty_${element._id}" class="badge rounded-pill bg-${colorResult}">${result}</span></td>
+                        <td class="text-center">${loopUserId()}</td>
                         <td class="text-center">${element.timestamp}</td>
+                        <td class="text-center">${loopModifId()}</td>
+                        <td class="text-center">${element.modifiedOn}</td>
                         <td class="text-center">
-                            <a href="#" class="btn btn-secondary btn-sm me-1 disabled" data-toggle="tooltip" data-placement="top" title="Ver datos Cliente ${element.name}"><i class="fa-solid fa-eye"></i></a>
-                            <i class="fa-solid fa-info-circle fa-2x ms-1" data-toggle="tooltip" data-placement="top" title="Solo Admin puede modificar esto" aria-hidden="true"></i>
+                            <div class="d-block align-items-center">
+                                <a href="/api/clientes/select/${element._id}" class="btn btn-secondary btn-sm me-1" data-toggle="tooltip" data-placement="top" title="Editar cliente ${element.name}"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <a href="/api/clientes/${element._id}" class="btn btn-primary btn-sm mx-1" title="Ver proyectos cliente ${element.name}"><i class="fa-solid fa-diagram-project"></i></a>
+                                <button id="${element._id}" name="btnDeleteClient" type="button" class="btn btn-danger btn-sm ms-1" title="Solo Admin puede modificar esto"><i class="fa-solid fa-info-circle"></i></button>
+                            </div>
                         </td>
                     </tr>`)
         }

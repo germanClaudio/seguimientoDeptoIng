@@ -11,7 +11,11 @@
     </header>
         <%- include('../partials/userBanner'); %>
     <br>
-        <%- include('../partials/adminChart'); %>
+        <% if (userInfo.admin) { %>
+            <%- include('../partials/adminChart'); %>
+        <% } else { %>
+            <%- include('../partials/userChart'); %>
+        <% } %>
     <br>
         <div class="d-block mx-auto mt-4 my-3 text-center bg-primary-light">    
             <%- include('../partials/formularioBuscarCliente'); %>
