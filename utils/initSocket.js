@@ -126,8 +126,8 @@ const initSocket = (io) => {
         const schemaMensajes = new schema.Entity("posts", { mensajes: [schemaMensaje] }, { idAttribute: "id" });
 
         socket.emit("mensajesAll",
-        await listarMensajesNormalizados(),
-        await containerUser.getAllUsers()
+            await listarMensajesNormalizados(),
+            await containerUser.getAllUsers()
         )
 
         socket.on("newMensaje", async (message) => {

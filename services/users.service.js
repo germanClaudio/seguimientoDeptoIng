@@ -24,6 +24,11 @@ class UserService {
     async getAllUsers() {
         return await this.usuarios.getAllUsers()
     }
+
+    // return all sessions from DB
+    async getAllSessions() {
+        return await this.usuarios.getAllSessions()
+    }
     
     // return one user by username
     async getUserByUsername(username) {

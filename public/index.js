@@ -66,7 +66,7 @@ const renderClient = (arrClient) => {
     }
  
     return (`<div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="shadow-lg card m-3" style="width: 15rem;">
+                <div class="shadow-lg card rounded-3 m-3" style="width: 15rem;">
                     <img src="${element.logo}" class="card-img-top rounded-5 mx-auto px-5 pt-2" alt="Logo Cliente" style=max-height="105px" >
                     <div class="card-body">
                         <h6 class="card-title"><strong>${element.name}</strong></h6>
@@ -81,7 +81,7 @@ const renderClient = (arrClient) => {
                             </a>        
                             <a class="btn mx-auto text-light w-75 my-1 small" type="submit" href="/api/clientes/select/${element._id}" style="background-color: #272787;">
                                 <i class="fa-solid fa-info-circle"></i>
-                                    Ver Cliente
+                                    Cliente
                             </a>
                         </div>
                     </div>

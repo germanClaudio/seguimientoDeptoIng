@@ -1,6 +1,4 @@
 const MessagesService = require("../services/messages.service.js")
-// const ProductosService = require("../services/products.service.js")
-// const CartsService = require("../services/carts.service.js")
 const UserService = require("../services/users.service.js")
 
 function formatDate(date) {
@@ -16,8 +14,6 @@ function formatDate(date) {
 
 class MessagesController {  
     constructor(){
-        // this.products = new ProductosService()
-        // this.carts = new CartsService()
         this.users = new UserService()
         this.messages = new MessagesService()
     }

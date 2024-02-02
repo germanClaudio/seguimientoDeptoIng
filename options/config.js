@@ -51,7 +51,7 @@ const options = {
 }
 
   const sessionTime = {
-    expirateTime: 15 * 60 * 1000  //15 minutes
+    expirateTime: 1 * 60 * 1000  //15 minutes 15 * 60 * 1000
   }
 
   module.exports = {

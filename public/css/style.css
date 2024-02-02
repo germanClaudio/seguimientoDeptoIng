@@ -1,5 +1,4 @@
-/* #show-password-btn {
-    border-radius: 0 0.25rem 0.25rem 0;
-    border-left: 1px solid #444444;
-    width: 4rem;
-  } */
+  .card_dashboard:hover{
+    transform: scale(1.03);
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.3);
+  }

@@ -13,6 +13,7 @@ function formatDate(date) {
 
 // ----------------  Messages ----------------
 socket.on('mensajesAll', (arrMensajes, arrUsers) => {
+    console.log('arrUsers: ', arrUsers)
     const cadena = document.getElementById('mostrarUserName').innerText
     let indice = cadena.indexOf(",");
     const name = cadena.substring(0,indice)

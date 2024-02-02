@@ -1,6 +1,7 @@
 const ContainerMongoDB = require('../../contenedores/usuarios/containerMongoDB.js')
 
 const Usuarios = require('../../models/usuarios.models.js')
+const Sessions = require('../../models/sessions.models.js')
 const logger = require('../../utils/winston.js')
 const now = require('../../utils/formatDate.js')
 
@@ -20,7 +21,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
         console.log('Connected to MongoDB Server 1-2-3 - UsuariosDaoFactory.js')
    }
 
-   async getAllUsers(){
+   async getAllUsers() {
        try {
            const users = await Usuarios.find()
            if (!users) {
@@ -34,7 +35,22 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
         }
     }
 
-    async getUserById(id){
+    async getAllSessions() {
+        try {
+            const sessions = await Sessions.find()
+            
+            if (!sessions) {
+                 return new Error ('No hay sessions en la DB!')
+            } else {
+                 return sessions
+            }
+         } catch (error) {
+             logger.error("Error MongoDB getSessions: ",error)
+             return new Error ('No hay sessions en la DB!')
+         }
+     }
+
+    async getUserById(id) {
         if(id){
             try {
                 const user = await Usuarios.findOne( {_id: `${id}`} )
@@ -51,7 +67,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
         }
     }
     
-    async getUserByUsername(username){
+    async getUserByUsername(username) {
         if(username){
             try {
                 const user = await Usuarios.findOne( { username: `${username}` })
@@ -59,10 +75,10 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                  if ( user === undefined || user === null) {
                     return false
                  } else {
-                    return user    
+                    return user
                  }
             } catch (error) {
-                logger.error('Aca esta el error: ', error)
+                logger.error('Aca esta el error vieja: ', error)
             }
         } else {
             return logger.error('Aca esta el error(username invalid)')
@@ -105,7 +121,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
     }
     
     async createNewUser(newUser) {
-        console.log('usuariosDaoMongoDB: ',newUser)
+        // console.log('usuariosDaoMongoDB: ',newUser)
         if (newUser) {
             let username = newUser.username || "";
             let password = newUser.password || "";
@@ -198,12 +214,12 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                     const base64Image = image.toString('base64')
 
                     const html = `<h5 style="color: #000000;">El usuario ${nuevoUsuario.name} ${nuevoUsuario.lastName}, se registro exitosamente en la base de datos!</h5>
-                                    <p>Este mensaje fue enviado automaticamente por la App Web Seguimiento Ingeneiría por un nuevo registro.</p>
+                                    <p>Este mensaje fue enviado automaticamente por la App Web Seguimiento Ingeniería por un nuevo registro.</p>
                                     <p>Si Usted no autorizó este registro, ingrese a la App y elimine el usuario.</p>
                                     <br>
                                     <p>Muchas gracias por utilizar nuestros servicios.</p>
                                     <p>--------------------------------------------------</p>
-                                    <p>El Equipo de Seguimiento Ingeneiría - Prodismo IT</p>
+                                    <p>El Equipo de Seguimiento de Ingeniería - Prodismo IT</p>
                                     <img src="data:image/jpeg;base64,${base64Image}" alt="Logo Prodismo" width="168" height="30">`
                     
                     const mailOptions = {

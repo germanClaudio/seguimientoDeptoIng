@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Usuarios = require('../models/usuarios.models')
 
+
 class ServerMongoDB {
     constructor() {
         this.connect()
@@ -9,7 +10,7 @@ class ServerMongoDB {
     connect() {
         try {
             const URL = process.env.MONGO_URL_CONNECT_PROD
-            mongoose.connect(URL, {
+            mongoose.connect(URL, { //createConnection or connect
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             })

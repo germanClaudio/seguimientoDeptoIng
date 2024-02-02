@@ -1,4 +1,8 @@
 const UserService = require("../services/users.service.js")
+const ProyectosService = require("../services/projects.service.js")
+const ClientesService = require("../services/clients.service.js")
+const MessagesService = require("../services/messages.service.js")
+
 const bCrypt = require('bcrypt')
 const { generateToken } = require('../utils/generateToken')
 
@@ -10,7 +14,10 @@ let imageNotFound = "../../../src/images/upload/LogoClientImages/noImageFound.pn
 
 class UsersController {  
     constructor(){
+        this.projects = new ProyectosService()
+        this.clients = new ClientesService()
         this.users = new UserService()
+        this.messages = new MessagesService()
       }
        
     getAllUsers = async (req, res) => {
@@ -342,7 +349,7 @@ class UsersController {
     login = async (req, res) => {
         const { username, password, sessionStarted } = req.body
         let visits = req.session.visits
-
+    
         const cookie = req.session.cookie
         const time = cookie.expires
         let expires = new Date(time)
@@ -370,6 +377,12 @@ class UsersController {
             if (boolean) {
                 const usuario = await this.users.getUserByUsernameAndPassword(username, user.password)
                 const userInfo = await this.users.getUserByUsername(username)
+
+                const clientes = await this.clients.getAllClients()
+                const usuarios = await this.users.getAllUsers()
+                const proyectos = await this.projects.getAllProjects()
+                const mensajes = await this.messages.getAllMessages()
+                const sessions = await this.users.getAllSessions()
                 
                 if (!usuario) {
                     return res.render('login', {
@@ -388,9 +401,14 @@ class UsersController {
                             userInfo,
                             username,
                             visits,
-                            expires
+                            expires,
+                            clientes,
+                            usuarios,
+                            proyectos,
+                            mensajes,
+                            sessions
                         })
-                    }, 2000)
+                    }, 800)
                 }
                 else {
                     return res.render('notAuthorizated', {
@@ -409,7 +427,7 @@ class UsersController {
                         flag,
                         fail
                     })
-                }, 2000)
+                }, 800)
             }
     }
 
@@ -544,6 +562,12 @@ class UsersController {
         try {
             const visits = req.session.visits
             const user = await this.users.getUserByUsername(username)
+
+            const clientes = await this.clients.getAllClients()
+            const usuarios = await this.users.getAllUsers()
+            const proyectos = await this.projects.getAllProjects()
+            const mensajes = await this.messages.getAllMessages()
+            const sessions = await this.users.getAllSessions()
             
             const { flag, fail } = true
     
@@ -563,7 +587,12 @@ class UsersController {
                     visits,
                     flag,
                     fail,
-                    expires
+                    expires,
+                    clientes,
+                    usuarios,
+                    proyectos,
+                    mensajes,
+                    sessions
                 })
             } else {
                 return res.render('notAuthorizated', {

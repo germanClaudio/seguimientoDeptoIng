@@ -499,14 +499,15 @@ let projectSchema = new Schema({
     },
     prioProject: {
         type: Number,
-        value: 1,
+        value: 0,
         maxlength: 10,
-        min: [1, 'Prio can not be less than 1']
+        min: [0, 'Prio can not be less than 0']
     },
     imageProject: { 
         type: String,
         maxlength: 1000,
-        value: 'https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png'
+        value: '../../../src/images/upload/LogoClientImages/noImageFound.png'
+        //https://orbis-alliance.com/wp-content/themes/consultix/images/no-image-found-360x260.png'
     },
     codeProject:{
         type: String,

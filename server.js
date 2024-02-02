@@ -49,7 +49,7 @@ const initServer = () => {
     app.use(session({
         secret: process.env.SECRET_KEY_SESSION,    
         store: MongoStore.create({
-            mongoUrl: process.env.MONGO_URL_CONNECT_SESS,
+            mongoUrl: process.env.MONGO_URL_CONNECT_PROD, //MONGO_URL_CONNECT_SESS
             mongoOptions: advancedOptions,
         }),
         httpOnly: true,

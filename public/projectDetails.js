@@ -34,6 +34,7 @@ btnAddNewRow.addEventListener('click', () => {
 
     const parentDiv = document.getElementById('div_body')
     let i = parentDiv.childElementCount
+    
     const lastChild = parentDiv.children[i - 1]
     const lastChildId = lastChild.id
 
@@ -47,6 +48,7 @@ btnAddNewRow.addEventListener('click', () => {
         numberId1 >= 0 && numberId2 ? numberIdLastChild = numberId2 : numberIdLastChild = numberId1;
 
         i = numberIdLastChild + 1
+        console.log('i line 50: ', i)
     }
     
     const ociNumberValue = parseInt(document.getElementById('ociNumber').value)
@@ -55,12 +57,12 @@ btnAddNewRow.addEventListener('click', () => {
             `<div class="col-2">
                 <label for="ociNumber${i}" id="labelOciNumber${i}">Número de OCI</label>
                 <input type="number" name="ociNumber${i}" id="ociNumber${i}" class="form-control" min="0" max="9999"
-                placeholder="Número OCI" value="${ociNumberValue+i}">
+                placeholder="Número OCI" value="${ociNumberValue+i}" required>
             </div>
             <div class="col-3">
                 <label for="ociDescription${i}" id="labelOciDescription${i}">Descripción OCI</label>
                 <textarea type="text" name="ociDescription${i}" id="ociDescription${i}" rows="3"
-                    maxlength="100" class="form-control" placeholder="Descripción OCI">
+                    maxlength="100" class="form-control" placeholder="Descripción OCI" required>
                 </textarea>
             </div>
             <div class="col-2">
@@ -85,14 +87,21 @@ btnAddNewRow.addEventListener('click', () => {
                         <i class="fa-solid fa-xmark"></i>
                 </button>
                 <div id="alertOci${i}" class="alert alert-warning align-items-center" role="alert"
-                    style="display: none; font-size: 0.85rem; height: 1.15rem;">
+                    style="display: none; font-size: 0.75rem; height: 1.15rem;">
                     <strong class="me-2">Error!</strong> Solo puedes ingresar una imagen jpg, png, bmp o jpeg.
+                </div>
+                <div id="alertOciSize${i}" class="alert alert-warning align-items-center mx-auto" role="alert"
+                    style="display: none; font-size: 0.75rem; height: 1.15rem;">
+                    <strong class="me-2">Atención!</strong> El tamaño de la imagen debe ser menor a 3Mb.
                 </div>
 
             </div>
             <div class="col-1 my-auto">
                 <div class="d-flex">
-                    <button type="button" id="btnRemoveRow${i}" name="btnRemoveRow" title="Eliminar línea de OCI" class="btn btn-danger rounded-circle m2 boton"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" id="btnRemoveRow${i}" name="btnRemoveRow" title="Eliminar línea de OCI"
+                        class="btn btn-danger rounded-circle m-2" autocomplete="off">
+                            <i class="fa-solid fa-trash"></i>
+                    </button>
                 </div>    
             </div>`
         )
@@ -119,7 +128,7 @@ btnAddNewRow.addEventListener('click', () => {
     const ociQty = document.getElementById("ociQuantity")
     ociQty.setAttribute('value', i + 1)
 
-    const buttons = document.querySelectorAll('button[name="btnRemoveRow"]') // Buttons to delete Oci Rows
+    const buttons = document.querySelectorAll('button[name="btnRemoveRow"]') //  Buttons to delete Oci Rows
     buttons.forEach((button) => {
         button.addEventListener("click", removeRow)
     })
@@ -127,6 +136,7 @@ btnAddNewRow.addEventListener('click', () => {
     var arrayDropAreas = []
     var arrayBtnRemoveOciImage = []
     var arrayAlertOci = []
+    var arrayAlertSizeOci = []
     var arrayImageOciFileName = []
     var arrayFileInputNewOci = []
     const totalOciQty = parseInt(document.getElementById("ociQuantity").value)
@@ -135,6 +145,7 @@ btnAddNewRow.addEventListener('click', () => {
         var dropAreasOciFile = document.getElementById(`drop-area-oci${m}`)
         var btnRemoveOciImageFile = document.getElementById(`btnRemoveOciImage${m}`)
         var alertOciFile = document.getElementById(`alertOci${m}`)
+        var alertOciSizeFile = document.getElementById(`alertOciSize${m}`)
         var fileInputNewOciTextFile = document.getElementById(`fileInputNewOciText${m}`)
         var fileInputNewOciFile = document.getElementById(`fileInputNewOci${m}`)
         
@@ -147,6 +158,9 @@ btnAddNewRow.addEventListener('click', () => {
         if (alertOciFile) {
             arrayAlertOci.push(alertOciFile)
         }
+        if (alertOciSizeFile) {
+            arrayAlertSizeOci.push(alertOciSizeFile)
+        }
         if (fileInputNewOciTextFile) {
             arrayImageOciFileName.push(fileInputNewOciTextFile)
         }
@@ -154,7 +168,7 @@ btnAddNewRow.addEventListener('click', () => {
             arrayFileInputNewOci.push(fileInputNewOciFile)
         }
     }
-
+    
     arrayDropAreas.forEach(function(elemento) {
         elemento.style.width = "250px"
         elemento.style.height = "160px"
@@ -181,6 +195,19 @@ btnAddNewRow.addEventListener('click', () => {
 
         function alertNotImageNewOci(number) {
             arrayAlertOci[number].style.display = 'flex'
+            arrayAlertSizeOci[number].style.display = 'none'
+            arrayBtnRemoveOciImage[number].style.display = 'none'
+            arrayImageOciFileName[number].value = ''
+            elemento.style.border = "2px dashed #ccc"
+            elemento.style.textAlign = "center"
+            elemento.style.backgroundColor = '#fff'
+            elemento.style.display = 'block'
+            elemento.innerHTML = 'Arrastra y suelta una imagen aquí'
+        }
+
+        function alertSizeImageNewOci(number) {
+            arrayAlertSizeOci[number].style.display = 'flex'
+            arrayAlertOci[number].style.display = 'none'
             arrayBtnRemoveOciImage[number].style.display = 'none'
             arrayImageOciFileName[number].value = ''
             elemento.style.border = "2px dashed #ccc"
@@ -195,15 +222,22 @@ btnAddNewRow.addEventListener('click', () => {
             elemento.style.border = '3px dashed #2d2'
             elemento.style.backgroundColor = '#22dd2210'
             const file = e.dataTransfer.files[0]
+            const fileSize = file.size
+            const fileSizeInMb = fileSize / (1024 * 1024)
             const number = parseInt(extractNumbers(elemento.id)-1)
             
             if (file && file.type.startsWith('image/')) {
-                arrayFileInputNewOci[number].files = e.dataTransfer.files
-                let pathToImage = '../../../src/images/upload/ociImages/'
-                arrayImageOciFileName[number].value = pathToImage + file.name
-                arrayBtnRemoveOciImage[number].style.display = 'flex'
-                arrayAlertOci[number].style.display = 'none'
-                handleFileUploadNewOci(file, number)
+                if (fileSizeInMb < 3) {
+                    arrayFileInputNewOci[number].files = e.dataTransfer.files
+                    let pathToImage = '../../../src/images/upload/ociImages/'
+                    arrayImageOciFileName[number].value = pathToImage + file.name
+                    arrayBtnRemoveOciImage[number].style.display = 'flex'
+                    arrayAlertOci[number].style.display = 'none'
+                    arrayAlertSizeOci[number].style.display = 'none'
+                    handleFileUploadNewOci(file, number)
+                } else {
+                    alertSizeImageNewOci(number)
+                }
             } else {
                 alertNotImageNewOci(number)
             }     
@@ -216,18 +250,53 @@ btnAddNewRow.addEventListener('click', () => {
 
     })
 
+
     arrayFileInputNewOci.forEach(function(elemento) {
+
+        function alertNotImageNewOci(number) {
+            arrayAlertOci[number].style.display = 'flex'
+            arrayAlertSizeOci[number].style.display = 'none'
+            arrayBtnRemoveOciImage[number].style.display = 'none'
+            arrayImageOciFileName[number].value = ''
+            arrayDropAreas[number].style.border = "2px dashed #ccc"
+            arrayDropAreas[number].style.textAlign = "center"
+            arrayDropAreas[number].style.backgroundColor = '#fff'
+            arrayDropAreas[number].style.display = 'block'
+            arrayDropAreas[number].innerHTML = 'Arrastra y suelta una imagen aquí'
+        }
+
+        function alertSizeImageNewOci(number) {
+            arrayAlertSizeOci[number].style.display = 'flex'
+            arrayAlertOci[number].style.display = 'none'
+            arrayBtnRemoveOciImage[number].style.display = 'none'
+            arrayImageOciFileName[number].value = ''
+            arrayDropAreas[number].style.border = "2px dashed #ccc"
+            arrayDropAreas[number].style.textAlign = "center"
+            arrayDropAreas[number].style.backgroundColor = '#fff'
+            arrayDropAreas[number].style.display = 'block'
+            arrayDropAreas[number].innerHTML = 'Arrastra y suelta una imagen aquí'
+        }
+
             elemento.addEventListener('change', (e) => {
                 e.preventDefault()
                 const file = elemento.files[0]
+                const fileSize = file.size
+                const fileSizeInMb = fileSize / (1024 * 1024)
                 const number = parseInt(extractNumbers(elemento.id)-1)
+                
+                    if (file && file.type.startsWith('image/')) {
+                        if (fileSizeInMb < 3) {
+                            let pathToImage = '../../../src/images/upload/projectImages/'
+                            arrayImageOciFileName[number].value = pathToImage + file.name
+                            arrayBtnRemoveOciImage[number].style.display = 'flex'
+                            arrayAlertOci[number].style.display = 'none'
+                            arrayAlertSizeOci[number].style.display = 'none'
+                            handleFileUploadNewOci(file, number)
 
-                    if (file && file.type.startsWith('image/')) { 
-                        let pathToImage = '../../../src/images/upload/projectImages/'
-                        arrayImageOciFileName[number].value = pathToImage + file.name
-                        arrayBtnRemoveOciImage[number].style.display = 'flex'
-                        arrayAlertOci[number].style.display = 'none'
-                        handleFileUploadNewOci(file, number)
+                        } else {
+                            alertSizeImageNewOci(number)
+                        }
+
                     } else {
                         alertNotImageNewOci(number)
                     }     
@@ -242,6 +311,7 @@ btnAddNewRow.addEventListener('click', () => {
                 arrayDropAreas[number].innerHTML = 
                     `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
                 arrayAlertOci[number].style.display = 'none'
+                arrayAlertSizeOci[number].style.display = 'none'
             }
 
         } else {
@@ -258,6 +328,7 @@ btnAddNewRow.addEventListener('click', () => {
         arrayDropAreas[number].innerHTML = 'Arrastra y suelta una imagen aquí'
         arrayBtnRemoveOciImage[number].style.display = 'none'
         arrayAlertOci[number].style.display = 'none'
+        arrayAlertSizeOci[number].style.display = 'none'
     }
 
     arrayBtnRemoveOciImage.forEach(function(elemento) {
@@ -317,6 +388,7 @@ function removeRow(e) {
     const fileImputTextProject = document.getElementById('fileInputTextProject')
     const removeImageButtonProject = document.getElementById('removeImageProject')
     const alertProject = document.getElementById('alertProject')
+    const alertProjectSize = document.getElementById('alertProjectSize')
 
     dropAreaProject.style.width = "300px"
     dropAreaProject.style.height = "200px"
@@ -336,16 +408,28 @@ function removeRow(e) {
     dropAreaProject.addEventListener('dragleave', (e) => {
         e.preventDefault()
         dropAreaProject.style.border = '2px dashed #ccc'
-        dropAreaProject.style.backgroundColor = '#666666'
+        dropAreaProject.style.backgroundColor = '#868686'
         removeImageButtonProject.style.display = 'none'
     })
 
     function alertNotImageProject() {
         alertProject.style.display = 'flex'
+        alertProjectSize.style.display = 'none'
         removeImageButtonProject.style.display = 'none'
         dropAreaProject.style.border = "2px dashed #ccc"
         dropAreaProject.style.textAlign = "center"
-        dropAreaProject.style.backgroundColor = '#666666'
+        dropAreaProject.style.backgroundColor = '#868686'
+        dropAreaProject.style.display = 'block'
+        dropAreaProject.innerHTML = 'Arrastra y suelta una imagen aquí'
+    }
+
+    function alertWrongImageProject() {
+        alertProjectSize.style.display = 'flex'
+        alertProject.style.display = 'none'
+        removeImageButtonProject.style.display = 'none'
+        dropAreaProject.style.border = "2px dashed #ccc"
+        dropAreaProject.style.textAlign = "center"
+        dropAreaProject.style.backgroundColor = '#868686'
         dropAreaProject.style.display = 'block'
         dropAreaProject.innerHTML = 'Arrastra y suelta una imagen aquí'
     }
@@ -355,17 +439,26 @@ function removeRow(e) {
         dropAreaProject.style.border = '3px dashed #2d2'
         dropAreaProject.style.backgroundColor = '#22dd2210'
         const file = e.dataTransfer.files[0]
+        const fileSize = file.size
+        const fileSizeInMb = fileSize / (1024 * 1024)
 
         if (file && file.type.startsWith('image/')) {
-            fileInputProject.files = e.dataTransfer.files
-            let pathToImage = '../../../src/images/upload/projectImages/'
-            fileImputTextProject.value = pathToImage + file.name
-            removeImageButtonProject.style.display = 'flex'
-            alertProject.style.display = 'none'
-            handleFileUploadProject(file)
+            if (fileSizeInMb < 3) {
+                fileInputProject.files = e.dataTransfer.files
+                let pathToImage = '../../../src/images/upload/projectImages/'
+                fileImputTextProject.value = pathToImage + file.name
+                removeImageButtonProject.style.display = 'flex'
+                alertProject.style.display = 'none'
+                alertProjectSize.style.display = 'none'
+                handleFileUploadProject(file)
+
+            } else {
+                alertWrongImageProject()
+            }
+
         } else {
             alertNotImageProject()
-        }     
+        }
     })
 
     dropAreaProject.addEventListener('click', () => {
@@ -375,13 +468,22 @@ function removeRow(e) {
     fileInputProject.addEventListener('change', (e) => {
         e.preventDefault()
         const file = fileInputProject.files[0]
+        const fileSize = file.size
+        const fileSizeInMb = fileSize / (1024 * 1024)
         
-        if (file && file.type.startsWith('image/')) { 
-            let pathToImage = '../../../src/images/upload/projectImages/'
-            fileImputTextProject.value = pathToImage + file.name
-            removeImageButtonProject.style.display = 'flex'
-            alertProject.style.display = 'none'
-            handleFileUploadProject(file)
+        if (file && file.type.startsWith('image/')) {
+            if (fileSizeInMb < 3) {
+                let pathToImage = '../../../src/images/upload/projectImages/'
+                fileImputTextProject.value = pathToImage + file.name
+                removeImageButtonProject.style.display = 'flex'
+                alertProject.style.display = 'none'
+                alertProjectSize.style.display = 'none'
+                handleFileUploadProject(file)
+
+            } else {
+                alertWrongImageProject()
+            }
+
         } else {
             alertNotImageProject()
         }     
@@ -395,6 +497,7 @@ function removeRow(e) {
                 dropAreaProject.innerHTML = 
                     `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
                 alertProject.style.display = 'none'
+                alertProjectSize.style.display = 'none'
             }
 
         } else {
@@ -406,11 +509,12 @@ function removeRow(e) {
         fileImputTextProject.value = ''
         dropAreaProject.style.border = "2px dashed #ccc"
         dropAreaProject.style.textAlign = "center"
-        dropAreaProject.style.backgroundColor = '#666666'
+        dropAreaProject.style.backgroundColor = '#868686'
         dropAreaProject.style.display = 'block'
         dropAreaProject.innerHTML = 'Arrastra y suelta una imagen aquí'
         removeImageButtonProject.style.display = 'none'
         alertProject.style.display = 'none'
+        alertProjectSize.style.display = 'none'
     })
 
 
@@ -420,6 +524,7 @@ function removeRow(e) {
     const fileInputNewOciText = document.getElementById('fileInputNewOciText')
     const btnRemoveOciImage = document.getElementById('btnRemoveOciImage')
     const alertOci = document.getElementById('alertOci')
+    const alertOciSize = document.getElementById(`alertOciSize`)
 
     dropAreaOci.style.width = "250px"
     dropAreaOci.style.height = "160px"
@@ -443,8 +548,22 @@ function removeRow(e) {
         btnRemoveOciImage.style.display = 'none'
     })
 
-    function alertNotImageNewOci() {
+    function alertNotImageNewOciAlone() {
         alertOci.style.display = 'flex'
+        alertOciSize.style.display = 'none'
+        btnRemoveOciImage.style.display = 'none'
+        fileInputNewOciText.value = ''
+        dropAreaOci.style.border = "2px dashed #ccc"
+        dropAreaOci.style.textAlign = "center"
+        dropAreaOci.style.backgroundColor = '#fff'
+        dropAreaOci.style.display = 'block'
+        dropAreaOci.innerHTML = 'Arrastra y suelta una imagen aquí'
+    }
+
+    function alertWrongSizeImageNewOciAlone() {
+        console.log('o pasa por aca la kgta!')
+        alertOciSize.style.display = 'flex'
+        alertOci.style.display = 'none'
         btnRemoveOciImage.style.display = 'none'
         fileInputNewOciText.value = ''
         dropAreaOci.style.border = "2px dashed #ccc"
@@ -459,16 +578,25 @@ function removeRow(e) {
         dropAreaOci.style.border = '3px dashed #2d2'
         dropAreaOci.style.backgroundColor = '#22dd2210'
         const file = e.dataTransfer.files[0]
+        const fileSize = file.size
+        const fileSizeInMb = fileSize / (1024 * 1024)
 
         if (file && file.type.startsWith('image/')) {
-            fileInputNewOci.files = e.dataTransfer.files
-            let pathToImage = '../../../src/images/upload/projectImages/'
-            fileInputNewOciText.value = pathToImage + file.name
-            btnRemoveOciImage.style.display = 'flex'
-            alertOci.style.display = 'none'
-            handleFileUploadNewOci(file)
+            if (fileSizeInMb < 3) {
+                fileInputNewOci.files = e.dataTransfer.files
+                let pathToImage = '../../../src/images/upload/projectImages/'
+                fileInputNewOciText.value = pathToImage + file.name
+                btnRemoveOciImage.style.display = 'flex'
+                alertOci.style.display = 'none'
+                alertOciSize.style.display = 'none'
+                handleFileUploadNewOci(file)
+
+            } else {
+                alertWrongSizeImageNewOciAlone()
+            }
+
         } else {
-            alertNotImageNewOci()
+            alertNotImageNewOciAlone()
         }     
     })
 
@@ -479,15 +607,24 @@ function removeRow(e) {
     fileInputNewOci.addEventListener('change', (e) => {
         e.preventDefault()
         const file = fileInputNewOci.files[0]
+        const fileSize = file.size
+        const fileSizeInMb = fileSize / (1024 * 1024)
         
-        if (file && file.type.startsWith('image/')) { 
-            let pathToImage = '../../../src/images/upload/projectImages/'
-            fileInputNewOciText.value = pathToImage + file.name
-            btnRemoveOciImage.style.display = 'flex'
-            alertOci.style.display = 'none'
-            handleFileUploadNewOci(file)
+        if (file && file.type.startsWith('image/')) {
+            if (fileSizeInMb < 3) {
+                let pathToImage = '../../../src/images/upload/projectImages/'
+                fileInputNewOciText.value = pathToImage + file.name
+                btnRemoveOciImage.style.display = 'flex'
+                alertOci.style.display = 'none'
+                alertOciSize.style.display = 'none'
+                handleFileUploadNewOci(file)
+
+            } else {
+                alertWrongSizeImageNewOciAlone()
+            }
+
         } else {
-            alertNotImageNewOci()
+            alertNotImageNewOciAlone()
         }     
     })
 
@@ -499,10 +636,11 @@ function removeRow(e) {
                 dropAreaOci.innerHTML = 
                     `<img class="p-2 mb-5" src="${reader.result}" style="max-width: 100%; max-height: 100%;">`
                 alertOci.style.display = 'none'
+                alertOciSize.style.display = 'none'
             }
 
         } else {
-            alertNotImageNewOci()
+            alertNotImageNewOciAlone()
         }
     }
 
@@ -515,9 +653,17 @@ function removeRow(e) {
         dropAreaOci.innerHTML = 'Arrastra y suelta una imagen aquí'
         btnRemoveOciImage.style.display = 'none'
         alertOci.style.display = 'none'
+        alertOciSize.style.display = 'none'
     })
 
-function messageNewProject(projectName, ociQuantity) {
+    function messageNewProject(projectName, 
+        ociQuantity, 
+        levelProject,
+        codeProject,
+        projectDescription,
+        ociNumber,
+        ociDescription
+    ) {
 
     const Toast = Swal.mixin({
         toast: true,
@@ -527,7 +673,7 @@ function messageNewProject(projectName, ociQuantity) {
         timerProgressBar: false,
     })
     
-    if(projectName) {
+    if (projectName, levelProject, codeProject, projectDescription, ociNumber, ociDescription) {
         let html=''
         parseInt(ociQuantity) > 1 ? 
         html = `Se creará el proyecto ${projectName}, con ${ociQuantity} OCI's !` :
@@ -572,11 +718,53 @@ function messageNewProject(projectName, ociQuantity) {
 
 const btnCreateNewProject = document.getElementById('btnNewProject')
 btnCreateNewProject.addEventListener('click', (event) => {
-    event.preventDefault()
-    const projectName = document.getElementById('projectName').value
-    const ociQuantity = document.getElementById('ociQuantity').value
     
-    messageNewProject(projectName, ociQuantity)
+    const projectName = document.getElementById('projectName').value
+    const ociQuantity = parseInt(document.getElementById('ociQuantity').value)
+    const levelProject = document.getElementById('levelProject').value
+    const codeProject = document.getElementById('codeProject').value
+    const projectDescription = document.getElementById('projectDescription').value
+
+    const ociNumber = document.getElementById('ociNumber').value
+    const ociDescription = document.getElementById('ociDescription').value
+
+    // Obtener todos los campos del formulario
+    var formFields = document.querySelectorAll('#formNewProject input, #formNewProject textarea, #formNewProject select')
+    var isEmpty = false
+
+    // Verificar si algún campo está vacío
+    formFields.forEach(function(field) {
+        if (field.hasAttribute('required') && field.value.trim() === '') {
+            isEmpty = true
+            field.style.border = '1px solid red'
+            field.classList.remove('is-valid')
+            field.classList.add('is-invalid')
+        } else {
+            field.style.border = '1px solid green'
+            field.classList.remove('is-invalid')
+            field.classList.add('is-valid')
+        }
+    })
+
+    if (isEmpty) {
+        event.preventDefault()
+        document.getElementById('mensajeError').style.display = 'flex'
+        document.getElementById('mensajeError').innerHTML = `<i class="fa-solid fa-triangle-exclamation me-3"></i> Por favor, completa todos los campos obligatorios`
+
+    } else {
+        document.getElementById('mensajeError').innerHTML = ''
+        document.getElementById('mensajeError').style.display = 'none'
+        
+        messageNewProject(
+            projectName, 
+            ociQuantity, 
+            levelProject,
+            codeProject,
+            projectDescription,
+            ociNumber,
+            ociDescription
+        )
+    }
 })
 
 //---- Change Project Status ----------------
@@ -631,7 +819,6 @@ function messageChangeProjectStatus(projectName, statusProject, k) {
             showConfirmButton: false,
         })
     }
-        
 }
 
 const projectQuantity = parseInt(document.getElementById('projectQuantity').innerText)

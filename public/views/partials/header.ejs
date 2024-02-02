@@ -45,12 +45,16 @@
                     <div class="my-auto me-4 small" id="clock"></div>
                 </div>
 
-                <button id="logoutBanner" class="btn btn-light me-5 my-auto" style="width: 155px;" type="button"><i
-                    class="fa-solid fa-sign-out"></i>
+                <button id="logoutBanner" class="btn btn-light me-5 my-auto" style="width: 155px;" type="button">
+                    <i class="fa-solid fa-sign-out"></i>
                     LogOut
                 </button>
             </div>
         </div>
     </nav>
-    <%- include('../partials/sidebar'); %>
+    <% if (userInfo.admin) { %>
+        <%- include('../partials/sidebarAdmin'); %>
+    <% } else { %>
+        <%- include('../partials/sidebarUser'); %>
+    <% } %>
 </header>
