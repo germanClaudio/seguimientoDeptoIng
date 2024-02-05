@@ -1,13 +1,13 @@
 const socket = io.connect()
 
 function formatDate(date) {
-    const day = date.getDate()
-    const month = date.getMonth() + 1
-    const year = date.getFullYear()
-    const hours = date.getHours()
-    const min = date.getMinutes()
-    const sec = date.getSeconds()
-    return day + "-" + month + "-" + year + "_" + hours + "." + min + "." + sec
+    const DD = String(date.getDate()).padStart(2, '0');
+    const MM = String(date.getMonth() + 1).padStart(2, '0');
+    const YY = date.getFullYear();
+    const hh = String(date.getHours()).padStart(2, '0');
+    const mm = String(date.getMinutes()).padStart(2, '0');
+    const ss = String(date.getSeconds()).padStart(2, '0');
+    return DD + "-" + MM + "-" + YY + " " + hh + "." + mm + "." + ss
 }
 
 function message(name, lastName, username) {

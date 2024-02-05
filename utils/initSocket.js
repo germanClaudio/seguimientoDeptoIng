@@ -132,7 +132,9 @@ const initSocket = (io) => {
 
         socket.on("newMensaje", async (message) => {
             await containerMsg.createNewMessage(message)
-            io.sockets.emit("mensajesAll", await listarMensajesNormalizados())
+            io.sockets.emit("mensajesAll",
+                await listarMensajesNormalizados(),
+                await containerUser.getAllUsers())
         })
     
         //-------------------- usuarios ----------------------

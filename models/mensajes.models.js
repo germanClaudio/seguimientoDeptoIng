@@ -24,7 +24,7 @@ const messageSchema = new Schema({
   },
   text: {
       type: String,
-      maxlength: 300,
+      maxlength: 500,
     },
   date: {
       type: String,

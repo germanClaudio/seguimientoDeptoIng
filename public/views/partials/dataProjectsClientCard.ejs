@@ -1,4 +1,4 @@
-<div class="card mt-2 mb-5 mx-auto text-center" style="max-width: 95vw;">
+<div class="card mt-2 mb-5 mx-auto text-center rounded-3" style="max-width: 95vw;">
     <div class="row align-items-center">
         <div class="col-2 mx-auto my-2">    
                 <a href="/api/clientes/select/<%= cliente._id %>">
@@ -232,16 +232,16 @@
                                                                             <!-- ----------- seccion creador / modificador de OCI's --------- -->
                                                                             <div class="col-3 my-auto px-1" style="font-size: 9pt">
                                                                                 <div class="container mb-4">
-                                                                                    <ul>OCI creada por: <%= arrVisibleProjects[m].project[j].oci[k].creator[0].name %>, <%= arrVisibleProjects[m].project[j].oci[k].creator[0].lastName %> </ul>
-                                                                                    <ul>Fecha: <%= arrVisibleProjects[m].project[j].oci[k].timestamp %> </ul>
+                                                                                    <span>OCI creada por: <%= arrVisibleProjects[m].project[j].oci[k].creator[0].name %>, <%= arrVisibleProjects[m].project[j].oci[k].creator[0].lastName %> </span><br>
+                                                                                    <span>Fecha: <%= arrVisibleProjects[m].project[j].oci[k].timestamp %> </span>
                                                                                 </div>
                                                                                 <div class="container mb-4">
                                                                                         <% if (arrVisibleProjects[m].project[j].oci[k].modificator[j]) { %>
-                                                                                            <ul>OCI modif. por: <%= arrVisibleProjects[m].project[j].oci[k].modificator[j].name %>, <%= arrVisibleProjects[m].project[j].oci[k].modificator[j].lastName %> </ul>
-                                                                                            <ul>Fecha modif.: <%= arrVisibleProjects[m].project[j].oci[k].modifiedOn %> </ul>
+                                                                                            <span>OCI modif. por: <%= arrVisibleProjects[m].project[j].oci[k].modificator[j].name %>, <%= arrVisibleProjects[m].project[j].oci[k].modificator[j].lastName %> </span><br>
+                                                                                            <span>Fecha modif.: <%= arrVisibleProjects[m].project[j].oci[k].modifiedOn %> </span>
                                                                                         <% } else { %>
-                                                                                            <ul>OCI modifi. por: </ul>
-                                                                                            <ul>Fecha modif.: </ul>
+                                                                                            <span>OCI modifi. por: </span><br>
+                                                                                            <span>Fecha modif.: </span>
                                                                                         <% } %>
                                                                                 </div>
                                                                             </div>

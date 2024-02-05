@@ -1,13 +1,13 @@
 const socket = io.connect()
 
 function formatDate(date) {
-    const day = date.getDate()
-    const month = date.getMonth() + 1
-    const year = date.getFullYear()
-    const hours = date.getHours()
-    const min = date.getMinutes()
-    const sec = date.getSeconds()
-    return day + "-" + month + "-" + year + "_" + hours + "." + min + "." + sec
+    const DD = String(date.getDate()).padStart(2, '0');
+    const MM = String(date.getMonth() + 1).padStart(2, '0');
+    const YY = date.getFullYear();
+    const hh = String(date.getHours()).padStart(2, '0');
+    const mm = String(date.getMinutes()).padStart(2, '0');
+    const ss = String(date.getSeconds()).padStart(2, '0');
+    return DD + "-" + MM + "-" + YY + " " + hh + "." + mm + "." + ss
 }
 
 // -------------- Show All Clients ----------------
@@ -74,7 +74,7 @@ const renderClient = (arrClient) => {
                                                 <span class="badge rounded-pill bg-${colorStatus}">${text}</span><br>
                                                 Proyectos: <span class="badge rounded-pill bg-${colorResult}">${result}</span>
                         </p>
-                        <div class="card-footer">
+                        <div class=".card-footer-client">
                             <a class="btn mx-auto text-light w-75 my-1 small ${disabled}" type="submit" href="/api/clientes/projects/${element._id}" style="background-color: #1d1d1d;">
                                 <i class="fa-solid fa-diagram-project"></i>
                                     Proyectos

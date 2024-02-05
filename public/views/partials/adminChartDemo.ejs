@@ -14,8 +14,8 @@
               <div class="card-content">
                 <div class="card-body">
                   <div class="media d-flex mx-2">
-										<div class="media-body text-end">
-											<h3><%= parseInt(clientes.length + 1) %></h3>
+										<div class="media-body text-left">
+											<h3 class="font-medium"><%= parseInt(clientes.length) %></h3>
 											<span>Clientes</span>
 										</div>
                     <div class="align-self-center ms-auto">
@@ -34,7 +34,7 @@
               <div class="card-content">
                 <div class="card-body">
                   <div class="media d-flex mx-2">
-                    <div class="media-body text-end">
+                    <div class="media-body text-left">
                       <% let arrayProject = []
                         for (let i=0; clientes.length>i; i++ ) {
                           arrayProject.push(clientes[i].project)
@@ -44,7 +44,7 @@
                         }
                         const resultado = sumarArray(arrayProject);
                       %>
-                      <h3 class="danger"><%= resultado %></h3>
+                      <h3 class="font-medium"><%= resultado %></h3>
                       <span>Proyectos</span>
                     </div>
                     <div class="align-self-center ms-auto">
@@ -63,12 +63,12 @@
               <div class="card-content">
                 <div class="card-body">
                   <div class="media d-flex mx-2">
-                    <div class="media-body text-end">
-                      <h3 class="success"><%= usuarios.length %></h3>
+                    <div class="media-body text-left">
+                      <h3 class="font-medium"><%= parseInt(usuarios.length) %></h3>
                       <span>Usuarios</span>
                     </div>
                     <div class="align-self-center ms-auto">
-                      <i class="icon-user success font-large-2 float-right"></i>
+                      <i class="icon-users success font-large-2 float-right"></i>
                     </div>
                   </div>
                 </div>
@@ -83,8 +83,8 @@
               <div class="card-content">
                 <div class="card-body">
                   <div class="media d-flex mx-2">
-                    <div class="media-body text-end">
-                      <h3><%= mensajes.length %></h3>
+                    <div class="media-body text-start">
+                      <h3 class="font-medium"><%= parseInt(mensajes.length) %></h3>
                       <span>Mensajes</span>
                     </div>
                     <div class="align-self-center ms-auto">
@@ -115,7 +115,7 @@
                     <span>Clientes con proyectos activos</span>
                   </div>
                   <div class="align-self-center ms-auto">
-                    <i class="icon-speech warning font-large-2 float-right"></i>
+                    <i class="icon-pin warning font-large-2 float-right"></i>
                   </div>
                 </div>
               </div>
@@ -150,11 +150,11 @@
                           resultArrayOci.push(arrayActiveOci[k].ociNumber)
                         }
                       } %>
-                    <h3><%= resultArrayOci.length %>/<span style="font-size: 0.95rem;" ><%=arrayActiveOci.length%></span></h3>
+                    <h3 class="font-medium"><%= resultArrayOci.length %>/<span style="font-size: 0.95rem;" ><%=arrayActiveOci.length%></span></h3>
                     <span>Cantidad de OCI's</span>
                   </div>
                   <div class="align-self-center ms-auto">
-                    <i class="icon-graph success font-large-2 float-right"></i>
+                    <i class="icon-settings success font-large-2 float-right"></i>
                   </div>
                 </div>
               </div>
@@ -166,9 +166,9 @@
           <div class="card rounded-3 card_dashboard">
             <div class="card-content">
               <div class="card-body">
-                <div class="media d-flex ms-2">
+                <div class="media d-flex mx-2">
                   <div class="media-body text-left">
-                    <h3 class="warning">64.89 %</h3>
+                    <h3 class="warning">??.? %</h3>
                     <span>Conversion Rate</span>
                   </div>
                   <div class="align-self-center ms-auto">
@@ -186,11 +186,11 @@
               <div class="card-body">
                 <div class="media d-flex ms-2">
                   <div class="media-body text-left">
-                    <h3 class="primary"><%= parseInt(sessions.length+1) %></h3>
+                    <h3 class="primary"><%= parseInt(sessions) %></h3>
                     <span>Sesiones activas</span>
                   </div>
                   <div class="align-self-center ms-auto">
-                    <i class="icon-support primary font-large-2 float-right"></i>
+                    <i class="icon-key primary font-large-2 float-right"></i>
                   </div>
                 </div>
               </div>
@@ -206,15 +206,24 @@
               <div class="card-body">
                 <div class="media d-flex mx-2">
                   <div class="media-body text-left">
-                    <h3 class="primary">278</h3>
-                    <span>New Posts</span>
+                    <% let arrayActiveProjectPorcent = []
+                    for (let i=0; clientes.length>i; i++ ) {
+                      if (clientes[i].project>0) {
+                        arrayActiveProjectPorcent.push(clientes[i].project)
+                      }
+                    } 
+                      let valueRateClient = parseFloat((arrayActiveProjectPorcent.length / clientes.length)*100).toFixed(2)
+                    %>
+
+                    <h3 class="primary"><%= valueRateClient %> %</h3>
+                    <span>Tasa conversion</span>
                   </div>
                   <div class="align-self-center ms-auto">
-                    <i class="icon-pointer danger font-large-2 float-right"></i>
+                    <i class="icon-badge danger font-large-2 float-right"></i>
                   </div>
                 </div>
                 <div class="progress mt-1 mb-0" style="height: 7px;">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div class="progress-bar bg-primary" role="progressbar" style="width: <%= valueRateClient %>%" aria-valuenow="<%= valueRateClient %>" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
               </div>
             </div>
@@ -258,11 +267,11 @@
                         }
                       } %>
 
-                    <h3 class="warning"><%= arrayFinalOt.length %>/<span style="font-size: 0.95rem;" ><%=arrayResultOt.length%></span></h3>
+                    <h3 class="font-medium"><%= arrayFinalOt.length %>/<span style="font-size: 0.95rem;" ><%=arrayResultOt.length%></span></h3>
                     <span>Cantidad de OT's</span>
                   </div>
                   <div class="align-self-center ms-auto">
-                    <i class="icon-book-open primary font-large-2 float-right"></i>
+                    <i class="icon-list primary font-large-2 float-right"></i>
                   </div>
                 </div>
                 <div class="progress mt-1 mb-0" style="height: 7px;">
@@ -303,7 +312,7 @@
                     <span>Total Visitas</span>
                   </div>
                   <div class="align-self-center ms-auto">
-                    <i class="icon-direction danger font-large-2 float-right"></i>
+                    <i class="icon-directions danger font-large-2 float-right"></i>
                   </div>
                 </div>
                 <div class="progress mt-1 mb-0" style="height: 7px;">
@@ -315,6 +324,4 @@
         </div>
       </div>
     </section>
-    
-    
   </div>

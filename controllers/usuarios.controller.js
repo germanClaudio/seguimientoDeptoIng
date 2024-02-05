@@ -382,8 +382,10 @@ class UsersController {
                 const usuarios = await this.users.getAllUsers()
                 const proyectos = await this.projects.getAllProjects()
                 const mensajes = await this.messages.getAllMessages()
-                const sessions = await this.users.getAllSessions()
+                const sessionLogin = await this.users.getAllSessions()
                 
+                const sessions = parseInt(sessionLogin.length+1)
+
                 if (!usuario) {
                     return res.render('login', {
                         flag: false,
@@ -567,8 +569,8 @@ class UsersController {
             const usuarios = await this.users.getAllUsers()
             const proyectos = await this.projects.getAllProjects()
             const mensajes = await this.messages.getAllMessages()
-            const sessions = await this.users.getAllSessions()
-            
+            const sessionsIndex = await this.users.getAllSessions()
+            const sessions = sessionsIndex.length
             const { flag, fail } = true
     
             if (!user) {
@@ -581,6 +583,7 @@ class UsersController {
                 const fail = false
                 req.session.admin = true
                 req.session.username = userInfo.username
+                
                 return res.render('index', {
                     userInfo,
                     username,
