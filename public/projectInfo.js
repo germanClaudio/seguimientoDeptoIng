@@ -1538,28 +1538,35 @@ function getOtList(i) {
     }
 }
 
-function getOtListValues(i) {
-    const parentDiv = document.getElementById(`tablaR14${i}`)
+//---------- Obtiene los valores de la lista de OT ------------
+function getOtListValues(i, idTabla) {
+    const parentDiv = document.getElementById(`${idTabla}`)
     let tableBody = parentDiv.lastElementChild
     const lastChild = parseInt(tableBody.childElementCount)
 
     let k = i
-    let arrayProcesoR14 = [], arrayAprobadoR14 = []
+    let arrayProcesoR14 = [], arrayAprobadoR14 = [], arrayConjuntos = []
+
     for (let n=0; n < lastChild; n++) {
+        //------------R14--------------
         const otProcesoR14 = document.getElementById(`resProcesoR14${k}_${n}`).innerText
         const otAprobadoR14 = document.getElementById(`resAprobadoR14${k}_${n}`).innerText
+        //---------Proceso 3d----------
+        
+        arrayConjuntos.push( { [`${n}`] : [otProcesoR14, otAprobadoR14] } )
         arrayProcesoR14.push(otProcesoR14)
         arrayAprobadoR14.push(otAprobadoR14)
     }
+    console.log('arrayConjuntosR14', arrayConjuntos)
     return {
         arrayProcesoR14,
         arrayAprobadoR14
     }
 }
 
-function addDatoToR14(i) {
+function addDatoToR14(i, idTabla) {
     let res = getOtList(i)
-    let getValues = getOtListValues(i)
+    let getValues = getOtListValues(i, idTabla)
 
     var arrayBloque = []
     for (let y=0; y < res.lastChild; y++) {
@@ -1701,7 +1708,7 @@ function addDatoToR14(i) {
                 <fieldset>
                     <div class="row my-1 mx-auto">
                         <div class="col-2 my-auto align-self-middle">
-                            <label for="otNumber"><strong>OT Status</strong></label>
+                            <label for="otStatus"><strong>OT Status</strong></label>
                         </div>
                         <div class="col-2 my-auto align-self-middle">
                             <label for="otNumber"><strong>OT#</strong></label>
@@ -1778,17 +1785,96 @@ function addDatoToR14(i) {
 }
 
 function addDatoToProceso3d(i) {
-    let resultado = getOtList(i)
+    let res = getOtList(i)
+    let getValues = getOtListValues(i)
 
     var arrayBloque = []
-    for (let y=0; y < resultado.lastChild; y++) {
+    for (let y=0; y < res.lastChild; y++) {
+        let color = ''
+        let disabled = 'required'
+        if (res.arrayOtStatus[y]==='Activo') {
+            color = 'success'
+        } else {
+            color = 'danger'
+            disabled = 'disabled'
+        }
+
+        let valorProceso3d = ''
+
+        const optionOk = (`
+            <option value="noOk">No OK</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="noAplica">N/A</option>
+        `)
+
+        const optionNoOk = (`
+            <option value="ok">OK</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="noAplica">N/A</option>
+        `)
+
+        const optionPendiente = (`
+            <option value="ok">OK</option>
+            <option value="noOk">No OK</option>
+            <option value="noAplica">N/A</option>
+        `)
+
+        const optionNoAplica = (`
+            <option value="ok">OK</option>
+            <option value="noOk">No OK</option>
+            <option value="pendiente">Pendiente</option>
+        `)
+
+        const optionDefault = (`
+            <option value="ok">OK</option>
+            <option value="noOk">No OK</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="noAplica">N/A</option>
+        `)
+
+        let optionDefinedProceso3d = ''
+
+        // switch (getValues.arrayProceso3d[y]) {
+        //     case 'OK': {
+        //         valorProceso3d = 'ok'
+        //         optionDefinedProceso3d = optionOk
+        //     break;
+        //     }
+        //     case 'No OK': {
+        //         valorProcesoR14 = 'noOk'
+        //         optionDefinedProcesoR14 = optionNoOk
+        //     break;
+        //     }
+        //     case 'Pendiente': {
+        //         valorProcesoR14 = 'pendiente'
+        //         optionDefinedProcesoR14 = optionPendiente
+        //     break;
+        //     }
+        //     case 'N/A': {
+        //         valorProcesoR14 = 'noAplica'
+        //         optionDefinedProcesoR14 = optionNoAplica
+        //     break;
+        //     }
+        //     default: {
+        //         valorProcesoR14 = 'SinDato'
+        //         optionDefinedProcesoR14 = optionDefault
+        //     break;
+        //     }
+        // }
+
+
+
         arrayBloque.push(`
         <div class="row my-1 mx-auto">
             <div class="col-2 my-auto align-self-middle">
-                <span class="badge rounded-pill bg-dark text-white">${resultado.arrayOtNumber[y]}</span>
+                <span id="${res.arrayOtStatus[y]}" class="badge rounded-pill bg-${color} text-white">${res.arrayOtStatus[y]}</span>
+                <input type="hidden" name="otStatusHidden${y}" value="${res.arrayOtStatus[y]}">
             </div>
             <div class="col-2 my-auto align-self-middle">
-                <span class="badge rounded-pill bg-secondary text-white">${resultado.arrayOpNumber[y]}</span>
+                <span class="badge rounded-pill bg-dark text-white">${res.arrayOtNumber[y]}</span>
+            </div>
+            <div class="col-2 my-auto align-self-middle">
+                <span class="badge rounded-pill bg-secondary text-white">${res.arrayOpNumber[y]}</span>
             </div>
             <div class="col my-auto">
                 <select id="proceso" name="proceso" class="form-select" required>
@@ -1811,6 +1897,9 @@ function addDatoToProceso3d(i) {
                 <fieldset>
                     <div class="row my-1 mx-auto">
                         <div class="col-2 my-auto align-self-middle">
+                            <label for="otStatus"><strong>OT Status</strong></label>
+                        </div>
+                        <div class="col-2 my-auto align-self-middle">
                             <label for="otNumber"><strong>OT#</strong></label>
                         </div>
                         <div class="col-2 my-auto align-self-middle">
@@ -1824,7 +1913,12 @@ function addDatoToProceso3d(i) {
                         </div>
                     </div>
                     <hr>
-                        ${arrayBloque}
+                        ${arrayBloque.join("<br>")}
+                    <hr>
+                    <input type="hidden" name="projectIdHidden" value="${projectNumberId}">
+                    <input type="hidden" name="clientIdHidden" value="${clientId.value}">
+                    <input type="hidden" name="ociNumberK" value="${i}"> 
+                    <input type="hidden" name="otQuantity" value="${arrayBloque.length}">
                 </fieldset>
             </form>
     `
@@ -2682,7 +2776,10 @@ if(arrTables !=[]) {
 		btn.addEventListener("click", (event) => {
             event.preventDefault()
             let kValue = event.target.value
-            addDatoToR14(kValue)
+            const nombreTabla = document.getElementById(`tablaR14${kValue}`)
+            const idTabla = nombreTabla.id
+
+            addDatoToR14(kValue, idTabla)
     	})
     })
 

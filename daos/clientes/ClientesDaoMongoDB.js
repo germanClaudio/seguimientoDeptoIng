@@ -393,14 +393,14 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
         try {
             switch (filter) {
                 case 'nullAllAll': {
-                    var resultados = []
-                break; 
+                    var resultados = ['vacio'] // []
+                break;
                 }
                 case 'nullAllWith': {
                     var resultados = await Clientes.find({
                         'project': { $gt: 0 } // Proyectos mayores que 0
                     })
-                break;    
+                break;
                 }
                 case 'nullAllWithout': {
                     var resultados = await Clientes.find({

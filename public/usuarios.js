@@ -53,8 +53,8 @@ const renderUser = (arrUsers) => {
     const grey = 'secondary'
     const yellow = 'warning'
     const cian = 'info'
-    const active = 'Active'
-    const inactive = 'Inactive'
+    const active = 'Activo'
+    const inactive = 'Inactivo'
     const admin = 'Admin'
     const user = 'User'
         

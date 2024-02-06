@@ -11,6 +11,7 @@ const multer = require('multer')
 
 let now = require('../utils/formatDate.js')
 let imageNotFound = "../../../src/images/upload/LogoClientImages/noImageFound.png"
+let userPictureNotFound = "../../../src/images/upload/LogoClientImages/incognito.jpg"
 
 class UsersController {  
     constructor(){
@@ -175,7 +176,7 @@ class UsersController {
                 lastName: req.body.lastName,
                 email: req.body.email,
                 username: usernameInput,
-                avatar: req.body.imageTextAvatarUser || imageNotFound,
+                avatar: req.body.imageTextAvatarUser || userPictureNotFound,
                 password: req.body.password,
                 permiso: req.body.permiso,
                 status: req.body.status === 'on' ? Boolean(true) : Boolean(false) || Boolean(true),
@@ -250,13 +251,15 @@ class UsersController {
             }).single('imageAvatarUser')
             
             upload(req, res, async (err) => {
+                let pictureString=''
+                req.body.imageTextAvatarUser ? pictureString=req.body.imageTextAvatarUser: pictureString=''
                 
                 const updatedUser = {
                     name: req.body.name,
                     lastName: req.body.lastName,
                     email: req.body.email,
                     username: req.body.username,
-                    avatar: req.body.imageTextAvatarUser || imageNotFound,
+                    avatar: pictureString,
                     permiso: req.body.permisoHidden,
                     status: req.body.status === 'on' ? Boolean(true) : Boolean(false),
                     admin: req.body.admin === 'on' ? Boolean(true) : Boolean(false),

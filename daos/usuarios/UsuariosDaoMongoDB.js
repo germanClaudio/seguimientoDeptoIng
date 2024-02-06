@@ -243,6 +243,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                         }
                     })()
                     return newUserCreated
+
                 } catch (error) {
                     logger.error(error)
                     return new Error (`No se pudo crear el Usuario! Error Try-catch`)
@@ -366,17 +367,19 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
     // }
 
     async updateUser(id, updatedUser, userModificator) {
-        
+        console.log('updatedUser.avatar ', updatedUser)
         if (updatedUser && userModificator) {
 
             try {
                 const userMongoDB = await Usuarios.findById( { _id: id } ) //`${id}`
-            
-                updatedUser.avatar != '' ? updatedUser.avatar : userMongoDB.avatar
-                updatedUser.name != '' ? updatedUser.name : userMongoDB.name
-                updatedUser.lastName != '' ? updatedUser.lastName : userMongoDB.lastName
-                updatedUser.email != '' ? updatedUser.email : userMongoDB.email
-                updatedUser.username != '' ? updatedUser.username : userMongoDB.username
+            console.log('updatedUser.avatar ', updatedUser.avatar)
+                let pictureString=''
+                updatedUser.avatar !== null ? pictureString=updatedUser.avatar : pictureString=userMongoDB.avatar
+                //updatedUser.avatar === 'noChangePicture' ? userMongoDB.avatar : updatedUser.avatar
+                updatedUser.name !== '' ? updatedUser.name : userMongoDB.name
+                updatedUser.lastName !== '' ? updatedUser.lastName : userMongoDB.lastName
+                updatedUser.email !== '' ? updatedUser.email : userMongoDB.email
+                updatedUser.username !== '' ? updatedUser.username : userMongoDB.username
                 
                 if(userMongoDB) {
                     var updatedFinalUser = await Usuarios.updateOne(
@@ -387,7 +390,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                                 lastName: updatedUser.lastName,
                                 email: updatedUser.email,
                                 username: updatedUser.username,
-                                avatar: updatedUser.avatar,
+                                avatar: pictureString,
                                 admin: updatedUser.admin,
                                 status: updatedUser.status,
                                 permiso: updatedUser.permiso,

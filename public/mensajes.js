@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let caracteres = valorText.length
         
         if (valorText !== "" || valorText !== null) {
-            if (valorText.length < 500) {
+            if (valorText.length <= 500) {
                 document.getElementById('messageTextLength').style.color = '#333333'
                 document.getElementById('messageTextLength').innerHTML
 				= `(${caracteres}/500)`
@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ----------------  Messages ----------------
 socket.on('mensajesAll', (arrMensajes, arrUsers) => {
-    // console.log('arrUsers: ', arrUsers)
     const cadena = document.getElementById('mostrarUserName').innerText
     let indice = cadena.indexOf(",");
     const name = cadena.substring(0,indice)

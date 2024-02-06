@@ -84,7 +84,13 @@
                 <div class="card-body">
                   <div class="media d-flex mx-2">
                     <div class="media-body text-start">
-                      <h3 class="font-medium"><%= parseInt(mensajes.length) %></h3>
+                      <% let cantMensajes=0
+                        for (let i=0; mensajes.length>i; i++) {
+                          if (mensajes[i].status) {
+                             cantMensajes++
+                          } 
+                        } %>
+                      <h3 class="font-medium"><%= parseInt(cantMensajes) %></h3>
                       <span>Mensajes</span>
                     </div>
                     <div class="align-self-center ms-auto">

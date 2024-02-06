@@ -1,70 +1,7 @@
 <div class="card mt-2 mb-5 mx-auto text-center" style="max-width: 98vw;">
     <div class="row align-items-center mx-1">
-        <div class="col-1 mx-auto my-2">
-            <div class="top-0 start-100">
-                <img src="<%= proyecto[0].client[0].logo %>" class="img-fluid rounded mb-2"
-                alt="Logo Cliente" width="85px">
-                <div id="projectIdHidden" value="<%= proyecto[0].project[0].id %>" style="display: none;"></div>
-            </div>
-            <h6 class="card-title">
-                <%= proyecto[0].project[0].projectName %>
-            </h6>
-            <br>
-            <a href="/api/clientes/<%= proyecto[0].client[0].id %>">
-                <img src="<%= proyecto[0].project[0].imageProject %>" class="img-fluid rounded mb-2"
-                    alt="Imagen Proyecto" width="120px">
-            </a>
-            <p class="card-text">
-                <small>
-                    <strong class="mx-2">
-                        <%= proyecto[0].project[0].projectDescription %>
-                    </strong>
-                </small>
-            </p>
-            <% if (proyecto[0].project[0].levelProject == 'ganado') { %>
-                <span class="badge rounded-pill bg-success text-white">Ganado</span>
-            <% } else if (proyecto[0].project[0].levelProject == 'paraCotizar') { %>
-                <span class="badge rounded-pill bg-secondary text-warning">Para Cotizar</span>
-            <% } else { %>
-                <span class="badge rounded-pill bg-danger text-white">A riesgo</span>
-            <% } %>
-                <p class="card-text">
-                    <small class="text-muted"> Prio:
-                        <span class="badge bg-dark text-white mx-2">
-                        <%= proyecto[0].project[0].prioProject %>
-                        </span>
-                    </small>
-                </p>
-
-            <% if (proyecto[0].project[0].statusProject) {
-                const status="Activo" %>
-                <span id="statusProjectBoolean" class="badge rounded-pill bg-primary text-white mx-2">
-                    <%= status %>
-                </span>
-            <% } else {
-                const status="Inactivo" %>
-                <span id="statusProjectBoolean" class="badge rounded-pill bg-danger text-white mx-2">
-                    <%= status %>
-                </span>
-            <% } %>
-                <br>
-                <p class="card-text">
-                    <%= proyecto[0].project[0].codeProject %>
-                </p>
-                <br>
-                <p class="card-text">
-                    Cantidad de OCI's
-                        <% let ociTotalCount = 0 
-                            for ( let k=0; proyecto[0].project[0].oci.length> k; k++) {
-                                if (proyecto[0].project[0].oci[k].visible) {
-                                    ociTotalCount++
-                                }
-                            } %>
-                    <span id="ociTotalQty" class="badge rounded-pill bg-primary text-white mx-auto">
-                        <%= ociTotalCount %>
-                    </span>
-                </p>
-        </div>
+        <!-- columna #1 datos de proyecto -->
+        <%- include('../partials/dataProjectCard_col1_projData'); %>
         
         <% if (proyecto[0].project[0].statusProject) { %>
             <div class="col-11 mx-auto">
@@ -81,9 +18,9 @@
                                     if (proyecto[m].project[j].oci[k].visible) { %>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="panelsStayOpen-headingOneCard">
+                                                <!-- boton accordion OCI's -->
                                                 <button class="accordion-button p-1" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#panelsStayOpen-collapseOneCard<%=k %>"
-                                                    aria-expanded="false"
+                                                    data-bs-target="#panelsStayOpen-collapseOneCard<%=k %>" aria-expanded="false"
                                                     aria-controls="panelsStayOpen-collapseOneCard<%=k %>">
                                                     <ul class="list-group list-group-horizontal flex-fill">
                                                         <li class="list-group-item list-group-item-secondary my-1">
@@ -101,15 +38,13 @@
                                                             <% if (proyecto[m].project[j].oci[k].ociStatus) {
                                                                 const ociStatus="Activa" %>
                                                                 Status OCI:
-                                                                    <span
-                                                                        class="badge rounded-pill bg-primary text-white mx-1">
+                                                                    <span class="badge rounded-pill bg-primary text-white mx-1">
                                                                         <%= ociStatus %>
                                                                     </span>
                                                             <% } else {
                                                                 const ociStatus="Inactiva" %>
                                                                 Status OCI:
-                                                                    <span
-                                                                        class="badge rounded-pill bg-danger text-white mx-1">
+                                                                    <span class="badge rounded-pill bg-danger text-white mx-1">
                                                                         <%= ociStatus %>
                                                                     </span>
                                                             <% } %>
@@ -129,6 +64,7 @@
 
                                                     <div class="container-fluid">
                                                         <% if (proyecto[m].project[j].oci[k].otProject.length> 0) { %>
+                                                            <!-- cabecera botonera principal de OCI -->
                                                             <div class="container my-2 mw-100">
                                                                 Puedes agregar mas datos de OT en esta OCI# <%= proyecto[m].project[j].oci[k].ociNumber %>, haciendo click en el siguiente botón
                                                                 <button class="btn btn-success m-1 rounded-circle"
@@ -145,7 +81,7 @@
                                                                 <hr class="border border-primary opacity-75">
                                                                 <div class="row">
                                                                     <div id="posBtnHiddeTableGeneral<%=k%>" class="col-3">
-
+                                                            
                                                                         <button id="btnHiddeTableGeneral<%=k%>"
                                                                             name="btnHiddeTableGeneral"
                                                                             type="button" class="btn btn-primary"
@@ -153,10 +89,10 @@
                                                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #115; border: none">
                                                                             <i class="fa-solid fa-eye-slash"></i>
                                                                         </button>
-
+                                                            
                                                                     </div>
                                                                     <div id="posBtnHiddeTableSeguimiento<%=k%>" class="col-3">
-
+                                                            
                                                                         <button id="btnHiddeTableSeguimiento<%=k%>"
                                                                             name="btnHiddeTableSeguimiento"
                                                                             type="button" class="btn btn-secondary"
@@ -164,10 +100,10 @@
                                                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; background-color: #115; border: none">
                                                                             <i class="fa-solid fa-eye-slash"></i>
                                                                         </button>
-
+                                                            
                                                                     </div>
                                                                     <div id="posCheckSelectionAll<%=k%>" class="col-3">
-
+                                                            
                                                                         <button id="btnCheckSelectionAll<%=k%>"
                                                                             name="btnCheckSelectionAll"
                                                                             type="button" class="btn btn-primary"
@@ -175,10 +111,10 @@
                                                                             style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; border: none">
                                                                             Seleccionar todos <i class="fa-solid fa-check-double"></i>
                                                                         </button>
-
+                                                            
                                                                     </div>
                                                                     <div id="posCheckSelecMasive<%=k%>" class="col-3">
-
+                                                            
                                                                         <button id="btnCheckSelecMasive<%=k%>"
                                                                             name="btnCheckSelecMasive"
                                                                             type="button" class="btn btn-secondary"
@@ -187,12 +123,13 @@
                                                                             disabled>
                                                                             <i class="fa-solid fa-list-check"></i> Mod. multiple (0)
                                                                         </button>
-
+                                                            
                                                                     </div>
                                                                 </div>
-                                                            </div>
-
+                                                            </div>                     
+                                                            
                                                             <div class="d-flex flex-row my-3">
+                                                                <!-- tabla general -->
 
                                                                 <table id="tablaGeneral<%=k%>"
                                                                     name="tablaGeneral"
@@ -442,6 +379,7 @@
                                                                         } %>    
                                                                     </tbody>
                                                                 </table>
+                                                                <!-- tabla seguimiento -->
 
                                                                 <table id="tablaSeguimiento<%=k%>"
                                                                     name="tablaSeguimiento"

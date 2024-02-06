@@ -44,7 +44,7 @@ label {
   max-width: 100%;
   margin-bottom: 5px;
   font-size: 15px;
-  color: #ffffff !important;
+  color: #000 !important;
 }
 
 /*--------------------
@@ -275,6 +275,10 @@ label {
   margin-bottom: 40px;
 }
 
+.m-b-50 {
+  margin-bottom: 50px;
+}
+
 .m-b-60 {
   margin-bottom: 60px;
 }
@@ -375,7 +379,7 @@ html body .display-7 {
 
 .card-footer-client {
   border-top: 1px solid #e6e6f2;
-  background: #f6f6ff;
+  background: #fcfcff;
 }
 
 
@@ -386,7 +390,7 @@ html body .display-7 {
 .badge {
   display: inline-block;
   padding: 3px 7px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   line-height: 1;
   text-align: center;

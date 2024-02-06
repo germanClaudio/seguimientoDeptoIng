@@ -65,16 +65,16 @@ const renderClient = (arrClient) => {
         text = "Inactivo"
     }
  
-    return (`<div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="shadow-lg card rounded-3 m-3" style="width: 15rem;">
-                    <img src="${element.logo}" class="card-img-top rounded-5 mx-auto px-5 pt-2" alt="Logo Cliente" style=max-height="105px" >
+    return (`<div class="col-lg-3 col-md-4 col-sm-6 mx-auto">
+                <div class="card shadow-lg rounded-3 m-3" style="width: 15rem; height: 25rem;">
+                    <img src="${element.logo}" class="card-img-top mx-auto px-5 pt-2" alt="Logo Cliente" style="max-height: 10rem">
                     <div class="card-body">
                         <h6 class="card-title"><strong>${element.name}</strong></h6>
                         <p class="card-text">Codigo: ${element.code}<br>
                                                 <span class="badge rounded-pill bg-${colorStatus}">${text}</span><br>
                                                 Proyectos: <span class="badge rounded-pill bg-${colorResult}">${result}</span>
                         </p>
-                        <div class=".card-footer-client">
+                        <div class="card-footer card-footer-client">
                             <a class="btn mx-auto text-light w-75 my-1 small ${disabled}" type="submit" href="/api/clientes/projects/${element._id}" style="background-color: #1d1d1d;">
                                 <i class="fa-solid fa-diagram-project"></i>
                                     Proyectos
