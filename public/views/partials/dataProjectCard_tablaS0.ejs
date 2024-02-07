@@ -1,0 +1,60 @@
+<!-- --------- tabla S0 ----------- -->
+<table id="tablaS0<%=k%>"
+    class="table-responsive align-middle col-5 border-end border-dark"
+    style="font-size: 10pt; width: 100%">
+    <thead class="align-middle" style="background-color: #99c">
+        <tr>
+            <th colspan="2" class="text-center">
+                S0
+                <button
+                    id="posBtnAddDataS0<%=k%>"
+                    name="btnS0"
+                    class="btn btn-small btn-success m-1"
+                    style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                    title="Agregar Datos"
+                    value="<%=k%>">
+                    <i class="fa-solid fa-pencil fa-lg" aria-hidden="true"></i>
+                </button>
+            </th>
+        </tr>
+        <tr>
+            <th style="width:50vw" scope="col-1"
+                class="text-center"> Sim </th>
+            <th style="width:50vw" scope="col-1"
+                class="text-center"> Doc </th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length>n; n++) {
+            if (proyecto[m].project[j].oci[k].otProject[n].visible) {
+                if (proyecto[m].project[j].oci[k].otProject[n].otStatus) { %>
+                    <tr name="rowSelected<%=k%>_<%=n%>" style="height: 7vh;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                OK
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <tr style="height: 7vh; background-color: #dedede;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                OK
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                    </tr>
+                <% }
+            }
+        } %>
+    </tbody>
+</table>

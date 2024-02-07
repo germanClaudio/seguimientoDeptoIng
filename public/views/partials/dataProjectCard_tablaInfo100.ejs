@@ -1,0 +1,67 @@
+<!-- --------- tabla Info al 100% ----------- -->
+<table id="tablaInfo100<%=k%>"
+    class="table-responsive align-middle col-5 border-end border-dark"
+    style="font-size: 10pt; width: 100%">
+    <thead class="align-middle" style="background-color: #aac">
+        <tr>
+            <th colspan="2" class="text-center">
+                INFO 100%
+                <button
+                    id="posBtnAddDataInfo100<%=k%>"
+                    name="btnInfo100"
+                    class="btn btn-small btn-success m-1"
+                    style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                    title="Agregar Datos"
+                    value="<%=k%>">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                </button>
+            </th>
+        </tr>
+        <tr>
+            <th style="width:50vw" scope="col-1"
+                class="text-center"> LDM 100%
+            </th>
+            <th style="width:50vw" scope="col-1"
+                class="text-center"> Info 100%
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        
+        <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length>n; n++) {
+            if (proyecto[m].project[j].oci[k].otProject[n].visible) {
+                if (proyecto[m].project[j].oci[k].otProject[n].otStatus) { %>
+                    <tr name="rowSelected<%=k%>_<%=n%>" style="height: 7vh;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                            <i class="fa-solid fa-circle-check"></i>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                            <i class="fa-solid fa-circle-check"></i>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <tr style="height: 7vh; background-color: #dedede;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                            <i class="fa-solid fa-circle-check"></i>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                            <i class="fa-solid fa-circle-check"></i>
+                        </td>
+                    </tr>
+                <% }
+            }
+        } %>
+    </tbody>
+</table>

@@ -1,0 +1,146 @@
+<!-- --------- tabla Diseno ----------- -->
+<table id="tablaDiseno<%=k%>"
+    class="table-responsive align-middle col-5 border-end border-dark"
+    style="font-size: 10pt; width: 100%">
+    <thead class="align-middle" style="background-color: #aac">
+        <tr>
+            <th colspan="8" class="text-center">
+                DISEÑO
+                <button
+                    id="posBtnAddDataDiseno<%=k%>"
+                    name="btnDiseno"
+                    class="btn btn-small btn-success m-1"
+                    style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                    title="Agregar Datos"
+                    value="<%=k%>">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                </button>
+            </th>
+        </tr>
+        <tr>
+            <th style="width:12.5vw"
+                scope="col-1"
+                class="text-center"> Av. Diseño
+            </th>
+            <th style="width:12.5vw"
+                scope="col-1"
+                class="text-center"> 1° Rev 50%
+            </th>
+            <th style="width:12.5vw"
+                scope="col-1"
+                class="text-center"> 2° Rev 80%
+            </th>
+            <th style="width:12.5vw"
+                scope="col-1"
+                class="text-center"> Env. Cliente</th>
+            <th style="width:12.5vw"
+                scope="col-1"
+                class="text-center"> Rev. Cliente</th>
+            <th style="width:12.5vw"
+                scope="col-1"
+                class="text-center"> LDM Prov.
+            </th>
+            <th style="width:12.5vw"
+                scope="col-1"
+                class="text-center"> Rev. 100%
+            </th>
+            <th style="width:12.5vw"
+                scope="col-1"
+                class="text-center"> Aprob. Clie
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length>n; n++) {
+            if (proyecto[m].project[j].oci[k].otProject[n].visible) {
+                if (proyecto[m].project[j].oci[k].otProject[n].otStatus) { %>
+                    <tr name="rowSelected<%=k%>_<%=n%>" style="height: 7vh;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <tr style="height: 7vh; background-color: #dedede;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-success text-white my-2">
+                                100%
+                            </span>
+                        </td>
+                    </tr>
+                <% }
+            }
+        } %>
+    </tbody>
+</table>

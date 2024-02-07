@@ -1,0 +1,62 @@
+<!-- --------- tabla S5 ----------- -->
+<table id="tablaS5<%=k%>"
+    class="table-responsive align-middle col-2 border-end border-dark"
+    style="font-size: 10pt; width: 100%">
+    <thead class="align-middle" style="background-color: #88c">
+        <tr>
+            <th colspan="2" class="text-center">
+                S5
+                <button
+                    id="posBtnAddDataS5<%=k%>"
+                    name="btnS5"
+                    class="btn btn-small btn-success m-1"
+                    style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                    title="Agregar Datos"
+                    value="<%=k%>">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                </button>
+            </th>
+        </tr>
+        <tr>
+            <th style="width:50vw" scope="col-1"
+                class="text-center"> Grillado <i class="fa-solid fa-table-cells fa-lg"></i>
+            </th>
+            <th style="width:50vw" scope="col-1"
+                class="text-center"> MP Ensayada
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length>n; n++) {
+            if (proyecto[m].project[j].oci[k].otProject[n].visible) {
+                if (proyecto[m].project[j].oci[k].otProject[n].otStatus) { %>
+                    <tr name="rowSelected<%=k%>_<%=n%>" style="height: 7vh;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-danger text-white my-2">
+                                NO
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-danger text-white my-2">
+                                NO
+                            </span>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <tr style="height: 7vh; background-color: #dedede;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-danger text-white my-2">
+                                NO
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-danger text-white my-2">
+                                NO
+                            </span>
+                        </td>
+                    </tr>
+                <% }
+            }
+        } %>
+    </tbody>
+</table>

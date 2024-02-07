@@ -1,0 +1,185 @@
+<!-- tabla R14 -->
+<table id="tablaR14<%=k%>"
+    class="table-responsive align-middle col-5 border-end border-dark"
+    style="font-size: 10pt; width: 100%">
+    <thead class="align-middle" style="background-color: #aac">
+        <tr>
+            <th colspan="2" class="text-center">
+                R-14
+                <button
+                    id="posBtnAddDataR14<%=k%>"
+                    name="btnR14"
+                    class="btn btn-small btn-success m-1"
+                    style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                    title="Agregar/Modificar Datos"
+                    value="<%=k%>">
+                    <i class="fa-solid fa-pencil fa-lg" aria-hidden="true"></i>                                                    
+                </button>
+            </th>
+        </tr>
+        <tr>
+            <th style="width:50vw" scope="col-1"
+                class="text-center"> Proceso
+            </th>
+            <th style="width:50vw" scope="col-1"
+                class="text-center"> Aprobado PM
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        
+        <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length>n; n++) {
+            if (proyecto[m].project[j].oci[k].otProject[n].visible) {
+                if (proyecto[m].project[j].oci[k].otProject[n].otStatus) { %>
+                    <tr name="rowSelected<%=k%>_<%=n%>" style="height: 7vh;">
+                        <td class="text-center align-middle">
+
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) {
+                                var resProcesoR14 = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoR14[0].procesoR14
+                            } else {
+                                var resProcesoR14 = ''
+                            }
+                                
+                            switch (resProcesoR14) { 
+                                case "ok": { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2" >
+                                            OK
+                                        </span>
+                                <% break; }        
+                                case "noOk": { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
+                                            No OK
+                                        </span>
+                                <% break; }        
+                                case "pendiente": { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
+                                            Pendiente
+                                        </span>
+                                <% break; }
+                                case "noAplica": { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-white my-2">
+                                            N/A
+                                        </span>
+                                <% break; }
+                                default: { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
+                                            S/D
+                                        </span>
+                                <% break; }
+                            } %>
+                        </td>
+                        <td class="text-center align-middle">
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) { 
+                                var resAprobadoR14 = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoR14[0].aprobadoR14
+                            } else {
+                                var resAprobadoR14 = ''
+                            }
+
+                            switch (resAprobadoR14) { 
+                                case "ok": { %>
+                                    <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2">
+                                        OK
+                                    </span>
+                                <% break; }        
+                                case "noOk": { %>
+                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
+                                            No OK
+                                        </span>
+                                <% break; }        
+                                case "pendiente": { %>
+                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
+                                            Pendiente
+                                        </span>
+                                <% break; }
+                                case "noAplica": { %>
+                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-withe my-2">
+                                            N/A
+                                        </span>
+                                <% break; }
+                                default: { %>
+                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
+                                            S/D
+                                        </span>
+                                <% break; }
+                            } %>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <tr style="height: 7vh; background-color: #dedede;">
+                        <td class="text-center align-middle">
+
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) {
+                                var resProcesoR14 = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoR14[0].procesoR14
+                            } else {
+                                var resProcesoR14 = ''
+                            }
+                                
+                            switch (resProcesoR14) { 
+                                case "ok": { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2" >
+                                            OK
+                                        </span>
+                                <% break; }        
+                                case "noOk": { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
+                                            No OK
+                                        </span>
+                                <% break; }        
+                                case "pendiente": { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
+                                            Pendiente
+                                        </span>
+                                <% break; }
+                                case "noAplica": { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-white my-2">
+                                            N/A
+                                        </span>
+                                <% break; }
+                                default: { %>
+                                        <span id="resProcesoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
+                                            S/D
+                                        </span>
+                                <% break; }
+                            } %>
+                        </td>
+                        <td class="text-center align-middle">
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) { 
+                                var resAprobadoR14 = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoR14[0].aprobadoR14
+                            } else {
+                                var resAprobadoR14 = ''
+                            }
+
+                            switch (resAprobadoR14) { 
+                                case "ok": { %>
+                                    <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2">
+                                        OK
+                                    </span>
+                                <% break; }        
+                                case "noOk": { %>
+                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
+                                            No OK
+                                        </span>
+                                <% break; }        
+                                case "pendiente": { %>
+                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
+                                            Pendiente
+                                        </span>
+                                <% break; }
+                                case "noAplica": { %>
+                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-withe my-2">
+                                            N/A
+                                        </span>
+                                <% break; }
+                                default: { %>
+                                        <span id="resAprobadoR14<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
+                                            S/D
+                                        </span>
+                                <% break; }
+                            } %>
+                        </td>
+                    </tr>
+                <% }
+            }
+        } %>
+    </tbody>
+</table>

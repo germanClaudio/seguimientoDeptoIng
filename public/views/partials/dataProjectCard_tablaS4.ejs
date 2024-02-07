@@ -1,0 +1,140 @@
+<!-- --------- tabla S4 ----------- -->
+<table id="tablaS4<%=k%>"
+    class="table-responsive align-middle col-2 border-end border-dark"
+    style="font-size: 10pt; width: 100%">
+    <thead class="align-middle" style="background-color: #88c">
+        <tr>
+            <th colspan="8" class="text-center">
+                S4
+                <button
+                    id="posBtnAddDataS4<%=k%>"
+                    name="btnS4"
+                    class="btn btn-small btn-success m-1"
+                    style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
+                    title="Agregar Datos"
+                    value="<%=k%>">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                </button>
+            </th>
+        </tr>
+        <tr>
+            <th style="width:20vw" scope="col-1"
+                class="text-center"> Mat Ensay
+            </th>
+            <th style="width:10vw" scope="col-1"
+                class="text-center"> <i class="fa-solid fa-plus-minus"></i>10%
+            </th>
+            <th style="width:10vw" scope="col-1"
+                class="text-center"> <i class="fa-solid fa-shapes"></i>MP
+            </th>
+            <th style="width:10vw" scope="col-1"
+                class="text-center"> Reun. Sim
+            </th>
+            <th style="width:10vw" scope="col-1"
+                class="text-center"> Informe
+            </th>
+            <th style="width:10vw" scope="col-1"
+                class="text-center"> GC#1
+            </th>
+            <th style="width:10vw" scope="col-1"
+                class="text-center"> GC#2
+            </th>
+            <th style="width:20vw" scope="col-1"
+                class="text-center"> Hs Tot Sim
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        <% for ( let n=0; proyecto[m].project[j].oci[k].otProject.length>n; n++) {
+            if (proyecto[m].project[j].oci[k].otProject[n].visible) {
+                if (proyecto[m].project[j].oci[k].otProject[n].otStatus) { %>
+                    <tr name="rowSelected<%=k%>_<%=n%>" style="height: 7vh;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-danger text-white my-2">
+                                NO
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="text-black mx-1">
+                                345
+                            </span>
+                        </td>
+                    </tr>
+                <% } else { %>
+                    <tr style="height: 7vh; background-color: #dedede;">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-danger text-white my-2">
+                                NO
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-warning text-black my-2">
+                                Pendiente
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="text-black mx-1">
+                                345
+                            </span>
+                        </td>
+                    </tr>
+                <% }
+            }
+        } %>
+    </tbody>
+</table>

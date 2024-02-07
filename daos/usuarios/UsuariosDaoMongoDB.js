@@ -367,15 +367,13 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
     // }
 
     async updateUser(id, updatedUser, userModificator) {
-        console.log('updatedUser.avatar ', updatedUser)
+        
         if (updatedUser && userModificator) {
 
             try {
                 const userMongoDB = await Usuarios.findById( { _id: id } ) //`${id}`
-            console.log('updatedUser.avatar ', updatedUser.avatar)
-                let pictureString=''
-                updatedUser.avatar !== null ? pictureString=updatedUser.avatar : pictureString=userMongoDB.avatar
-                //updatedUser.avatar === 'noChangePicture' ? userMongoDB.avatar : updatedUser.avatar
+                            
+                updatedUser.avatar !== '' ? updatedUser.avatar : userMongoDB.avatar
                 updatedUser.name !== '' ? updatedUser.name : userMongoDB.name
                 updatedUser.lastName !== '' ? updatedUser.lastName : userMongoDB.lastName
                 updatedUser.email !== '' ? updatedUser.email : userMongoDB.email
@@ -390,7 +388,7 @@ class UsuariosDaoMongoDB extends ContainerMongoDB {
                                 lastName: updatedUser.lastName,
                                 email: updatedUser.email,
                                 username: updatedUser.username,
-                                avatar: pictureString,
+                                avatar: updatedUser.avatar,
                                 admin: updatedUser.admin,
                                 status: updatedUser.status,
                                 permiso: updatedUser.permiso,

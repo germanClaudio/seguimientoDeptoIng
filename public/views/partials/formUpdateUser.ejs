@@ -76,7 +76,8 @@
                         Seleccione una nueva imagen de Avatar Usuario
                     </label>
                     <input type="text" id="fileInputTextAvatarUser" name="imageTextAvatarUser"
-                            style="display: none;">
+                        value="<%=usuario.avatar%>" style="display: none;">
+                            
                         <input type="file" id="fileInputAvatarUser" name="imageAvatarUser"
                             value="" accept="image/*" style="display: none;">
                         <div id="drop-areaAvatarUser" class="my-3 mx-auto">
@@ -117,7 +118,7 @@
                     </div>
                     
                     <%  if (usuario.admin) { %>
-                        <div class="col-3" style="background-color: #03120390;">
+                        <div class="col-3" style="background-color: #00029090;">
                             <label for="admin">Rol</label>
                             <div class="">
                                 <p class="d-inline-block me-1">Usuario</p>
@@ -129,7 +130,7 @@
                             </div>
                         </div>
                     <% } else { %>
-                        <div class="col-3" style="background-color: #41414160;">
+                        <div class="col-3" style="background-color: #009e0360;">
                             <label for="admin">Rol</label>
                             <div class="">
                                 <p class="d-inline-block me-1">Usuario</p>

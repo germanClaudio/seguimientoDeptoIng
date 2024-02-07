@@ -251,15 +251,13 @@ class UsersController {
             }).single('imageAvatarUser')
             
             upload(req, res, async (err) => {
-                let pictureString=''
-                req.body.imageTextAvatarUser ? pictureString=req.body.imageTextAvatarUser: pictureString=''
-                
+                                
                 const updatedUser = {
                     name: req.body.name,
                     lastName: req.body.lastName,
                     email: req.body.email,
                     username: req.body.username,
-                    avatar: pictureString,
+                    avatar: req.body.imageTextAvatarUser || userPictureNotFound,
                     permiso: req.body.permisoHidden,
                     status: req.body.status === 'on' ? Boolean(true) : Boolean(false),
                     admin: req.body.admin === 'on' ? Boolean(true) : Boolean(false),

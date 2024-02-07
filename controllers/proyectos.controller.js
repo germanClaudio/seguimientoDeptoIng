@@ -124,6 +124,12 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
 
+        const data = {
+            k: 0, // Inicializar k en el servidor
+            m: 0,
+            j: 0
+        }
+
         try {
             if (!proyecto) return res.status(404).json({ msg: 'Proyecto no encontrado' })
             res.render('projectSelectedDetail', {
@@ -131,7 +137,8 @@ class ProjectsController {
                 username,
                 userInfo,
                 expires,
-                cliente
+                cliente,
+                data
             })
         } catch (error) {
             res.status(500).json({
@@ -477,14 +484,21 @@ class ProjectsController {
             arrayInfoAddedToOt
         )
 
+        // const data = {
+        //     k: 0, // Inicializar k en el servidor
+        //     // m: 0,
+        //     // j: 0
+        // }
+
         try {
             if (!proyecto) return res.status(404).json({ msg: 'Proyecto, OCI u OT no encontrada' })
-            res.render('projectsList', {
+            res.render('projectsSelectedDetail', {  //projectsList
                 username,
                 userInfo,
                 expires,
                 cliente,
-                proyecto
+                proyecto,
+                // data
             })
 
         } catch (error) {
