@@ -124,8 +124,8 @@ class ProjectsController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        const data = {
-            k: 0, // Inicializar k en el servidor
+        const data = { // Inicializar variables en servidor
+            k: 0, 
             m: 0,
             j: 0
         }
@@ -389,8 +389,14 @@ class ProjectsController {
             user
         )
 
+        const data = { // Inicializar variables en servidor
+            k: 0, 
+            m: 0,
+            j: 0
+        }
+
         const proyecto = await this.projects.selectProjectsByMainProjectId(projectId)
-            // console.log('proyectoController ',proyecto)
+            console.log('proyectoController ',proyecto)
         try {
             if (!proyecto) return res.status(404).json({ msg: 'OCI no encontrada' })
             res.render('projectSelectedDetail', {
@@ -398,7 +404,8 @@ class ProjectsController {
                 username,
                 userInfo,
                 expires,
-                cliente
+                cliente,
+                data
             })
 
         } catch (error) {
@@ -484,10 +491,10 @@ class ProjectsController {
             arrayInfoAddedToOt
         )
 
-        // const data = {
-        //     k: 0, // Inicializar k en el servidor
-        //     // m: 0,
-        //     // j: 0
+        // const data = { // Inicializar variables en servidor
+        //     k: 0, 
+        //     m: 0,
+        //     j: 0
         // }
 
         try {

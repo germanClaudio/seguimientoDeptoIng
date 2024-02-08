@@ -23,8 +23,19 @@
         <% if( userInfo.admin ){ %>
             <a class="btn btn-danger my-2 ms-4 disabled" href="/api/clientes/all/delete"><i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar Todos </a>
         <% } %>
-            <h2 class="d-block mx-auto my-3 text-center">Lista de Clientes</h2>
     </div>
+    <!-- ------------ Lista de Clientes ------------ -->
+    <section class="mx-auto align-items-start" style="width: 94%;">
+        <div class="row">
+            <div class="col-12 mt-3 mb-1">
+                <hr>
+                <h4 class="text-uppercase">Lista de Clientes</h4>
+                <p>Departamento de Ingeniería Prodismo</p>
+                <hr>
+            </div>
+        </div>
+    </section>
+            
     <br>
     <div class="d-block mx-auto mb-3 text-center w-100 px-5">
         <%- include('../partials/dataClientTable'); %>

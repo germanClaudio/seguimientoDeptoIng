@@ -233,7 +233,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
                         <td class="text-center" data-column="nivel"><span class="badge rounded-pill bg-${colorResult} text-${colorLevel}">${text}</span></td>
                         <td class="text-center px-2">${element.project[0].projectDescription}</td>
                         <td class="text-center">
-                            <table class="table-responsive mx-auto my-2" style="font-size: 10pt; width: 100%;">
+                            <table class="table-responsive mx-auto my-3" style="font-size: 10pt; width: 100%;">
                                 <tbody>
                                     <tr>
                                         <td class="border border-0" data-column="oci">${loopArrayOci()}</td>
@@ -242,7 +242,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
                             </table>
                         </td>
                         <td class="text-center">
-                            <table class="table-responsive mx-auto my-2" style="font-size: 10pt; width: 100%;">
+                            <table class="table-responsive mx-auto my-3" style="font-size: 10pt; width: 100%;">
                                 <tbody>
                                     <tr>
                                         <td class="border border-0" data-column="ot">${loopArrayOt()}</td>
@@ -251,7 +251,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
                             </table>
                         </td>
                         <td class="text-center">
-                            <table class="table-responsive mx-auto my-2" style="font-size: 10pt; width: 100%;">
+                            <table class="table-responsive mx-auto my-3" style="font-size: 10pt; width: 100%;">
                                 <tbody>
                                     <tr>
                                         <td class="border border-0">${loopArrayOp()}</td>
@@ -260,7 +260,7 @@ const renderProjectsForAdmin = (arrayProjects) => {
                             </table>
                         </td>
                         <td class="text-center">
-                            <table class="table-responsive mx-auto my-2" style="font-size: 10pt; width: 100%;">
+                            <table class="table-responsive mx-auto my-3" style="font-size: 10pt; width: 100%;">
                                 <tbody>
                                     <tr>
                                         <td class="border border-0">${loopArrayDescription()}</td>
@@ -487,7 +487,7 @@ const renderProjectsForUser = (arrayProjects) => {
                         <td class="text-center">${element.project[0].projectDescription}</td>
                         
                         <td class="text-center">
-                            <table class="table-responsive mx-auto my-2" style="font-size: 10pt; width: 100%;">
+                            <table class="table-responsive mx-auto my-3" style="font-size: 10pt; width: 100%;">
                                 <tbody>
                                     <tr>
                                         <td data-column="oci">${loopArrayOci()}</td>
@@ -496,7 +496,7 @@ const renderProjectsForUser = (arrayProjects) => {
                             </table>
                         </td>
                         <td class="text-center">
-                            <table class="table-responsive mx-auto my-2" style="font-size: 10pt; width: 100%;">
+                            <table class="table-responsive mx-auto my-3" style="font-size: 10pt; width: 100%;">
                                 <tbody>
                                     <tr>
                                         <td data-column="ot">${loopArrayOt()}</td>
@@ -505,7 +505,7 @@ const renderProjectsForUser = (arrayProjects) => {
                             </table>
                         </td>
                         <td class="text-center">
-                            <table class="table-responsive mx-auto my-2" style="font-size: 10pt; width: 100%;">
+                            <table class="table-responsive mx-auto my-3" style="font-size: 10pt; width: 100%;">
                                 <tbody>
                                     <tr>
                                         <td>${loopArrayOp()}</td>
@@ -514,7 +514,7 @@ const renderProjectsForUser = (arrayProjects) => {
                             </table>
                         </td>
                         <td class="text-center">
-                            <table class="table-responsive mx-auto my-2" style="font-size: 10pt; width: 100%;">
+                            <table class="table-responsive mx-auto my-3" style="font-size: 10pt; width: 100%;">
                                 <tbody>
                                     <tr>
                                         <td>${loopArrayDescription()}</td>

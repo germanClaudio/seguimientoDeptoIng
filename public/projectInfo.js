@@ -98,7 +98,7 @@ if(arrBtnHidde !=[]) {
 document.addEventListener('DOMContentLoaded', function () {
     const projectNameHidden = document.getElementById('projectNameHidden').value
     const projectNameTitle = document.getElementById('projectNameTitle')
-    projectNameTitle.innerHTML = `Nombre Proyecto: ${projectNameHidden}`
+    projectNameTitle.innerHTML = `Proyecto <strong>${projectNameHidden}</strong>`
 })
 
 

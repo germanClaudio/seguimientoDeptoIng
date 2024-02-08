@@ -120,22 +120,23 @@
                                                                         countOci++
                                                                     }
                                                                 }
-                                                                if (arrVisibleOci.length>0 && countOci !== 0) {
+                                                                
+                                                                if (arrVisibleOci.length > 0 && countOci > 0) {
                                                                     for (let k=0; arrVisibleOci.length > k; k++) { %>
 
                                                                         <div class="row align-items-center">
                                                                             <!-- ----------- seccion Imagen de OCI's ------------ -->
                                                                             <div class="col-3 my-auto px-1">
-                                                                                <img id="imageOci<%= ociCount %>_<%= k %>" src="<%= arrVisibleProjects[m].project[j].oci[k].ociImage %>"
+                                                                                <img id="imageOci<%= ociCount %>_<%= k %>" src="<%= arrVisibleOci[k].ociImage %>"
                                                                                     class="img-fluid rounded my-auto px-1" alt="Imagen OCI" width="150px">
                                                                             </div>
                                                                         
                                                                             <!-- ----------- seccion Datos de OCI's ------------ -->
                                                                             <div class="col my-auto px-1">
-                                                                                <div class="mb-3">OCI #: <strong><%= arrVisibleProjects[m].project[j].oci[k].ociNumber %></strong></div>
-                                                                                <div class="my-3" id="ociDescription<%= ociCount %>_<%= k %>">Descripción: <%= proyectos[m].project[j].oci[k].ociDescription %> </div>
+                                                                                <div class="mb-3">OCI #: <strong><%= arrVisibleOci[k].ociNumber %></strong></div>
+                                                                                <div class="my-3" id="ociDescription<%= ociCount %>_<%= k %>">Descripción: <%= arrVisibleOci[k].ociDescription %> </div>
                                                                             
-                                                                                <% if (arrVisibleProjects[m].project[j].oci[k].ociStatus) {
+                                                                                <% if (arrVisibleOci[k].ociStatus) {
                                                                                     const ociStatus="Activa" %>
                                                                                     <div class="my-3">Status OCI: <span class="badge rounded-pill bg-primary text-white"> <%= ociStatus %> </span> </div>
                                                                             
@@ -169,12 +170,12 @@
 
                                                                                     Cantidad de OT:
                                                                                     <div class="m-3 px-3 justify-content-center">
-                                                                                        <% if (arrVisibleProjects[m].project[j].oci[k].otProject.length > 0) {
-                                                                                            for (let x=0; arrVisibleProjects[m].project[j].oci[k].otProject.length > x; x++) {                                                                                            
-                                                                                                if (arrVisibleProjects[m].project[j].oci[k].otProject[x].visible) {                                                                                                    
-                                                                                                    if (arrVisibleProjects[m].project[j].oci[k].otProject[x].otStatus) { %>
+                                                                                        <% if (arrVisibleOci[k].otProject.length > 0) {
+                                                                                            for (let x=0; arrVisibleOci[k].otProject.length > x; x++) {                                                                                            
+                                                                                                if (arrVisibleOci[k].otProject[x].visible) {                                                                                                    
+                                                                                                    if (arrVisibleOci[k].otProject[x].otStatus) { %>
                                                                                                         <span>
-                                                                                                            <button id="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otNumber %>"
+                                                                                                            <button id="<%= arrVisibleOci[k].otProject[x].otNumber %>"
                                                                                                                 name="otNumberSpot"
                                                                                                                 class="rounded-circle text-white mb-2"
                                                                                                                 style="--bs-btn-font-size: .20rem;
@@ -186,19 +187,19 @@
                                                                                                                 text-align: center;
                                                                                                                 font-size: 10px;
                                                                                                                 line-height: 25px;"
-                                                                                                                valueop="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].opNumber %>"
-                                                                                                                valuedes="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].opDescription %>"
-                                                                                                                valuedesig="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otDesign %>"
-                                                                                                                valuesim="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otSimulation %>"
-                                                                                                                valuesup="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otSupplier %>">
+                                                                                                                valueop="<%= arrVisibleOci[k].otProject[x].opNumber %>"
+                                                                                                                valuedes="<%= arrVisibleOci[k].otProject[x].opDescription %>"
+                                                                                                                valuedesig="<%= arrVisibleOci[k].otProject[x].otDesign %>"
+                                                                                                                valuesim="<%= arrVisibleOci[k].otProject[x].otSimulation %>"
+                                                                                                                valuesup="<%= arrVisibleOci[k].otProject[x].otSupplier %>">
                                                                                                                     
-                                                                                                                <%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otNumber %>
+                                                                                                                <%= arrVisibleOci[k].otProject[x].otNumber %>
                                                                                                             </button>
                                                                                                         </span>
                                                                                                         
                                                                                                     <% } else { %>
                                                                                                         <span>
-                                                                                                            <button id="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otNumber %>"
+                                                                                                            <button id="<%= arrVisibleOci[k].otProject[x].otNumber %>"
                                                                                                                 name="otNumberSpot"
                                                                                                                 class="rounded-circle text-white mb-2"
                                                                                                                 style="--bs-btn-font-size: .20rem;
@@ -210,12 +211,12 @@
                                                                                                                 text-align: center;
                                                                                                                 font-size: 10px;
                                                                                                                 line-height: 22px;"
-                                                                                                                valueop="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].opNumber %>"
-                                                                                                                valuedes="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].opDescription %>"
-                                                                                                                valuedesig="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otDesign %>"
-                                                                                                                valuesim="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otSimulation %>"
-                                                                                                                valuesup="<%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otSupplier %>">
-                                                                                                                <%= arrVisibleProjects[m].project[j].oci[k].otProject[x].otNumber %>
+                                                                                                                valueop="<%= arrVisibleOci[k].otProject[x].opNumber %>"
+                                                                                                                valuedes="<%= arrVisibleOci[k].otProject[x].opDescription %>"
+                                                                                                                valuedesig="<%= arrVisibleOci[k].otProject[x].otDesign %>"
+                                                                                                                valuesim="<%= arrVisibleOci[k].otProject[x].otSimulation %>"
+                                                                                                                valuesup="<%= arrVisibleOci[k].otProject[x].otSupplier %>">
+                                                                                                                <%= arrVisibleOci[k].otProject[x].otNumber %>
                                                                                                             </button>
                                                                                                         </span>
                                                                                                     <% }

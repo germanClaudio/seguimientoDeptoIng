@@ -528,6 +528,7 @@ html body .display-7 {
 }
 .chat-module {
     height: calc(25vh - 105px);
+    background-color: #6c757d;
 }
 
 .dashboard-main-wrapper .content-container>.chat-module {
@@ -670,7 +671,8 @@ html body .display-7 {
     position: relative;
     padding-top: 1rem;
     border-top: 1px solid #E9EEF2;
-    background: #efeff6;
+    background-color: #dbdbdb;
+    /* background: #efeff6; */
 
 }
 

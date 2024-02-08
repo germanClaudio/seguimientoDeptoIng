@@ -8,14 +8,14 @@
         </li>
         <li class="list-group-item list-group-item-secondary my-1">
             OCI#: <strong class="mx-2">
-                <%= proyecto[m].project[j].oci[k].ociNumber %>
+                <%= arrayVisibleOci[k].ociNumber %>
             </strong>
         </li>
         <li class="list-group-item list-group-item-secondary my-1">
-            Descripcion: <%= proyecto[m].project[j].oci[k].ociDescription %>
+            Descripcion: <%= arrayVisibleOci[k].ociDescription %>
         </li>
         <li class="list-group-item list-group-item-secondary my-1">
-            <% if (proyecto[m].project[j].oci[k].ociStatus) {
+            <% if (arrayVisibleOci[k].ociStatus) {
                 const ociStatus="Activa" %>
                 Status OCI:
                     <span class="badge rounded-pill bg-primary text-white mx-1">

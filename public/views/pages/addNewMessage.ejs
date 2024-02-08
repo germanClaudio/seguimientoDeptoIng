@@ -10,9 +10,18 @@
 
         <%- include('../partials/userBanner'); %>
     <br>
-    <div class="d-block mx-auto my-1 w-50 text-center alert alert-secondary h6" role="alert">
-        <%= userInfo.name %>, chatea con otros usuarios de la plataforma
-    </div>
+    <!-- ------------ Mensaje ------------ -->
+    <section class="mx-auto align-items-start" style="width: 94%;">
+        <div class="row">
+            <div class="col-12 mt-3 mb-1">
+                <hr>
+                <h4 class="text-uppercase"><strong><%= userInfo.name %></strong>, chatea con otros usuarios de la plataforma</h4>
+                <p>Departamento de Ingeniería Prodismo</p>
+                <hr>
+            </div>
+        </div>
+    </section>
+
     <div class="d-block mx-auto my-3 text-center">
         <a class="btn btn-primary my-2" href="/api/auth/index"><i class="icon-home" aria-hidden="true"></i> Volver al Home</a>
         <% if( userInfo.admin ){ %>

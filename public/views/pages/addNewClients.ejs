@@ -23,7 +23,18 @@
                 <a class="btn btn-secondary my-2 ms-5" href="/api/auth/index"><i class="fa-solid fa-home"
                         aria-hidden="true"></i> Regresar al Home </a>
             </div>
-            <h2 class="d-block mx-auto my-3 text-center">Lista de Clientes</h2>
+            <!-- ------------ Lista de Clientes ------------ -->
+            <section class="mx-auto align-items-start" style="width: 94%;">
+                <div class="row">
+                    <div class="col-12 mt-3 mb-1">
+                        <hr>
+                        <h4 class="text-uppercase">Lista de Clientes</h4>
+                        <p>Departamento de Ingeniería Prodismo</p>
+                        <hr>
+                    </div>
+                </div>
+            </section>
+
             <div class="d-block mx-auto px-5 mb-3 text-center w-100">
                 <%- include('../partials/dataClientTable'); %>
                     <br>
@@ -33,13 +44,14 @@
                         <a class="btn btn-secondary my-2 mx-auto" href="#"> Ir arriba <i class="fa-solid fa-arrow-up"></i></a>
                     </div>
                     <br>
+            </div>
                     <footer>
                         <%- include('../partials/footer'); %>
                     </footer>
-                    <!--    scripts     -->
-                    <script type="text/javascript" src="../../../clientes.js"></script>
-                    <script type="text/javascript" src="../../../clock.js"></script>
-                    <script type="text/javascript" src="../../../expiresSession.js"></script>
+    <!--    scripts     -->
+    <script type="text/javascript" src="../../../clientes.js"></script>
+    <script type="text/javascript" src="../../../clock.js"></script>
+    <script type="text/javascript" src="../../../expiresSession.js"></script>
 
 </body>
 
