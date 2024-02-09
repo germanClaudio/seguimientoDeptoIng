@@ -356,7 +356,7 @@ class UsersController {
         let expires = new Date(time)
         
         if (sessionStarted) {
-            req.session.cookie.expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+            req.session.cookie.expires = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) // new: 24hs -- old: una semana
             expires = req.session.cookie.expires
         }
 

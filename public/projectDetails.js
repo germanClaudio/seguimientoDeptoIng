@@ -48,7 +48,7 @@ btnAddNewRow.addEventListener('click', () => {
         numberId1 >= 0 && numberId2 ? numberIdLastChild = numberId2 : numberIdLastChild = numberId1;
 
         i = numberIdLastChild + 1
-        console.log('i line 50: ', i)
+        // console.log('i line 50: ', i)
     }
     
     const ociNumberValue = parseInt(document.getElementById('ociNumber').value)

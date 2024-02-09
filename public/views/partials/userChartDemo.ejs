@@ -8,7 +8,8 @@
           <hr>
         </div>
       </div>
-      <div class="row">
+
+      <div class="row justify-content-evenly">
         <!-- clientes -->
         <div class="col-xl-3 col-sm-6 col-12">
           <a href="/api/clientes" style="text-decoration: none;">
@@ -64,26 +65,7 @@
             </div>
           </a>
         </div>
-        <!-- usuarios -->
-        <div class="col-xl-3 col-sm-6 col-12">
-          <a href="/api/usuarios" style="text-decoration: none;">
-            <div class="card rounded-3 card_dashboard">
-              <div class="card-content">
-                <div class="card-body">
-                  <div class="media d-flex mx-2">
-                    <div class="media-body text-left">
-                      <h3 class="font-medium"><%= parseInt(usuarios.length) %></h3>
-                      <span>Usuarios</span>
-                    </div>
-                    <div class="align-self-center ms-auto">
-                      <i class="icon-users success font-large-2 float-right"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
+        
         <!-- mensajes -->
         <div class="col-xl-3 col-sm-6 col-12">
           <a href="/api/webchat/" style="text-decoration: none;">
@@ -112,7 +94,8 @@
         </div>
       </div>
     
-      <div class="row">
+      <div class="row justify-content-evenly">
+        <!-- clientes con proyectos activos -->
         <div class="col-xl-3 col-sm-6 col-12">
           <div class="card rounded-3 card_dashboard">
             <div class="card-content">
@@ -183,7 +166,7 @@
                 <div class="media d-flex mx-2">
                   <div class="media-body text-left">
                     <h3 class="warning">??.? %</h3>
-                    <span>Conversion Rate</span>
+                    <span>Graficos</span>
                   </div>
                   <div class="align-self-center ms-auto">
                     <i class="icon-pie-chart warning font-large-2 float-right"></i>
@@ -193,27 +176,10 @@
             </div>
           </div>
         </div>
-
-        <div class="col-xl-3 col-sm-6 col-12">
-          <div class="card rounded-3 card_dashboard">
-            <div class="card-content">
-              <div class="card-body">
-                <div class="media d-flex ms-2">
-                  <div class="media-body text-left">
-                    <h3 class="primary"><%= parseInt(sessions) %></h3>
-                    <span>Sesiones activas</span>
-                  </div>
-                  <div class="align-self-center ms-auto">
-                    <i class="icon-key primary font-large-2 float-right"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     
-      <div class="row">
+      <div class="row justify-content-evenly">
+        <!-- Tasa conversion -->
         <div class="col-xl-3 col-sm-6 col-12">
           <div class="card rounded-3 card_dashboard">
             <div class="card-content">
@@ -299,27 +265,7 @@
             </div>
           </div>
         </div>
-    
-        <div class="col-xl-3 col-sm-6 col-12">
-          <div class="card rounded-3 card_dashboard">
-            <div class="card-content">
-              <div class="card-body">
-                <div class="media d-flex mx-2">
-                  <div class="media-body text-left">
-                    <h3 class="success">64.89 %</h3>
-                    <span>Bounce Rate</span>
-                  </div>
-                  <div class="align-self-center ms-auto">
-                    <i class="icon-cup success font-large-2 float-right"></i>
-                  </div>
-                </div>
-                <div class="progress mt-1 mb-0" style="height: 7px;">
-                  <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- total visitas -->
         <div class="col-xl-3 col-sm-6 col-12">
           <div class="card rounded-3 card_dashboard">
             <div class="card-content">

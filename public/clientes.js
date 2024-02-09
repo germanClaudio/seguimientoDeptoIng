@@ -105,25 +105,25 @@ const renderClientAdmin = (arrClient) => {
         }
         
         if(element.visible) {
-        return (`<tr>
-                    <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
-                    <td class="text-center" id="name_${element._id}">${element.name}</td>
-                    <td class="text-center"><a href="/api/clientes/select/${element._id}"><img id="logo_${element._id}" class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
-                    <td class="text-center">${element.code}</td>
-                    <td class="text-center"><span class="badge rounded-pill bg-${colorStatus}">${text}</span></td>
-                    <td class="text-center"><span id="projectQty_${element._id}" class="badge rounded-pill bg-${colorResult}">${result}</span></td>
-                    <td class="text-center">${loopUserId()}</td>
-                    <td class="text-center">${element.timestamp}</td>
-                    <td class="text-center">${loopModifId()}</td>
-                    <td class="text-center">${element.modifiedOn}</td>
-                    <td class="text-center">
-                        <div class="d-block align-items-center">
-                            <a href="/api/clientes/select/${element._id}" class="btn btn-secondary btn-sm me-1" data-toggle="tooltip" data-placement="top" title="Editar cliente ${element.name}"><i class="fa-regular fa-pen-to-square"></i></a>
-                            <a href="/api/clientes/${element._id}" class="btn btn-primary btn-sm mx-1" title="Ver proyectos cliente ${element.name}"><i class="fa-solid fa-diagram-project"></i></a>
-                            <button id="${element._id}" name="btnDeleteClient" type="button" class="btn btn-danger btn-sm ms-1" title="Eliminar Cliente ${element.name}"><i class="fa-regular fa-trash-can"></i></button>
-                        </div>
-                    </td>
-                </tr>`)
+            return (`<tr>
+                        <th scope="row" class="text-center"><strong>...${idChain}</strong></th>
+                        <td class="text-center" id="name_${element._id}">${element.name}</td>
+                        <td class="text-center"><a href="/api/clientes/select/${element._id}"><img id="logo_${element._id}" class="img-fluid rounded m-2" alt="Logo Cliente" src='${element.logo}' width="100px" height="80px"></a></td>
+                        <td class="text-center">${element.code}</td>
+                        <td class="text-center"><span class="badge rounded-pill bg-${colorStatus}">${text}</span></td>
+                        <td class="text-center"><span id="projectQty_${element._id}" class="badge rounded-pill bg-${colorResult}">${result}</span></td>
+                        <td class="text-center">${loopUserId()}</td>
+                        <td class="text-center">${element.timestamp}</td>
+                        <td class="text-center">${loopModifId()}</td>
+                        <td class="text-center">${element.modifiedOn}</td>
+                        <td class="text-center">
+                            <div class="d-block align-items-center">
+                                <a href="/api/clientes/select/${element._id}" class="btn btn-secondary btn-sm me-1" data-toggle="tooltip" data-placement="top" title="Editar cliente ${element.name}"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <a href="/api/clientes/${element._id}" class="btn btn-primary btn-sm mx-1" title="Ver proyectos cliente ${element.name}"><i class="fa-solid fa-diagram-project"></i></a>
+                                <button id="${element._id}" name="btnDeleteClient" type="button" class="btn btn-danger btn-sm ms-1" title="Eliminar Cliente ${element.name}"><i class="fa-regular fa-trash-can"></i></button>
+                            </div>
+                        </td>
+                    </tr>`)
         }
     }).join(" ");
 
@@ -291,8 +291,8 @@ const renderClientUser = (arrClient) => {
                         <td class="text-center">${element.modifiedOn}</td>
                         <td class="text-center">
                             <div class="d-block align-items-center">
-                                <a href="/api/clientes/select/${element._id}" class="btn btn-secondary btn-sm me-1" data-toggle="tooltip" data-placement="top" title="Editar cliente ${element.name}"><i class="fa-regular fa-pen-to-square"></i></a>
-                                <a href="/api/clientes/${element._id}" class="btn btn-primary btn-sm mx-1" title="Ver proyectos cliente ${element.name}"><i class="fa-solid fa-diagram-project"></i></a>
+                                <a href="/api/clientes/select/${element._id}" class="btn btn-secondary btn-sm me-1" data-toggle="tooltip" data-placement="top" title="Ver cliente ${element.name}"><i class="fa-regular fa-eye"></i></a>
+                                <a href="/api/clientes/${element._id}" class="btn btn-primary btn-sm mx-1" title="Ver proyectos cliente ${element.name}"><i class="icon-rocket"></i></a>
                                 <button id="${element._id}" name="btnDeleteClient" type="button" class="btn btn-danger btn-sm ms-1" title="Solo Admin puede modificar esto"><i class="fa-solid fa-info-circle"></i></button>
                             </div>
                         </td>
@@ -342,7 +342,7 @@ dropAreaLogoClient.addEventListener('dragover', (e) => {
 dropAreaLogoClient.addEventListener('dragleave', (e) => {
     e.preventDefault()
     dropAreaLogoClient.style.border = '2px dashed #ccc'
-    dropAreaLogoClient.style.backgroundColor = '#666666'
+    dropAreaLogoClient.style.backgroundColor = '#9c9c9c'
     removeImageButtonLogoClient.style.display = 'none'
 })
 
@@ -351,7 +351,7 @@ function alertNotImageLogoClient() {
     removeImageButtonLogoClient.style.display = 'none'
     dropAreaLogoClient.style.border = "2px dashed #ccc"
     dropAreaLogoClient.style.textAlign = "center"
-    dropAreaLogoClient.style.backgroundColor = '#666666'
+    dropAreaLogoClient.style.backgroundColor = '#9c9c9c'
     dropAreaLogoClient.style.display = 'block'
     dropAreaLogoClient.innerHTML = 'Arrastra y suelta una imagen aquí'
 }
@@ -412,7 +412,7 @@ removeImageButtonLogoClient.addEventListener('click', ()=> {
     fileImputTextLogoClient.value = ''
     dropAreaLogoClient.style.border = "2px dashed #ccc"
     dropAreaLogoClient.style.textAlign = "center"
-    dropAreaLogoClient.style.backgroundColor = '#666666'
+    dropAreaLogoClient.style.backgroundColor = '#9c9c9c'
     dropAreaLogoClient.style.display = 'block'
     dropAreaLogoClient.innerHTML = 'Arrastra y suelta una imagen aquí'
     removeImageButtonLogoClient.style.display = 'none'

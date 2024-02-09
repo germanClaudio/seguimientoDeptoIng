@@ -1,11 +1,12 @@
 <header>
     <nav class="navbar fixed-top navbar-dark bg-dark text-white">
-        <div class="container-fluid px-2 my-1">
+        <div class="container-fluid px-2 my-2">
             <a class="navbar-brand mx-2" role="button" href="#offcanvasExample" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasWithBothOptions"
                 aria-controls="offcanvasWithBothOptions">
                 <img src='../../../src/images/logo01-bco.png' width="168" height="30"
-                    class="d-inline-block align-text-top"></a>
+                    class="d-inline-block align-text-top">
+            </a>
             <div class="me-auto d-block" id="navbarTogglerDemo02">
                 <ul class="navbar-nav my-auto list-group list-group-horizontal">
                     <li class="nav-item mx-4 active">
@@ -25,11 +26,6 @@
                         </a>
                     </li>
                     <li class="nav-item mx-4">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-cog fa-spin fa-fw" aria-hidden="true"></i>
-                            OCI's
-                        </a>
-                    </li>
-                    <li class="nav-item mx-4">
                         <a class="nav-link" href="/api/webchat"><i class="fa-solid fa-comments" aria-hidden="true"></i>
                             WebChat
                         </a>
@@ -37,18 +33,52 @@
                 </ul>
             </div>
             <div class="d-flex text-center">
-                <div id="expires" style="display: none;">
-                    <%= expires %>
-                </div>
-                <div class="container text-center m-auto">
-                    <div class="my-auto mx-4 small" id="countdown"></div>
-                    <div class="my-auto me-4 small" id="clock"></div>
+                <div id="expires" style="display: none;"><%= expires %></div>
+
+                <div class="vr mx-2" style="color: white;"></div>
+
+                <div class="container text-center m-auto" style="width: 12vw;">
+                    <div class="mx-auto small" id="countdown"></div>
+                    <div class="mx-auto small" id="clock"></div>
                 </div>
 
-                <button id="logoutBanner" class="btn btn-light me-5 my-auto" style="width: 155px;" type="button">
+                <div class="vr mx-2" style="color: white;"></div>
+
+                <div class="container text-center m-auto" style="width: 12vw;">
+                    <% if (userInfo.admin) { %>
+                        <div class="mx-auto small">
+                            <span class="badge rounded-pill bg-primary">Admin</span>
+                        </div>
+                        <div class="mx-auto small" id="mostrarUserName">
+                            <%= userInfo.name %>, <%= userInfo.lastName %>
+                        </div>
+                        <div class="d-none" id="userBanner_<%= userInfo._id %>"><%= userInfo._id %></div>
+                    <% } else { %>
+                        <div class="mx-auto small">
+                            <span class="badge rounded-pill bg-info text-dark">User</span>
+                        </div>
+                        <div class="mx-auto small" id="mostrarUserName">
+                            <%= userInfo.name %>, <%= userInfo.lastName %>
+                        </div>
+                        <div class="d-none" id="<%= userInfo._id %>"></div>
+                    <% } %>
+                </div>
+                <button type="button" class="btn btn-link rounded-circle  my-auto mx-2" name="btnSetting" id="btnSetting">
+                    <i class="fa-regular fa-star"></i>
+                </button>
+                <button type="button" class="btn btn-link rounded-circle  my-auto mx-2" name="btnSetting" id="btnSetting">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <img id="avatarUser" class="img rounded-circle me-3" alt="Avatar <%= userInfo.name %> <%= userInfo.lastName %>"
+                    src="<%= userInfo.avatar %>" width="55px" height="55px">
+
+                <div class="vr mx-2" style="color: white;"></div>
+
+                <button id="logoutBanner" class="btn btn-light me-2 my-auto" style="width: 6.25rem;" type="button">
                     <i class="fa-solid fa-sign-out"></i>
                     LogOut
                 </button>
+
             </div>
         </div>
     </nav>

@@ -8,21 +8,21 @@
 <body>
     <%- include('../partials/header'); %>
 
-    <%- include('../partials/userBanner'); %>
+    <div class="container" style="padding-top: 70px;"></div>
     <br>
-    <div class="d-block mx-auto my-2 text-center">
-        <a class="btn btn-primary my-1 mx-5" href="/api/auth/index"><i class="fa-solid fa-home" aria-hidden="true"></i> Regresar al Home </a>
-            <% if( userInfo.admin ){ %>
-                <a class="btn btn-danger my-1 mx-5" href="/api/clientes/all/delete"><i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar Todos </a>
-            <% } %>
-        </div>
+    <div class="d-block mx-auto my-4 text-center">
+        <a class="btn btn-primary my-1 mx-5" href="/api/auth/index">
+            <i class="fa-solid fa-home" aria-hidden="true"></i>
+             Regresar al Home
+        </a>        
+    </div>
    
     <!-- ------------ Datos de Proyectos ------------ -->
     <section class="mx-auto align-items-start" style="width: 94%;">
         <div class="row">
             <div class="col-12 mt-3 mb-1">
                 <hr>
-                <h4 class="text-uppercase">Datos de Poryectos</h4>
+                <h4 class="text-uppercase">Datos de Proyectos</h4>
                 <p>Departamento de Ingeniería Prodismo</p>
                 <hr>
             </div>
@@ -34,10 +34,14 @@
         <%- include('../partials/dataProjectsTable'); %>
     </div>
     <div class="d-block mx-auto my-4 pb-5 text-center">
-        <a class="btn btn-primary my-1 mx-5" href="/api/auth/index"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Regresar al Home </a>
-        <% if( userInfo.admin ){ %>
-            <a class="btn btn-danger my-1 mx-5" href="/api/clientes/all/delete"><i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar Todos </a>
-        <% } %>
+        <a class="btn btn-primary my-1 me-5" href="/api/auth/index">
+            <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>
+             Regresar al Home
+        </a>
+        <a class="btn btn-secondary my-2 ms-5" href="#">
+            <i class="fa-solid fa-arrow-up"></i>
+             Ir arriba
+        </a>
     </div>
     <footer>
         <%- include('../partials/footer'); %>
