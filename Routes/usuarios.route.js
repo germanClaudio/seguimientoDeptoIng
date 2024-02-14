@@ -28,9 +28,9 @@ routerUsers.get('/delete/:id', checkAuthentication, authUserMiddleware, users.de
 routerUsers.get('/searchUsers/:all', checkAuthentication, authUserMiddleware, users.searchUsers)
 
 //---------------- Not authorizate session --------------
-routerUsers.get("/auth-bloq", users.authBloq)
+routerUsers.get("/auth-bloq", checkAuthentication, users.authBloq)
 
 //---------------- Authorizate session --------------
-routerUsers.get("/auth-nobloq", users.authNoBloq)
+routerUsers.get("/auth-nobloq", checkAuthentication, users.authNoBloq)
 
 module.exports = routerUsers

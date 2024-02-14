@@ -355,13 +355,15 @@ class UsersController {
         const time = cookie.expires
         let expires = new Date(time)
         
-        if (sessionStarted) {
-            req.session.cookie.expires = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) // new: 24hs -- old: una semana
-            expires = req.session.cookie.expires
-        }
+        try {
+       
+            if (sessionStarted) {
+                req.session.cookie.expires = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) // new: 24hs -- old: una semana
+                expires = req.session.cookie.expires
+            }
 
-        let boolean = false
-        
+            let boolean = false
+            
             const user = await this.users.getUserByUsername(username)
 
             function isValidPassword(user, password) {
@@ -374,64 +376,70 @@ class UsersController {
             }
 
             boolean = isValidPassword(user, password)
-            
-            if (boolean) {
-                const usuario = await this.users.getUserByUsernameAndPassword(username, user.password)
-                const userInfo = await this.users.getUserByUsername(username)
-
-                const clientes = await this.clients.getAllClients()
-                const usuarios = await this.users.getAllUsers()
-                const proyectos = await this.projects.getAllProjects()
-                const mensajes = await this.messages.getAllMessages()
-                const sessionLogin = await this.users.getAllSessions()
                 
-                const sessions = parseInt(sessionLogin.length+1)
+                if (boolean) {
+                    const usuario = await this.users.getUserByUsernameAndPassword(username, user.password)
+                    const userInfo = await this.users.getUserByUsername(username)
 
-                if (!usuario) {
-                    return res.render('login', {
-                        flag: false,
-                        fail: false
-                    }) 
-                }
-                else if (usuario && userInfo.status ) {
-                    const access_token = generateToken(usuario)
-                                       
-                    req.session.admin = true
-                    req.session.username = userInfo.username
+                    const clientes = await this.clients.getAllClients()
+                    const usuarios = await this.users.getAllUsers()
+                    const proyectos = await this.projects.getAllProjects()
+                    const mensajes = await this.messages.getAllMessages()
+                    const sessionLogin = await this.users.getAllSessions()
                     
+                    const sessions = parseInt(sessionLogin.length+1)
+
+                        if (!usuario) {
+                            return res.render('login', {
+                                flag: false,
+                                fail: false
+                            }) 
+                        }
+                        else if (usuario && userInfo.status ) {
+                            const access_token = generateToken(usuario)
+                            
+                            req.session.admin = userInfo.admin //true
+                            req.session.username = userInfo.username
+                            
+                            setTimeout(() => {
+                                return res.render('index', {
+                                    userInfo,
+                                    username,
+                                    visits,
+                                    expires,
+                                    clientes,
+                                    usuarios,
+                                    proyectos,
+                                    mensajes,
+                                    sessions
+                                })
+                            }, 600)
+                        }
+                        else {
+                            setTimeout(() => {
+                                return res.render('notAuthorizated', {
+                                    userInfo,
+                                    username,
+                                    visits,
+                                    expires
+                                })
+                            }, 400)
+                        }
+                
+                } else {
+                    const flag = true
+                    const fail = true
                     setTimeout(() => {
-                        return res.render('index', {
-                            userInfo,
-                            username,
-                            visits,
-                            expires,
-                            clientes,
-                            usuarios,
-                            proyectos,
-                            mensajes,
-                            sessions
+                        return res.render('login', {
+                            flag,
+                            fail
                         })
-                    }, 800)
+                    }, 600)
                 }
-                else {
-                    return res.render('notAuthorizated', {
-                        userInfo,
-                        username,
-                        visits,
-                        expires
-                    })
-                }
-            
-            } else {
-                const flag = true
-                const fail = true
-                setTimeout(() => {
-                    return res.render('login', {
-                        flag,
-                        fail
-                    })
-                }, 800)
-            }
+
+        } catch {
+            res.status(500).send(error)
+        }
     }
 
     registerNewUser = async (req, res) => { 
@@ -579,10 +587,13 @@ class UsersController {
                     flag,
                     fail
                 })
+
             } else if ( user.status ) {
                 const access_token = generateToken(user)
                 const fail = false
-                req.session.admin = true
+                
+                req.session.admin = user.admin
+                //req.session.admin = true
                 req.session.username = userInfo.username
                 
                 return res.render('index', {

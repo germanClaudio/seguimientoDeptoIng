@@ -9,55 +9,55 @@ const getProjects = GetProjects.ProjectsController
 const projects = new getProjects()
 
 // -------------------  Seleccionar todos los Proyectos ------------------
-routerProyectos.get('/', checkAuthentication, authUserMiddleware, projects.getAllProjects)
+routerProyectos.get('/', checkAuthentication, projects.getAllProjects)
 
 // -------------------  Seleccionar Proyecto por Cliente Id ------------------ 
-routerProyectos.get('/:id', checkAuthentication, authProductMiddleware, projects.getProjectsByClientId)
+routerProyectos.get('/:id', checkAuthentication, projects.getProjectsByClientId)
 
 // -------------------  Ver detalles del Proyecto por Id del proyecto ------------------ 
-routerProyectos.get('/selectProject/:id', checkAuthentication, authProductMiddleware, projects.selectProjectById)
+routerProyectos.get('/selectProject/:id', checkAuthentication, projects.selectProjectById)
 
 // -------------------  Ver proyectos del Cliente ------------------ 
 // routerProyectos.get('/projects/:id', checkAuthentication, authProductMiddleware, projects.getClientProjectsById)
 
 // -------------------  Crear Nuevo Proyecto ------------------------ 
-routerProyectos.post('/', checkAuthentication, authProductMiddleware, projects.createNewProject)
+routerProyectos.post('/', checkAuthentication, authUserMiddleware, projects.createNewProject)
 
 // -------------------  Agregar informacion R14 a OT --------------------------- 
-routerProyectos.post('/otInfoR14', checkAuthentication, authProductMiddleware, projects.addInfoR14ToOtProject)
+routerProyectos.post('/otInfoR14', checkAuthentication, projects.addInfoR14ToOtProject)
 
 // -------------------  Agregar OT a OCI ---------------- 
-routerProyectos.post('/oci', checkAuthentication, authProductMiddleware, projects.addOtToOciProject)
+routerProyectos.post('/oci', checkAuthentication, projects.addOtToOciProject)
 
 // -------------------  Actualizar Estado del Proyecto por Id ------------------ 
-routerProyectos.post('/updateStatusProject/:id', checkAuthentication, authProductMiddleware, projects.updateStatusProject)
+routerProyectos.post('/updateStatusProject/:id', checkAuthentication, authUserMiddleware, projects.updateStatusProject)
 
 // -------------------  Actualizar Nivel del Proyecto por Id ------------------ 
-routerProyectos.post('/updateLevelProject/:id', checkAuthentication, authProductMiddleware, projects.updateLevelProject)
+routerProyectos.post('/updateLevelProject/:id', checkAuthentication, authUserMiddleware, projects.updateLevelProject)
 
 // -------------------  Actualizar Estado de OCI por Id Proyecto ------------------ 
-routerProyectos.post('/updateStatusOci/:id', checkAuthentication, authProductMiddleware, projects.updateStatusOci)
+routerProyectos.post('/updateStatusOci/:id', checkAuthentication, authUserMiddleware, projects.updateStatusOci)
 
 // -------------------  Actualizar Estado de OT por Id Proyecto ------------------ 
-routerProyectos.post('/updateStatusOt/:id', checkAuthentication, authProductMiddleware, projects.updateStatusOt)
+routerProyectos.post('/updateStatusOt/:id', checkAuthentication, projects.updateStatusOt)
 
 // -------------------  Agregar Nueva OCI a Proyecto por Id Proyecto ------------------ 
-routerProyectos.post('/addNewOciToProject/:id', checkAuthentication, authProductMiddleware, projects.addNewOciToProject)
+routerProyectos.post('/addNewOciToProject/:id', checkAuthentication, authUserMiddleware, projects.addNewOciToProject)
 
 // -------------------  Actualizar Proyecto por Id ------------------ 
-routerProyectos.post('/updateProject/:id', checkAuthentication, authProductMiddleware, projects.updateProject)
+routerProyectos.post('/updateProject/:id', checkAuthentication, authUserMiddleware, projects.updateProject)
 
 // -------------------  Actualizar OCI por Id de Proyecto ------------------ 
-routerProyectos.post('/updateOci/:id', checkAuthentication, authProductMiddleware, projects.updateOci)
+routerProyectos.post('/updateOci/:id', checkAuthentication, projects.updateOci)
 
 // -------------------  Eliminar OCI por Id de Proyecto ------------------ 
-routerProyectos.post('/deleteOci/:id', checkAuthentication, authProductMiddleware, projects.deleteOci)
+routerProyectos.post('/deleteOci/:id', checkAuthentication, authUserMiddleware, projects.deleteOci)
 
 // -------------------  Eliminar OT por Id de Proyecto ------------------ 
-routerProyectos.post('/deleteOt/:id', checkAuthentication, authProductMiddleware, projects.deleteOt)
+routerProyectos.post('/deleteOt/:id', checkAuthentication, authUserMiddleware, projects.deleteOt)
 
 // -------------------  Eliminar Proyecto por Id (Visible = false) ------------------ 
-routerProyectos.post('/deleteProject/:id', checkAuthentication, authProductMiddleware, projects.deleteProjectById)
+routerProyectos.post('/deleteProject/:id', checkAuthentication, authUserMiddleware, projects.deleteProjectById)
 
 // -------------------  Eliminar todos los Proyectos (Status = Inactivo) ------------------ 
 // routerProyectos.get('/all/delete', checkAuthentication, authProductMiddleware, projects.deleteAllClients)

@@ -9,30 +9,30 @@ const getClients = GetClients.ClientsController
 const clients = new getClients()
 
 // -------------------  Seleccionar todos los Clientes ------------------
-routerClientes.get('/', checkAuthentication, authUserMiddleware, clients.getAllClients)
+routerClientes.get('/', checkAuthentication, clients.getAllClients)
 
 // -------------------  Seleccionar Cliente por Id ------------------ 
-routerClientes.get('/:id', checkAuthentication, authProductMiddleware, clients.getClientById)
+routerClientes.get('/:id', checkAuthentication, clients.getClientById)
 
 // -------------------  Ver detalles del Cliente por Id ------------------ 
-routerClientes.get('/select/:id', checkAuthentication, authProductMiddleware, clients.selectClientById)
+routerClientes.get('/select/:id', checkAuthentication, clients.selectClientById)
 
 // -------------------  Ver proyectos del Cliente ------------------ 
-routerClientes.get('/projects/:id', checkAuthentication, authProductMiddleware, clients.getClientProjectsById)
+routerClientes.get('/projects/:id', checkAuthentication, clients.getClientProjectsById)
 
 // -------------------  Crear Nuevo Cliente ------------------------ 
-routerClientes.post('/', checkAuthentication, authProductMiddleware, clients.createNewClient)
+routerClientes.post('/', checkAuthentication, authUserMiddleware, clients.createNewClient)
 
 // -------------------  Actualizar Cliente por Id ------------------ 
-routerClientes.post('/update/:id', checkAuthentication, authProductMiddleware, clients.updateClient)
+routerClientes.post('/update/:id', checkAuthentication, authUserMiddleware, clients.updateClient)
 
 // -------------------  Eliminar Cliente por Id (Status = Inactivo) ------------------ 
-routerClientes.get('/delete/:id', checkAuthentication, authProductMiddleware, clients.deleteClientById)
+routerClientes.get('/delete/:id', checkAuthentication, authUserMiddleware, clients.deleteClientById)
 
 // -------------------  Buscar cliente ------------------------------------ 
 // routerClientes.get('/buscar/cliente', checkAuthentication, authProductMiddleware, clients.getClientBySearching)
 
 // -------------------  Eliminar todos los Clientes (Status = Inactivo) ------------------ 
-routerClientes.get('/all/delete', checkAuthentication, authProductMiddleware, clients.deleteAllClients)
+routerClientes.get('/all/delete', checkAuthentication, authUserMiddleware, clients.deleteAllClients)
 
 module.exports = routerClientes

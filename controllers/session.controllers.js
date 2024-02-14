@@ -23,10 +23,11 @@ const sessionPostLogin = (req, res, next) => {
     if (!username || !password) {
         return res.send('Login FAILED')
     }
+
     res.locals.username = username
     res.locals.admin = true
         
-    next()
+    next();
 }
 
 module.exports = { 

@@ -9,13 +9,13 @@ const getMessages = GetMessages.MessagesController
 const messages = new getMessages()
 
 // -------------------  Seleccionar todos los Mensajes ------------------
-routerMensajes.get('/', checkAuthentication, authUserMiddleware, messages.getAllMessages)
+routerMensajes.get('/', checkAuthentication, messages.getAllMessages)
 
 // -------------------  Seleccionar Mensaje por Id ------------------ 
-routerMensajes.get('/:id', checkAuthentication, authUserMiddleware, messages.getMessageById)
+routerMensajes.get('/:id', checkAuthentication, messages.getMessageById)
 
 // -------------------  Crear Nuevo Mensaje ------------------------ 
-routerMensajes.post('/', checkAuthentication, authUserMiddleware, messages.createNewMessage)
+routerMensajes.post('/', checkAuthentication, messages.createNewMessage)
 
 // -------------------  Eliminar Mensaje por Id ------------------ 
 routerMensajes.get('/delete/:id', checkAuthentication, authUserMiddleware, messages.deleteMessageById)

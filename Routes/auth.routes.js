@@ -28,10 +28,10 @@ authRouter.get('/login', (req, res) => { // lleva la vista del formulario de log
 authRouter.post('/login', sessionPostLogin, countVisits, users.login)
 
 //----------------------------------------------------------------
-authRouter.get('/clientes', checkAuthentication, authUserMiddleware, users.clientes)
+authRouter.get('/clientes', checkAuthentication, users.clientes)
 
 
-authRouter.get('/index', checkAuthentication, authUserMiddleware, users.index)
+authRouter.get('/index', checkAuthentication, users.index)
 
 //_________________________________ github _______________________________ //
 authRouter.get('/github', passport.authenticate('github', {scope: ['user:email']}))
@@ -79,7 +79,7 @@ authRouter.get('/register', (req, res) => {   // devuelve la vista de registro
     res.render('register', { flag, fail })
 })
 
-authRouter.post('/register', users.registerNewUser)
+authRouter.post('/register', authUserMiddleware, users.registerNewUser)
 
 //____________________________ logout __________________________________ //
 authRouter.post('/logout', checkAuthentication, authUserMiddleware, users.userLogout)
