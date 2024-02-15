@@ -30,8 +30,6 @@ class UsersController {
         const time = cookie.expires
         const expires = new Date(time)
 
-        //const usuario = await this.users.getUserByUsername(username)
-
         try {
             if(usuarios.error) return res.status(400).json({msg: 'No hay usuarios cargados!'}) 
             res.render('addNewUser', {
@@ -398,7 +396,7 @@ class UsersController {
                         else if (usuario && userInfo.status ) {
                             const access_token = generateToken(usuario)
                             
-                            req.session.admin = userInfo.admin //true
+                            req.session.admin = userInfo.admin
                             req.session.username = userInfo.username
                             
                             setTimeout(() => {

@@ -25,7 +25,18 @@ authRouter.get('/login', (req, res) => { // lleva la vista del formulario de log
     res.render('login', { flag, fail })
 })
 
+
 authRouter.post('/login', sessionPostLogin, countVisits, users.login)
+
+//_____________________________ forgot password _______________________ //
+authRouter.get('/forgot-password', (req, res) => {
+    const flag = false
+    const fail = false
+    res.render('forgot-password', { flag, fail })
+})
+
+authRouter.post('/forgot-password', authUserMiddleware, users.login)
+
 
 //----------------------------------------------------------------
 authRouter.get('/clientes', checkAuthentication, users.clientes)

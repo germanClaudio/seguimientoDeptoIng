@@ -57,7 +57,8 @@ class ClientsController {
         const expires = new Date(time)
 
         try {
-            if (!proyectos) return res.status(404).json({ msg: 'getProjectsByClientId no encontrado' })
+            if (!proyectos) return res.render('404-page', {username, userInfo, expires, proyectos, cliente})
+            //res.status(404).json({ msg: 'getProjectsByClientId no encontrado' })
 
             res.render('clientProjectsDetails', {
                 username,
@@ -90,7 +91,8 @@ class ClientsController {
         const expires = new Date(time)
 
         try {
-            if (!cliente) return res.status(404).json({ msg: 'Cliente no encontrado' })
+            if (!cliente) return res.render('404-page', {username, userInfo, expires, proyectos, cliente})
+            // res.status(404).json({ msg: 'Cliente no encontrado' })
 
             res.render('clientProjectsDetails', {
                 cliente,
@@ -123,7 +125,9 @@ class ClientsController {
         const expires = new Date(time)
 
         try {
-            if (!cliente) return res.status(404).json({ msg: 'Cliente no encontrado' })
+            if (!cliente) return res.render('404-page', {username, userInfo, expires, proyectos, cliente})
+            // res.status(404).json({ msg: 'Cliente no encontrado' })
+            
             res.render('clientDetails', {
                 cliente,
                 username,
@@ -201,7 +205,8 @@ class ClientsController {
             try {
                 const cliente = await this.clients.addClient(newCliente)
 
-                if (!cliente) return res.status(404).json({ Msg: 'Cliente no guardado' })
+                if (!cliente) return res.render('404-page', {username, userInfo, expires, proyectos, cliente})
+                // res.status(404).json({ Msg: 'Cliente no guardado' })
                 res.render('addNewClients', {
                     cliente,
                     username,

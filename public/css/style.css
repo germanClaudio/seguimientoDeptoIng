@@ -510,6 +510,80 @@ html body .display-7 {
   margin-right: 3px;
 }
 
+/*-----------------------
+Container / Wrapper
+-------------------------*/
+
+.dashboard-main-wrapper {
+  min-height: 100%;
+  padding-top: 60px;
+  position: relative;
+}
+
+.dashboard-wrapper {
+  position: relative;
+  left: 0;
+  margin-left: 264px;
+  min-height: 870px !important;
+}
+
+.dashboard-content {
+  padding: 30px 30px 60px 30px;
+}
+
+/*-----------------------
+Splash Container / Wrapper
+-------------------------*/
+
+.splash-container {
+  width: 100%;
+  max-width: 385px;
+  padding: 15px;
+  margin: auto;
+  margin-top: 100px;
+}
+
+.splash-container .card-header {
+  padding: 20px;
+}
+
+.splash-description {
+  text-align: center;
+  display: block;
+  line-height: 20px;
+  font-size: 1.25rem;
+  margin-top: 15px;
+  padding-bottom: 20px;
+}
+
+.splash-title {
+  text-align: left;
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.splash-container .card-footer-item {
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+
+/*-----------------------
+6.9 404 error
+-------------------------*/
+
+.error-section {
+  padding: 74px 0px;
+}
+
+.error-section-content {
+  padding-top: 30px;
+  color: #3d405c;
+  padding-bottom: 30px;
+}
+
   /*-------------------
 7.4  Message Chat Module
 ----------------------*/
