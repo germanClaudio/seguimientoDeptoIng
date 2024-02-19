@@ -17,8 +17,8 @@ routerProyectos.get('/:id', checkAuthentication, projects.getProjectsByClientId)
 // -------------------  Ver detalles del Proyecto por Id del proyecto ------------------ 
 routerProyectos.get('/selectProject/:id', checkAuthentication, projects.selectProjectById)
 
-// -------------------  Ver proyectos del Cliente ------------------ 
-// routerProyectos.get('/projects/:id', checkAuthentication, authProductMiddleware, projects.getClientProjectsById)
+// -------------------  Ver listado de OCI completo ------------------ 
+// routerProyectos.get('/oci-list', checkAuthentication, projects.getAllOciList)
 
 // -------------------  Crear Nuevo Proyecto ------------------------ 
 routerProyectos.post('/', checkAuthentication, authUserMiddleware, projects.createNewProject)

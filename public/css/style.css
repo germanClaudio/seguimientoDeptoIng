@@ -382,6 +382,91 @@ html body .display-7 {
   background: #fcfcff;
 }
 
+.card-figure {
+  position: relative;
+  padding: 10px;
+  border-radius: 2px;
+}
+
+.card-figure .figure {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+.card-figure .figure-caption {
+  display: block;
+  margin-top: 10px;
+  font-size: .875rem;
+  color: inherit;
+}
+
+.figure-title {
+  margin: 0 0 .125rem;
+  text-transform: capitalize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-figure.has-hoverable {
+  -webkit-transition: -webkit-transform .2s, -webkit-box-shadow .2s;
+  transition: -webkit-transform .2s, -webkit-box-shadow .2s;
+  transition: transform .2s, box-shadow .2s;
+  transition: transform .2s, box-shadow .2s, -webkit-transform .2s, -webkit-box-shadow .2s;
+}
+
+.card-figure.has-hoverable:focus,
+.card-figure.has-hoverable:hover {
+  -webkit-transform: translate3d(0, -.25rem, 0);
+  transform: translate3d(0, -.25rem, 0);
+  -webkit-box-shadow: 0 5px 15px 0 rgba(61, 70, 79, .15);
+  box-shadow: 0 5px 15px 0 rgba(61, 70, 79, .15);
+}
+
+.figure-img {
+  position: relative;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.figure-img .img-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: hsla(0, 0%, 100%, .96);
+  opacity: 0;
+  z-index: 2;
+  -webkit-transition: opacity .2s ease;
+  transition: opacity .2s ease;
+}
+
+.card-figure:hover .img-link {
+  opacity: 1;
+}
+
+.figure-img .img-link .tile {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -1rem;
+  margin-left: -1rem;
+}
+
+.tile.bg-danger {
+  color: #fff;
+}
+
+.tile-circle {
+  border-radius: 4rem;
+}
 
 /*-----------------------
 2.13 Badge
@@ -516,8 +601,8 @@ Container / Wrapper
 
 .dashboard-main-wrapper {
   min-height: 100%;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   position: relative;
 }
 
@@ -529,7 +614,7 @@ Container / Wrapper
 }
 
 .dashboard-content {
-  padding: 30px 30px 60px 30px;
+  padding: 30px 30px 30px 30px;  /*30px 30px 60px 30px;*/
 }
 
 /*-----------------------

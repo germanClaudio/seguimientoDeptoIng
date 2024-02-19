@@ -6,17 +6,12 @@
 </head>
 
 <body>
-    <%- include('../partials/header'); %>
-
-    <div class="container" style="padding-top: 70px;"></div>
-    <br>
-    <div class="d-block mx-auto my-4 text-center">
-        <a class="btn btn-primary my-1 mx-5" href="/api/auth/index">
-            <i class="fa-solid fa-home" aria-hidden="true"></i>
-             Regresar al Home
-        </a>        
+        <%- include('../partials/header'); %>
+    
+    <div class="container-fluid dashboard-content m-t-60">
+        <%- include('../partials/btnHeaderTop-proyectos'); %>
     </div>
-   
+       
     <!-- ------------ Datos de Proyectos ------------ -->
     <section class="mx-auto align-items-start" style="width: 94%;">
         <div class="row">

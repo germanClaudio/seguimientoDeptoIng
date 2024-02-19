@@ -10,9 +10,9 @@ const expires = (document.getElementById('expires').innerText)
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
         const seconds = Math.floor((distance % (1000 * 60)) / 1000)
         
-        if (distance > 60000000) {
+        if (distance > 3600000) {
             countdownElement.innerHTML = "<span class=\"badge rounded-pill bg-success\">Sessión Ilimitada</span>"
-        } else if (distance > 0 && distance <= 60000000 ) {
+        } else if (distance > 0 && distance <= 3600000 ) {
             countdownElement.innerHTML = `<span class="badge rounded-pill bg-warning text-dark">Tiempo de Sesión: ${hours}h ${minutes}m ${seconds}s</span>`
         } else {
             countdownElement.innerHTML = `<span class="badge rounded-pill bg-danger">Expiró Tiempo de Sessión!</span>`

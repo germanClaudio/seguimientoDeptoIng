@@ -13,14 +13,17 @@
 </head>
 
 <body>
-    <header>
-        <%- include('../partials/headerLogin'); %>
-    </header>
+    
+    <%- include('../partials/headerLogin'); %>
+        
+    <div class="container" style="padding-top: 70px;"></div>
     <br>
+        <%- include('../partials/btnHeaderTop'); %>
+    
     <!-- ------------ Lista de OCI ------------ -->
     <section class="mx-auto align-items-start" style="width: 94%;">
         <div class="row">
-            <div class="col-12 mt-3 mb-1">
+            <div class="col-12 mb-1">
                 <hr>
                 <h4 class="text-uppercase">Lista de OCI</h4>
                 <p>Departamento de Ingeniería Prodismo</p>
@@ -47,7 +50,7 @@
                                     <ul class="dd-list" id="items">
                                         <li class="dd-item" data-id="13">
                                             <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                <div> Item one</div>
+                                                <div> OCI# 1</div>
                                                 <div class="dd-nodrag btn-group ml-auto">
                                                     <button class="btn btn-sm btn-primary">
                                                         <i class="fa-solid fa-pencil"></i>
@@ -60,7 +63,7 @@
                                         </li>
                                         <li class="dd-item" data-id="2">
                                             <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                <div> Item two</div>
+                                                <div> OCI# 2</div>
                                                 <div class="dd-nodrag btn-group ml-auto">
                                                     <button class="btn btn-sm btn-primary">
                                                         <i class="fa-solid fa-pencil"></i>
@@ -73,7 +76,7 @@
                                             <ol class="dd-list">
                                                 <li class="dd-item" data-id="3">
                                                     <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                        <div> Item three</div>
+                                                        <div> OT #1111</div>
                                                         <div class="dd-nodrag btn-group ml-auto">
                                                             <button class="btn btn-sm btn-primary">
                                                                 <i class="fa-solid fa-pencil"></i>
@@ -86,7 +89,7 @@
                                                 </li>
                                                 <li class="dd-item" data-id="4">
                                                     <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                        <div> Item four </div>
+                                                        <div> OT #1112</div>
                                                         <div class="dd-nodrag btn-group ml-auto">
                                                             <button class="btn btn-sm btn-primary">
                                                                 <i class="fa-solid fa-pencil"></i>
@@ -99,7 +102,7 @@
                                                 </li>
                                                 <li class="dd-item" data-id="5">
                                                     <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                        <div> Item five </div>
+                                                        <div> OCI #3</div>
                                                         <div class="dd-nodrag btn-group ml-auto">
                                                             <button class="btn btn-sm btn-primary">
                                                                 <i class="fa-solid fa-pencil"></i>
@@ -112,7 +115,7 @@
                                                     <ol class="dd-list">
                                                         <li class="dd-item" data-id="6">
                                                             <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                                <div> Item six </div>
+                                                                <div> OT #1252 </div>
                                                                 <div class="dd-nodrag btn-group ml-auto">
                                                                     <button class="btn btn-sm btn-primary">
                                                                         <i class="fa-solid fa-pencil"></i>
@@ -125,7 +128,7 @@
                                                         </li>
                                                         <li class="dd-item" data-id="7">
                                                             <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                                <div> Item seven </div>
+                                                                <div> OT #1253 </div>
                                                                 <div class="dd-nodrag btn-group ml-auto">
                                                                     <button class="btn btn-sm btn-primary">
                                                                         <i class="fa-solid fa-pencil"></i>
@@ -138,7 +141,7 @@
                                                         </li>
                                                         <li class="dd-item" data-id="8">
                                                             <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                                <div> Item eight </div>
+                                                                <div> OT #1254 </div>
                                                                 <div class="dd-nodrag btn-group ml-auto">
                                                                     <button class="btn btn-sm btn-primary">
                                                                         <i class="fa-solid fa-pencil"></i>
@@ -181,7 +184,7 @@
                                         </li>
                                         <li class="dd-item" data-id="11">
                                             <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                <div> Item eleven </div>
+                                                <div> OCI# 4 </div>
                                                 <div class="dd-nodrag btn-group ml-auto">
                                                     <button class="btn btn-sm btn-primary">
                                                         <i class="fa-solid fa-pencil"></i>
@@ -194,7 +197,7 @@
                                         </li>
                                         <li class="dd-item" data-id="12">
                                             <div class="dd-handle"> <span class="drag-indicator"></span>
-                                                <div> Item twelve </div>
+                                                <div> OCI# 5 </div>
                                                 <div class="dd-nodrag btn-group ml-auto">
                                                     <button class="btn btn-sm btn-primary">
                                                         <i class="fa-solid fa-pencil"></i>
@@ -217,6 +220,17 @@
         </div>
     </div>
     
+    <div class="d-block mx-auto my-4 pb-5 text-center">
+        <a class="btn btn-primary my-1 me-5" href="/api/auth/index">
+            <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>
+             Regresar al Home
+        </a>
+        <a class="btn btn-secondary my-2 ms-5" href="#">
+            <i class="fa-solid fa-arrow-up"></i>
+             Ir arriba
+        </a>
+    </div>
+    <br>
     <footer>
         <%- include('../partials/footer'); %>
     </footer>
