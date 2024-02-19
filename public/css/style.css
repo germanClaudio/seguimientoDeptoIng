@@ -25,8 +25,8 @@ body {
   font-weight: normal;
   font-size: 14px;
   color: #71748d;
-  background-color: #efeff6;
-  /* -webkit-font-smoothing: antialiased; */
+  background-color: #F5F7FA; /* #efeff6;*/
+  /* -webkit-font-smoothing: antialiased; style="background-color: #F5F7FA;"*/
 }
 
 h1,
@@ -516,7 +516,8 @@ Container / Wrapper
 
 .dashboard-main-wrapper {
   min-height: 100%;
-  padding-top: 60px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   position: relative;
 }
 

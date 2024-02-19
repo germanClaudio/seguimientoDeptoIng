@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../../assets/libs/css/style.css">
+    <%- include('../partials/head'); %>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <!-- <link rel="stylesheet" href="../../assets/libs/css/style.css"> -->
+</head>
+
+<body>
+    <header>
+        <%- include('../partials/headerLogin'); %>
+    </header>
+    <br>
+    <!-- ------------ Lista de OCI ------------ -->
+    <section class="mx-auto align-items-start" style="width: 94%;">
+        <div class="row">
+            <div class="col-12 mt-3 mb-1">
+                <hr>
+                <h4 class="text-uppercase">Lista de OCI</h4>
+                <p>Departamento de Ingeniería Prodismo</p>
+                <hr>
+            </div>
+        </div>
+    </section>
+    
+    <div class="dashboard-main-wrapper">
+       
+        <!-- ========================= wrapper ============================== -->
+
+        <div class="dashboard mx-auto" style="width: 90%;">
+            <div class="container-fluid dashboard-content">
+                <div id="item-2"></div>
+                    <!-- ============================================================== -->
+                <div class="dashboard-short-list">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-12">
+                            <section class="card card-fluid">
+                                <h5 class="card-header drag-handle"> OCI Activas</h5>
+
+                                <div class="dd" id="nestable">
+                                    <ul class="dd-list" id="items">
+                                        <li class="dd-item" data-id="13">
+                                            <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                <div> Item one</div>
+                                                <div class="dd-nodrag btn-group ml-auto">
+                                                    <button class="btn btn-sm btn-primary">
+                                                        <i class="fa-solid fa-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger">
+                                                        <i class="far fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="dd-item" data-id="2">
+                                            <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                <div> Item two</div>
+                                                <div class="dd-nodrag btn-group ml-auto">
+                                                    <button class="btn btn-sm btn-primary">
+                                                        <i class="fa-solid fa-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger">
+                                                        <i class="far fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <ol class="dd-list">
+                                                <li class="dd-item" data-id="3">
+                                                    <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                        <div> Item three</div>
+                                                        <div class="dd-nodrag btn-group ml-auto">
+                                                            <button class="btn btn-sm btn-primary">
+                                                                <i class="fa-solid fa-pencil"></i>
+                                                            </button>
+                                                            <button class="btn btn-sm btn-danger">
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="dd-item" data-id="4">
+                                                    <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                        <div> Item four </div>
+                                                        <div class="dd-nodrag btn-group ml-auto">
+                                                            <button class="btn btn-sm btn-primary">
+                                                                <i class="fa-solid fa-pencil"></i>
+                                                            </button>
+                                                            <button class="btn btn-sm btn-danger">
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="dd-item" data-id="5">
+                                                    <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                        <div> Item five </div>
+                                                        <div class="dd-nodrag btn-group ml-auto">
+                                                            <button class="btn btn-sm btn-primary">
+                                                                <i class="fa-solid fa-pencil"></i>
+                                                            </button>
+                                                            <button class="btn btn-sm btn-danger">
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <ol class="dd-list">
+                                                        <li class="dd-item" data-id="6">
+                                                            <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                                <div> Item six </div>
+                                                                <div class="dd-nodrag btn-group ml-auto">
+                                                                    <button class="btn btn-sm btn-primary">
+                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-sm btn-danger">
+                                                                        <i class="far fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="dd-item" data-id="7">
+                                                            <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                                <div> Item seven </div>
+                                                                <div class="dd-nodrag btn-group ml-auto">
+                                                                    <button class="btn btn-sm btn-primary">
+                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-sm btn-danger">
+                                                                        <i class="far fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="dd-item" data-id="8">
+                                                            <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                                <div> Item eight </div>
+                                                                <div class="dd-nodrag btn-group ml-auto">
+                                                                    <button class="btn btn-sm btn-primary">
+                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-sm btn-danger">
+                                                                        <i class="far fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+                                                <li class="dd-item" data-id="9">
+                                                    <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                        <div> Item nine</div>
+                                                        <div class="dd-nodrag btn-group ml-auto">
+                                                            <button class="btn btn-sm btn-primary">
+                                                                <i class="fa-solid fa-pencil"></i>
+                                                            </button>
+                                                            <button class="btn btn-sm btn-danger">
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="dd-item" data-id="10">
+                                                    <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                        <div> Item ten </div>
+                                                        <div class="dd-nodrag btn-group ml-auto">
+                                                            <button class="btn btn-sm btn-primary">
+                                                                <i class="fa-solid fa-pencil"></i>
+                                                            </button>
+                                                            <button class="btn btn-sm btn-danger">
+                                                                <i class="far fa-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                        </li>
+                                        <li class="dd-item" data-id="11">
+                                            <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                <div> Item eleven </div>
+                                                <div class="dd-nodrag btn-group ml-auto">
+                                                    <button class="btn btn-sm btn-primary">
+                                                        <i class="fa-solid fa-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger">
+                                                        <i class="far fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="dd-item" data-id="12">
+                                            <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                <div> Item twelve </div>
+                                                <div class="dd-nodrag btn-group ml-auto">
+                                                    <button class="btn btn-sm btn-primary">
+                                                        <i class="fa-solid fa-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger">
+                                                        <i class="far fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <!-- ========================= end nestable list ========================== -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <footer>
+        <%- include('../partials/footer'); %>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <script src="../../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="../../assets/libs/js/main-js.js"></script>
+    <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="../../assets/vendor/shortable-nestable/Sortable.min.js"></script>
+    <script src="../../assets/vendor/shortable-nestable/sort-nest.js"></script>
+    <script src="../../assets/vendor/shortable-nestable/jquery.nestable.js"></script>
+   
+</body>
+ 
+</html>

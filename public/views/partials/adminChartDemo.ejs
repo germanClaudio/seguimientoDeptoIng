@@ -138,42 +138,44 @@
         </div>
         <!-- oci's -->
         <div class="col-xl-3 col-sm-6 col-12">
-          <div class="card rounded-3 card_dashboard">
-            <div class="card-content">
-              <div class="card-body">
-                <div class="media d-flex mx-2">
-                  <div class="media-body text-left">
-                    <% let arrayOci = []
-                      for (let i=0; proyectos.length>i; i++ ) {
-                        if (proyectos[i].visible) {
-                          arrayOci.push(proyectos[i].project[0])
+          <a href="/api/auth/oci-list" style="text-decoration: none;">
+            <div class="card rounded-3 card_dashboard">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="media d-flex mx-2">
+                    <div class="media-body text-left">
+                      <% let arrayOci = []
+                        for (let i=0; proyectos.length>i; i++ ) {
+                          if (proyectos[i].visible) {
+                            arrayOci.push(proyectos[i].project[0])
+                          }
                         }
-                      }
-
-                      let arrayVisibleOci = []
-                      for (let j=0; arrayOci.length>j; j++ ) {
-                        if (arrayOci[j].visible) {
-                          arrayVisibleOci.push(arrayOci[j].oci)
+  
+                        let arrayVisibleOci = []
+                        for (let j=0; arrayOci.length>j; j++ ) {
+                          if (arrayOci[j].visible) {
+                            arrayVisibleOci.push(arrayOci[j].oci)
+                          }
                         }
-                      }
-
-                      let arrayActiveOci = [].concat(...arrayVisibleOci)
-                      let resultArrayOci = []
-                      for (let k=0; arrayActiveOci.length>k; k++ ) {
-                        if (arrayActiveOci[k].visible) {
-                          resultArrayOci.push(arrayActiveOci[k].ociNumber)
-                        }
-                      } %>
-                    <h3 class="font-medium"><%= resultArrayOci.length %>/<span style="font-size: 0.95rem;" ><%=arrayActiveOci.length%></span></h3>
-                    <span>Cantidad de OCI's</span>
-                  </div>
-                  <div class="align-self-center ms-auto">
-                    <i class="icon-settings success font-large-2 float-right"></i>
+  
+                        let arrayActiveOci = [].concat(...arrayVisibleOci)
+                        let resultArrayOci = []
+                        for (let k=0; arrayActiveOci.length>k; k++ ) {
+                          if (arrayActiveOci[k].visible) {
+                            resultArrayOci.push(arrayActiveOci[k].ociNumber)
+                          }
+                        } %>
+                      <h3 class="font-medium"><%= resultArrayOci.length %>/<span style="font-size: 0.95rem;" ><%=arrayActiveOci.length%></span></h3>
+                      <span>Cantidad de OCI's</span>
+                    </div>
+                    <div class="align-self-center ms-auto">
+                      <i class="icon-settings success font-large-2 float-right"></i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
     
         <div class="col-xl-3 col-sm-6 col-12">
