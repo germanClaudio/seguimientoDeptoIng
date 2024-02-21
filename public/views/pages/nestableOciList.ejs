@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../../../assets/libs/css/style.css">
+    <%- include('../partials/head'); %>
+    
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="../../../assets/vendor/fonts/circular-std/style.css">
+    <link rel="stylesheet" href="../../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <!-- <link rel="stylesheet" href="../../assets/libs/css/style.css"> -->
+</head>
+
+<body>
+    
+    <%- include('../partials/header'); %>
+        
+    <div class="container" style="padding-top: 70px;"></div>
+    <br>
+        <%- include('../partials/btnHeaderTop-ociAll'); %>
+    
+    <!-- ------------ Lista de OCI ------------ -->
+    <section class="mx-auto align-items-start" style="width: 94%;">
+        <div class="row">
+            <div class="col-12 mb-1">
+                <hr>
+                <h4 class="text-uppercase">Lista de OCI</h4>
+                <p>Departamento de Ingeniería Prodismo</p>
+                <hr>
+            </div>
+        </div>
+    </section>
+    
+    <div class="dashboard-main-wrapper">
+        <% var ociCount=0
+            var arrVisibleProjects = []
+            var arrActiveClients = []
+                for ( let p=0; proyectos.length>p; p++) {    
+                    if (proyectos[p].project[0].visible) {
+                        arrVisibleProjects.push(proyectos[p])
+                    }
+                }
+                for ( let c=0; clientes.length>c; c++) {    
+                    if (clientes[c].project>0 && clientes[c].status) {
+                        arrActiveClients.push(clientes[c])
+                    }
+                }
+        %>    
+        <!-- ========================= wrapper ============================== -->
+
+        <div class="dashboard mx-auto" style="width: 80%;">
+            <div class="container-fluid dashboard-content">
+                <div id="items"></div>
+                
+                <!-- ====================================================== -->
+                <div class="dashboard-short-list">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-12">
+                            <section class="card card-fluid">
+                                <h5 class="card-header drag-handle"> OCI Activas</h5>
+                                
+                                    <div class="dd" id="nestable">
+                                        <ul class="dd-list" id="item-2">
+                                            
+                                            <% for (let c=0; arrActiveClients.length>c; c++) {
+                                                
+                                                    for (let m=0; arrVisibleProjects.length>m; m++) {
+
+                                                        if (arrVisibleProjects[m].project[0].visible) {
+
+                                                            for ( let j=0;  arrVisibleProjects[m].project.length > j; j++ ) {
+                                                                
+                                                                let countOci=0
+                                                                var arrVisibleOci = []
+
+                                                                for ( let x=0; arrVisibleProjects[m].project[j].oci.length > x; x++) {
+                                                                    if (arrVisibleProjects[m].project[j].oci[x].visible) { 
+                                                                        arrVisibleOci.push(arrVisibleProjects[m].project[j].oci[x])
+                                                                        countOci++
+                                                                    }
+                                                                } %>
+
+                                                                <% if (arrVisibleOci.length > 0 && countOci > 0) {
+                                                                    for (let k=0; arrVisibleOci.length > k; k++) { %>
+                                                                
+                                                                    <li class="dd-item" data-id="1">
+                                                                        <div class="dd-handle"> <span class="drag-indicator"></span>
+
+                                                                                <div> OCI# <%= arrVisibleOci[k].ociNumber %></div>
+                                                                                <div class="dd-nodrag btn-group ms-auto">
+                                                                                    <button class="btn btn-sm btn-primary">
+                                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                                    </button>
+                                                                                    <button class="btn btn-sm btn-danger">
+                                                                                        <i class="far fa-trash-alt"></i>
+                                                                                    </button>
+                                                                                </div>
+                                                                            <% }
+                                                                        } %>
+                                                                            
+                                                                        </div>
+                                                                    </li>
+                                                            <% }
+                                                        }
+                                                        ociCount++
+                                                    }
+                                            } %> 
+
+                                            <!-- <li class="dd-item" data-id="2">
+                                                <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                    <div> OCI# 2</div>
+                                                    <div class="dd-nodrag btn-group ms-auto">
+                                                        <button class="btn btn-sm btn-primary">
+                                                            <i class="fa-solid fa-pencil"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <ol class="dd-list">
+                                                    <li class="dd-item" data-id="3">
+                                                        <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                            <div> OT #1111</div>
+                                                            <div class="dd-nodrag btn-group ms-auto">
+                                                                <button class="btn btn-sm btn-primary">
+                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-danger">
+                                                                    <i class="far fa-trash-alt"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    
+                                                    <li class="dd-item" data-id="5">
+                                                        <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                            <div> OCI #3</div>
+                                                            <div class="dd-nodrag btn-group ms-auto">
+                                                                <button class="btn btn-sm btn-primary">
+                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-danger">
+                                                                    <i class="far fa-trash-alt"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <ol class="dd-list">
+                                                            <li class="dd-item" data-id="6">
+                                                                <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                                    <div> OT #1252 </div>
+                                                                    <div class="dd-nodrag btn-group ms-auto">
+                                                                        <button class="btn btn-sm btn-primary">
+                                                                            <i class="fa-solid fa-pencil"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-danger">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="dd-item" data-id="7">
+                                                                <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                                    <div> OT #1253 </div>
+                                                                    <div class="dd-nodrag btn-group ms-auto">
+                                                                        <button class="btn btn-sm btn-primary">
+                                                                            <i class="fa-solid fa-pencil"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-sm btn-danger">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ol>
+                                                    </li>
+
+                                                    <li class="dd-item" data-id="9">
+                                                        <div class="dd-handle"> <span class="drag-indicator"></span>
+                                                            <div> Item nine</div>
+                                                            <div class="dd-nodrag btn-group ms-auto">
+                                                                <button class="btn btn-sm btn-primary">
+                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-danger">
+                                                                    <i class="far fa-trash-alt"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                                </ol>
+                                            </li> -->
+
+                                        </ul>
+                                    </div>
+                            </section>
+                        </div>
+                    </div>
+                        <!-- ========================= end nestable list ========================== -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-block mx-auto my-4 pb-5 text-center">
+        <a class="btn btn-primary my-1 me-5" href="/api/auth/index">
+            <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>
+             Regresar al Home
+        </a>
+        <a class="btn btn-secondary my-2 ms-5" href="#">
+            <i class="fa-solid fa-arrow-up"></i>
+             Ir arriba
+        </a>
+    </div>
+    <br>
+    <footer>
+        <%- include('../partials/footer'); %>
+    </footer>
+
+    <!--    scripts     -->
+    <script type="text/javascript" src="../../../clock.js"></script>
+    <script type="text/javascript" src="../../../expiresSession.js"></script>
+    <!-- Optional JavaScript -->
+    <script src="../../../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="../../../assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="../../../assets/libs/js/main-js.js"></script>
+    <script src="../../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="../../../assets/vendor/shortable-nestable/Sortable.min.js"></script>
+    <script src="../../../assets/vendor/shortable-nestable/sort-nest.js"></script>
+    <script src="../../../assets/vendor/shortable-nestable/jquery.nestable.js"></script>
+   
+</body>
+ 
+</html>

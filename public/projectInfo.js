@@ -349,14 +349,14 @@ function lastOtNumberFn(i) {
 }
 
 //-------------------- Boton agregar nuevas OT's a OCI ------------------------
-const btnAddOtForm = document.getElementById("btnAddOtForm")
-btnAddOtForm.addEventListener('click', () => {
-    if (document.getElementById(`ociNumberHidden`)) {
-        let ociSeleccionada = document.getElementById(`ociNumberHidden`).value
-        tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
-        lastOtNumberFn()
-    }
-})
+// const btnAddOtForm = document.getElementById("btnAddOtForm")
+// btnAddOtForm.addEventListener('click', () => {
+//     if (document.getElementById(`ociNumberHidden`)) {
+//         let ociSeleccionada = document.getElementById(`ociNumberHidden`).value
+//         tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
+//         lastOtNumberFn()
+//     }
+// })
 
 function radioSelected(radioSelectedValue, elementoId) {
     const radioSelected = document.getElementById(`${radioSelectedValue}`)

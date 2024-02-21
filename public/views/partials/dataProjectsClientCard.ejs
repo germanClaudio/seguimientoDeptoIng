@@ -31,9 +31,8 @@
                     }
                     
                 if (cliente.project > 0) {
-
                     for (let m=0; arrVisibleProjects.length>m; m++) {
-                        if (arrVisibleProjects[m].project[0].visible &&  cliente.status) { %>
+                        if (arrVisibleProjects[m].project[0].visible && cliente.status) { %>
                                                     
                                 <div class="accordion" id="accordionPanelsStayOpen<%=m %>">
                                     <% for ( let j = 0;  arrVisibleProjects[m].project.length > j; j++ ) { %>

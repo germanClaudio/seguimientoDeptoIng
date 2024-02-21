@@ -20,7 +20,7 @@ class ClientesDaoMongoDB extends ContenedorMongoDB {
             if ( clients === undefined || clients === null) {
                 return new Error ('No hay clientes en la DB!')
             } else {
-                logger.info('Clientes encontrados...>')
+                // logger.info('Clientes encontrados...>')
                 return clients
             }    
         } catch (error) {

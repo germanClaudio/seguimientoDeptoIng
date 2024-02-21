@@ -122,6 +122,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
+    // Vreate a New project ----------------------
     async createNewProject(project) {
         
         if (project) {
@@ -141,6 +142,22 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
             }
         } else {
             return new Error(`No se pudo crear el Proyecto!`)
+        }
+    }
+
+    // Get all OCI from all projects -----------
+    async getAllOciProjects() {
+        try {
+            const projects = await Proyectos.find() //{ $or: [{ clientName: query }, { clientCode: query }] }).exec()
+            
+            if (projects === undefined || projects === null) {
+                return new Error('No hay proyectos cargados en ningún cliente!')
+            } else {
+                return projects
+            }
+        } catch (error) {
+            logger.error("Error MongoDB getAllOciProjects: ", error)
+            return new Error('No hay proyectos en la DB!')
         }
     }
 
@@ -170,7 +187,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
     // Add Ot's to Oci Number ----------------
     async addOtToOciProject(idProjectTarget, numberOci, ociNumberK, arrayOtAddedToOci) {
-        console.log('arrayOtAddedToOci: ', arrayOtAddedToOci)
+        //console.log('arrayOtAddedToOci: ', arrayOtAddedToOci)
         if (idProjectTarget) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget })

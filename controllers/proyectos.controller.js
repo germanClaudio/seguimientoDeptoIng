@@ -291,6 +291,46 @@ class ProjectsController {
         })
     }
 
+    getAllOciProjects = async (req, res) => {
+        const proyectos = await this.projects.getAllOciProjects()
+
+        let username = res.locals.username
+        let userInfo = res.locals.userInfo
+
+        const cookie = req.session.cookie
+        const time = cookie.expires
+        const expires = new Date(time)
+
+        // let cliente = await this.clients.getClientById()
+        let clientes = await this.clients.getAllClients()
+
+        const data = { // Inicializar variables en servidor
+            k: 0, 
+            m: 0,
+            j: 0,
+            c: 0
+        }
+
+        try {
+            if (proyectos.error) return res.status(400).json({ msg: 'No hay proyectos cargados' })
+            res.render('nestableOciList', {
+                proyectos,
+                clientes,
+                username,
+                userInfo,
+                expires,
+                data
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                msg: 'controllerError - getAllProjects',
+                error: error
+            })
+        }
+    }
+
     addOtToOciProject = async (req, res) => {
         const { id } = req.params
         const clientId = req.body.clientIdHidden

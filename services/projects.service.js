@@ -26,6 +26,11 @@ class ProjectService {
         return this.proyectos.selectProjectsByMainProjectId(idProject)
     }
 
+    // returns all OCI from projects
+    async getAllOciProjects() {
+        return this.proyectos.getAllOciProjects()
+    }
+
     // add new project to a Client
     async addProjectToClient(payload) {
         return this.proyectos.createNewProject(payload)

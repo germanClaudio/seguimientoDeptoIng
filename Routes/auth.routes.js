@@ -38,14 +38,14 @@ authRouter.get('/forgot-password', (req, res) => {
 authRouter.post('/forgot-password', authUserMiddleware, users.login)
 
 //_____________________________ OCI List _______________________ //
-authRouter.get('/oci-list', (req, res) => {
-    const cookie = req.session.cookie
-    const time = cookie.expires
-    const expires = new Date(time)
-    res.render('sortable-nestable-lists', { expires })
-})
+// authRouter.get('/oci-list', (req, res) => {
+//     const cookie = req.session.cookie
+//     const time = cookie.expires
+//     const expires = new Date(time)
+//     res.render('nestableOciList', { expires })
+// })
 
-authRouter.post('/oci-list', authUserMiddleware, users.index)
+// authRouter.post('/oci-list', authUserMiddleware, users.index)
 
 //------------------------ Clientes ----------------------------------
 authRouter.get('/clientes', checkAuthentication, users.clientes)
