@@ -1,7 +1,7 @@
 function updateTime() {
     const now = new Date()
     //const date = now.toLocaleDateString()
-    const weekdays = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    const weekdays = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
     const weekday = weekdays[now.getDay()]
     const day = String(now.getDate()).padStart(2, '0')
     const month = String(now.getMonth() + 1).padStart(2, '0')

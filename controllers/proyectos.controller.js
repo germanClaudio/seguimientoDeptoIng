@@ -314,10 +314,10 @@ class ProjectsController {
         try {
             if (proyectos.error) return res.status(400).json({ msg: 'No hay proyectos cargados' })
             res.render('nestableOciList', {
-                proyectos,
-                clientes,
                 username,
                 userInfo,
+                proyectos,
+                clientes,
                 expires,
                 data
             })

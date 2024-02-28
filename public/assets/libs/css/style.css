@@ -5389,19 +5389,21 @@ Vertical Timeline - by CodyHouse.co
     position: relative;
     cursor: pointer;
     float: left;
-    width: 34px;
-    height: 20px;
-    margin: 18px 0;
+    width: 25px; /*34px*/
+    height: 25px; /*20px*/
+    margin: 25px 14px;
     padding: 0;
     text-indent: 100%;
     white-space: nowrap;
     overflow: hidden;
     border: 0;
-    background: transparent;
-    font-size: 12px;
+    background: #111;
+    color: #fff;
+    font-size: 18px;
     line-height: 1;
     text-align: center;
     font-weight: bold;
+    border-radius: 50%;
 }
 
 .dd-item>button:before {
@@ -5411,7 +5413,7 @@ Vertical Timeline - by CodyHouse.co
     width: 100%;
     text-align: center;
     text-indent: 0;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .dd-item>button[data-action="collapse"]:before {

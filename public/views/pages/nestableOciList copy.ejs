@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../../../assets/libs/css/style.css">
+    <%- include('../partials/head'); %>
+    
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="../../../assets/vendor/fonts/circular-std/style.css">
+    <link rel="stylesheet" href="../../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <!-- <link rel="stylesheet" href="../../assets/libs/css/style.css"> -->
+</head>
+
+<body>
+    
+    <%- include('../partials/header'); %>
+        
+    <div class="container" style="padding-top: 70px;"></div>
+    <br>
+        <%- include('../partials/btnHeaderTop-ociAll'); %>
+    
+    <!-- ------------ Lista de OCI ------------ -->
+    <section class="mx-auto align-items-start" style="width: 94%;">
+        <div class="row">
+            <div class="col-12 mb-1">
+                <hr>
+                <h4 class="text-uppercase">Listado de OCI</h4>
+                <p>Departamento de Ingeniería Prodismo</p>
+                <hr>
+            </div>
+        </div>
+    </section>
+    
+    <div class="dashboard-main-wrapper">
+        
+        <!-- ========================= wrapper ============================== -->
+
+        <div class="dashboard mx-auto" style="width: 92%;">
+            <div class="container-fluid dashboard-content">
+                    
+                    <!-- ====================================================== -->
+                    <% let arrayOci = []
+                    for (let i=0; proyectos.length>i; i++ ) {
+                        if (proyectos[i].visible) {
+                            arrayOci.push(proyectos[i].project[0])
+                        }
+                    }
+
+                    let arrayVisibleOci = []
+                    for (let j=0; arrayOci.length>j; j++ ) {
+                        if (arrayOci[j].visible) {
+                            arrayVisibleOci.push(arrayOci[j].oci)
+                        }
+                    }
+                    
+                    let arrayActiveOci = [].concat(...arrayVisibleOci)
+                    var resultArrayOci = []
+                    for (let k=0; arrayActiveOci.length>k; k++ ) {
+                        if (arrayActiveOci[k].visible) {
+                            resultArrayOci.push(arrayActiveOci[k])
+                        }
+                    } %>
+                    <!-- ====================================================== -->
+                    
+                    <div class="dashboard-short-list">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+
+                                <section class="card card-fluid">
+                                    <h5 class="card-header drag-handle"> OCI Activas <%= resultArrayOci.length %></h5>
+                                        <div id="items"></div>
+                                        <div id="item-2"></div>
+                                        <div class="dd" id="nestable">
+                                            <ol class="dd-list">
+                                                                                            
+                                                    <% let dataIdCounterL = 0
+                                                        for (let c=0; resultArrayOci.length>c; c++) { 
+                                                        dataIdCounterL++  %>
+                                                        <li class="dd-item" data-id="<%= dataIdCounterL %>">
+                                                            <div class="dd-handle"> <span class="drag-indicator"></span>
+
+                                                                <div> OCI# <strong><%= resultArrayOci[c].ociNumber %></strong> </div>
+                                                                <div> - Descripción: <%= resultArrayOci[c].ociDescription %></div>
+                                                                <div class="dd-nodrag btn-group ms-auto">
+                                                                    <button class="btn btn-sm btn-primary">
+                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-sm btn-danger">
+                                                                        <i class="far fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            <% if (resultArrayOci[c].otProject) {
+                                                                for (let x=0; resultArrayOci[c].otProject.length>x; x++) {
+                                                                    if (resultArrayOci[c].otProject[x].visible) { 
+                                                                        dataIdCounterL++ %>
+                                                                        <ol class="dd-list">
+                                                                            <li class="dd-item ms-5" data-id="<%= dataIdCounterL %>">
+                                                                                <div class="dd-handle"> <span class="drag-indicator"></span>
+
+                                                                                    <div> OT #<%= resultArrayOci[c].otProject[x].otNumber %></div>
+                                                                                    <div class="dd-nodrag btn-group ms-auto">
+                                                                                        <button class="btn btn-sm btn-primary">
+                                                                                            <i class="fa-solid fa-pencil"></i>
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-danger">
+                                                                                            <i class="far fa-trash-alt"></i>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ol>
+                                                                    <% }
+                                                                }
+                                                            } %>
+
+                                                        </li>
+                                                    <% } %>
+
+                                            </ol>
+                                        </div>
+                                </section>
+                            </div>
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+
+                                <section class="card card-fluid">
+                                    <h5 class="card-header drag-handle"> OCI Activas <%= resultArrayOci.length %></h5>
+                                    
+                                        <div class="dd" id="nestable2">
+                                            <ol class="dd-list">
+                                                                                            
+                                                    <% let dataIdCounterR = 0
+                                                        for (let c=0; resultArrayOci.length>c; c++) { 
+                                                        dataIdCounterR++  %>
+                                                        <li class="dd-item" data-id="<%= dataIdCounterR %>">
+                                                            <div class="dd-handle"> <span class="drag-indicator"></span>
+
+                                                                <div> OCI# <strong><%= resultArrayOci[c].ociNumber %></strong> </div>
+                                                                <div> - Descripción: <%= resultArrayOci[c].ociDescription %></div>
+                                                                <div class="dd-nodrag btn-group ms-auto">
+                                                                    <button class="btn btn-sm btn-primary">
+                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-sm btn-danger">
+                                                                        <i class="far fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            <% if (resultArrayOci[c].otProject) {
+                                                                for (let x=0; resultArrayOci[c].otProject.length>x; x++) {
+                                                                    if (resultArrayOci[c].otProject[x].visible) { 
+                                                                        dataIdCounterR++ %>
+                                                                        <ol class="dd-list">
+                                                                            <li class="dd-item ms-5" data-id="<%= dataIdCounterR %>">
+                                                                                <div class="dd-handle"> <span class="drag-indicator"></span>
+
+                                                                                    <div> OT #<%= resultArrayOci[c].otProject[x].otNumber %></div>
+                                                                                    <div class="dd-nodrag btn-group ms-auto">
+                                                                                        <button class="btn btn-sm btn-primary">
+                                                                                            <i class="fa-solid fa-pencil"></i>
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-danger">
+                                                                                            <i class="far fa-trash-alt"></i>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ol>
+                                                                    <% }
+                                                                }
+                                                            } %>
+
+                                                        </li>
+                                                    <% } %>
+                                            </ol>
+                                        </div>
+                                </section>
+                            </div>
+
+                        </div>
+                            <!-- ========================= end nestable list ========================== -->
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-block mx-auto my-4 pb-5 text-center">
+        <a class="btn btn-primary my-1 me-5" href="/api/auth/index">
+            <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>
+             Regresar al Home
+        </a>
+        <a class="btn btn-secondary my-2 ms-5" href="#">
+            <i class="fa-solid fa-arrow-up"></i>
+             Ir arriba
+        </a>
+    </div>
+    <br>
+    <footer>
+        <%- include('../partials/footer'); %>
+    </footer>
+
+    <!--    scripts     -->
+    <script type="text/javascript" src="../../../clock.js"></script>
+    <script type="text/javascript" src="../../../expiresSession.js"></script>
+    <!-- Optional JavaScript -->
+    <script src="../../../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="../../../assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="../../../assets/libs/js/main-js.js"></script>
+    <script src="../../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="../../../assets/vendor/shortable-nestable/Sortable.min.js"></script>
+    <script src="../../../assets/vendor/shortable-nestable/sort-nest.js"></script>
+    <script src="../../../assets/vendor/shortable-nestable/jquery.nestable.js"></script>
+   
+</body>
+ 
+</html>
