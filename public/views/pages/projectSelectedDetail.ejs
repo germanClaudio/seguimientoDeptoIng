@@ -2,21 +2,21 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head/head'); %>
 </head>
 
 <body>
     <header>
-        <%- include('../partials/header'); %>
+        <%- include('../partials/header/header'); %>
     </header>
     <div class="container" style="padding-top: 70px;"></div>
     <br>
         <div class="collapse mt-5 mx-auto" id="collapseExample">
-            <%- include('../partials/formularioNewOt'); %>
+            <%- include('../partials/forms/formularioNewOt'); %>
         </div>
             <br>
             <div class="d-block mx-auto my-2 pb-4 text-center">
-                <%- include('../partials/btnProjectSelectedDetail'); %>
+                <%- include('../partials/btnHeaderTop/btnProjectSelectedDetail'); %>
             </div>
 
             <section class="mx-auto align-items-start" style="width: 94%;">
@@ -31,10 +31,10 @@
             </section>
             <div id="updateCliente">
             </div>
-            <%- include('../partials/dataProjectCard', { k: data.k, m: data.m, j: data.j }); %>
+            <%- include('../partials/data/dataProjectCard', { k: data.k, m: data.m, j: data.j }); %>
                 <br>
                 <footer>
-                    <%- include('../partials/footer'); %>
+                    <%- include('../partials/footer/footer'); %>
                 </footer>
 
                 <!--    scripts     -->

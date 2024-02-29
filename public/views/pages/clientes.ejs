@@ -2,19 +2,19 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head/head'); %>
 </head>
 
 <body>
-    <%- include('../partials/header'); %>
+    <%- include('../partials/header/header'); %>
 
     <div class="container" style="padding-top: 70px;"></div>
     <br>
     <div class="collapse" id="collapseExample">
-        <%- include('../partials/formularioCliente'); %>
+        <%- include('../partials/forms/formularioCliente'); %>
     </div>
 
-    <%- include('../partials/btnHeaderTop-newClient'); %>
+    <%- include('../partials/btnHeaderTop/btnHeaderTop-newClient'); %>
 
     <!-- <div class="d-block mx-auto mt-4 pb-1 text-center">
         <button class="btn btn-primary my-2 me-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
@@ -41,13 +41,13 @@
             
     <br>
     <div class="d-block mx-auto mb-3 text-center w-100 px-5">
-        <%- include('../partials/dataClientTable'); %>
+        <%- include('../partials/data/dataClientTable'); %>
     </div>
     <div class="d-block mx-auto my-4 pb-5 text-center">
         <a class="btn btn-primary my-2" href="/api/auth/index"><i class="fa-solid fa-chevron-circle-left" aria-hidden="true"></i> Regresar al Home </a>
     </div>
     <footer>
-        <%- include('../partials/footer'); %>
+        <%- include('../partials/footer/footer'); %>
     </footer>
 <!--    scripts     -->
 <script type="text/javascript" src="../../../clientes.js"></script>

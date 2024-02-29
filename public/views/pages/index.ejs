@@ -2,24 +2,24 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head/head'); %>
 </head>
 
 <body>
     <header>
-        <%- include('../partials/header'); %>
+        <%- include('../partials/header/header'); %>
     </header>
     <div class="container" style="padding-top: 70px;"></div>
     <br>
         <% if (userInfo.admin) { %>
-            <%- include('../partials/adminChartDemo'); %>
+            <%- include('../partials/mainCharts/adminChartDemo'); %>
         <% } else { %>
-            <%- include('../partials/userChartDemo'); %>
+            <%- include('../partials/mainCharts/userChartDemo'); %>
         <% } %>
     <br>
         <div class="d-block mx-auto mt-4 my-3 text-center bg-primary-light">    
-            <%- include('../partials/formularioBuscarCliente'); %>
-            <%- include('../partials/dataClientSearch'); %>
+            <%- include('../partials/forms/formularioBuscarCliente'); %>
+            <%- include('../partials/data/dataClientSearch'); %>
         </div>
         <!-- ------------ Lista de Clientes ------------ -->
         <section class="mx-auto align-items-start" style="width: 94%;">
@@ -34,12 +34,12 @@
         </section>
     <br>
         <div class="d-block mx-auto mb-3 text-center w-75">
-            <%- include('../partials/dataClientList'); %>
+            <%- include('../partials/data/dataClientList'); %>
         </div>
     <br>
         
     <footer>
-        <%- include('../partials/footer'); %>
+        <%- include('../partials/footer/footer'); %>
     </footer>
 
     <!--    scripts     -->

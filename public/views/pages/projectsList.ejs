@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head/head'); %>
 </head>
 
 <body>
-        <%- include('../partials/header'); %>
+        <%- include('../partials/header/header'); %>
     
     <div class="container-fluid dashboard-content m-t-60">
-        <%- include('../partials/btnHeaderTop-proyectos'); %>
+        <%- include('../partials/btnHeaderTop/btnHeaderTop-proyectos'); %>
     </div>
        
     <!-- ------------ Datos de Proyectos ------------ -->
@@ -26,7 +26,7 @@
     
         <br>
     <div class="d-block mx-auto mb-3 text-center w-100 px-3">
-        <%- include('../partials/dataProjectsTable'); %>
+        <%- include('../partials/data/dataProjectsTable'); %>
     </div>
     <div class="d-block mx-auto my-4 pb-5 text-center">
         <a class="btn btn-primary my-1 me-5" href="/api/auth/index">
@@ -39,7 +39,7 @@
         </a>
     </div>
     <footer>
-        <%- include('../partials/footer'); %>
+        <%- include('../partials/footer/footer'); %>
     </footer>
 <!--    scripts     -->
 <script type="text/javascript" src="../../../projects.js"></script>

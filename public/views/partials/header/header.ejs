@@ -84,8 +84,8 @@
         </div>
     </nav>
     <% if (userInfo.admin) { %>
-        <%- include('../partials/sidebarAdmin'); %>
+        <%- include('../../partials/sidebar/sidebarAdmin'); %>
     <% } else { %>
-        <%- include('../partials/sidebarUser'); %>
+        <%- include('../../partials/sidebar/sidebarUser'); %>
     <% } %>
 </header>

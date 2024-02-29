@@ -2,16 +2,16 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head/head'); %>
 </head>
 
 <body>
     <header>
-        <%- include('../partials/headerLogin'); %>
+        <%- include('../partials/header/headerLogin'); %>
     </header>
     <div class="container mt-3 mx-auto">
-        <h3 class="d-block mx-auto my-3 text-center">Register your User</h3>
-        <%- include('../partials/formularioRegister'); %>
+        <h3 class="d-block mx-auto my-3 text-center">Registra tu Usuario</h3>
+        <%- include('../partials/forms/formularioRegister'); %>
     </div>
 
     <% if (!flag && !fail) { %>
@@ -33,7 +33,7 @@
     </div>
     <br>
     <footer>
-        <%- include('../partials/footer') %>
+        <%- include('../partials/footer/footer') %>
     </footer>
 
     <!--    scripts     -->

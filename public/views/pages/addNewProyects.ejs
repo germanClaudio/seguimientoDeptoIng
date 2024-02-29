@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head/head'); %>
 </head>
 <body>
-    <%- include('../partials/header'); %>
+    <%- include('../partials/header/header'); %>
     
     <div class="container" style="padding-top: 70px;"></div>
     <br>
     
-    <%- include('../partials/formularioProyecto'); %>
+    <%- include('../partials/forms/formularioProyecto'); %>
             <br>
             <div class="d-block mx-auto my-4 pb-5 text-center">
                 <a class="btn btn-primary my-2 me-5" href="/api/auth/index"><i class="fa fa-home" aria-hidden="true"></i> Regresar al Home </a>
@@ -28,7 +28,7 @@
             </section>
             
             <div class="d-block mx-auto px-5 mb-3 text-center w-100">
-            <%- include('../partials/dataProjectsTable'); %>
+            <%- include('../partials/data/dataProjectsTable'); %>
             <br>
             <div class="d-block mx-auto my-4 pb-5 text-center">
                 <a class="btn btn-primary my-2 me-5" href="/api/auth/index"><i class="fa fa-home" aria-hidden="true"></i> Regresar al Home </a>
@@ -37,7 +37,7 @@
             </div>
             <br>
             <footer>
-                <%- include('../partials/footer'); %>
+                <%- include('../partials/footer/footer'); %>
             </footer>
 <!--    scripts     -->
 <script type="text/javascript" src="../../../clientes.js"></script>

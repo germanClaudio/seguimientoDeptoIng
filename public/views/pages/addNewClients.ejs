@@ -2,21 +2,21 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head'); %>
+    <%- include('../partials/head/head'); %>
 </head>
 
 <body>
-    <%- include('../partials/header'); %>
+    <%- include('../partials/header/header'); %>
 
     <div class="container" style="padding-top: 70px;"></div>
     <br>
 
     <div class="collapse" id="collapseExample">
-        <%- include('../partials/formularioCliente'); %>
+        <%- include('../partials/forms/formularioCliente'); %>
     </div>
     <br>
 
-    <%- include('../partials/btnHeaderTop-newClient'); %>
+    <%- include('../partials/btnHeaderTop/btnHeaderTop-newClient'); %>
 
             <!-- ------------ Lista de Clientes ------------ -->
             <section class="mx-auto align-items-start" style="width: 94%;">
@@ -31,7 +31,7 @@
             </section>
 
             <div class="d-block mx-auto px-5 mb-3 text-center w-100">
-                <%- include('../partials/dataClientTable'); %>
+                <%- include('../partials/data/dataClientTable'); %>
                     <br>
                     <div class="d-block mx-auto my-4 pb-5 text-center">
                         <!-- <a class="btn btn-primary my-2 me-5" href="/api/auth/index"><i class="fa-solid fa-home"
@@ -41,7 +41,7 @@
                     <br>
             </div>
                     <footer>
-                        <%- include('../partials/footer'); %>
+                        <%- include('../partials/footer/footer'); %>
                     </footer>
     <!--    scripts     -->
     <script type="text/javascript" src="../../../clientes.js"></script>
