@@ -1557,7 +1557,7 @@ function getOtListValues(i, idTabla) {
         arrayProcesoR14.push(otProcesoR14)
         arrayAprobadoR14.push(otAprobadoR14)
     }
-    console.log('arrayConjuntosR14', arrayConjuntos)
+    //console.log('arrayConjuntosR14', arrayConjuntos)
     return {
         arrayProcesoR14,
         arrayAprobadoR14
@@ -1576,7 +1576,7 @@ function addDatoToR14(i, idTabla) {
             color = 'success'
         } else {
             color = 'danger'
-            disabled = 'disabled'
+            //disabled = ''
         }
 
         let valorProcesoR14 = ''
@@ -1636,7 +1636,7 @@ function addDatoToR14(i, idTabla) {
             break;
             }
             default: {
-                valorProcesoR14 = 'SinDato'
+                valorProcesoR14 = 'sinDato'
                 optionDefinedProcesoR14 = optionDefault
             break;
             }
@@ -1667,40 +1667,71 @@ function addDatoToR14(i, idTabla) {
             break;
             }
             default: {
-                valorProcesoR14 = 'SinDato'
+                valorProcesoR14 = 'sinDato'
                 optionDefinedAprobadoR14 = optionDefault
             break;
             }
         }
 
-
-        arrayBloque.push(`
-        <div class="row my-1 mx-auto">
-            <div class="col-2 my-auto align-self-middle">
-                <span id="${res.arrayOtStatus[y]}" class="badge rounded-pill bg-${color} text-white">${res.arrayOtStatus[y]}</span>
-                <input type="hidden" name="otStatusHidden${y}" value="${res.arrayOtStatus[y]}">
-            </div>
-            <div class="col-2 my-auto align-self-middle">
-                <span id="${res.arrayOtNumber[y]}" class="badge rounded-pill bg-dark text-white">${res.arrayOtNumber[y]}</span>
-                <input type="hidden" name="otNumberHidden${y}" value="${res.arrayOtNumber[y]}">
-            </div>
-            <div class="col-2 my-auto align-self-middle">
-                <span class="badge rounded-pill bg-secondary text-white">${res.arrayOpNumber[y]}</span>
-            </div>
-            <div class="col my-auto">
-                <select id="procesoR14${res.arrayOtNumber[y]}" name="procesoR14${y}" class="form-select" ${disabled}>
-                    <option selected disabled value="${valorProcesoR14}">${getValues.arrayProcesoR14[y]}</option>
-                    ${optionDefinedProcesoR14}
-                </select>
-            </div>
-            <div class="col my-auto">
-                <select id="aprobadoR14${res.arrayOtNumber[y]}" name="aprobadoR14${y}" class="form-select" ${disabled}>
-                    <option selected disabled value="${valorAprobadoR14}">${getValues.arrayAprobadoR14[y]}</option>
-                    ${optionDefinedAprobadoR14}
-                </select>
-            </div>
-        </div>    
-        `)
+        //***************
+        if (res.arrayOtStatus[y]==='Inactivo') {
+            arrayBloque.push(`
+                <div class="row py-1 mx-auto pe-none" contenteditable="false" style="background-color: rgba(0, 0, 0, 0.25); opacity: 0.5">
+                    <div class="col-2 my-auto align-self-middle">
+                        <span id="${res.arrayOtStatus[y]}" class="badge rounded-pill bg-${color} text-white">${res.arrayOtStatus[y]}</span>
+                        <input type="hidden" name="otStatusHidden${y}" value="${res.arrayOtStatus[y]}">
+                    </div>
+                    <div class="col-2 my-auto align-self-middle">
+                        <span id="${res.arrayOtNumber[y]}" class="badge rounded-pill bg-dark text-white">${res.arrayOtNumber[y]}</span>
+                        <input type="hidden" name="otNumberHidden${y}" value="${res.arrayOtNumber[y]}">
+                    </div>
+                    <div class="col-2 my-auto align-self-middle">
+                        <span class="badge rounded-pill bg-secondary text-white">${res.arrayOpNumber[y]}</span>
+                    </div>
+                    <div class="col my-auto">
+                        <select id="procesoR14${res.arrayOtNumber[y]}" name="procesoR14${y}" class="form-select" ${disabled}>
+                            <option selected value="${valorProcesoR14}">${getValues.arrayProcesoR14[y]}</option>
+                            ${optionDefinedProcesoR14}
+                        </select>
+                    </div>
+                    <div class="col my-auto">
+                        <select id="aprobadoR14${res.arrayOtNumber[y]}" name="aprobadoR14${y}" class="form-select" ${disabled}>
+                            <option selected value="${valorAprobadoR14}">${getValues.arrayAprobadoR14[y]}</option>
+                            ${optionDefinedAprobadoR14}
+                        </select>
+                    </div>
+                </div>     
+            `)
+        } else {
+        //***************
+            arrayBloque.push(`
+            <div class="row my-1 mx-auto">
+                <div class="col-2 my-auto align-self-middle">
+                    <span id="${res.arrayOtStatus[y]}" class="badge rounded-pill bg-${color} text-white">${res.arrayOtStatus[y]}</span>
+                    <input type="hidden" name="otStatusHidden${y}" value="${res.arrayOtStatus[y]}">
+                </div>
+                <div class="col-2 my-auto align-self-middle">
+                    <span id="${res.arrayOtNumber[y]}" class="badge rounded-pill bg-dark text-white">${res.arrayOtNumber[y]}</span>
+                    <input type="hidden" name="otNumberHidden${y}" value="${res.arrayOtNumber[y]}">
+                </div>
+                <div class="col-2 my-auto align-self-middle">
+                    <span class="badge rounded-pill bg-secondary text-white">${res.arrayOpNumber[y]}</span>
+                </div>
+                <div class="col my-auto">
+                    <select id="procesoR14${res.arrayOtNumber[y]}" name="procesoR14${y}" class="form-select" ${disabled}>
+                        <option selected value="${valorProcesoR14}">${getValues.arrayProcesoR14[y]}</option>
+                        ${optionDefinedProcesoR14}
+                    </select>
+                </div>
+                <div class="col my-auto">
+                    <select id="aprobadoR14${res.arrayOtNumber[y]}" name="aprobadoR14${y}" class="form-select" ${disabled}>
+                        <option selected value="${valorAprobadoR14}">${getValues.arrayAprobadoR14[y]}</option>
+                        ${optionDefinedAprobadoR14}
+                    </select>
+                </div>
+            </div>    
+            `)
+        }
     }
 
     const html = `

@@ -19,7 +19,7 @@
                                         for ( let k = 0; proyecto[m].project[j].oci.length > k; k++) {
                                             if (proyecto[m].project[j].oci[k].visible) { %>
                                                 <div class="form-check form-check-inline">
-                                                    <label class="form-check-label" for="ociNumber">OCI # <%= proyecto[m].project[j].oci[k].ociNumber %></label>
+                                                    <label class="form-check-label" for="<%= proyecto[m].project[j].oci[k].ociNumber %>">OCI # <%= proyecto[m].project[j].oci[k].ociNumber %></label>
     
                                                     <% if (proyecto[m].project[j].oci[k].ociStatus) { %>
                                                         <input class="form-check-input" type="radio" name="ociNumber"

@@ -436,7 +436,7 @@ class ProjectsController {
         }
 
         const proyecto = await this.projects.selectProjectsByMainProjectId(projectId)
-            console.log('proyectoController ',proyecto)
+            // console.log('proyectoController ',proyecto)
         try {
             if (!proyecto) return res.status(404).json({ msg: 'OCI no encontrada' })
             res.render('projectSelectedDetail', {
@@ -495,6 +495,7 @@ class ProjectsController {
             arrayAprobadoR14=[]
 
         for (const key in req.body) {
+            
             if (key.startsWith('otNumberHidden')) {
                 arrayOtNumber.push(req.body[key])
             }
@@ -508,6 +509,10 @@ class ProjectsController {
                 arrayAprobadoR14.push(req.body[key])
             } 
         }
+        
+console.log('arrayOtStatus', arrayOtStatus)
+console.log('arrayProcesoR14', arrayProcesoR14)
+console.log('arrayAprobadoR14', arrayAprobadoR14)
 
         let arrayInfoAddedToOt = []
         for (let i=0; i<otQuantity; i++ ) {
@@ -523,29 +528,32 @@ class ProjectsController {
             }
             arrayInfoAddedToOt.push(infoAddedToOt)
         }
-
-        const proyecto = await this.projects.addInfoR14ToOtProject(
+        //console.log('arrayInfoAddedToOt_Controller: ', arrayInfoAddedToOt)
+        //const itemUpdated = 
+        await this.projects.addInfoR14ToOtProject(
             projectId,
             otQuantity,
             ociNumberK,
             arrayInfoAddedToOt
         )
+        //console.log('itemUpdated_Controller: ', itemUpdated.project)    
+        const proyecto = await this.projects.selectProjectsByMainProjectId(projectId)
 
-        // const data = { // Inicializar variables en servidor
-        //     k: 0, 
-        //     m: 0,
-        //     j: 0
-        // }
-
+        const data = { // Inicializar variables en servidor
+            k: 0, 
+            m: 0,
+            j: 0
+        }
+        
         try {
             if (!proyecto) return res.status(404).json({ msg: 'Proyecto, OCI u OT no encontrada' })
-            res.render('projectsSelectedDetail', {  //projectsList
+            res.render('projectSelectedDetail', {  //projectsList
                 username,
                 userInfo,
                 expires,
                 cliente,
                 proyecto,
-                // data
+                data
             })
 
         } catch (error) {

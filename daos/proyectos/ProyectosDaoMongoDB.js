@@ -342,7 +342,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                             countTreeCreation++
                         }
                     }
-                    // console.log('3.1-Dao-countTree: ', countTreeCreation)
+                    //  console.log('3.1-Dao-countTree: ', countTreeCreation)
                     
                     // Si la cant. de estructuras agregadas es = a la cantidad de OT => continua ---
                     if (countTreeCreation === quantityOt) {
@@ -369,6 +369,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                         // Si la cant. de datos agregados es = a la cantidad de OT => continua ---
                         if (countInfoAdded === quantityOt) {
                             const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
+                            // console.log('5.1-Dao-proyecto: ', itemUpdated.project[0].oci)
                             return itemUpdated
 
                         } else {
