@@ -122,7 +122,7 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    // Vreate a New project ----------------------
+    // Create a New project ----------------------
     async createNewProject(project) {
         
         if (project) {
@@ -394,7 +394,122 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    
+    // Add Info Proceso 3D to Ot's ----------------
+    async addInfoProceso3dToOtProject(idProjectTarget, otQuantity, ociNumberK, infoAddedToOt) {
+
+        const ociKNumber = parseInt(ociNumberK) || 0
+        const quantityOt = parseInt(otQuantity)
+
+        // compara si el proyecto existe --------
+        if (idProjectTarget) {
+            try {
+                const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget })
+
+                // Si encontro el proyecto en la BBDD ----- 
+                if (itemMongoDB) {
+                    let arrayQuantity = []
+                    let arrayStructureTree = []
+
+                    // Se crean los array de estructura de arbol y datos a agregar ---
+                    for (let i = 0; i < quantityOt; i++) {
+                        let estructuraACrear = {
+                            [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation`]:
+                            {
+                                otInfoProceso: []
+                            }
+                        }
+                        arrayStructureTree.push(estructuraACrear)
+
+                        let updateQuery = {
+                            [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation.0.otInfoProceso`]:
+                            {
+                                proceso3d: infoAddedToOt[i].proceso3d,
+                                horasProceso3d: infoAddedToOt[i].horasProceso3d,
+                                creator: infoAddedToOt[i].creator,
+                                timestamp: now,
+                                modificator: infoAddedToOt[i].modificator,
+                                modifiedOn: ''
+                            }
+                        }
+                        arrayQuantity.push(updateQuery)
+                    }
+                    // console.log('1-Dao-arrayStructureTree--- ', arrayStructureTree)
+                    // console.log('2-Dao-arrayQuantity--- ', arrayQuantity)
+
+                    // Se agregan las estructuras al arbol de MongoDB ---
+                    let arrayTreeCreation = []
+                    for (let i = 0; i < quantityOt; i++) {
+                        const treeInfoOtAddedToOt = await Proyectos.updateOne(
+                            { _id: itemMongoDB._id },
+                            {
+                                $set: arrayStructureTree[i] //estructuraACrear
+                            },
+                            { upsert: true }
+                        )
+                        arrayTreeCreation.push(treeInfoOtAddedToOt)
+                    }
+                    // console.log('3-Dao-Estructura arbol creada: ', arrayTreeCreation)
+
+                    // Se cuentan las estructuras del arbol agregadas ---
+                    var countTreeCreation = 0
+                    for (let i = 0; i < quantityOt; i++) {
+                        if (arrayTreeCreation[i].modifiedCount===1) {
+                            countTreeCreation++
+                        }
+                    }
+                    //  console.log('3.1-Dao-countTree: ', countTreeCreation)
+                    
+                    // Si la cant. de estructuras agregadas es = a la cantidad de OT => continua ---
+                    if (countTreeCreation === quantityOt) {
+                        for (let i = 0; i < quantityOt; i++) {
+                            var infoProceso3dOtAddedToOt = await Proyectos.updateOne(
+                                { _id: itemMongoDB._id },
+                                {
+                                    $push: arrayQuantity[i]
+                                },
+                                { new: true }
+                            )
+                        }
+                    // console.log('4-Dao-Ot agregada: ', infoProceso3dOtAddedToOt)
+
+                        // Se cuentan las estructuras de datos agregados ---
+                        var countInfoAdded = 0
+                        for (let i = 0; i < quantityOt; i++) {
+                            if (infoProceso3dOtAddedToOt.modifiedCount===1) {
+                                countInfoAdded++
+                            }
+                        }
+                        // console.log('4.1-Dao-count: ', countInfoAdded)
+
+                        // Si la cant. de datos agregados es = a la cantidad de OT => continua ---
+                        if (countInfoAdded === quantityOt) {
+                            const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
+                            // console.log('5.1-Dao-proyecto: ', itemUpdated.project[0].oci)
+                            return itemUpdated
+
+                        } else {
+                            return new Error(`No se agregó la info de OT en el item: ${itemMongoDB._id}`)
+                        }
+
+                    } else {
+                        return new Error(`No se creo la estructura del arbol correctamente!`)
+                    }
+
+                } else {
+                    return new Error(`No se encontró el Proyecto id#`)
+                }
+
+            } catch (error) {
+                //console.log("Error MongoDB adding info Proceso 3D to OT: ", error)
+                logger.error("Error MongoDB adding info Proceso 3D to OT: ", error)
+            }
+
+        } else {
+            return new Error(`No se pudo agregar la info Proceso 3D a la OT del Proyecto!`)
+        }
+    }
+
+
 
     // Update Status Project by Project Id
     async updateStatusProject(id, project, statusProject, userModificator) {

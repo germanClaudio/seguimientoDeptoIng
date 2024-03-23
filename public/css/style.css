@@ -123,6 +123,10 @@ label {
   padding-top: 60px;
 }
 
+.p-t-70 {
+  padding-top: 70px;
+}
+
 .p-t-80 {
   padding-top: 80px;
 }
@@ -241,6 +245,10 @@ label {
 
 .m-t-60 {
   margin-top: 60px;
+}
+
+.m-t-70 {
+  margin-top: 70px;
 }
 
 .m-t-80 {
@@ -614,7 +622,7 @@ Container / Wrapper
 }
 
 .dashboard-content {
-  padding: 30px 30px 30px 30px;  /*30px 30px 60px 30px;*/
+  padding: 20px 20px 20px 20px;  /*30px 30px 60px 30px;*/
 }
 
 /*-----------------------

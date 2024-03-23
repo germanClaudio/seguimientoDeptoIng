@@ -85,11 +85,11 @@ let otInformationProcesoSchema = new Schema({
     // otInfoR14Id: {
     //     type: mongoose.Schema.Types.ObjectId,
     // },
-    proceso: { 
+    proceso3d: { 
         type: String,
         default: 'noAplica',
     },
-    horasProceso: {
+    horasProceso3d: {
         type: Number,
         default: 0,
     },

@@ -12,9 +12,9 @@
                     name="btnProceso3d"
                     class="btn btn-small btn-success m-1"
                     style="--bs-btn-font-size: .6rem; color: var(--bs-white);"
-                    title="Agregar Datos"
+                    title="Agregar/Modificar Datos"
                     value="<%=k%>">
-                    <i class="fa-solid fa-plus"                                                                              aria-hidden="true"></i>
+                    <i class="fa-solid fa-pencil fa-lg" aria-hidden="true"></i>
                 </button>
             </th>
         </tr>
@@ -34,34 +34,102 @@
                 if (proyecto[m].project[j].oci[k].otProject[n].otStatus) { %>
                     <tr name="rowSelected<%=k%>_<%=n%>" style="height: 7vh;">
                         <td class="text-center align-middle">
-                            <span class="badge rounded-pill bg-success text-white my-2">
-                                100%
-                            </span>
-                            <span
-                                class="badge rounded-pill bg-success text-white my-2">
-                                OK
-                            </span>
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) {
+                                var resProceso3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[0].proceso3d
+                            } else {
+                                var resProceso3d = ''
+                            }
+                                
+                            switch (resProceso3d) { 
+                                case "ok": { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2" >
+                                            OK
+                                        </span>
+                                <% break; }        
+                                case "noOk": { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
+                                            No OK
+                                        </span>
+                                <% break; }        
+                                case "pendiente": { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
+                                            Pendiente
+                                        </span>
+                                <% break; }
+                                case "noAplica": { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-white my-2">
+                                            N/A
+                                        </span>
+                                <% break; }
+                                default: { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
+                                            S/D
+                                        </span>
+                                <% break; }
+                            } %>
                         </td>
                         <td class="text-center align-middle">
-                            <span class="text-black mx-1">
-                                25
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) { 
+                                var resHoras3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[0].horasProceso3d
+                            } else {
+                                var resHoras3d = 0
+                            } %>
+                            
+                            <span id="resHorasProceso3d<%=k%>_<%=n%>" class="text-black mx-1">
+                                <% resHoras3d %>
                             </span>
                         </td>
                     </tr>
+
                 <% } else { %>
                     <tr style="height: 7vh; background-color: #dedede;">
                         <td class="text-center align-middle">
-                            <span class="badge rounded-pill bg-success text-white my-2">
-                                100%
-                            </span>
-                            <span class="badge rounded-pill bg-success text-white my-2">
-                                OK
-                            </span>
+                            
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) {
+                                var resProceso3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso3d[0].proceso3d
+                            } else {
+                                var resProceso3d = ''
+                            }
+
+                            switch (resProceso3d) { 
+                                case "ok": { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-success text-white my-2" >
+                                            OK
+                                        </span>
+                                <% break; }        
+                                case "noOk": { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-danger text-white my-2">
+                                            No OK
+                                        </span>
+                                <% break; }        
+                                case "pendiente": { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-warning text-dark my-2">
+                                            Pendiente
+                                        </span>
+                                <% break; }
+                                case "noAplica": { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-secondary text-white my-2">
+                                            N/A
+                                        </span>
+                                <% break; }
+                                default: { %>
+                                        <span id="resProceso3d<%=k%>_<%=n%>" class="badge rounded-pill bg-info text-dark my-2">
+                                            S/D
+                                        </span>
+                                <% break; }
+                            } %>
+
                         </td>
                         <td class="text-center align-middle">
-                            <span class="text-black mx-1">
-                                25
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) { 
+                                var resHoras3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[0].horasProceso3d
+                            } else {
+                                var resHoras3d = 0
+                            } %>
+                            <span id="resHorasProceso3d<%=k%>_<%=n%>" class="text-black mx-1">
+                                <% resHoras3d %>
                             </pan>
+
                         </td>
                     </tr>
                 <% }

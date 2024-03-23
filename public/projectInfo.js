@@ -1545,22 +1545,33 @@ function getOtListValues(i, idTabla) {
     const lastChild = parseInt(tableBody.childElementCount)
 
     let k = i
-    let arrayProcesoR14 = [], arrayAprobadoR14 = [], arrayConjuntos = []
+    let arrayProcesoR14 = [],
+        arrayAprobadoR14 = [],
+        arrayConjuntos = [],
+        arrayProceso3d =[],
+        arrayHoras3d = []
 
     for (let n=0; n < lastChild; n++) {
         //------------R14--------------
         const otProcesoR14 = document.getElementById(`resProcesoR14${k}_${n}`).innerText
         const otAprobadoR14 = document.getElementById(`resAprobadoR14${k}_${n}`).innerText
         //---------Proceso 3d----------
-        
-        arrayConjuntos.push( { [`${n}`] : [otProcesoR14, otAprobadoR14] } )
+        const otProceso3d = document.getElementById(`resProceso3d${k}_${n}`).innerText
+        const otHoras3d = document.getElementById(`resHoras3d${k}_${n}`).innerText
+
+        arrayConjuntos.push( { [`${n}`] : [otProcesoR14, otAprobadoR14]})//, otProceso3d, otHoras3d] } )
         arrayProcesoR14.push(otProcesoR14)
         arrayAprobadoR14.push(otAprobadoR14)
+        arrayProceso3d.push(otProceso3d)
+        arrayHoras3d.push(otHoras3d)
+
     }
-    //console.log('arrayConjuntosR14', arrayConjuntos)
+    console.log('arrayConjuntosR14', arrayConjuntos)
     return {
         arrayProcesoR14,
-        arrayAprobadoR14
+        arrayAprobadoR14,
+        arrayProceso3d,
+        arrayHoras3d
     }
 }
 
@@ -1815,9 +1826,9 @@ function addDatoToR14(i, idTabla) {
     })
 }
 
-function addDatoToProceso3d(i) {
+function addDatoToProceso3d(i, idTabla) {
     let res = getOtList(i)
-    let getValues = getOtListValues(i)
+    let getValues = getOtListValues(i, idTabla)
 
     var arrayBloque = []
     for (let y=0; y < res.lastChild; y++) {
@@ -1865,33 +1876,33 @@ function addDatoToProceso3d(i) {
 
         let optionDefinedProceso3d = ''
 
-        // switch (getValues.arrayProceso3d[y]) {
-        //     case 'OK': {
-        //         valorProceso3d = 'ok'
-        //         optionDefinedProceso3d = optionOk
-        //     break;
-        //     }
-        //     case 'No OK': {
-        //         valorProcesoR14 = 'noOk'
-        //         optionDefinedProcesoR14 = optionNoOk
-        //     break;
-        //     }
-        //     case 'Pendiente': {
-        //         valorProcesoR14 = 'pendiente'
-        //         optionDefinedProcesoR14 = optionPendiente
-        //     break;
-        //     }
-        //     case 'N/A': {
-        //         valorProcesoR14 = 'noAplica'
-        //         optionDefinedProcesoR14 = optionNoAplica
-        //     break;
-        //     }
-        //     default: {
-        //         valorProcesoR14 = 'SinDato'
-        //         optionDefinedProcesoR14 = optionDefault
-        //     break;
-        //     }
-        // }
+        switch (getValues.arrayProceso3d[y]) {
+            case 'OK': {
+                valorProceso3d = 'ok'
+                optionDefinedProceso3d = optionOk
+            break;
+            }
+            case 'No OK': {
+                valorProceso3d = 'noOk'
+                optionDefinedProceso3d = optionNoOk
+            break;
+            }
+            case 'Pendiente': {
+                valorProceso3d = 'pendiente'
+                optionDefinedProceso3d = optionPendiente
+            break;
+            }
+            case 'N/A': {
+                valorProceso3d = 'noAplica'
+                optionDefinedProceso3d = optionNoAplica
+            break;
+            }
+            default: {
+                valorProceso3d = 'SinDato'
+                optionDefinedProceso3d = optionDefault
+            break;
+            }
+        }
 
 
 
@@ -2816,8 +2827,12 @@ if(arrTables !=[]) {
 
     allButtonsProceso3d.forEach(function(btn){
 		btn.addEventListener("click", (event) => {
+            event.preventDefault()
             let kValue = event.target.value
-            addDatoToProceso3d(kValue)
+            const nombreTabla = document.getElementById(`tablaProceso3D${kValue}`)
+            const idTabla = nombreTabla.id
+
+            addDatoToProceso3d(kValue, idTabla)
     	})
     })
 

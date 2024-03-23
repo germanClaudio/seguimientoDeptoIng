@@ -6,9 +6,7 @@
 </head>
 
 <body>
-    <header>
         <%- include('../partials/header/header'); %>
-    </header>
     <div class="container" style="padding-top: 70px;"></div>
     <br>
         <% if (userInfo.admin) { %>
@@ -16,8 +14,8 @@
         <% } else { %>
             <%- include('../partials/mainCharts/userChartDemo'); %>
         <% } %>
-    <br>
-        <div class="d-block mx-auto mt-4 my-3 text-center bg-primary-light">    
+    
+        <div class="d-block mx-auto mt-1 text-center bg-primary-light">    
             <%- include('../partials/forms/formularioBuscarCliente'); %>
             <%- include('../partials/data/dataClientSearch'); %>
         </div>
@@ -32,7 +30,7 @@
                 </div>
             </div>
         </section>
-    <br>
+        
         <div class="d-block mx-auto mb-3 text-center w-75">
             <%- include('../partials/data/dataClientList'); %>
         </div>

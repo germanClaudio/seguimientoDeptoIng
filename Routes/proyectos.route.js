@@ -26,6 +26,10 @@ routerProyectos.post('/', checkAuthentication, authUserMiddleware, projects.crea
 // -------------------  Agregar informacion R14 a OT --------------------------- 
 routerProyectos.post('/otInfoR14', checkAuthentication, projects.addInfoR14ToOtProject)
 
+// -------------------  Agregar informacion Proceso 3D a OT ------------------------ 
+routerProyectos.post('/otInfoProceso3d', checkAuthentication, projects.addInfoProceso3dToOtProject)
+
+
 // -------------------  Agregar OT a OCI ---------------- 
 routerProyectos.post('/oci', checkAuthentication, projects.addOtToOciProject)
 

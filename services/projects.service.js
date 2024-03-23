@@ -55,6 +55,17 @@ class ProjectService {
             infoAddedToOt)
     }
 
+    // add Info Proceso 3D to Ot - Project
+    async addInfoProceso3dToOtProject(projectId, otQuantity, ociNumberK, infoAddedToOt) {
+        return this.proyectos.addInfoProceso3dToOtProject(
+            projectId,
+            otQuantity,
+            ociNumberK,
+            infoAddedToOt)
+    }
+
+
+    
     // Select OCI - Project
     async selectOciByOciNumber(numberOci) {
         return this.proyectos.selectOciByOciNumber(numberOci)
