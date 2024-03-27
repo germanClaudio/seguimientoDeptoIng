@@ -20,10 +20,34 @@
         </tr>
         <tr>
             <th style="width:50vw" scope="col-1"
-                class="text-center"> Proceso 3D
+                class="text-center pb-1"> Proceso 3D
             </th>
+            <% var arrayHsProceso3d = []
+            var sumaHsProceso3dTotal = 0 
+            for ( let n=0; proyecto[m].project[j].oci[k].otProject.length>n; n++) {
+                if (proyecto[m].project[j].oci[k].otProject.length > 0) {
+                    
+                    if (proyecto[m].project[j].oci[k].otProject[n].visible &&
+                        proyecto[m].project[j].oci[k].otProject[n].otStatus) {
+
+                            if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) {
+
+                                if (proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > 0 ) {
+                                    arrayHsProceso3d.push(parseInt(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length-1].horasProceso3d))
+                                } else {
+                                    arrayHsProceso3d.push(0)
+                                }
+
+                                var sumaHsProceso3dTotal = arrayHsProceso3d.reduce(function(acumulador, valorActual) {
+                                    return acumulador + valorActual;
+                                }, 0);
+                            }
+                    }
+                }
+            } %>
+
             <th style="width:50vw" scope="col-1"
-                class="text-center"> Hs Proceso 3D
+                class="text-center pb-1"> Hs Proceso 3D | Total horas: <span id="resHsTotalProceso3d<%=k%>" class="badge rounded-pill bg-dark text-white"><%= sumaHsProceso3dTotal %></span>
             </th>
         </tr>
     </thead>
@@ -34,7 +58,8 @@
                 if (proyecto[m].project[j].oci[k].otProject[n].otStatus) { %>
                     <tr name="rowSelected<%=k%>_<%=n%>" style="height: 7vh;">
                         <td class="text-center align-middle">
-                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) {
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0 && 
+                                proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > 0) {
                                 var resProceso3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[0].proceso3d
                             } else {
                                 var resProceso3d = ''
@@ -69,15 +94,71 @@
                             } %>
                         </td>
                         <td class="text-center align-middle">
-                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) { 
-                                var resHoras3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[0].horasProceso3d
-                            } else {
-                                var resHoras3d = 0
+                            <%  var arrResHorasProceso3d = [];
+                                var valueArrayResHorasProceso3d = 0;
+                                var valueToShowDefault = 0;
+                                var arrResCreadorProceso3d = []
+                                var arrResModificadorProceso3d = []
+                                var arrResFechaProceso3d = []
+                                var arrResFechaModProceso3d = []
+
+                                if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0 &&
+                                    proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > 0) {
+                                   
+                                        for (let i = 0; proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > i; i++) {
+                                            if (proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso) {
+                                                arrResHorasProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].horasProceso3d)
+                                                valueArrayResHorasProceso3d = parseInt(arrResHorasProceso3d.length-1)
+                                                valueToShowDefault = arrResHorasProceso3d[valueArrayResHorasProceso3d]
+                                                arrResCreadorProdeso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].creator)
+                                                arrResModificadorProdeso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].modificator)
+                                                arrResFechaProdeso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].timestamp)
+                                                arrResFechaModProdeso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].modifiedOn) 
+
+                                            } else {
+                                                valueArrayResHorasProceso3d = 0
+                                                valueToShowDefault = 0
+                                            }
+                                        }
                             } %>
+                        <div id="btnAnteriorSiguienteHorasProceso3d<%=k%>_<%=n%>">
+                            <button id="btnAnteriorHorasProceso3d<%=k%>_<%=n%>"
+                                name="btnAnteriorHorasProceso3d"
+                                value="<%=k%>_<%=n%>"
+                                class="btn btn-light btn-sm me-2"
+                                title="Ver anterior"
+                                type="button"
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem; color: var(--bs-black);">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <input type="hidden" id="resHorasProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResHorasProceso3d %>">
+                            <input type="hidden" id="resIndexHorasProceso3dHidden<%=k%>_<%=n%>" value="<%= valueArrayResHorasProceso3d %>">
+                            <input type="hidden" id="arrResCreadorProdeso3dHidden<%=k%>_<%=n%>" value="arrResCreadorProdeso3d">
+                            <input type="hidden" id="arrResModificadorProdeso3dHidden<%=k%>_<%=n%>" value="arrResModificadorProdeso3d">
+                            <input type="hidden" id="arrResFechaProdeso3dHidden<%=k%>_<%=n%>" value="arrResCreaFechaProdeso3d">
+                            <input type="hidden" id="arrResFechaModProdeso3dHidden<%=k%>_<%=n%>" value="arrResFechaModProdeso3d">
                             
-                            <span id="resHorasProceso3d<%=k%>_<%=n%>" class="text-black mx-1">
-                                <% resHoras3d %>
+                            <span id="resHorasProceso3d<%=k%>_<%=n%>"
+                                name="resHorasProceso3d"
+                                class="text-black mx-2"
+                                style="font-size: .9rem;"
+                                valueCreador="Creador"
+                                valueFecha="Fecha"
+                                valueModificador="Modif."
+                                valueFechaMod="Fecha modif.">
+                                <%= valueToShowDefault %>
                             </span>
+                            <button id="btnSiguienteHorasProceso3d<%=k%>_<%=n%>"
+                                name="btnSiguienteHorasProceso3d"
+                                value="<%=k%>_<%=n%>"
+                                class="btn btn-light btn-sm ms-2"
+                                title="Ver siguiente"
+                                type="button"
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem; color: var(--bs-black);"
+                                disabled= "true">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>    
                         </td>
                     </tr>
 
@@ -85,8 +166,9 @@
                     <tr style="height: 7vh; background-color: #dedede;">
                         <td class="text-center align-middle">
                             
-                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) {
-                                var resProceso3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso3d[0].proceso3d
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0 &&
+                                proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > 0) {
+                                var resProceso3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[0].proceso3d
                             } else {
                                 var resProceso3d = ''
                             }
@@ -121,13 +203,14 @@
 
                         </td>
                         <td class="text-center align-middle">
-                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0) { 
+                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0 &&
+                                proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > 0) { 
                                 var resHoras3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[0].horasProceso3d
                             } else {
                                 var resHoras3d = 0
                             } %>
                             <span id="resHorasProceso3d<%=k%>_<%=n%>" class="text-black mx-1">
-                                <% resHoras3d %>
+                                <%= resHoras3d %>
                             </pan>
 
                         </td>

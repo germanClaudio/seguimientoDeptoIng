@@ -477,6 +477,28 @@ html body .display-7 {
 }
 
 /*-----------------------
+2.xxx Carousel-controls
+-------------------------*/
+.carousel-control-prev,
+.carousel-control-next {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4% !important;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+  background: none;
+  border: 0;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+
+/*-----------------------
 2.13 Badge
 -------------------------*/
 

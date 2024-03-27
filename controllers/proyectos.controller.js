@@ -617,17 +617,18 @@ class ProjectsController {
                 arrayHorasProceso3d.push(req.body[key])
             } 
         }
-        
-console.log('arrayOtStatus', arrayOtStatus)
-console.log('arrayProceso3d', arrayProceso3d)
-console.log('arrayHorasProceso3d', arrayHorasProceso3d)
+
+// console.log('arrayOtNmber', arrayOtNumber)        
+// console.log('arrayOtStatus', arrayOtStatus)
+// console.log('arrayProceso3d', arrayProceso3d)
+// console.log('arrayHorasProceso3d', arrayHorasProceso3d)
 
         let arrayInfoAddedToOt = []
         for (let i=0; i<otQuantity; i++ ) {
             var infoAddedToOt = {
                 otStatus: arrayOtStatus[i],
                 otNumber: parseInt(arrayOtNumber[i]),
-                procesoR14: arrayProceso3d[i] || "sinDato",
+                proceso3d: arrayProceso3d[i] || "sinDato",
                 horasProceso3d: arrayHorasProceso3d[i] || 0,
                 timestamp: now,
                 creator: user,
@@ -636,7 +637,7 @@ console.log('arrayHorasProceso3d', arrayHorasProceso3d)
             }
             arrayInfoAddedToOt.push(infoAddedToOt)
         }
-        console.log('arrayInfoAddedToOt_Controller: ', arrayInfoAddedToOt)
+        //console.log('arrayInfoAddedToOt_Controller: ', arrayInfoAddedToOt)
         //const itemUpdated = 
         await this.projects.addInfoProceso3dToOtProject(
             projectId,

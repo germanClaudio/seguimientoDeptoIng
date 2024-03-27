@@ -1910,7 +1910,24 @@ Sidebar Page Navigations
 
 
 /* -------------------- 0.5.Container / Wrapper ----------------------- */
-
+.carousel-control-prev,
+.carousel-control-next {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4% !important;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+  background: none;
+  border: 0;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
 
 /*-----------------------
 Container / Wrapper
@@ -2385,7 +2402,7 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
   position: relative;
     -ms-flex: 0 1 auto;
     flex: 0 1 auto;
-    width: 10px;
+    width: 5% !important; /*10px;*/
     height: 10px;
     margin-right: 3px;
     margin-left: 3px;

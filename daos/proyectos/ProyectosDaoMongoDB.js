@@ -394,13 +394,13 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
         }
     }
 
-    // Add Info Proceso 3D to Ot's ----------------
+    // ***************** Add Info Proceso 3D to Ot's ----------------
     async addInfoProceso3dToOtProject(idProjectTarget, otQuantity, ociNumberK, infoAddedToOt) {
 
         const ociKNumber = parseInt(ociNumberK) || 0
         const quantityOt = parseInt(otQuantity)
 
-        // compara si el proyecto existe --------
+        // Compara si el proyecto existe --------
         if (idProjectTarget) {
             try {
                 const itemMongoDB = await Proyectos.findById({ _id: idProjectTarget })
@@ -409,98 +409,117 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
                 if (itemMongoDB) {
                     let arrayQuantity = []
                     let arrayStructureTree = []
-
-                    // Se crean los array de estructura de arbol y datos a agregar ---
-                    for (let i = 0; i < quantityOt; i++) {
-                        let estructuraACrear = {
-                            [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation`]:
-                            {
-                                otInfoProceso: []
-                            }
-                        }
-                        arrayStructureTree.push(estructuraACrear)
-
-                        let updateQuery = {
-                            [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation.0.otInfoProceso`]:
-                            {
-                                proceso3d: infoAddedToOt[i].proceso3d,
-                                horasProceso3d: infoAddedToOt[i].horasProceso3d,
-                                creator: infoAddedToOt[i].creator,
-                                timestamp: now,
-                                modificator: infoAddedToOt[i].modificator,
-                                modifiedOn: ''
-                            }
-                        }
-                        arrayQuantity.push(updateQuery)
-                    }
-                    // console.log('1-Dao-arrayStructureTree--- ', arrayStructureTree)
-                    // console.log('2-Dao-arrayQuantity--- ', arrayQuantity)
-
-                    // Se agregan las estructuras al arbol de MongoDB ---
                     let arrayTreeCreation = []
-                    for (let i = 0; i < quantityOt; i++) {
-                        const treeInfoOtAddedToOt = await Proyectos.updateOne(
-                            { _id: itemMongoDB._id },
-                            {
-                                $set: arrayStructureTree[i] //estructuraACrear
-                            },
-                            { upsert: true }
-                        )
-                        arrayTreeCreation.push(treeInfoOtAddedToOt)
-                    }
-                    // console.log('3-Dao-Estructura arbol creada: ', arrayTreeCreation)
+                    let countInfoAdded = 0
+                    let countTreeCreation = 0
 
-                    // Se cuentan las estructuras del arbol agregadas ---
-                    var countTreeCreation = 0
+                    //Se verifica si la estructura del arbol existe en la BBDD -----
+                    let arrayStructureTreeExists = []
                     for (let i = 0; i < quantityOt; i++) {
-                        if (arrayTreeCreation[i].modifiedCount===1) {
-                            countTreeCreation++
-                        }
+                        const treeOtInformation = await Proyectos.find({
+                            [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation`]: { $exists: true }
+                        })
+                        
+                        treeOtInformation ? arrayStructureTreeExists.push(true) : arrayStructureTreeExists.push(false)
                     }
-                    //  console.log('3.1-Dao-countTree: ', countTreeCreation)
-                    
-                    // Si la cant. de estructuras agregadas es = a la cantidad de OT => continua ---
-                    if (countTreeCreation === quantityOt) {
-                        for (let i = 0; i < quantityOt; i++) {
-                            var infoProceso3dOtAddedToOt = await Proyectos.updateOne(
-                                { _id: itemMongoDB._id },
+                        console.log('0-Dao-arrayStructureTreeExists---- ',arrayStructureTreeExists)
+
+                    for (let i = 0; i < quantityOt; i++) {
+                        // Si no existe la extructura del arbol, se crea la estructura a agregar --
+                        if (!arrayStructureTreeExists[i]) {
+                            let estructuraACrear = {
+                                [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation`]:
                                 {
-                                    $push: arrayQuantity[i]
-                                },
-                                { new: true }
-                            )
-                        }
-                    // console.log('4-Dao-Ot agregada: ', infoProceso3dOtAddedToOt)
-
-                        // Se cuentan las estructuras de datos agregados ---
-                        var countInfoAdded = 0
-                        for (let i = 0; i < quantityOt; i++) {
-                            if (infoProceso3dOtAddedToOt.modifiedCount===1) {
-                                countInfoAdded++
+                                    otInfoProceso: []
+                                }
                             }
-                        }
-                        // console.log('4.1-Dao-count: ', countInfoAdded)
+                            arrayStructureTree.push(estructuraACrear)
 
-                        // Si la cant. de datos agregados es = a la cantidad de OT => continua ---
-                        if (countInfoAdded === quantityOt) {
+                            console.log('1-Dao-arrayStructureTree-- ', i,' - ', arrayStructureTree)
+                            
+                            // Se agrega la estructura al arbol de MongoDB ---
+                                const treeInfoOtAddedToOt = await Proyectos.updateOne(
+                                    { _id: itemMongoDB._id },
+                                    {
+                                        $set: arrayStructureTree[i] //estructuraACrear
+                                    },
+                                    { upsert: true }
+                                )
+                                arrayTreeCreation.push(treeInfoOtAddedToOt)
+                                console.log('2-Dao-Estructura arbol creada: ', i,' - ', arrayTreeCreation)
+
+                            // Se crea el array de datos a agregar --
+                            let updateQuery = {
+                                [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation.0.otInfoProceso`]:
+                                {
+                                    proceso3d: infoAddedToOt[i].proceso3d,
+                                    horasProceso3d: infoAddedToOt[i].horasProceso3d,
+                                    creator: infoAddedToOt[i].creator,
+                                    timestamp: now,
+                                    modificator: infoAddedToOt[i].modificator,
+                                    modifiedOn: ''
+                                }
+                            }
+                                arrayQuantity.push(updateQuery)
+
+                                // Si arrayTreeCreation.modifiedCount es = a 1 ---
+                                if (arrayTreeCreation[i].modifiedCount===1) {
+               
+                                    var infoProceso3dOtAddedToOt = await Proyectos.updateOne(
+                                        { _id: itemMongoDB._id },
+                                        {
+                                            $push: arrayQuantity[i]
+                                        },
+                                        { new: true }
+                                    )
+                                    countTreeCreation++
+                                }
+                                console.log('4-Dao-Ot agregada: ', i,' - ', infoProceso3dOtAddedToOt)
+
+                        } else {
+
+                            // Si existe la extructura del arbol, se crea el array de datos a agregar --
+                            let updateQuery = {
+                                [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation.0.otInfoProceso`]:
+                                {
+                                    proceso3d: infoAddedToOt[i].proceso3d,
+                                    horasProceso3d: infoAddedToOt[i].horasProceso3d,
+                                    // creator: infoAddedToOt[i].creator,
+                                    // timestamp: now,
+                                    modificator: infoAddedToOt[i].creator,
+                                    modifiedOn: now
+                                }
+                            }
+                                arrayQuantity.push(updateQuery)
+                                console.log('5-Dao-arrayQuantity-- ', i,' - ', arrayQuantity)
+
+                                var infoProceso3dOtAddedToOt = await Proyectos.updateOne(
+                                    { _id: itemMongoDB._id },
+                                    {
+                                        $push: arrayQuantity[i]
+                                    },
+                                    { new: true }
+                                )
+                                countInfoAdded++
+                        }
+                    }            
+
+                    // Si el recuento de info agregada o creacion de arbol es mayor a 0
+                        if (countInfoAdded > 0 || countTreeCreation > 0 ) {
+                              
                             const itemUpdated = await Proyectos.findById({ _id: idProjectTarget })
-                            // console.log('5.1-Dao-proyecto: ', itemUpdated.project[0].oci)
+                            //console.log('5.1-Dao-proyecto: ', itemUpdated.project[0].oci)
                             return itemUpdated
 
                         } else {
                             return new Error(`No se agregó la info de OT en el item: ${itemMongoDB._id}`)
                         }
 
-                    } else {
-                        return new Error(`No se creo la estructura del arbol correctamente!`)
-                    }
-
                 } else {
                     return new Error(`No se encontró el Proyecto id#`)
                 }
 
             } catch (error) {
-                //console.log("Error MongoDB adding info Proceso 3D to OT: ", error)
                 logger.error("Error MongoDB adding info Proceso 3D to OT: ", error)
             }
 

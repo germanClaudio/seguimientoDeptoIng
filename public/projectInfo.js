@@ -1530,6 +1530,7 @@ function getOtList(i) {
         arrayOpNumber.push(opNumber)
         arrayOtStatus.push(otStatus)
     }
+    //console.log('arrayOtNumber', arrayOtNumber,)
     return {
         arrayOtNumber,
         arrayOpNumber,
@@ -1547,9 +1548,11 @@ function getOtListValues(i, idTabla) {
     let k = i
     let arrayProcesoR14 = [],
         arrayAprobadoR14 = [],
-        arrayConjuntos = [],
         arrayProceso3d =[],
-        arrayHoras3d = []
+        arrayHoras3d = [],
+
+        arrayConjuntosR14 = []
+        arrayConjuntos3d = []
 
     for (let n=0; n < lastChild; n++) {
         //------------R14--------------
@@ -1557,16 +1560,20 @@ function getOtListValues(i, idTabla) {
         const otAprobadoR14 = document.getElementById(`resAprobadoR14${k}_${n}`).innerText
         //---------Proceso 3d----------
         const otProceso3d = document.getElementById(`resProceso3d${k}_${n}`).innerText
-        const otHoras3d = document.getElementById(`resHoras3d${k}_${n}`).innerText
-
-        arrayConjuntos.push( { [`${n}`] : [otProcesoR14, otAprobadoR14]})//, otProceso3d, otHoras3d] } )
+        const otHoras3d = document.getElementById(`resHorasProceso3d${k}_${n}`).innerHTML
+        
         arrayProcesoR14.push(otProcesoR14)
         arrayAprobadoR14.push(otAprobadoR14)
+        arrayConjuntosR14.push( { [`${n}`] : [otProcesoR14, otAprobadoR14]})
+        
         arrayProceso3d.push(otProceso3d)
         arrayHoras3d.push(otHoras3d)
-
+        arrayConjuntos3d.push( { [`${n}`] : [otProceso3d, otHoras3d]})
+        
     }
-    console.log('arrayConjuntosR14', arrayConjuntos)
+    console.log('arrayConjuntosR14', arrayConjuntosR14)
+    console.log('arrayConjuntos3d', arrayConjuntos3d)
+    
     return {
         arrayProcesoR14,
         arrayAprobadoR14,
@@ -1575,6 +1582,7 @@ function getOtListValues(i, idTabla) {
     }
 }
 
+//***** addDatoToR14 ******
 function addDatoToR14(i, idTabla) {
     let res = getOtList(i)
     let getValues = getOtListValues(i, idTabla)
@@ -1773,8 +1781,7 @@ function addDatoToR14(i, idTabla) {
                     <input type="hidden" name="ociNumberK" value="${i}"> 
                     <input type="hidden" name="otQuantity" value="${arrayBloque.length}">
                 </fieldset>
-            </form>
-    `
+            </form>`
 
     const Toast = Swal.mixin({
         toast: true,
@@ -1795,18 +1802,7 @@ function addDatoToR14(i, idTabla) {
         showCancelButton: true,
         confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
         cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
-        // showLoaderOnConfirm: true,
-        // preConfirm: () => {
-        //     var arrayInputs = []
-        //     for (let y=0; y < res.lastChild; y++) {
-        //         arrayInputs.push(
-        //             document.getElementById(`${res.arrayOtNumber[y]}`).innerText,
-        //             document.getElementById(`procesoR14${res.arrayOtNumber[y]}`).value,
-        //             document.getElementById(`aprobadoR14${res.arrayOtNumber[y]}`).value
-        //         )
-        //     }
-        //     return arrayInputs
-        // }        
+
     }).then((result) => {
         if (result.isConfirmed) {
             const formR14Values = document.getElementById('formR14Values')
@@ -1825,12 +1821,14 @@ function addDatoToR14(i, idTabla) {
         }
     })
 }
+//***** End addDatoToR14 ******
 
+//***** addDatoToProceso3d ******
 function addDatoToProceso3d(i, idTabla) {
     let res = getOtList(i)
     let getValues = getOtListValues(i, idTabla)
-
-    var arrayBloque = []
+    console.log('getValues[i]: ', getValues.arrayHoras3d[i])
+    var arrayBloqueProceso3d = []
     for (let y=0; y < res.lastChild; y++) {
         let color = ''
         let disabled = 'required'
@@ -1838,7 +1836,6 @@ function addDatoToProceso3d(i, idTabla) {
             color = 'success'
         } else {
             color = 'danger'
-            disabled = 'disabled'
         }
 
         let valorProceso3d = ''
@@ -1904,38 +1901,62 @@ function addDatoToProceso3d(i, idTabla) {
             }
         }
 
-
-
-        arrayBloque.push(`
-        <div class="row my-1 mx-auto">
-            <div class="col-2 my-auto align-self-middle">
-                <span id="${res.arrayOtStatus[y]}" class="badge rounded-pill bg-${color} text-white">${res.arrayOtStatus[y]}</span>
-                <input type="hidden" name="otStatusHidden${y}" value="${res.arrayOtStatus[y]}">
-            </div>
-            <div class="col-2 my-auto align-self-middle">
-                <span class="badge rounded-pill bg-dark text-white">${res.arrayOtNumber[y]}</span>
-            </div>
-            <div class="col-2 my-auto align-self-middle">
-                <span class="badge rounded-pill bg-secondary text-white">${res.arrayOpNumber[y]}</span>
-            </div>
-            <div class="col my-auto">
-                <select id="proceso" name="proceso" class="form-select" required>
-                    <option selected disabled value="">Seleccione...</option>
-                    <option value="ok">OK</option>
-                    <option value="noOk">No OK</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="noAplica">N/A</option>
-                </select>
-            </div>
-            <div class="col my-auto">
-                <input type="number" id="hsProceso" name="hsProceso" class="form-control" min="0" max="9999" required>
-            </div>
-        </div>    
-        `)
+        //***************
+        if (res.arrayOtStatus[y]==='Inactivo') {
+            arrayBloqueProceso3d.push(`
+                <div class="row py-1 mx-auto pe-none" contenteditable="false" style="background-color: rgba(0, 0, 0, 0.25); opacity: 0.5">
+                    <div class="col-2 my-auto align-self-middle">
+                        <span id="${res.arrayOtStatus[y]}" class="badge rounded-pill bg-${color} text-white">${res.arrayOtStatus[y]}</span>
+                        <input type="hidden" name="otStatusHidden${y}" value="${res.arrayOtStatus[y]}">
+                    </div>
+                    <div class="col-2 my-auto align-self-middle">
+                        <span id="${res.arrayOtNumber[y]}" class="badge rounded-pill bg-dark text-white">${res.arrayOtNumber[y]}</span>
+                        <input type="hidden" name="otNumberHidden${y}" value="${res.arrayOtNumber[y]}">
+                    </div>
+                    <div class="col-2 my-auto align-self-middle">
+                        <span class="badge rounded-pill bg-secondary text-white">${res.arrayOpNumber[y]}</span>
+                    </div>
+                    <div class="col my-auto">
+                        <select id="proceso3d${res.arrayOtNumber[y]}" name="proceso3d${y}" class="form-select" ${disabled}>
+                            <option selected value="${valorProceso3d}">${getValues.arrayProceso3d[y]}</option>
+                            ${optionDefinedProceso3d}
+                        </select>
+                    </div>
+                    <div class="col my-auto">
+                    <input value="${parseInt(getValues.arrayHoras3d[y])}" type="number" id="hsProceso${res.arrayOtNumber[y]}" name="horasProceso3d${y}" class="form-control" min="0" max="9999" ${disabled}>
+                    </div>
+                </div>     
+            `)
+        } else {
+        //***************
+        arrayBloqueProceso3d.push(`
+            <div class="row my-1 mx-auto">
+                <div class="col-2 my-auto align-self-middle">
+                    <span id="${res.arrayOtStatus[y]}" class="badge rounded-pill bg-${color} text-white">${res.arrayOtStatus[y]}</span>
+                    <input type="hidden" name="otStatusHidden${y}" value="${res.arrayOtStatus[y]}">
+                </div>
+                <div class="col-2 my-auto align-self-middle">
+                    <span id="${res.arrayOtNumber[y]}" class="badge rounded-pill bg-dark text-white">${res.arrayOtNumber[y]}</span>
+                    <input type="hidden" name="otNumberHidden${y}" value="${res.arrayOtNumber[y]}">
+                </div>
+                <div class="col-2 my-auto align-self-middle">
+                    <span class="badge rounded-pill bg-secondary text-white">${res.arrayOpNumber[y]}</span>
+                </div>
+                <div class="col my-auto">
+                    <select id="proceso3d${res.arrayOtNumber[y]}" name="proceso3d${y}" class="form-select" ${disabled}>
+                        <option selected value="${valorProceso3d}">${getValues.arrayProceso3d[y]}</option>
+                        ${optionDefinedProceso3d}
+                    </select>
+                </div>
+                <div class="col my-auto">
+                    <input value="${parseInt(getValues.arrayHoras3d[y])}" type="number" id="hsProceso${res.arrayOtNumber[y]}" name="horasProceso3d${y}" class="form-control" min="0" max="9999" ${disabled}>
+                </div>           
+            </div>`)
+        }
     }
 
     const html = `
-            <form id="formProceso3dValues" action="/api/proyectos/oci" method="post" style="font-size: 10pt">
+            <form id="formProceso3dValues" action="/api/proyectos/otInfoProceso3d" method="post" style="font-size: 10pt">
                 <fieldset>
                     <div class="row my-1 mx-auto">
                         <div class="col-2 my-auto align-self-middle">
@@ -1955,32 +1976,54 @@ function addDatoToProceso3d(i, idTabla) {
                         </div>
                     </div>
                     <hr>
-                        ${arrayBloque.join("<br>")}
+                        ${arrayBloqueProceso3d.join("<br>")}
                     <hr>
                     <input type="hidden" name="projectIdHidden" value="${projectNumberId}">
                     <input type="hidden" name="clientIdHidden" value="${clientId.value}">
                     <input type="hidden" name="ociNumberK" value="${i}"> 
-                    <input type="hidden" name="otQuantity" value="${arrayBloque.length}">
+                    <input type="hidden" name="otQuantity" value="${arrayBloqueProceso3d.length}">
                 </fieldset>
-            </form>
-    `
+            </form>`
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: false,
+    })        
 
     Swal.fire({
         title: 'Proceso 3D',
         html: html,
+        width: 680,
         //background: "#aaaaaa",
         allowOutsideClick: false,
         showCloseButton: true,
         showCancelButton: true,
         confirmButtonText: 'Guardar <i class="fa-solid fa-save"></i>',
         cancelButtonText: 'Cancelar <i class="fa-solid fa-xmark"></i>',
+
     }).then((result) => {
         if (result.isConfirmed) {
-            // Haz algo con los valores seleccionados, por ejemplo, muestra una alerta
-            Swal.fire(`Seleccionaste: `)
+            const formProceso3dValues = document.getElementById('formProceso3dValues')
+            formProceso3dValues.submit()
+            Toast.fire({
+                icon: 'success',
+                title: `Información de OT ${res.arrayOtNumber.join(" - ")} agregada con éxito!`
+            })
+        } else {
+            Swal.fire(
+                'Info Proceso 3D no agregada!',
+                `La información no fue agregada a las OTs# ${res.arrayOtNumber.join(" - ")}!`,
+                'warning'
+            )
+            return false
         }
     })
 }
+//***** End addDatoToProceso3d ******
+
 
 function addDatoToDiseno(i) {
     let resultado = getOtList(i)
@@ -2796,11 +2839,27 @@ function addDatoToS5(i) {
 }
 
 const arrTables = []
-for (let i = 0; i<25; i++) { //ver limite maximo de proyectos por Cliente
+const arrBtnAnterior = []
+const arrBtnSiguiente = []
+//variable limite maximo de proyectos por Cliente
+let varLimMaxProyectoCliente = 25
+
+//variable limite maximo de Ot por Proyecto
+let varLimMaxOtProyecto = 50
+
+for (let i = 0; i<varLimMaxProyectoCliente; i++) { //variable limite maximo de proyectos por Cliente
     if (document.getElementById(`tablaGeneral${i}`)) {
         arrTables.push(i)
     }
+
+    for (let p = 0; p<varLimMaxOtProyecto; p++) //variable limite maximo de Ot por proyecto
+    if (document.getElementById(`btnAnteriorSiguienteHorasProceso3d${i}_${p}`)) {
+        arrBtnAnterior.push(i)
+        arrBtnSiguiente.push(i)
+    }
+    //encontrar los input hidden y sus valores
 }
+
 
 if(arrTables !=[]) {
     let allButtonsR14 = document.querySelectorAll('button[name="btnR14"]')
@@ -2893,3 +2952,98 @@ if(arrTables !=[]) {
     })
 }
 
+//*********** Evento btn's anterior y siguiente ************* */
+if(arrBtnAnterior !=[]) {
+    let allBtnAnteriorHorasProceso3d = document.querySelectorAll('button[name="btnAnteriorHorasProceso3d"]')
+    
+    allBtnAnteriorHorasProceso3d.forEach(function(btn){
+        btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            let arrayActual = document.getElementById(`resHorasProceso3dHidden${kValue}`)
+            let actualValue = arrayActual.value
+            let arrayFromValues = actualValue.split(",")
+            
+            mostrarAnterior(arrayFromValues, kValue)
+    	})
+    })
+}
+
+if(arrBtnSiguiente !=[]) {    
+    let allBtnSiguienteHorasProceso3d = document.querySelectorAll('button[name="btnSiguienteHorasProceso3d"]')
+    
+    allBtnSiguienteHorasProceso3d.forEach(function(btn){
+		btn.addEventListener("click", (event) => {
+            let kValue = event.target.value
+            let arrayActual = document.getElementById(`resHorasProceso3dHidden${kValue}`)
+            let actualValue = arrayActual.value
+            let arrayFromValues = actualValue.split(",")
+            
+            mostrarSiguiente(arrayFromValues, kValue)
+    	})
+    })
+
+}
+
+// Mostrar el elemento actual en la página
+function mostrarElemento(arrayFromValues, indiceAMostrar, kValue) {
+    let spanElemento = document.getElementById(`resHorasProceso3d${kValue}`)
+    let lastIndexArrayFromValuesToShow = document.getElementById(`resIndexHorasProceso3dHidden${kValue}`)
+    lastIndexArrayFromValuesToShow.value = parseInt(indiceAMostrar)
+    spanElemento.innerText = arrayFromValues[indiceAMostrar]
+
+    let btnAnteriorHorasProceso3d = document.getElementById(`btnAnteriorHorasProceso3d${kValue}`)
+    let btnSiguienteHorasProceso3d = document.getElementById(`btnSiguienteHorasProceso3d${kValue}`)
+    
+    if (indiceAMostrar == 0) {
+        btnAnteriorHorasProceso3d.disabled = 'true'
+        btnSiguienteHorasProceso3d.removeAttribute('disabled')
+    } else if (indiceAMostrar == arrayFromValues.length-1) {
+        btnSiguienteHorasProceso3d.disabled = true
+        btnAnteriorHorasProceso3d.removeAttribute('disabled')
+    } else {
+        btnAnteriorHorasProceso3d.removeAttribute('disabled')
+        btnSiguienteHorasProceso3d.removeAttribute('disabled')
+    }
+}
+
+// Función para mostrar el elemento anterior
+function mostrarAnterior(arrayFromValues, kValue) {
+    let lastIndexArrayFromValues = document.getElementById(`resIndexHorasProceso3dHidden${kValue}`)
+    let indiceActualMostrado =  parseInt(lastIndexArrayFromValues.value)
+    let indiceAMostrar = parseInt(indiceActualMostrado - 1)
+        
+    mostrarElemento(arrayFromValues, indiceAMostrar, kValue)
+}
+
+// Función para mostrar el elemento siguiente
+function mostrarSiguiente(arrayFromValues, kValue) {
+    let lastIndexArrayFromValues = document.getElementById(`resIndexHorasProceso3dHidden${kValue}`)
+    let indiceActualMostrado =  parseInt(lastIndexArrayFromValues.value)
+    let indiceAMostrar = indiceActualMostrado + 1
+        
+    mostrarElemento(arrayFromValues, indiceAMostrar, kValue)
+}
+//*********** End Evento btn anterior y siguiente ********* */
+
+//************ ToolTip btn-Arrows anterior/Siguiente -----------
+let spanResHorasProceso3d = Array.from(document.querySelectorAll('span[name="resHorasProceso3d"]'))
+
+
+spanResHorasProceso3d.forEach(function(spanElement) {
+    spanElement.addEventListener("mouseover", (event) => {
+        let spanSpotHorasProceso3d = document.getElementById(`${spanElement.id}`)
+        
+        tippy(spanSpotHorasProceso3d, {
+            content: `Creador: ${spanSpotHorasProceso3d.getAttribute("valueCreador")}<br>
+                      Fecha: ${spanSpotHorasProceso3d.getAttribute("valueFecha")}<br>
+                      Modificador: ${spanSpotHorasProceso3d.getAttribute("valueModificador")}<br>
+                      Fecha mod.: ${spanSpotHorasProceso3d.getAttribute("valueFechaMod")}`,
+            allowHTML: true,
+            arrow: true,
+            animation: 'scale',
+            theme: 'material',
+            interactive: false,
+        })
+    })
+})
+//************ End ToolTip btn-Arrows anterior/Siguiente -----------
