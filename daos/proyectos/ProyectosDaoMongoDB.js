@@ -478,14 +478,18 @@ class ProyectosDaoMongoDB extends ContenedorMongoDB {
 
                         } else {
 
+                            // Recupero el creador y la fecha inicial, ya que solo se modifica
+                            let creatorInitial = itemMongoDB.project[0].oci[ociKNumber].otProject[i].creator[0]
+                            let timestampInitial = itemMongoDB.project[0].oci[ociKNumber].otProject[i].timestamp
+                            
                             // Si existe la extructura del arbol, se crea el array de datos a agregar --
                             let updateQuery = {
                                 [`project.0.oci.${ociKNumber}.otProject.${i}.otInformation.0.otInfoProceso`]:
                                 {
                                     proceso3d: infoAddedToOt[i].proceso3d,
                                     horasProceso3d: infoAddedToOt[i].horasProceso3d,
-                                    // creator: infoAddedToOt[i].creator,
-                                    // timestamp: now,
+                                    creator: creatorInitial,
+                                    timestamp: timestampInitial,
                                     modificator: infoAddedToOt[i].creator,
                                     modifiedOn: now
                                 }

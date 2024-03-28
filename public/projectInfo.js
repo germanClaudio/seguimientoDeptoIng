@@ -1,7 +1,15 @@
-// Manejador de eventos de tablas General y Seguimiento -------------------
+//variable limite maximo de proyectos por Cliente
+const varLimMaxProyectoCliente = 25
 
+//variable limite maximo de Ot por Proyecto
+const varLimMaxOtProyecto = 50
+
+//variable limite maximo de OCI por Proyecto
+const varLimMaxOciProyecto = 25
+
+// Manejador de eventos de tablas General y Seguimiento -------------------
 const arrBtnHidde = []
-for (let i = 0; i<25; i++) { //ver limite maximo de OCI por Proyecto
+for (let i = 0; i<varLimMaxOciProyecto; i++) {
     if (document.getElementById(`tablaGeneral${i}`)) {
         arrBtnHidde.push(i)
     }
@@ -79,19 +87,23 @@ if(arrBtnHidde !=[]) {
     let allButtonsHiddeTableSeguimiento = document.querySelectorAll('button[name="btnHiddeTableSeguimiento"]')
     
     allButtonsHiddeTableGeneral.forEach(function(btn){
-		btn.addEventListener("click", (event) => {
-            event.preventDefault()
-            let kValue = event.target.id
-            hiddeTableGeneral(extractNumbers(kValue))
-    	})
+        if (btn.id) {
+            btn.addEventListener("click", (event) => {
+                event.preventDefault()
+                let kValue = btn.id//event.target.id
+                hiddeTableGeneral(extractNumbers(kValue))
+            })
+        }
     })
 
     allButtonsHiddeTableSeguimiento.forEach(function(btn){
-		btn.addEventListener("click", (event) => {
-            event.preventDefault()
-            let kValue = event.target.id
-            hiddeTableSeguimiento(extractNumbers(kValue))
-    	})
+        if (btn.id) {
+            btn.addEventListener("click", (event) => {
+                event.preventDefault()
+                let kValue = btn.id//event.target.id
+                hiddeTableSeguimiento(extractNumbers(kValue))
+            })
+        }    
     })
 }
 
@@ -349,17 +361,10 @@ function lastOtNumberFn(i) {
 }
 
 //-------------------- Boton agregar nuevas OT's a OCI ------------------------
-// const btnAddOtForm = document.getElementById("btnAddOtForm")
-// btnAddOtForm.addEventListener('click', () => {
-//     if (document.getElementById(`ociNumberHidden`)) {
-//         let ociSeleccionada = document.getElementById(`ociNumberHidden`).value
-//         tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
-//         lastOtNumberFn()
-//     }
-// })
-
 function radioSelected(radioSelectedValue, elementoId) {
-    const radioSelected = document.getElementById(`${radioSelectedValue}`)
+    console.log('elementoId', elementoId)
+    const radioSelected = document.getElementById(`radioSelectedValue${elementoId}`)
+    console.log('radioSelected', radioSelected)
     radioSelected.checked = true
     tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${radioSelectedValue}</strong> / Proyecto: ${projectNameHidden}`
     ociNumberK.value = extractNumbers(elementoId)
@@ -377,17 +382,20 @@ for (let i=0; i<radios.length; i++) {
 }
 
 arrayBtnAddOtFormSelected.forEach(function(elemento) {
-    elemento.addEventListener('click', (event) => {
-        event.preventDefault()
-        const radioSelectedValue = event.target.name   //elemento.name
-        radioSelected(radioSelectedValue, elemento.id)
-        lastOtNumberFn(elemento.id)
-    })
+    if (elemento) {
+        elemento.addEventListener('click', (event) => {
+            event.preventDefault()
+            const radioSelectedValue = elemento.id //event.target.name   //elemento.name
+            console.log('radioSelected-elemento.value', radioSelectedValue, elemento.value)
+            radioSelected(radioSelectedValue, elemento.value)
+            lastOtNumberFn(elemento.id)
+        })
+    }
 })
 
 for (let i = 0; i < radios.length; i++) {
     radios[i].addEventListener("change", function (event) {
-        ociSeleccionada = event.target.value
+        let ociSeleccionada = event.target.value
         tituloForm.innerHTML = `Agregar Nueva/s OT's a OCI #<strong>${ociSeleccionada}</strong> / Proyecto: ${projectNameHidden}`
         ociNumberK.value = i
         ociNumberHidden.value = ociSeleccionada
@@ -585,7 +593,7 @@ function messageUpdateOt(
         })
     }
 
-    // //--------------------------------- to be done
+    // //******************** to be done ********************
     //-----Btns Buscar en BBDD el Usuario Seguidor de Diseño --------------
     const searchDesignUserModal = document.getElementById('searchDesignUserModal')
     searchDesignUserModal.addEventListener('click', (event) => {
@@ -767,7 +775,7 @@ function messageUpdateOt(
         }
         cargarUsuarioSimulacion()
     })
-    //-------------------------------- to be done
+    // ****************** End To be done *******************************
 }
 
 //---- Delete OT ----------------
@@ -1058,115 +1066,123 @@ function updateBtnCheckSelecMasive(idOci) {
 }  
 
 arrayBtnCheckSelecMasive.forEach(function(elemento) {
-    elemento.addEventListener('click', (event) => {
-        event.preventDefault()
-        const idOci = elemento.id.slice(19)
-        var arrayRowsSelected = []
-        for (let z=0; z<99; z++) {
-            let selected = document.getElementById(`checkSelect${idOci}_${z}`)
-
-            if (selected && selected.checked) {
-                const statusOt = cleanString(document.getElementById(`lastOtStatus${idOci}_${z}`).textContent)
-                const otNumber = parseInt(document.getElementById(`lastOtNumber${idOci}_${z}`).textContent)
-                const otDescription = document.getElementById(`lastOpDescription${idOci}_${z}`).textContent
-                const otDesign =  document.getElementById(`otDesign${idOci}_${z}`).textContent
-                const otSimulation =  document.getElementById(`otSimulation${idOci}_${z}`).textContent
-                const otSupplier =  document.getElementById(`otSupplier${idOci}_${z}`).textContent
-                const idProjectSelected = document.getElementById('projectIdHidden').value
-                
-                arrayRowsSelected.push({
-                    selected, 
-                    statusOt, 
-                    otNumber, 
-                    otDescription, 
-                    otDesign, 
-                    otSimulation, 
-                    otSupplier, 
-                    idProjectSelected
-                })
+    if (elemento.id) {
+        elemento.addEventListener('click', (event) => {
+            event.preventDefault()
+            const idOci = elemento.id.slice(19)
+            var arrayRowsSelected = []
+            for (let z=0; varLimMaxOtProyecto > z; z++) {
+                let selected = document.getElementById(`checkSelect${idOci}_${z}`)
+    
+                if (selected && selected.checked) {
+                    const statusOt = cleanString(document.getElementById(`lastOtStatus${idOci}_${z}`).textContent)
+                    const otNumber = parseInt(document.getElementById(`lastOtNumber${idOci}_${z}`).textContent)
+                    const otDescription = document.getElementById(`lastOpDescription${idOci}_${z}`).textContent
+                    const otDesign =  document.getElementById(`otDesign${idOci}_${z}`).textContent
+                    const otSimulation =  document.getElementById(`otSimulation${idOci}_${z}`).textContent
+                    const otSupplier =  document.getElementById(`otSupplier${idOci}_${z}`).textContent
+                    const idProjectSelected = document.getElementById('projectIdHidden').value
+                    
+                    arrayRowsSelected.push({
+                        selected, 
+                        statusOt, 
+                        otNumber, 
+                        otDescription, 
+                        otDesign, 
+                        otSimulation, 
+                        otSupplier, 
+                        idProjectSelected
+                    })
+                }
             }
-        }
-                
-        messageUpdateMasiveOt(arrayRowsSelected)
-        
-    })
+                    
+            messageUpdateMasiveOt(arrayRowsSelected)
+            
+        })
+    }
 })
 
 
 arrayBtnChangeStatusOt.forEach(function(elemento) {
-    elemento.addEventListener('click', (event) => {
-        event.preventDefault()
-        const idOtOci = (event.target.id).slice(11)
-        const arrayOciOtSelected = (event.target.id).slice(11).split('_')
-        
-        const statusOt = document.getElementById(`lastOtStatus${idOtOci}`).textContent
-        const otNumber = parseInt(document.getElementById(`lastOtNumber${idOtOci}`).textContent)
-        const idProjectSelected = document.getElementById('projectIdHidden').value
-        const ociKNumber = parseInt(arrayOciOtSelected[0])
-        const otKNumber = parseInt(arrayOciOtSelected[1])
-        
-        messageChangeOtStatus(
-            cleanString(statusOt),
-            otNumber,
-            idProjectSelected,
-            ociKNumber,
-            otKNumber
-        )
-    })
+    if (elemento.id) {
+        elemento.addEventListener('click', (event) => {
+            event.preventDefault()
+            const idOtOci = (elemento.id).slice(11) //(event.target.id)
+            const arrayOciOtSelected = (event.target.id).slice(11).split('_')
+            
+            const statusOt = document.getElementById(`lastOtStatus${idOtOci}`).textContent
+            const otNumber = parseInt(document.getElementById(`lastOtNumber${idOtOci}`).textContent)
+            const idProjectSelected = document.getElementById('projectIdHidden').value
+            const ociKNumber = parseInt(arrayOciOtSelected[0])
+            const otKNumber = parseInt(arrayOciOtSelected[1])
+            
+            messageChangeOtStatus(
+                cleanString(statusOt),
+                otNumber,
+                idProjectSelected,
+                ociKNumber,
+                otKNumber
+            )
+        })
+    }
 })
 
 arrayBtnUpdateOt.forEach(function(element) {
-    element.addEventListener('click', (event) => {
-        event.preventDefault()
-        const idOtOci = (event.target.id).slice(11)
-        const arrayOciOtSelected = (event.target.id).slice(11).split('_')
-        
-        const statusOt = document.getElementById(`lastOtStatus${idOtOci}`).textContent
-        const otNumber = parseInt(document.getElementById(`lastOtNumber${idOtOci}`).textContent)
-        const idProjectSelected = document.getElementById('projectIdHidden').value
-        const ociKNumber = parseInt(arrayOciOtSelected[0])
-        const otKNumber = parseInt(arrayOciOtSelected[1])       
-        const otDescription = document.getElementById(`lastOpDescription${idOtOci}`).textContent
-        const otDesign =  document.getElementById(`otDesign${idOtOci}`).textContent
-        const otSimulation =  document.getElementById(`otSimulation${idOtOci}`).textContent
-        const otSupplier =  document.getElementById(`otSupplier${idOtOci}`).textContent
-        
-        messageUpdateOt(
-            cleanString(statusOt),
-            otNumber,
-            idProjectSelected,
-            ociKNumber,
-            otKNumber,
-            cleanString(otDescription),
-            cleanString(otDesign),
-            cleanString(otSimulation),
-            cleanString(otSupplier)
-        )
-    })
+    if (element.id) {
+        element.addEventListener('click', (event) => {
+            event.preventDefault()
+            const idOtOci = (element.id).slice(11) //(event.target.id)
+            const arrayOciOtSelected = (element.id).slice(11).split('_') //(event.target.id)
+            
+            const statusOt = document.getElementById(`lastOtStatus${idOtOci}`).textContent
+            const otNumber = parseInt(document.getElementById(`lastOtNumber${idOtOci}`).textContent)
+            const idProjectSelected = document.getElementById('projectIdHidden').value
+            const ociKNumber = parseInt(arrayOciOtSelected[0])
+            const otKNumber = parseInt(arrayOciOtSelected[1])       
+            const otDescription = document.getElementById(`lastOpDescription${idOtOci}`).textContent
+            const otDesign =  document.getElementById(`otDesign${idOtOci}`).textContent
+            const otSimulation =  document.getElementById(`otSimulation${idOtOci}`).textContent
+            const otSupplier =  document.getElementById(`otSupplier${idOtOci}`).textContent
+            
+            messageUpdateOt(
+                cleanString(statusOt),
+                otNumber,
+                idProjectSelected,
+                ociKNumber,
+                otKNumber,
+                cleanString(otDescription),
+                cleanString(otDesign),
+                cleanString(otSimulation),
+                cleanString(otSupplier)
+            )
+        })
+    }
 })
 
 arrayBtnDeleteOt.forEach(function(element) {
-    element.addEventListener('click', (event) => {
-        event.preventDefault()
-        const idOtOci = (event.target.id).slice(11)
-        const arrayOciOtSelected = (event.target.id).slice(11).split('_')
-        
-        const statusOt = document.getElementById(`lastOtStatus${idOtOci}`).textContent
-        const otNumber = parseInt(document.getElementById(`lastOtNumber${idOtOci}`).textContent)
-        const idProjectSelected = document.getElementById('projectIdHidden').value
-        const ociKNumber = parseInt(arrayOciOtSelected[0])
-        const otKNumber = parseInt(arrayOciOtSelected[1])       
-        const otDescription = document.getElementById(`lastOpDescription${idOtOci}`).textContent
-        
-        messageDeleteOt(
-            cleanString(statusOt),
-            otNumber,
-            idProjectSelected,
-            ociKNumber,
-            otKNumber,
-            otDescription
-        )
-    })
+    if (element.id) {
+        element.addEventListener('click', (event) => {
+            event.preventDefault()
+            const idOtOci = (element.id).slice(11) //(event.target.id)
+            const arrayOciOtSelected = (element.id).slice(11).split('_') //(event.target.id)
+            
+            const statusOt = document.getElementById(`lastOtStatus${idOtOci}`).textContent
+            const otNumber = parseInt(document.getElementById(`lastOtNumber${idOtOci}`).textContent)
+            const idProjectSelected = document.getElementById('projectIdHidden').value
+            const ociKNumber = parseInt(arrayOciOtSelected[0])
+            const otKNumber = parseInt(arrayOciOtSelected[1])       
+            const otDescription = document.getElementById(`lastOpDescription${idOtOci}`).textContent
+            
+            messageDeleteOt(
+                cleanString(statusOt),
+                otNumber,
+                idProjectSelected,
+                ociKNumber,
+                otKNumber,
+                otDescription
+            )
+        })
+    }
 })
 
 arrayCheckBoxSelect.forEach(function(element) {
@@ -1550,8 +1566,7 @@ function getOtListValues(i, idTabla) {
         arrayAprobadoR14 = [],
         arrayProceso3d =[],
         arrayHoras3d = [],
-
-        arrayConjuntosR14 = []
+        arrayConjuntosR14 = [],
         arrayConjuntos3d = []
 
     for (let n=0; n < lastChild; n++) {
@@ -1571,8 +1586,8 @@ function getOtListValues(i, idTabla) {
         arrayConjuntos3d.push( { [`${n}`] : [otProceso3d, otHoras3d]})
         
     }
-    console.log('arrayConjuntosR14', arrayConjuntosR14)
-    console.log('arrayConjuntos3d', arrayConjuntos3d)
+    // console.log('arrayConjuntosR14', arrayConjuntosR14)
+    // console.log('arrayConjuntos3d', arrayConjuntos3d)
     
     return {
         arrayProcesoR14,
@@ -1827,8 +1842,9 @@ function addDatoToR14(i, idTabla) {
 function addDatoToProceso3d(i, idTabla) {
     let res = getOtList(i)
     let getValues = getOtListValues(i, idTabla)
-    console.log('getValues[i]: ', getValues.arrayHoras3d[i])
+    //console.log('getValues[i]: ', getValues.arrayHoras3d[i])
     var arrayBloqueProceso3d = []
+    
     for (let y=0; y < res.lastChild; y++) {
         let color = ''
         let disabled = 'required'
@@ -1923,7 +1939,7 @@ function addDatoToProceso3d(i, idTabla) {
                         </select>
                     </div>
                     <div class="col my-auto">
-                    <input value="${parseInt(getValues.arrayHoras3d[y])}" type="number" id="hsProceso${res.arrayOtNumber[y]}" name="horasProceso3d${y}" class="form-control" min="0" max="9999" ${disabled}>
+                    <input value="${parseInt(getValues.arrayHoras3d[y])}" type="number" id="hsProceso${res.arrayOtNumber[y]}" name="horasProceso3d${y}" class="form-control" min="0" max="9999" style="text-align: center;" ${disabled}>
                     </div>
                 </div>     
             `)
@@ -1949,11 +1965,22 @@ function addDatoToProceso3d(i, idTabla) {
                     </select>
                 </div>
                 <div class="col my-auto">
-                    <input value="${parseInt(getValues.arrayHoras3d[y])}" type="number" id="hsProceso${res.arrayOtNumber[y]}" name="horasProceso3d${y}" class="form-control" min="0" max="9999" ${disabled}>
+                    <input value="${parseInt(getValues.arrayHoras3d[y])}" type="number" id="hsProceso${res.arrayOtNumber[y]}" oninput="updateTotal(${i})" name="horasProceso3d${y}" class="form-control" min="0" max="9999" style="text-align: center;" ${disabled}>
                 </div>           
             </div>`)
         }
     }
+
+    let totalHorasProceso3dActual = document.getElementById(`resHsTotalProceso3d${i}`).innerText
+    const inputTotalHorasProceso3d = 
+    `<div class="row my-1 mx-auto">
+        <div class="col-8 my-auto align-self-middle ms-5 ps-5">
+            <span class="badge bg-dark text-white">Total horas Proceso 3D</span>
+        </div>
+        <div class="col my-auto">
+            <input value="${totalHorasProceso3dActual}" type="number" id="totalHsProceso3d" class="form-control" style="text-align: center;" disabled>
+        </div> 
+    </div>`
 
     const html = `
             <form id="formProceso3dValues" action="/api/proyectos/otInfoProceso3d" method="post" style="font-size: 10pt">
@@ -1978,6 +2005,8 @@ function addDatoToProceso3d(i, idTabla) {
                     <hr>
                         ${arrayBloqueProceso3d.join("<br>")}
                     <hr>
+                        ${inputTotalHorasProceso3d}
+                    <hr>
                     <input type="hidden" name="projectIdHidden" value="${projectNumberId}">
                     <input type="hidden" name="clientIdHidden" value="${clientId.value}">
                     <input type="hidden" name="ociNumberK" value="${i}"> 
@@ -1991,7 +2020,7 @@ function addDatoToProceso3d(i, idTabla) {
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: false,
-    })        
+    })
 
     Swal.fire({
         title: 'Proceso 3D',
@@ -2022,6 +2051,26 @@ function addDatoToProceso3d(i, idTabla) {
         }
     })
 }
+
+// Función para actualizar el valor del campo total
+function updateTotal(i) {
+    let res = getOtList(i)
+    var arrayTotalHorasProceso3d = []
+
+    for (let y=0; y < res.arrayOtNumber.length; y++) {    
+        var input1 = document.getElementById(`hsProceso${res.arrayOtNumber[y]}`).value
+        if (input1) {
+            arrayTotalHorasProceso3d.push(input1)
+        }
+    }
+        // Usamos el método map para convertir los strings a números enteros
+        const arrayDeNumeros = arrayTotalHorasProceso3d.map(str => parseInt(str, 10));
+        var total = arrayDeNumeros.reduce(function(acumulador, valorActual) {
+            return acumulador + valorActual;
+        }, 0);
+        document.getElementById("totalHsProceso3d").value = isNaN(total) ? '' : total;
+}
+// ------------------------------------------------  
 //***** End addDatoToProceso3d ******
 
 
@@ -2841,29 +2890,24 @@ function addDatoToS5(i) {
 const arrTables = []
 const arrBtnAnterior = []
 const arrBtnSiguiente = []
-//variable limite maximo de proyectos por Cliente
-let varLimMaxProyectoCliente = 25
-
-//variable limite maximo de Ot por Proyecto
-let varLimMaxOtProyecto = 50
 
 for (let i = 0; i<varLimMaxProyectoCliente; i++) { //variable limite maximo de proyectos por Cliente
     if (document.getElementById(`tablaGeneral${i}`)) {
         arrTables.push(i)
     }
 
-    for (let p = 0; p<varLimMaxOtProyecto; p++) //variable limite maximo de Ot por proyecto
-    if (document.getElementById(`btnAnteriorSiguienteHorasProceso3d${i}_${p}`)) {
-        arrBtnAnterior.push(i)
-        arrBtnSiguiente.push(i)
+    for (let p = 0; p<varLimMaxOtProyecto; p++) { //variable limite maximo de Ot por proyecto
+        if (document.getElementById(`btnAnteriorSiguienteHorasProceso3d${i}_${p}`)) {
+            arrBtnAnterior.push(i)
+            arrBtnSiguiente.push(i)
+        }
     }
-    //encontrar los input hidden y sus valores
 }
 
 
 if(arrTables !=[]) {
-    let allButtonsR14 = document.querySelectorAll('button[name="btnR14"]')
-    let allButtonsProceso3d = document.querySelectorAll('button[name="btnProceso3d"]')
+    let allButtonsR14 = document.querySelectorAll('[name="btnR14"]') // era 'button[name="btnR14"]'
+    let allButtonsProceso3d = document.querySelectorAll('[name="btnProceso3d"]')
     let allButtonsDiseno = document.querySelectorAll('button[name="btnDiseno"]')
     let allButtonsInfo80 = document.querySelectorAll('button[name="btnInfo80"]')
     let allButtonsInfo100 = document.querySelectorAll('button[name="btnInfo100"]')
@@ -2874,25 +2918,30 @@ if(arrTables !=[]) {
     let allButtonsS5 = document.querySelectorAll('button[name="btnS5"]')
     
     allButtonsR14.forEach(function(btn){
-		btn.addEventListener("click", (event) => {
-            event.preventDefault()
-            let kValue = event.target.value
-            const nombreTabla = document.getElementById(`tablaR14${kValue}`)
-            const idTabla = nombreTabla.id
+        if (btn.value) {
+            btn.addEventListener("click", (event) => {
+                event.preventDefault()
+                let kValue = btn.value
+                let nombreTabla = document.getElementById(`tablaR14${kValue}`)
+                const idTabla = nombreTabla.id
 
-            addDatoToR14(kValue, idTabla)
-    	})
+                addDatoToR14(kValue, idTabla)
+            })
+        }
+		
     })
 
     allButtonsProceso3d.forEach(function(btn){
-		btn.addEventListener("click", (event) => {
-            event.preventDefault()
-            let kValue = event.target.value
-            const nombreTabla = document.getElementById(`tablaProceso3D${kValue}`)
-            const idTabla = nombreTabla.id
+        if (btn.value) {
+            btn.addEventListener("click", (event) => {
+                event.preventDefault()
+                let kValue = btn.value
+                const nombreTabla = document.getElementById(`tablaProceso3D${kValue}`)
+                const idTabla = nombreTabla.id
 
-            addDatoToProceso3d(kValue, idTabla)
-    	})
+                addDatoToProceso3d(kValue, idTabla)
+            })
+        }
     })
 
     allButtonsDiseno.forEach(function(btn){
@@ -2954,32 +3003,36 @@ if(arrTables !=[]) {
 
 //*********** Evento btn's anterior y siguiente ************* */
 if(arrBtnAnterior !=[]) {
-    let allBtnAnteriorHorasProceso3d = document.querySelectorAll('button[name="btnAnteriorHorasProceso3d"]')
+    let allBtnAnteriorHorasProceso3d = document.querySelectorAll('[name="btnAnteriorHorasProceso3d"]')
     
     allBtnAnteriorHorasProceso3d.forEach(function(btn){
-        btn.addEventListener("click", (event) => {
-            let kValue = event.target.value
-            let arrayActual = document.getElementById(`resHorasProceso3dHidden${kValue}`)
-            let actualValue = arrayActual.value
-            let arrayFromValues = actualValue.split(",")
-            
-            mostrarAnterior(arrayFromValues, kValue)
-    	})
+        if (btn.value) {
+            btn.addEventListener("click", (event) => {
+                let kValue = btn.value //event.target.value
+                let arrayActual = document.getElementById(`resHorasProceso3dHidden${kValue}`)
+                let actualValue = arrayActual.value
+                let arrayFromValues = actualValue.split(",")
+                
+                mostrarAnterior(arrayFromValues, kValue)
+            })
+        }
     })
 }
 
 if(arrBtnSiguiente !=[]) {    
-    let allBtnSiguienteHorasProceso3d = document.querySelectorAll('button[name="btnSiguienteHorasProceso3d"]')
+    let allBtnSiguienteHorasProceso3d = document.querySelectorAll('[name="btnSiguienteHorasProceso3d"]')
     
     allBtnSiguienteHorasProceso3d.forEach(function(btn){
-		btn.addEventListener("click", (event) => {
-            let kValue = event.target.value
-            let arrayActual = document.getElementById(`resHorasProceso3dHidden${kValue}`)
-            let actualValue = arrayActual.value
-            let arrayFromValues = actualValue.split(",")
-            
-            mostrarSiguiente(arrayFromValues, kValue)
-    	})
+        if (btn.value) {
+            btn.addEventListener("click", (event) => {
+                let kValue = btn.value
+                let arrayActual = document.getElementById(`resHorasProceso3dHidden${kValue}`)
+                let actualValue = arrayActual.value
+                let arrayFromValues = actualValue.split(",")
+                
+                mostrarSiguiente(arrayFromValues, kValue)
+            })
+        }
     })
 
 }
@@ -3025,24 +3078,58 @@ function mostrarSiguiente(arrayFromValues, kValue) {
 }
 //*********** End Evento btn anterior y siguiente ********* */
 
+
 //************ ToolTip btn-Arrows anterior/Siguiente -----------
 let spanResHorasProceso3d = Array.from(document.querySelectorAll('span[name="resHorasProceso3d"]'))
-
 
 spanResHorasProceso3d.forEach(function(spanElement) {
     spanElement.addEventListener("mouseover", (event) => {
         let spanSpotHorasProceso3d = document.getElementById(`${spanElement.id}`)
+        let idSpotSelected = spanSpotHorasProceso3d.id
+
+        // Expresión regular para eliminar el texto inicial
+        var regex = /^resHorasProceso3d/;
+
+        // Eliminar el texto inicial de la cadena
+        var idFinalInputs = idSpotSelected.replace(regex, '');
+
+        let inputSpotIndexProceso3d = document.getElementById(`resIndexHorasProceso3dHidden${idFinalInputs}`).value
+        let inputSpotCreadorProceso3d = document.getElementById(`arrResCreadorProceso3dHidden${idFinalInputs}`).value
+
+        let inputSpotModificadorProceso3d = document.getElementById(`arrResModificadorProceso3dHidden${idFinalInputs}`).value
+        let inputSpotFechaProceso3d = document.getElementById(`arrResFechaProceso3dHidden${idFinalInputs}`).value
+        let inputSpotFechaModProceso3d = document.getElementById(`arrResFechaModProceso3dHidden${idFinalInputs}`).value
         
+        let arrayFromSpotCreadorProceso3d = inputSpotCreadorProceso3d.split(",")
+        let arrayFromSpotModificadorProceso3d = inputSpotModificadorProceso3d.split(",")
+        let arrayFromSpotFechaProceso3d = inputSpotFechaProceso3d.split(",")
+        let arrayFromSpotFechaModProceso3d = inputSpotFechaModProceso3d.split(",")
+        
+        let spanHorasProceso3dSelected = document.getElementById(`${spanElement.id}`)
+        
+        for (let y=0; arrayFromSpotCreadorProceso3d.length>y; y++) {
+            if(inputSpotIndexProceso3d == y) {
+                spanHorasProceso3dSelected.setAttribute("valueRevision", "0"+inputSpotIndexProceso3d)
+                spanHorasProceso3dSelected.setAttribute("valueCreador", arrayFromSpotCreadorProceso3d[y])
+                spanHorasProceso3dSelected.setAttribute("valueFecha", arrayFromSpotFechaProceso3d[y])
+                spanHorasProceso3dSelected.setAttribute("valueModificador", arrayFromSpotModificadorProceso3d[y])
+                spanHorasProceso3dSelected.setAttribute("valueFechaMod", arrayFromSpotFechaModProceso3d[y])
+            }
+        }
+
         tippy(spanSpotHorasProceso3d, {
-            content: `Creador: ${spanSpotHorasProceso3d.getAttribute("valueCreador")}<br>
-                      Fecha: ${spanSpotHorasProceso3d.getAttribute("valueFecha")}<br>
+            content: `Revisión: ${spanSpotHorasProceso3d.getAttribute("valueRevision")}<br>
+                      Creador: ${spanSpotHorasProceso3d.getAttribute("valueCreador")}<br>
+                      Fecha creac.: ${spanSpotHorasProceso3d.getAttribute("valueFecha")}<br>
                       Modificador: ${spanSpotHorasProceso3d.getAttribute("valueModificador")}<br>
                       Fecha mod.: ${spanSpotHorasProceso3d.getAttribute("valueFechaMod")}`,
             allowHTML: true,
+            maxWidth: 350,
             arrow: true,
-            animation: 'scale',
+            animation: 'shift-away', //'scale',
             theme: 'material',
             interactive: false,
+            hideOnClick: true, // Oculta el tooltip al hacer clic en cualquier lugar fuera de él
         })
     })
 })

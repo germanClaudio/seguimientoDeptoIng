@@ -22,7 +22,7 @@
                                                 countVisibleOci++
                                         }
                                     }    
-                                        
+
                                         if (arrayVisibleOci.length > 0 && countVisibleOci > 0) {
                                             for (let k=0; arrayVisibleOci.length > k; k++) { %>
                                         
@@ -213,7 +213,7 @@
                                                                     <% } else { %>
 
                                                                         <!-- ------ contenedor de OCI vacía ------ -->
-                                                                        <%- include('../../partials/dataProjectCard/dataProjectCard_contOciVacia', { k, m, j }); %>
+                                                                        <%- include('../../partials/dataProjectCard/dataProjectCard_contOciVacia', { k, m, j , arrayVisibleOci}); %>
 
                                                                     <% } %>
 

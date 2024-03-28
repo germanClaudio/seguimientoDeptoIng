@@ -2386,6 +2386,7 @@ btnOtNumberSpot.forEach(function(btnSpot) {
             theme: 'material',
             // followCursor: true,
             interactive: true,
+            hideOnClick: true,
         })
     })
 })

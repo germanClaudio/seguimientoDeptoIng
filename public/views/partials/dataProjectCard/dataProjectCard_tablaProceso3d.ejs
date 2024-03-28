@@ -97,10 +97,10 @@
                             <%  var arrResHorasProceso3d = [];
                                 var valueArrayResHorasProceso3d = 0;
                                 var valueToShowDefault = 0;
-                                var arrResCreadorProceso3d = []
-                                var arrResModificadorProceso3d = []
-                                var arrResFechaProceso3d = []
-                                var arrResFechaModProceso3d = []
+                                var arrResCreadorProceso3d = [];
+                                var arrResModificadorProceso3d = [];
+                                var arrResFechaProceso3d = [];
+                                var arrResFechaModProceso3d = [];
 
                                 if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0 &&
                                     proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > 0) {
@@ -110,17 +110,27 @@
                                                 arrResHorasProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].horasProceso3d)
                                                 valueArrayResHorasProceso3d = parseInt(arrResHorasProceso3d.length-1)
                                                 valueToShowDefault = arrResHorasProceso3d[valueArrayResHorasProceso3d]
-                                                arrResCreadorProdeso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].creator)
-                                                arrResModificadorProdeso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].modificator)
-                                                arrResFechaProdeso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].timestamp)
-                                                arrResFechaModProdeso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].modifiedOn) 
+                                                arrResCreadorProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].creator[0].username)
+                                                arrResModificadorProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].modificator[0].username)
+                                                arrResFechaProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].timestamp)
+                                                arrResFechaModProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].modifiedOn) 
 
                                             } else {
                                                 valueArrayResHorasProceso3d = 0
                                                 valueToShowDefault = 0
                                             }
                                         }
-                            } %>
+                                        if (valueArrayResHorasProceso3d == 0) {
+                                            var varDisabled = "disabled"
+                                        } else {
+                                            var varDisabled = ""
+                                        }
+                                        
+                                } else {
+                                    if (valueArrayResHorasProceso3d == 0) {
+                                        var varDisabled = "disabled"
+                                    }
+                                } %>
                         <div id="btnAnteriorSiguienteHorasProceso3d<%=k%>_<%=n%>">
                             <button id="btnAnteriorHorasProceso3d<%=k%>_<%=n%>"
                                 name="btnAnteriorHorasProceso3d"
@@ -128,24 +138,26 @@
                                 class="btn btn-light btn-sm me-2"
                                 title="Ver anterior"
                                 type="button"
-                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem; color: var(--bs-black);">
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem; color: var(--bs-black);"
+                                <%= varDisabled %>
+                                >
                                     <i class="fa-solid fa-arrow-left"></i>
                             </button>
                             <input type="hidden" id="resHorasProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResHorasProceso3d %>">
                             <input type="hidden" id="resIndexHorasProceso3dHidden<%=k%>_<%=n%>" value="<%= valueArrayResHorasProceso3d %>">
-                            <input type="hidden" id="arrResCreadorProdeso3dHidden<%=k%>_<%=n%>" value="arrResCreadorProdeso3d">
-                            <input type="hidden" id="arrResModificadorProdeso3dHidden<%=k%>_<%=n%>" value="arrResModificadorProdeso3d">
-                            <input type="hidden" id="arrResFechaProdeso3dHidden<%=k%>_<%=n%>" value="arrResCreaFechaProdeso3d">
-                            <input type="hidden" id="arrResFechaModProdeso3dHidden<%=k%>_<%=n%>" value="arrResFechaModProdeso3d">
+                            <input type="hidden" id="arrResCreadorProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResCreadorProceso3d %>">
+                            <input type="hidden" id="arrResModificadorProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResModificadorProceso3d %>">
+                            <input type="hidden" id="arrResFechaProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResFechaProceso3d %>">
+                            <input type="hidden" id="arrResFechaModProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResFechaModProceso3d %>">
                             
                             <span id="resHorasProceso3d<%=k%>_<%=n%>"
                                 name="resHorasProceso3d"
                                 class="text-black mx-2"
                                 style="font-size: .9rem;"
-                                valueCreador="Creador"
-                                valueFecha="Fecha"
-                                valueModificador="Modif."
-                                valueFechaMod="Fecha modif.">
+                                valueCreador=""
+                                valueFecha=""
+                                valueModificador=""
+                                valueFechaMod="">
                                 <%= valueToShowDefault %>
                             </span>
                             <button id="btnSiguienteHorasProceso3d<%=k%>_<%=n%>"
@@ -155,7 +167,8 @@
                                 title="Ver siguiente"
                                 type="button"
                                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem; color: var(--bs-black);"
-                                disabled= "true">
+                                <%= varDisabled %>
+                                >
                                     <i class="fa-solid fa-arrow-right"></i>
                             </button>
                         </div>    
@@ -203,15 +216,55 @@
 
                         </td>
                         <td class="text-center align-middle">
-                            <% if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0 &&
-                                proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > 0) { 
-                                var resHoras3d = proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[0].horasProceso3d
-                            } else {
-                                var resHoras3d = 0
+                            <%  var arrResHorasProceso3d = [];
+                                var valueArrayResHorasProceso3d = 0;
+                                var valueToShowDefault = 0;
+                                var arrResCreadorProceso3d = [];
+                                var arrResModificadorProceso3d = [];
+                                var arrResFechaProceso3d = [];
+                                var arrResFechaModProceso3d = [];
+
+                                if (proyecto[m].project[j].oci[k].otProject[n].otInformation.length > 0 &&
+                                    proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > 0) {
+                                   
+                                        for (let i = 0; proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso.length > i; i++) {
+                                            if (proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso) {
+                                                arrResHorasProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].horasProceso3d)
+                                                valueArrayResHorasProceso3d = parseInt(arrResHorasProceso3d.length-1)
+                                                valueToShowDefault = arrResHorasProceso3d[valueArrayResHorasProceso3d]
+                                                arrResCreadorProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].creator[0].username)
+                                                arrResModificadorProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].modificator[0].username)
+                                                arrResFechaProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].timestamp)
+                                                arrResFechaModProceso3d.push(proyecto[m].project[j].oci[k].otProject[n].otInformation[0].otInfoProceso[i].modifiedOn) 
+
+                                            } else {
+                                                valueArrayResHorasProceso3d = 0
+                                                valueToShowDefault = 0
+                                            }
+                                        }
                             } %>
-                            <span id="resHorasProceso3d<%=k%>_<%=n%>" class="text-black mx-1">
-                                <%= resHoras3d %>
-                            </pan>
+                            <div id="btnAnteriorSiguienteHorasProceso3d<%=k%>_<%=n%>">
+                                
+                                <input type="hidden" id="resHorasProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResHorasProceso3d %>">
+                                <input type="hidden" id="resIndexHorasProceso3dHidden<%=k%>_<%=n%>" value="<%= valueArrayResHorasProceso3d %>">
+                                <input type="hidden" id="arrResCreadorProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResCreadorProceso3d %>">
+                                <input type="hidden" id="arrResModificadorProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResModificadorProceso3d %>">
+                                <input type="hidden" id="arrResFechaProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResFechaProceso3d %>">
+                                <input type="hidden" id="arrResFechaModProceso3dHidden<%=k%>_<%=n%>" value="<%= arrResFechaModProceso3d %>">
+                                
+                                <span id="resHorasProceso3d<%=k%>_<%=n%>"
+                                    name="resHorasProceso3d"
+                                    class="text-black mx-2"
+                                    style="font-size: .9rem;"
+                                    valueRevision=""
+                                    valueCreador=""
+                                    valueFecha=""
+                                    valueModificador=""
+                                    valueFechaMod="">
+                                    <%= valueToShowDefault %>
+                                </span>
+                                
+                            </div> 
 
                         </td>
                     </tr>
